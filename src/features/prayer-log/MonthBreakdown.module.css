@@ -1,0 +1,94 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.empty {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 5.5em minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.name {
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+/* Statuses always run in the same order, with a gap between them, so position helps where colour does not. */
+.bar {
+  display: flex;
+  gap: 2px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.segment,
+.rest {
+  flex-basis: 0;
+  min-width: 3px;
+}
+
+.segment {
+  background: var(--status);
+}
+
+.rest {
+  background: var(--surface-3);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3) 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-xs);
+}
+
+.swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--status);
+  color: var(--surface);
+}
+
+.count {
+  color: var(--ink);
+  font-weight: 700;
+}

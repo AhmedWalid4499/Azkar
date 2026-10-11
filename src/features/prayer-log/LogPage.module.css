@@ -1,0 +1,28 @@
+.welcome {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.welcomeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.welcomeTitle {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.welcomeBody {
+  margin-top: var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}

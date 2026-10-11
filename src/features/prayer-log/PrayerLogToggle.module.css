@@ -1,0 +1,57 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  transition: background-color 0.15s var(--ease);
+}
+
+.toggle:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ring,
+.badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transition: transform 0.1s var(--ease);
+}
+
+.toggle:active:not(:disabled) .ring,
+.toggle:active:not(:disabled) .badge {
+  transform: scale(0.9);
+}
+
+/* Not logged: an empty ring, drawn dark enough to read as a control. */
+.ring {
+  border: 2px solid var(--ink-3);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--status);
+  /* The page surface is the one colour that contrasts with every status fill in both themes. */
+  color: var(--surface);
+  animation: pop 0.22s var(--ease);
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+}

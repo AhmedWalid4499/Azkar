@@ -1,0 +1,34 @@
+/*
+ * One class per status. Each sets the colours its descendants paint with, so
+ * the mapping from status to colour lives in exactly one place.
+ * --status is for fills and icons, --status-ink for text, --status-soft for tints.
+ */
+.ontime {
+  --status: var(--primary);
+  --status-ink: var(--primary-strong);
+  --status-soft: var(--primary-soft);
+}
+
+.jamaah {
+  --status: var(--accent);
+  --status-ink: var(--accent-ink);
+  --status-soft: var(--accent-soft);
+}
+
+.late {
+  --status: var(--warn);
+  --status-ink: var(--warn);
+  --status-soft: var(--warn-soft);
+}
+
+.missed {
+  --status: var(--danger);
+  --status-ink: var(--danger);
+  --status-soft: var(--danger-soft);
+}
+
+.excused {
+  --status: var(--info);
+  --status-ink: var(--info);
+  --status-soft: var(--info-soft);
+}
