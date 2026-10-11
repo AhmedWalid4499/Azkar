@@ -46,3 +46,8 @@ export function CalculationSettingsSection() {
 export function NotificationSettingsSection() {
   return null
 }
+
+/** Mounted once in the app shell. Schedules prayer-time reminders while the app is open; renders nothing. */
+export function PrayerNotifier() {
+  return null
+}

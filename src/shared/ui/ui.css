@@ -368,6 +368,84 @@
   font-weight: 600;
 }
 
+/* ---------- Feedback ---------- */
+
+.ui-notice {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-s);
+  font-size: var(--text-s);
+  background: var(--info-soft);
+  color: var(--info);
+}
+
+.ui-notice--warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.ui-notice--danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.ui-notice--success {
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+/* Rings and bars take their colour from `color`, so a parent can retint them. */
+.ui-ring {
+  position: relative;
+  flex: none;
+  color: var(--primary);
+}
+
+.ui-ring svg {
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.ui-ring circle {
+  fill: none;
+}
+
+.ui-ring__track {
+  stroke: currentcolor;
+  opacity: 0.18;
+}
+
+.ui-ring__value {
+  stroke: currentcolor;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.35s var(--ease);
+}
+
+.ui-ring__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-s);
+  font-weight: 700;
+}
+
+.ui-bar {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, currentcolor 18%, transparent);
+  color: var(--primary);
+  overflow: hidden;
+}
+
+.ui-bar__value {
+  width: calc(var(--ui-bar-value, 0) * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: currentcolor;
+  transition: width 0.35s var(--ease);
+}
+
 /* ---------- Bottom sheet ---------- */
 
 .ui-sheet {

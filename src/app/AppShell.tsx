@@ -1,6 +1,7 @@
 import { BookOpenText, CalendarCheck, Settings, Sunrise } from 'lucide-react'
 import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { PrayerNotifier } from '../features/prayer-times'
 import { useI18n } from '../shared/i18n'
 import type { StringKey } from '../shared/i18n'
 import './app.css'
@@ -22,6 +23,7 @@ export function AppShell() {
 
   return (
     <div className="app">
+      <PrayerNotifier />
       <main className="app__main">
         <Outlet />
       </main>

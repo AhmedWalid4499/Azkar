@@ -6,6 +6,7 @@ export {
   LocationSettingsSection,
   NextPrayerCard,
   NotificationSettingsSection,
+  PrayerNotifier,
   PrayerTimesList,
   useNextPrayer,
   usePrayerDay,
