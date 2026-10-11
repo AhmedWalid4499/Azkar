@@ -1,0 +1,438 @@
+/* Shared primitives. Feature-specific styling belongs in CSS modules next to the feature. */
+
+/* ---------- Page scaffold ---------- */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--gutter) var(--space-8);
+}
+
+.ui-page-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+}
+
+.ui-page-header__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-page-header__title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+:root[lang='ar'] .ui-page-header__title {
+  letter-spacing: 0;
+}
+
+.ui-page-header__subtitle {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+  margin-top: 2px;
+}
+
+.ui-page-header__trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* ---------- Card ---------- */
+
+.ui-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-4);
+}
+
+.ui-card--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ---------- Buttons ---------- */
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-m);
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 0.15s var(--ease),
+    border-color 0.15s var(--ease),
+    transform 0.1s var(--ease);
+}
+
+.ui-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.ui-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ui-button--s {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-s);
+}
+
+.ui-button--block {
+  width: 100%;
+}
+
+.ui-button--primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.ui-button--primary:hover:not(:disabled) {
+  background: var(--primary-strong);
+}
+
+.ui-button--secondary {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.ui-button--secondary:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.ui-button--ghost {
+  background: transparent;
+  color: var(--primary);
+}
+
+.ui-button--ghost:hover:not(:disabled) {
+  background: var(--primary-soft);
+}
+
+.ui-button--danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.ui-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: background-color 0.15s var(--ease);
+}
+
+.ui-icon-button:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.ui-icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- Section and rows ---------- */
+
+.ui-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ui-section__title {
+  font-size: var(--text-s);
+  font-weight: 600;
+  color: var(--ink-2);
+  padding-inline: var(--space-2);
+}
+
+.ui-section__body > * + * {
+  border-top: 1px solid var(--line);
+}
+
+.ui-section__footer {
+  font-size: var(--text-s);
+  color: var(--ink-3);
+  padding-inline: var(--space-2);
+}
+
+.ui-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-3) var(--space-4);
+}
+
+.ui-row--stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.ui-row__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-row__label {
+  display: block;
+  font-weight: 500;
+}
+
+.ui-row__description {
+  font-size: var(--text-s);
+  color: var(--ink-2);
+  margin-top: 2px;
+}
+
+.ui-row__control {
+  display: flex;
+  align-items: center;
+  flex: none;
+  max-width: 100%;
+}
+
+.ui-row--stacked .ui-row__control {
+  flex: 1;
+}
+
+/* ---------- Segmented control ---------- */
+
+.ui-segmented {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  background: var(--surface-2);
+  border-radius: var(--radius-full);
+  max-width: 100%;
+}
+
+.ui-segmented--block {
+  display: flex;
+  width: 100%;
+}
+
+.ui-segmented__option {
+  position: relative;
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+}
+
+.ui-segmented__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  flex: 1;
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-s);
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition:
+    background-color 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+
+.ui-segmented__option input:checked + .ui-segmented__label {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-1);
+}
+
+.ui-segmented__option input:focus-visible + .ui-segmented__label {
+  outline: 3px solid var(--primary);
+  outline-offset: 1px;
+}
+
+/* ---------- Switch ---------- */
+
+.ui-switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 50px;
+  height: 30px;
+  margin: 0;
+  border-radius: var(--radius-full);
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease);
+}
+
+.ui-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+  transition: inset-inline-start 0.2s var(--ease);
+}
+
+.ui-switch:checked {
+  background: var(--primary);
+}
+
+.ui-switch:checked::after {
+  inset-inline-start: 23px;
+}
+
+.ui-switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Select ---------- */
+
+.ui-select {
+  appearance: none;
+  min-height: 40px;
+  max-width: 100%;
+  padding-block: 0;
+  padding-inline: var(--space-3) var(--space-8);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ink-2) 50%),
+    linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) 50%,
+    calc(100% - 12px) 50%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  text-overflow: ellipsis;
+}
+
+[dir='rtl'] .ui-select {
+  background-position:
+    12px 50%,
+    17px 50%;
+}
+
+/* ---------- Stepper ---------- */
+
+.ui-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+}
+
+.ui-stepper .ui-icon-button {
+  width: 40px;
+  height: 40px;
+}
+
+.ui-stepper__value {
+  min-width: 3ch;
+  padding-inline: var(--space-1);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ---------- Bottom sheet ---------- */
+
+.ui-sheet {
+  width: 100%;
+  max-width: var(--content-max);
+  max-height: 88dvh;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-l) var(--radius-l) 0 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+}
+
+.ui-sheet[open] {
+  display: flex;
+  animation: ui-sheet-in 0.25s var(--ease);
+}
+
+.ui-sheet::backdrop {
+  background: rgb(10 16 14 / 50%);
+}
+
+.ui-sheet__panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ui-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-2) var(--space-5);
+}
+
+[dir='rtl'] .ui-sheet__header {
+  padding: var(--space-3) var(--space-5) var(--space-2) var(--space-3);
+}
+
+.ui-sheet__title {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.ui-sheet__body {
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-5) var(--space-5);
+}
+
+@keyframes ui-sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (min-width: 600px) {
+  .ui-sheet {
+    margin: auto;
+    border-radius: var(--radius-l);
+  }
+}

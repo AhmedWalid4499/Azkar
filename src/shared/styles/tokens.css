@@ -1,0 +1,167 @@
+/*
+ * Design tokens. Emerald on warm parchment by day, deep green-black by night.
+ * Every colour used in the app comes from here so both themes stay in step.
+ */
+:root {
+  color-scheme: light;
+
+  --bg: #f5f1e8;
+  --surface: #fffdf9;
+  --surface-2: #efe9dc;
+  --surface-3: #e6dfcf;
+  --line: #e0d8c6;
+  --line-strong: #cfc5ae;
+
+  --ink: #17231f;
+  --ink-2: #44534d;
+  --ink-3: #62706a;
+
+  --primary: #0e6b54;
+  --primary-strong: #0a5341;
+  --primary-soft: #dcede5;
+  --on-primary: #ffffff;
+
+  --accent: #b5822a;
+  --accent-ink: #7f5a12;
+  --accent-soft: #f5e8cc;
+
+  --danger: #a8392b;
+  --danger-soft: #f8e2dd;
+  --warn: #9a5a10;
+  --warn-soft: #f9e9d2;
+  --info: #44597a;
+  --info-soft: #e2e8f2;
+
+  /* Session moods for the adhkar reader. */
+  --morning-from: #fbe3b5;
+  --morning-to: #f7c7a0;
+  --morning-ink: #5a3410;
+  --evening-from: #2b2f5e;
+  --evening-to: #4a2f5f;
+  --evening-ink: #f1e9ff;
+
+  --shadow-1: 0 1px 2px rgb(23 35 31 / 6%), 0 1px 1px rgb(23 35 31 / 4%);
+  --shadow-2: 0 8px 24px rgb(23 35 31 / 10%), 0 2px 6px rgb(23 35 31 / 6%);
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --radius-full: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  --font-latin: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-arabic-ui: 'IBM Plex Sans Arabic', 'Geeza Pro', 'Noto Sans Arabic', Tahoma, sans-serif;
+  /* Recitation text: adhkar and Qur'an, always fully vocalised. */
+  --font-recitation: 'Amiri', 'Geeza Pro', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --font-ui: var(--font-latin);
+
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1rem;
+  --text-l: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  --tabbar-height: 64px;
+  --content-max: 560px;
+  --gutter: 16px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root[lang='ar'] {
+  --font-ui: var(--font-arabic-ui);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --bg: #0e1513;
+    --surface: #161f1c;
+    --surface-2: #1d2925;
+    --surface-3: #25332e;
+    --line: #26342f;
+    --line-strong: #35463f;
+
+    --ink: #e9f0ec;
+    --ink-2: #b4c2bb;
+    --ink-3: #8d9c95;
+
+    --primary: #45b892;
+    --primary-strong: #63cba7;
+    --primary-soft: #16332a;
+    --on-primary: #06221a;
+
+    --accent: #d9b25f;
+    --accent-ink: #e4c37c;
+    --accent-soft: #33290f;
+
+    --danger: #ee8272;
+    --danger-soft: #3a1a15;
+    --warn: #e8a55a;
+    --warn-soft: #382510;
+    --info: #9bb2d6;
+    --info-soft: #1b2636;
+
+    --morning-from: #4a3513;
+    --morning-to: #5a2f1b;
+    --morning-ink: #fdebcf;
+    --evening-from: #1d2048;
+    --evening-to: #37204a;
+    --evening-ink: #efe6ff;
+
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 40%);
+    --shadow-2: 0 10px 30px rgb(0 0 0 / 50%);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0e1513;
+  --surface: #161f1c;
+  --surface-2: #1d2925;
+  --surface-3: #25332e;
+  --line: #26342f;
+  --line-strong: #35463f;
+
+  --ink: #e9f0ec;
+  --ink-2: #b4c2bb;
+  --ink-3: #8d9c95;
+
+  --primary: #45b892;
+  --primary-strong: #63cba7;
+  --primary-soft: #16332a;
+  --on-primary: #06221a;
+
+  --accent: #d9b25f;
+  --accent-ink: #e4c37c;
+  --accent-soft: #33290f;
+
+  --danger: #ee8272;
+  --danger-soft: #3a1a15;
+  --warn: #e8a55a;
+  --warn-soft: #382510;
+  --info: #9bb2d6;
+  --info-soft: #1b2636;
+
+  --morning-from: #4a3513;
+  --morning-to: #5a2f1b;
+  --morning-ink: #fdebcf;
+  --evening-from: #1d2048;
+  --evening-to: #37204a;
+  --evening-ink: #efe6ff;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-2: 0 10px 30px rgb(0 0 0 / 50%);
+}

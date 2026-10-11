@@ -1,0 +1,26 @@
+{
+  "version": 0,
+  "sources": [],
+  "items": {
+    "placeholder-tasbih": {
+      "id": "placeholder-tasbih",
+      "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+      "transliteration": "Subhan-Allahi wa bihamdih",
+      "translation": "Glory is to Allah and praise is to Him.",
+      "repeat": 100,
+      "reference": { "en": "PLACEHOLDER — replaced by the verified dataset", "ar": "نص مؤقت" }
+    },
+    "placeholder-istighfar": {
+      "id": "placeholder-istighfar",
+      "arabic": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+      "transliteration": "Astaghfirullaha wa atubu ilayh",
+      "translation": "I seek Allah's forgiveness and turn to Him in repentance.",
+      "repeat": 3,
+      "reference": { "en": "PLACEHOLDER — replaced by the verified dataset", "ar": "نص مؤقت" }
+    }
+  },
+  "collections": {
+    "morning": ["placeholder-tasbih", "placeholder-istighfar"],
+    "evening": ["placeholder-istighfar", "placeholder-tasbih"]
+  }
+}
