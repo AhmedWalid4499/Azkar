@@ -67,12 +67,12 @@ describe('CalculationSettingsSection', () => {
   it('explains the automatic high-latitude rule and stores an explicit one', async () => {
     const user = userEvent.setup()
     render(<CalculationSettingsSection />)
-    expect(screen.getByText('Automatic uses “Middle of the night” at your latitude.')).toBeInTheDocument()
+    expect(screen.getByText('Automatic uses “Twilight angle”.')).toBeInTheDocument()
 
     const select = screen.getByRole('combobox', { name: 'High-latitude rule' })
-    await user.selectOptions(select, 'Twilight angle')
-    expect(settings().highLatitudeRule).toBe('twilightangle')
-    expect(screen.queryByText(/at your latitude/)).toBeNull()
+    await user.selectOptions(select, 'One-seventh of the night')
+    expect(settings().highLatitudeRule).toBe('seventhofthenight')
+    expect(screen.queryByText(/Automatic uses “/)).toBeNull()
   })
 
   it('offers the polar option only where the sun can fail to rise or set', async () => {
@@ -83,7 +83,7 @@ describe('CalculationSettingsSection', () => {
 
     resetStores({ location: TROMSO })
     render(<CalculationSettingsSection />)
-    expect(screen.getByText('Automatic uses “One-seventh of the night” at your latitude.')).toBeInTheDocument()
+    expect(screen.getByText('Automatic uses “Twilight angle”.')).toBeInTheDocument()
     const polar = screen.getByRole('switch', { name: 'Polar day and night' })
     expect(polar).not.toBeChecked()
     await user.click(polar)

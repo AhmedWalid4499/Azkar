@@ -24,6 +24,9 @@ const HONOLULU: Place = { latitude: 21.3069, longitude: -157.8583, timeZone: 'Pa
 const KIRITIMATI: Place = { latitude: 1.8721, longitude: -157.4278, timeZone: 'Pacific/Kiritimati', countryCode: 'KI' }
 const APIA: Place = { latitude: -13.8333, longitude: -171.7667, timeZone: 'Pacific/Apia', countryCode: 'WS' }
 const AUCKLAND: Place = { latitude: -36.8485, longitude: 174.7633, timeZone: 'Pacific/Auckland', countryCode: 'NZ' }
+const STOCKHOLM: Place = { latitude: 59.3293, longitude: 18.0686, timeZone: 'Europe/Stockholm', countryCode: 'SE' }
+const BERLIN: Place = { latitude: 52.52, longitude: 13.405, timeZone: 'Europe/Berlin', countryCode: 'DE' }
+const EDMONTON: Place = { latitude: 53.5461, longitude: -113.4938, timeZone: 'America/Edmonton', countryCode: 'CA' }
 const TROMSO: Place = { latitude: 69.6492, longitude: 18.9553, timeZone: 'Europe/Oslo', countryCode: 'NO' }
 
 const config = (overrides: Partial<CalculationConfig> = {}): CalculationConfig => ({ ...DEFAULT_CALCULATION, ...overrides })
@@ -224,18 +227,32 @@ describe('settings', () => {
     )
   })
 
-  it('picks the one-seventh rule above 48° in either hemisphere, the middle of the night below', () => {
-    expect(resolveHighLatitudeRule('auto', 51.5)).toBe('seventhofthenight')
-    expect(resolveHighLatitudeRule('auto', -54.8)).toBe('seventhofthenight')
-    expect(resolveHighLatitudeRule('auto', 30)).toBe('middleofthenight')
-    expect(resolveHighLatitudeRule('auto', -33.9)).toBe('middleofthenight')
-    expect(resolveHighLatitudeRule('twilightangle', 60)).toBe('twilightangle')
+  it('uses the twilight-angle rule for "automatic" at every latitude', () => {
+    expect(resolveHighLatitudeRule('auto')).toBe('twilightangle')
+    expect(resolveHighLatitudeRule('seventhofthenight')).toBe('seventhofthenight')
+    expect(resolveHighLatitudeRule('middleofthenight')).toBe('middleofthenight')
+  })
+
+  // The default settings above 48°, on days when the method's own angles exist.
+  // adhan's recommended one-seventh rule made Fajr 20 to 54 minutes late on these days.
+  it.each([
+    // https://api.aladhan.com/v1/timings/12-10-2026?latitude=59.3293&longitude=18.0686&method=3
+    { name: 'Stockholm in October', place: STOCKHOLM, dateKey: '2026-10-12', fajr: '05:02', isha: '19:57' },
+    // https://api.aladhan.com/v1/timings/15-04-2027?latitude=52.52&longitude=13.405&method=3
+    { name: 'Berlin in April', place: BERLIN, dateKey: '2027-04-15', fajr: '03:57', isha: '22:09' },
+    // https://api.aladhan.com/v1/timings/10-05-2027?latitude=53.5461&longitude=-113.4938&method=2
+    { name: 'Edmonton in May', place: EDMONTON, dateKey: '2027-05-10', fajr: '03:36', isha: '23:25' },
+  ])('keeps the true twilight times with default settings: $name', ({ place, dateKey, fajr, isha }) => {
+    const day = computePrayerDay(dateKey, place, config())
+    const minutes = (value: string) => Number(value.slice(0, 2)) * 60 + Number(value.slice(3))
+    expect(Math.abs(minutes(clock(day, 'fajr')) - minutes(fajr))).toBeLessThanOrEqual(2)
+    expect(Math.abs(minutes(clock(day, 'isha')) - minutes(isha))).toBeLessThanOrEqual(2)
   })
 
   it('lets the high-latitude rule bound a London summer night', () => {
     const rule = (highLatitudeRule: CalculationConfig['highLatitudeRule']) =>
       computePrayerDay('2026-06-21', LONDON, config({ method: 'MuslimWorldLeague', highLatitudeRule }))
-    expect(clock(rule('auto'), 'fajr')).toBe(clock(rule('seventhofthenight'), 'fajr'))
+    expect(clock(rule('auto'), 'fajr')).toBe(clock(rule('twilightangle'), 'fajr'))
     expect(clock(rule('seventhofthenight'), 'fajr')).toBe('03:40')
     expect(rule('middleofthenight').times.fajr.getTime()).toBeLessThan(rule('seventhofthenight').times.fajr.getTime())
     expect(rule('middleofthenight').times.isha.getTime()).toBeGreaterThan(rule('seventhofthenight').times.isha.getTime())

@@ -1,4 +1,4 @@
-import { CalculationMethod, Coordinates, HighLatitudeRule, Madhab, PolarCircleResolution, PrayerTimes } from 'adhan'
+import { CalculationMethod, Coordinates, Madhab, PolarCircleResolution, PrayerTimes } from 'adhan'
 import { dateKeyInZone, dateKeyToUtcNoon, daysBetween, partsOfDateKey, shiftDateKey } from '../../../shared/date'
 import { TIME_SLOTS } from '../../../shared/types'
 import type { DateKey, PrayerDay, TimeSlot } from '../../../shared/types'
@@ -51,10 +51,15 @@ export function isPolarLatitude(latitude: number): boolean {
   return Math.abs(latitude) >= POLAR_LATITUDE
 }
 
-export function resolveHighLatitudeRule(setting: HighLatitudeSetting, latitude: number): HighLatitudeRuleId {
-  if (setting !== 'auto') return setting
-  // adhan's recommendation only looks north of 48°; the far south needs it just as much.
-  return HighLatitudeRule.recommended(new Coordinates(Math.abs(latitude), 0))
+/**
+ * "Automatic" is the twilight-angle rule at every latitude. It steps in only
+ * when twilight takes up more of the night than the method's own angles allow,
+ * so ordinary days keep the true angle times, as published timetables do.
+ * adhan's own recommendation (one-seventh of the night above 48°) is a
+ * year-round cap that moved Fajr and Isha by 20 to 90 minutes on most days there.
+ */
+export function resolveHighLatitudeRule(setting: HighLatitudeSetting): HighLatitudeRuleId {
+  return setting === 'auto' ? 'twilightangle' : setting
 }
 
 export function clampAdjustment(minutes: number): number {
@@ -111,7 +116,7 @@ export function computePrayerDay(dateKey: DateKey, place: Place, config: Calcula
   const params = CalculationMethod[method]()
 
   params.madhab = config.madhab === 'hanafi' ? Madhab.Hanafi : Madhab.Shafi
-  params.highLatitudeRule = resolveHighLatitudeRule(config.highLatitudeRule, place.latitude)
+  params.highLatitudeRule = resolveHighLatitudeRule(config.highLatitudeRule)
   params.polarCircleResolution =
     config.polar === 'nearestLatitude' ? PolarCircleResolution.AqrabBalad : PolarCircleResolution.Unresolved
   for (const slot of TIME_SLOTS) params.adjustments[slot] = clampAdjustment(config.adjustments[slot])

@@ -106,7 +106,7 @@ export function CalculationSettingsSection() {
             {settings.highLatitudeRule === 'auto' && place && (
               <span className={styles.line}>
                 {t('times.calc.highLat.autoResolved', {
-                  rule: t(`times.calc.highLat.${resolveHighLatitudeRule('auto', place.latitude)}`),
+                  rule: t(`times.calc.highLat.${resolveHighLatitudeRule('auto')}`),
                 })}
               </span>
             )}

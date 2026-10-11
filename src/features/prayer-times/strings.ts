@@ -106,8 +106,9 @@ export const strings = defineStrings({
     'times.calc.asr.shafi': 'Standard',
     'times.calc.asr.hanafi': 'Hanafi',
     'times.calc.highLat': 'High-latitude rule',
-    'times.calc.highLat.description': 'Keeps Fajr and Isha reasonable where twilight lasts all night in summer.',
-    'times.calc.highLat.autoResolved': 'Automatic uses “{rule}” at your latitude.',
+    'times.calc.highLat.description':
+      'Caps Fajr and Isha at high latitudes around midsummer, when twilight lasts most or all of the night.',
+    'times.calc.highLat.autoResolved': 'Automatic uses “{rule}”.',
     'times.calc.highLat.middleofthenight': 'Middle of the night',
     'times.calc.highLat.seventhofthenight': 'One-seventh of the night',
     'times.calc.highLat.twilightangle': 'Twilight angle',
@@ -250,8 +251,9 @@ export const strings = defineStrings({
     'times.calc.asr.shafi': 'الجمهور',
     'times.calc.asr.hanafi': 'الحنفي',
     'times.calc.highLat': 'قاعدة خطوط العرض العليا',
-    'times.calc.highLat.description': 'تضبط وقتَي الفجر والعشاء في البلاد التي يستمر فيها الشفق طوال الليل صيفًا.',
-    'times.calc.highLat.autoResolved': 'المعتمَد تلقائيًا عند خط عرضك: «{rule}».',
+    'times.calc.highLat.description':
+      'تضبط وقتَي الفجر والعشاء في خطوط العرض العليا حول منتصف الصيف، حين يستمر الشفق معظم الليل أو كلَّه.',
+    'times.calc.highLat.autoResolved': 'المعتمَد تلقائيًا: «{rule}».',
     'times.calc.highLat.middleofthenight': 'منتصف الليل',
     'times.calc.highLat.seventhofthenight': 'سُبع الليل',
     'times.calc.highLat.twilightangle': 'زاوية الشفق',
