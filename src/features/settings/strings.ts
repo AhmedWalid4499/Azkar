@@ -35,7 +35,7 @@ export const strings = defineStrings({
     'settings.reset.description': 'Remove your log, progress and settings',
     'settings.reset.confirmTitle': 'Erase everything?',
     'settings.reset.confirmBody':
-      'This permanently removes your prayer log, adhkar progress, location and settings from this device. It cannot be undone.',
+      'This permanently removes your prayer log, azkar progress, location and settings from this device. It cannot be undone.',
     'settings.reset.confirm': 'Erase all data',
 
     'settings.about': 'About',

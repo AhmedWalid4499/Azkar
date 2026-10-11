@@ -1,0 +1,429 @@
+.reader {
+  /* Height of the fixed dock, reserved under the text so its last line can scroll clear. */
+  --dock-space: 136px;
+
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--tabbar-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* Cover the status-bar inset too, so text never shows above the pinned header. */
+  margin-top: calc(-1 * env(safe-area-inset-top));
+  padding: calc(env(safe-area-inset-top) + var(--space-2)) var(--space-2) var(--space-3);
+  background: var(--bg);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.headerText {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  font-size: var(--text-l);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.position {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.header :global(.ui-bar) {
+  margin-inline: var(--space-2);
+}
+
+/* ---------- The dhikr ---------- */
+
+.body {
+  display: flex;
+  /* Fill the page so a swipe below a short dhikr still turns it. */
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-3) var(--gutter) calc(var(--dock-space) + var(--space-8));
+  /* Vertical scrolling and zoom stay with the browser; sideways swipes turn the page. */
+  touch-action: pan-y pinch-zoom;
+  animation: dhikr-in 0.2s var(--ease);
+}
+
+@keyframes dhikr-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Size comes from the reader settings; the tall line-height comes from .recitation. */
+.arabic {
+  padding-block: var(--space-2);
+  color: var(--ink);
+  overflow-wrap: break-word;
+  white-space: pre-line;
+}
+
+.pauseGroup {
+  white-space: nowrap;
+}
+
+/* Amiri sets these signs well above the line; bring them down beside the word they follow. */
+.pauseMark {
+  position: relative;
+  top: 0.42em;
+  color: var(--accent-ink);
+}
+
+/* How to count this dhikr when the number alone does not say it, e.g. "100 times during the day". */
+.note {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-s);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+  font-size: var(--text-s);
+  font-weight: 500;
+}
+
+.centered .note {
+  align-self: center;
+}
+
+.centered .arabic,
+.centered .transliteration,
+.centered .translation {
+  text-align: center;
+  text-wrap: balance;
+}
+
+.ornament {
+  align-self: center;
+  width: 40px;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+.transliteration,
+.translation {
+  font-family: var(--font-latin);
+  line-height: 1.7;
+  text-align: start;
+}
+
+.transliteration {
+  color: var(--ink-2);
+  font-style: italic;
+}
+
+.translation {
+  color: var(--ink);
+}
+
+.reference {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.referenceLabel {
+  margin-inline-end: var(--space-2);
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+.virtue {
+  border-radius: var(--radius-m);
+  background: var(--accent-soft);
+}
+
+.virtueSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-m);
+  color: var(--accent-ink);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.virtueSummary::-webkit-details-marker {
+  display: none;
+}
+
+.virtueChevron {
+  flex: none;
+  transition: transform 0.2s var(--ease);
+}
+
+.virtue[open] .virtueChevron {
+  transform: rotate(180deg);
+}
+
+.virtueText {
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+/* ---------- Counter dock ---------- */
+
+.dock {
+  position: fixed;
+  inset-inline: 0;
+  bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+  z-index: 9;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dockInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-block: var(--space-1) var(--space-3);
+  padding-inline: max(var(--space-2), env(safe-area-inset-left)) max(var(--space-2), env(safe-area-inset-right));
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  min-height: 44px;
+}
+
+.toolsMiddle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--ink-2);
+  font-size: var(--text-s);
+  font-weight: 600;
+  transition: background-color 0.15s var(--ease);
+}
+
+.tool:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 68px;
+  margin-inline: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-l);
+  background: var(--primary);
+  color: var(--on-primary);
+  touch-action: manipulation;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease),
+    transform 0.1s var(--ease);
+}
+
+.counter:active {
+  transform: scale(0.985);
+}
+
+.counterDone {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+.counterValue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.counterHint {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ---------- Overview sheet ---------- */
+
+.overviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.overviewItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-1) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--ink);
+  text-align: start;
+}
+
+.overviewItem:hover {
+  background: var(--surface-2);
+}
+
+.overviewItem[aria-current='true'] {
+  background: var(--primary-soft);
+}
+
+.overviewItem:focus-visible {
+  outline-offset: -3px;
+}
+
+.overviewIndex {
+  flex: none;
+  min-width: 2ch;
+  color: var(--ink-3);
+  font-size: var(--text-s);
+  font-weight: 600;
+  text-align: center;
+}
+
+.overviewItem[aria-current='true'] .overviewIndex {
+  color: var(--primary-strong);
+}
+
+.overviewItem .overviewText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 1.25rem;
+  line-height: 2.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overviewState {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  color: var(--ink-2);
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+.overviewStateDone {
+  color: var(--primary);
+}
+
+.sheetActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.confirmBody {
+  color: var(--ink-2);
+}
+
+/* ---------- Completion ---------- */
+
+.complete {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-10) var(--gutter) var(--space-8);
+  text-align: center;
+}
+
+.completeMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: var(--space-3);
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.completeTitle {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+/* Focused from script so it is read out; it is not a control. */
+.completeTitle:focus {
+  outline: none;
+}
+
+.complete .completeDua {
+  margin-top: var(--space-2);
+  color: var(--accent-ink);
+  font-size: var(--text-2xl);
+  text-align: center;
+}
+
+.completeDuaTranslation {
+  color: var(--ink-2);
+}
+
+.completeActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 320px;
+  margin-top: var(--space-8);
+}

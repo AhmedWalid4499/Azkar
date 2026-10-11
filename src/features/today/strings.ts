@@ -4,7 +4,7 @@ export const strings = defineStrings({
   en: {
     'today.greeting': 'As-salamu alaykum',
     'today.prayers': 'Today’s prayers',
-    'today.azkar': 'Daily adhkar',
+    'today.azkar': 'Daily azkar',
     'today.locationUnset': 'Location not set',
     'today.changeLocation': 'Change location',
   },

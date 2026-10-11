@@ -1,0 +1,32 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+}
+
+.name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  /* A comfortable target without pushing the rows apart. */
+  min-height: 32px;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link svg {
+  flex: none;
+}
+
+.detail {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+  overflow-wrap: anywhere;
+}

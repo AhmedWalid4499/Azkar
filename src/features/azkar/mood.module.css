@@ -1,0 +1,17 @@
+/* Session moods, shared by the picker and the Today cards. */
+
+.morning {
+  background: linear-gradient(140deg, var(--morning-from), var(--morning-to));
+  color: var(--morning-ink);
+}
+
+.evening {
+  background: linear-gradient(140deg, var(--evening-from), var(--evening-to));
+  color: var(--evening-ink);
+}
+
+/* Bedtime borrows the evening tones, turned the other way. */
+.sleep {
+  background: linear-gradient(140deg, var(--evening-to), var(--evening-from));
+  color: var(--evening-ink);
+}
