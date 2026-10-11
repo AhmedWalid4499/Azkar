@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Apple touch icon: opaque and square. iOS rounds the corners itself and paints transparency black. -->
+  <rect width="512" height="512" fill="#0e6b54"/>
+  <path d="M328 112a160 160 0 1 0 72 240 128 128 0 1 1-72-240z" fill="#f5e8cc"/>
+  <path d="M360 176 374.5 211.3 412.5 214.1 383.4 238.8 392.4 275.9 360 255.8 327.6 275.9 336.6 238.8 307.5 214.1 345.5 211.3z" fill="#d9b25f"/>
+</svg>

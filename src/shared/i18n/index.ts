@@ -4,6 +4,7 @@ import { strings as prayerLog } from '../../features/prayer-log/strings'
 import { strings as prayerTimes } from '../../features/prayer-times/strings'
 import { strings as settings } from '../../features/settings/strings'
 import { strings as today } from '../../features/today/strings'
+import { strings as pwa } from '../../pwa/strings'
 import { useSettings } from '../settings'
 import type { Lang } from '../types'
 import { common } from './common'
@@ -11,8 +12,8 @@ import { common } from './common'
 export { defineStrings } from './define'
 
 const dictionaries = {
-  en: { ...common.en, ...today.en, ...azkar.en, ...prayerTimes.en, ...prayerLog.en, ...settings.en },
-  ar: { ...common.ar, ...today.ar, ...azkar.ar, ...prayerTimes.ar, ...prayerLog.ar, ...settings.ar },
+  en: { ...common.en, ...today.en, ...azkar.en, ...prayerTimes.en, ...prayerLog.en, ...settings.en, ...pwa.en },
+  ar: { ...common.ar, ...today.ar, ...azkar.ar, ...prayerTimes.ar, ...prayerLog.ar, ...settings.ar, ...pwa.ar },
 }
 
 export type StringKey = keyof typeof dictionaries.en

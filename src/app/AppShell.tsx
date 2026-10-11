@@ -2,6 +2,7 @@ import { BookOpenText, CalendarCheck, Settings, Sunrise } from 'lucide-react'
 import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { PrayerNotifier } from '../features/prayer-times'
+import { UpdateBanner } from '../pwa'
 import { useI18n } from '../shared/i18n'
 import type { StringKey } from '../shared/i18n'
 import './app.css'
@@ -27,6 +28,7 @@ export function AppShell() {
       <main className="app__main">
         <Outlet />
       </main>
+      <UpdateBanner />
       <nav className="tabbar" aria-label={t('nav.label')}>
         <div className="tabbar__inner">
           {TABS.map(({ to, label, icon: Icon, end }) => (

@@ -5,33 +5,48 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Least privilege by default; the deploy job asks for what Pages needs.
 permissions:
   contents: read
 
-# One deployment at a time; let a running deploy finish rather than cancel it.
+# One deployment at a time. A running deployment is left to finish rather than
+# cancelled half-way; of the runs queued behind it only the newest is kept.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
   build:
+    name: Build and test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - name: Check out
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v5
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type-check
+        run: npm run typecheck
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
+  # Everything that needs GitHub Pages to be switched on lives in this job, so
+  # the build job stays green in a repository where Pages is not enabled yet
+  # (Settings -> Pages -> Source: GitHub Actions).
   deploy:
+    name: Deploy
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -41,5 +56,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Check that Pages is enabled
+        uses: actions/configure-pages@v6
+      - name: Deploy
+        id: deployment
         uses: actions/deploy-pages@v5

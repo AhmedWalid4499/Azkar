@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!--
+    App icon, purpose "maskable": the ground bleeds to every edge so the launcher can cut any shape,
+    and the artwork is drawn at 90% so that it stays within 157px of the centre. The guaranteed safe
+    zone is a circle of radius 204.8px (40% of the width).
+  -->
+  <rect width="512" height="512" fill="#0e6b54"/>
+  <g transform="translate(256 256) scale(0.9) translate(-256 -256)">
+    <path d="M328 112a160 160 0 1 0 72 240 128 128 0 1 1-72-240z" fill="#f5e8cc"/>
+    <path d="M360 176 374.5 211.3 412.5 214.1 383.4 238.8 392.4 275.9 360 255.8 327.6 275.9 336.6 238.8 307.5 214.1 345.5 211.3z" fill="#d9b25f"/>
+  </g>
+</svg>
