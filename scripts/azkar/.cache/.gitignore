@@ -1,0 +1,4 @@
+# Optional verification witnesses fetched by `node scripts/azkar/fetch.mjs --cache`.
+# They are not redistributed with the app.
+*
+!.gitignore

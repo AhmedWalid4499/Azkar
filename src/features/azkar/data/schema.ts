@@ -24,6 +24,11 @@ export interface Dhikr {
   translation: string
   /** How many times to recite it in one session. */
   repeat: number
+  /**
+   * The source's own remark on the count when `repeat` cannot carry it,
+   * e.g. "Ten times, or once if one feels too weary" or "One hundred times during the day".
+   */
+  note?: Bilingual
   /** Reward or benefit mentioned in the narration, when there is one. */
   virtue?: Bilingual
   /** Where it is narrated, e.g. "Abu Dawud 5068; at-Tirmidhi 3391". */

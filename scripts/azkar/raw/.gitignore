@@ -1,0 +1,7 @@
+# Complete third-party compilations of Hisn al-Muslim. They are inputs of build.mjs, pinned by
+# sha256 in sources.mjs and downloaded by `node scripts/azkar/fetch.mjs`, but they are not
+# redistributed from this repository: the book's text belongs to its author and publisher.
+# The licence files beside them stay committed.
+abdorizak-hisnul-muslim/hisnul_muslim.json
+asellam-hisn-el-muslim/hisn.json
+seen-arabic-adhkar-db/ar.json
