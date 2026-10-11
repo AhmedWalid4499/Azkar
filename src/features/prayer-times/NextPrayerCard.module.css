@@ -1,0 +1,154 @@
+/*
+ * A solid emerald surface by day; by night the same idea in deep green, since
+ * the dark theme's primary is a bright mint that would glare at this size.
+ */
+.card {
+  --hero-from: var(--primary);
+  --hero-to: var(--primary-strong);
+  --hero-ink: var(--on-primary);
+  --hero-accent: var(--accent-soft);
+  --hero-line: transparent;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--hero-line);
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--hero-ink) 14%, transparent), transparent 62%),
+    linear-gradient(155deg, var(--hero-from), var(--hero-to));
+  color: var(--hero-ink);
+  box-shadow: var(--shadow-2);
+}
+
+[dir='rtl'] .card {
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--hero-ink) 14%, transparent), transparent 62%),
+    linear-gradient(205deg, var(--hero-from), var(--hero-to));
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme='light'])) .card {
+    --hero-from: color-mix(in srgb, var(--primary) 30%, var(--surface));
+    --hero-to: var(--primary-soft);
+    --hero-ink: var(--ink);
+    --hero-accent: var(--accent-ink);
+    --hero-line: color-mix(in srgb, var(--primary) 32%, transparent);
+  }
+}
+
+:global(:root[data-theme='dark']) .card {
+  --hero-from: color-mix(in srgb, var(--primary) 30%, var(--surface));
+  --hero-to: var(--primary-soft);
+  --hero-ink: var(--ink);
+  --hero-accent: var(--accent-ink);
+  --hero-line: color-mix(in srgb, var(--primary) 32%, transparent);
+}
+
+/* An eight-pointed star, half off the corner: two squares, one turned 45°. */
+.motif {
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -44px;
+  inset-inline-end: -44px;
+  width: 168px;
+  height: 168px;
+  opacity: 0.16;
+}
+
+.motif::before,
+.motif::after {
+  content: '';
+  position: absolute;
+  inset: 24px;
+  border: 2px solid var(--hero-ink);
+  border-radius: 6px;
+}
+
+.motif::after {
+  transform: rotate(45deg);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--hero-accent);
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 18px;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: currentcolor;
+}
+
+.headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: var(--space-4);
+}
+
+.name {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.when {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.time {
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.tomorrow {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--hero-ink) 16%, transparent);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.countdown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--hero-ink) 22%, transparent);
+}
+
+.digits {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  unicode-bidi: isolate;
+}
+
+.countdownLabel,
+.current {
+  color: color-mix(in srgb, var(--hero-ink) 88%, transparent);
+  font-size: var(--text-s);
+}
+
+.fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}

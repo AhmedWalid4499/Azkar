@@ -1,0 +1,214 @@
+/* ---------- Actions shared by the first-run card and Settings ---------- */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Side by side when there is room, stacked on a narrow phone. */
+.buttons > * {
+  flex: 1 1 180px;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.spinner {
+  flex: none;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- First-run card ---------- */
+
+.prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.promptBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.promptIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.promptTitle {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.promptText {
+  color: var(--ink-2);
+}
+
+/* ---------- Settings section ---------- */
+
+/* A block inside a Section that is not a label/control row. */
+.block {
+  padding: var(--space-3) var(--space-4);
+}
+
+.detail {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- City search ---------- */
+
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 46dvh;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fieldIcon {
+  position: absolute;
+  inset-inline-start: var(--space-4);
+  color: var(--ink-3);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding-block: 0;
+  padding-inline: calc(var(--space-4) + 26px) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--ink-3);
+}
+
+.input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.status {
+  min-height: 1.5em;
+  padding-inline: var(--space-2);
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.noticeRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.results > li + li {
+  border-top: 1px solid var(--line);
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  text-align: start;
+  transition: background-color 0.15s var(--ease);
+}
+
+.result:hover {
+  background: var(--surface-2);
+}
+
+.result:focus-visible {
+  outline-offset: -3px;
+}
+
+.resultIcon {
+  flex: none;
+  color: var(--ink-3);
+}
+
+.resultText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.resultName {
+  font-weight: 600;
+}
+
+.resultDetail {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.resultName,
+.resultDetail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attribution {
+  margin-top: auto;
+  padding-inline: var(--space-2);
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+}
+
+.attribution a {
+  color: inherit;
+}

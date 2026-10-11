@@ -1,0 +1,36 @@
+/* A <select> under its label, as wide as the row. */
+.select {
+  width: 100%;
+}
+
+/* One line of a multi-line row description. */
+.line {
+  display: block;
+}
+
+.block {
+  padding: var(--space-3) var(--space-4);
+}
+
+.sheetText {
+  color: var(--ink-2);
+}
+
+.sheetRows {
+  margin-top: var(--space-3);
+}
+
+.sheetRows > * {
+  padding-inline: 0;
+}
+
+.sheetRows > * + * {
+  border-top: 1px solid var(--line);
+}
+
+.sheetActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
