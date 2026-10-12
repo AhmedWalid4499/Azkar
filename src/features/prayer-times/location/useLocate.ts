@@ -7,7 +7,7 @@ import { LookupError, reverseGeocode } from './geocoding'
 import type { LookupErrorCode } from './geocoding'
 import { GeoError, requestPosition } from './geolocation'
 import type { GeoErrorCode } from './geolocation'
-import { coordinatesLabel, placeLabel } from './place'
+import { placeLabel } from './place'
 
 export interface LocateState {
   /** `locating`: waiting for the device. `naming`: position saved, looking up its name. */
@@ -66,6 +66,7 @@ export function useLocate(): LocateState & { locate: () => Promise<void>; dismis
 
     const store = useLocationStore.getState()
     const previous = store.location
+    const timeZone = deviceTimeZone()
     // An update from the same town keeps its name if the lookup below fails.
     const known =
       previous &&
@@ -75,12 +76,16 @@ export function useLocate(): LocateState & { locate: () => Promise<void>; dismis
       isSamePlace(previous, latitude, longitude)
         ? previous
         : null
+    // A time zone belongs to one country, so further afield in the same zone the
+    // country still holds, and with it the calculation method. The name does not.
+    const sameCountry = previous && typeof previous.countryCode === 'string' && previous.timeZone === timeZone
     const saved: SavedLocation = {
       latitude,
       longitude,
-      timeZone: deviceTimeZone(),
-      label: known ? known.label : coordinatesLabel(latitude, longitude, i18n),
-      countryCode: known ? known.countryCode : null,
+      timeZone,
+      // No name yet: the coordinates are shown in its place, in whatever language the interface is in then.
+      label: known ? known.label : '',
+      countryCode: known ? known.countryCode : sameCountry ? previous.countryCode : null,
       source: 'gps',
       updatedAt: Date.now(),
     }

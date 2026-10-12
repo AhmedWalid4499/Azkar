@@ -52,6 +52,7 @@ const Timetable = memo(function Timetable({ day, current, next, renderTrailing }
                 key={slot}
                 className={cx(
                   styles.row,
+                  renderTrailing && styles.withTrailing,
                   slot === 'sunrise' && styles.secondary,
                   isCurrent && styles.current,
                   isNext && styles.next,

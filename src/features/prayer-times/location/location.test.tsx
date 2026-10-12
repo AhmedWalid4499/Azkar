@@ -1,11 +1,14 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, renderHook, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { deviceTimeZone } from '../../../shared/date'
 import { useLocationStore } from '../../../shared/location'
+import { useSettings } from '../../../shared/settings'
+import { autoMethod } from '../engine/methods'
 import { CAIRO, resetStores } from '../test-helpers'
 import { LocationPrompt } from './LocationPrompt'
 import { LocationSettingsSection } from './LocationSettingsSection'
+import { useLocationLabel } from './useLocationLabel'
 
 const SEARCH_HOST = 'geocoding-api.open-meteo.com'
 const REVERSE_HOST = 'api.bigdatacloud.net'
@@ -122,7 +125,7 @@ describe('using the device location', () => {
     expect(screen.getByRole('status')).toBeEmptyDOMElement()
   })
 
-  it('still saves the location when the name lookup fails, labelled with its coordinates', async () => {
+  it('still saves the location when the name lookup fails, with no name rather than a made-up one', async () => {
     const user = userEvent.setup()
     stubServices({
       reverse: () => {
@@ -134,14 +137,34 @@ describe('using the device location', () => {
 
     await user.click(useMyLocation())
     expect(await screen.findByText(/Its name couldn’t be looked up, but the prayer times are accurate/)).toBeInTheDocument()
+    // The coordinates are written out where the place is shown, in the language of the day; they are not stored as a name.
     expect(savedLocation()).toMatchObject({
       latitude: 30.044,
       longitude: 31.236,
-      label: '30.04° N, 31.24° E',
+      label: '',
       countryCode: null,
       source: 'gps',
     })
     expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it('announces how it ended, and not only that it started, to a screen reader', async () => {
+    const user = userEvent.setup()
+    let fail: (reason: unknown) => void = () => {}
+    stubServices({ reverse: () => new Promise((_resolve, reject) => (fail = reject)) })
+    stubGeolocation(at(30.0444196, 31.2357116))
+    render(<LocationPrompt />)
+
+    await user.click(useMyLocation())
+    const status = screen.getByRole('status')
+    await waitFor(() => expect(status).toHaveTextContent('Location saved. Looking up the place name…'))
+
+    await act(async () => fail(new TypeError('Failed to fetch')))
+    // The same live region, still in the page, now carries the outcome, and shows it.
+    expect(screen.getByRole('status')).toBe(status)
+    expect(status).toHaveTextContent('Location saved. Its name couldn’t be looked up, but the prayer times are accurate.')
+    expect(status).not.toHaveClass('visually-hidden')
+    expect(screen.getAllByText(/couldn’t be looked up/)).toHaveLength(1)
   })
 
   it('works offline without attempting the lookup', async () => {
@@ -153,11 +176,12 @@ describe('using the device location', () => {
 
     await user.click(useMyLocation())
     expect(await screen.findByText(/You’re offline, so its name couldn’t be looked up/)).toBeInTheDocument()
-    expect(savedLocation()).toMatchObject({ latitude: -33.869, longitude: 151.209, label: '33.87° S, 151.21° E', source: 'gps' })
+    expect(screen.getByRole('status')).toHaveTextContent(/You’re offline, so its name couldn’t be looked up/)
+    expect(savedLocation()).toMatchObject({ latitude: -33.869, longitude: 151.209, label: '', source: 'gps' })
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it('keeps the coordinates label when the service has no name for the spot', async () => {
+  it('leaves the name empty when the service has none for the spot', async () => {
     const user = userEvent.setup()
     stubServices({ reverse: () => ({ city: '', locality: '', countryName: '', countryCode: '' }) })
     stubGeolocation(at(0.001, -140.5))
@@ -165,7 +189,7 @@ describe('using the device location', () => {
 
     await user.click(useMyLocation())
     await screen.findByText(/Its name couldn’t be looked up/)
-    expect(savedLocation()).toMatchObject({ label: '0.00° N, 140.50° W', countryCode: null })
+    expect(savedLocation()).toMatchObject({ label: '', countryCode: null })
   })
 
   it('does not let a late name overwrite a city chosen in the meantime', async () => {
@@ -239,6 +263,36 @@ describe('using the device location', () => {
     await waitFor(() => expect(useMyLocation()).toBeEnabled())
     expect(savedLocation()).toMatchObject({ label: 'Cairo, Egypt', countryCode: 'EG', source: 'gps' })
     expect(screen.queryByText(/couldn’t be looked up/)).toBeNull()
+  })
+
+  describe('an update that cannot be looked up, away from the saved place', () => {
+    // About 15 km from the saved spot: too far to keep its name.
+    const INDIANAPOLIS = { ...CAIRO, latitude: 39.768, longitude: -86.158, label: 'Indianapolis, United States', countryCode: 'US', source: 'gps' as const }
+
+    async function updateOffline() {
+      const user = userEvent.setup()
+      const { fetchMock } = stubServices({ reverse: () => CAIRO_PLACE })
+      vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+      stubGeolocation(at(39.91, -86.05))
+      render(<LocationPrompt />)
+      await user.click(screen.getByRole('button', { name: 'Use my location' }))
+      await screen.findByText(/You’re offline, so its name couldn’t be looked up/)
+      expect(fetchMock).not.toHaveBeenCalled()
+    }
+
+    it('keeps the country, and with it the method, while the device is still in the same time zone', async () => {
+      useLocationStore.setState({ location: { ...INDIANAPOLIS, timeZone: deviceTimeZone() } })
+      await updateOffline()
+      expect(savedLocation()).toMatchObject({ latitude: 39.91, longitude: -86.05, label: '', countryCode: 'US', timeZone: deviceTimeZone() })
+      expect(autoMethod(savedLocation())).toBe('NorthAmerica')
+    })
+
+    it('drops the country once the device has moved to another time zone', async () => {
+      const elsewhere = deviceTimeZone() === 'America/Chicago' ? 'America/Denver' : 'America/Chicago'
+      useLocationStore.setState({ location: { ...INDIANAPOLIS, timeZone: elsewhere } })
+      await updateOffline()
+      expect(savedLocation()).toMatchObject({ label: '', countryCode: null, timeZone: deviceTimeZone() })
+    })
   })
 
   describe('when it fails', () => {
@@ -528,10 +582,58 @@ describe('LocationSettingsSection', () => {
     expect(screen.getByText('30.04° N, 31.24° E')).toBeInTheDocument()
   })
 
+  it('writes those coordinates in the language in use now, not the one the location was saved in', async () => {
+    resetStores({ settings: { language: 'ar' } })
+    const user = userEvent.setup()
+    stubServices({})
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    stubGeolocation(at(30.0444, 31.2357))
+    render(<LocationSettingsSection />)
+
+    await user.click(screen.getByRole('button', { name: 'استخدام موقعي' }))
+    expect(await screen.findByText('٣٠٫٠٤° شمالًا، ٣١٫٢٤° شرقًا')).toBeInTheDocument()
+    expect(savedLocation()?.label).toBe('')
+
+    act(() => useSettings.setState({ language: 'en' }))
+    expect(screen.getByText('30.04° N, 31.24° E')).toBeInTheDocument()
+    expect(document.body).not.toHaveTextContent(/[٠-٩]|شمالًا/)
+  })
+
+  it('says in Arabic that it is the lookup service that receives the position', () => {
+    resetStores({ settings: { language: 'ar' } })
+    render(<LocationSettingsSection />)
+    const footer = screen.getByText(/يبقى موقعك على هذا الجهاز/)
+    // Without its subject the verb reads as "you receive your approximate position".
+    expect(footer).toHaveTextContent('فتتلقّى الخدمة حينها موقعك التقريبي')
+  })
+
   it('asks for the location again when the stored one is unusable', () => {
     useLocationStore.setState({ location: { ...CAIRO, latitude: 1234 } })
     render(<LocationSettingsSection />)
     expect(screen.getByText('The saved location can’t be read. Please set it again.')).toBeInTheDocument()
     expect(useMyLocation()).toBeInTheDocument()
+  })
+})
+
+describe('useLocationLabel', () => {
+  const label = () => renderHook(() => useLocationLabel()).result.current
+
+  it('is null until a location is saved', () => {
+    expect(label()).toBeNull()
+  })
+
+  it('is the stored name when there is one', () => {
+    resetStores({ location: CAIRO })
+    expect(label()).toBe('Cairo, Egypt')
+  })
+
+  it('is the coordinates, in the interface language and digits, when there is none', () => {
+    const unnamed = { ...CAIRO, latitude: -33.869, longitude: 151.209, label: '' }
+    resetStores({ location: unnamed })
+    expect(label()).toBe('33.87° S, 151.21° E')
+    resetStores({ location: unnamed, settings: { language: 'ar' } })
+    expect(label()).toBe('٣٣٫٨٧° جنوبًا، ١٥١٫٢١° شرقًا')
+    resetStores({ location: unnamed, settings: { language: 'ar', arabicDigits: false } })
+    expect(label()).toBe('33.87° جنوبًا، 151.21° شرقًا')
   })
 })

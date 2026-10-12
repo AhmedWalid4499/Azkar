@@ -1,6 +1,7 @@
 import { act, render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { parseCss, readStylesheet, styleOf } from '../../shared/styles/testing'
 import { usePrayerTimesStore } from './config'
 import { PrayerTimesList } from './PrayerTimesList'
 import { CAIRO, resetStores, restoreDeviceZone, setDeviceZone, TROMSO, zonedInstant } from './test-helpers'
@@ -86,6 +87,47 @@ describe('PrayerTimesList', () => {
     it('adds no cell when no control is asked for', () => {
       render(<PrayerTimesList dateKey={TODAY} />)
       for (const row of rows()) expect(row.lastElementChild?.tagName).toBe('TIME')
+    })
+
+    it('has every row keep room for it at its end, and none when there is no control', () => {
+      const withControl = render(<PrayerTimesList dateKey={TODAY} renderTrailing={() => null} />)
+      expect(rows().every((row) => /withTrailing/.test(row.className))).toBe(true)
+      withControl.unmount()
+      render(<PrayerTimesList dateKey={TODAY} />)
+      expect(rows().some((row) => /withTrailing/.test(row.className))).toBe(false)
+    })
+  })
+
+  // jsdom lays nothing out, so this reads the stylesheet: at 200% text on a 360px screen
+  // "Maghrib" and "6:45 PM" do not fit side by side, and used to be painted over each other.
+  describe('at large text sizes', () => {
+    const rules = parseCss(readStylesheet('src/features/prayer-times/PrayerTimesList.module.css'))
+
+    it('lets the time drop to its own line rather than run into the name', () => {
+      expect(styleOf(rules, '.row')['flex-wrap']).toBe('wrap')
+      // What has to fit beside the time is the name at its real width, where it used to count as nothing...
+      const label = styleOf(rules, '.label')
+      expect(label.flex).toBe('1 1 auto')
+      expect(label.width).toBe('min-content')
+      // ...and the time is never squeezed or broken, wherever it lands.
+      const time = styleOf(rules, '.time')
+      expect(time.flex).toBe('none')
+      expect(time['white-space']).toBe('nowrap')
+      expect(time['margin-inline-start']).toBe('auto')
+    })
+
+    it('keeps a name in one piece unless a whole line cannot hold it', () => {
+      // `anywhere` would let "Maghrib" split to make room for the time; `break-word` does not count towards its width.
+      expect(styleOf(rules, '.name')['overflow-wrap']).toBe('break-word')
+    })
+
+    it('holds the trailing control at the end of the row, outside what wraps', () => {
+      const trailing = styleOf(rules, '.trailing')
+      expect(trailing.position).toBe('absolute')
+      expect(trailing['inset-inline-end']).toBe('var(--space-2)')
+      expect(trailing['min-width']).toBe('44px')
+      // The row leaves exactly that much free: the control, its inset and the gap before it.
+      expect(styleOf(rules, '.withTrailing')['padding-inline-end']).toBe('calc(var(--space-2) + 44px + var(--space-3))')
     })
   })
 
@@ -188,6 +230,26 @@ describe('PrayerTimesList', () => {
 
       expect(screen.getByText(/can’t be calculated here today/)).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Open the high-latitude settings' })).toHaveAttribute('href', '/settings')
+    })
+
+    it('has no Asr to show, and says why truthfully, on a day the sun rises but stays at the horizon', () => {
+      // 24 November in Tromsø: sunrise 10:32, sunset 12:29, and adhan's Asr at 08:31.
+      vi.setSystemTime(zonedInstant('2026-11-24', '08:40', 'Europe/Oslo'))
+      render(
+        <MemoryRouter>
+          <PrayerTimesList dateKey="2026-11-24" />
+        </MemoryRouter>,
+      )
+      expect(rowTexts()).toEqual(['Fajr05:45', 'Sunrise10:32', 'DhuhrNext11:32', 'Asr—Not available', 'Maghrib12:29', 'Isha17:04'])
+      expect(screen.queryByText('Now')).toBeNull()
+      // The sun does rise and set that day, so the notice must not claim otherwise.
+      expect(screen.getByText(/because the sun doesn’t rise, doesn’t set, or stays too close to the horizon\./)).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Open the high-latitude settings' })).toBeInTheDocument()
+
+      // The setting that link leads to does fill the day in.
+      act(() => usePrayerTimesStore.getState().setPolar('nearestLatitude'))
+      expect(screen.queryByText('Not available')).toBeNull()
+      expect(rowTexts()[3]).toBe('Asr11:33')
     })
 
     it('fills the times in once the nearest-latitude option is on', () => {

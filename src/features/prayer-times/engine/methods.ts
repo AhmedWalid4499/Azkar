@@ -70,9 +70,10 @@ const COUNTRY_METHOD: Readonly<Record<string, MethodId>> = {
 }
 
 /**
- * Fallback for a location saved without a country (GPS while offline): the
- * main IANA zones of the countries above, including the older aliases some
- * browsers still report.
+ * Fallback for a location saved without a country (GPS while offline): every
+ * IANA zone of the countries above, under the names browsers report. Chrome and
+ * Safari still give the older spelling of several (Asia/Calcutta,
+ * America/Indianapolis, America/Coral_Harbour), so both are listed.
  */
 const ZONE_COUNTRY: Readonly<Record<string, string>> = {
   'Africa/Cairo': 'EG',
@@ -99,23 +100,71 @@ const ZONE_COUNTRY: Readonly<Record<string, string>> = {
   'Asia/Jayapura': 'ID',
   'Asia/Brunei': 'BN',
   'Europe/London': 'GB',
+  'Europe/Belfast': 'GB',
+
   'America/New_York': 'US',
   'America/Detroit': 'US',
+  'America/Louisville': 'US',
+  'America/Indianapolis': 'US',
+  'America/Fort_Wayne': 'US',
+  'America/Knox_IN': 'US',
   'America/Chicago': 'US',
+  'America/Menominee': 'US',
   'America/Denver': 'US',
+  'America/Shiprock': 'US',
+  'America/Boise': 'US',
   'America/Phoenix': 'US',
   'America/Los_Angeles': 'US',
   'America/Anchorage': 'US',
+  'America/Juneau': 'US',
+  'America/Sitka': 'US',
+  'America/Metlakatla': 'US',
+  'America/Yakutat': 'US',
+  'America/Nome': 'US',
+  'America/Adak': 'US',
+  'America/Atka': 'US',
   'Pacific/Honolulu': 'US',
+
+  'America/St_Johns': 'CA',
+  'America/Halifax': 'CA',
+  'America/Glace_Bay': 'CA',
+  'America/Moncton': 'CA',
+  'America/Goose_Bay': 'CA',
+  'America/Blanc-Sablon': 'CA',
   'America/Toronto': 'CA',
   'America/Montreal': 'CA',
+  'America/Nipigon': 'CA',
+  'America/Thunder_Bay': 'CA',
+  'America/Iqaluit': 'CA',
+  'America/Pangnirtung': 'CA',
+  'America/Atikokan': 'CA',
+  'America/Coral_Harbour': 'CA',
   'America/Winnipeg': 'CA',
+  'America/Rainy_River': 'CA',
+  'America/Resolute': 'CA',
+  'America/Rankin_Inlet': 'CA',
   'America/Regina': 'CA',
+  'America/Swift_Current': 'CA',
   'America/Edmonton': 'CA',
+  'America/Cambridge_Bay': 'CA',
+  'America/Yellowknife': 'CA',
+  'America/Inuvik': 'CA',
+  'America/Creston': 'CA',
+  'America/Dawson_Creek': 'CA',
+  'America/Fort_Nelson': 'CA',
+  'America/Whitehorse': 'CA',
+  'America/Dawson': 'CA',
   'America/Vancouver': 'CA',
-  'America/Halifax': 'CA',
-  'America/St_Johns': 'CA',
 }
+
+/** Zones named by region under a common prefix: the counties of Indiana, Kentucky and North Dakota, and the old `US/` and `Canada/` aliases. */
+const ZONE_PREFIX_COUNTRY: ReadonlyArray<readonly [prefix: string, country: string]> = [
+  ['America/Indiana/', 'US'],
+  ['America/Kentucky/', 'US'],
+  ['America/North_Dakota/', 'US'],
+  ['US/', 'US'],
+  ['Canada/', 'CA'],
+]
 
 export interface MethodContext {
   countryCode: string | null
@@ -127,18 +176,48 @@ function lookup<T>(table: Readonly<Record<string, T>>, key: string): T | undefin
   return Object.hasOwn(table, key) ? table[key] : undefined
 }
 
+function countryOfZone(timeZone: unknown): string | undefined {
+  if (typeof timeZone !== 'string') return undefined
+  return lookup(ZONE_COUNTRY, timeZone) ?? ZONE_PREFIX_COUNTRY.find(([prefix]) => timeZone.startsWith(prefix))?.[1]
+}
+
+/** The country a place is in: the one saved with it, otherwise the one its time zone belongs to. */
+function countryOf(place: MethodContext): string | undefined {
+  return typeof place.countryCode === 'string' && place.countryCode !== ''
+    ? place.countryCode.toUpperCase()
+    : countryOfZone(place.timeZone)
+}
+
 /** The preset "Automatic" stands for at a place. */
 export function autoMethod(place: MethodContext | null): MethodId {
-  if (!place) return DEFAULT_METHOD
-  const country =
-    typeof place.countryCode === 'string' && place.countryCode !== ''
-      ? place.countryCode.toUpperCase()
-      : lookup(ZONE_COUNTRY, place.timeZone)
+  const country = place ? countryOf(place) : undefined
   return (country !== undefined && lookup(COUNTRY_METHOD, country)) || DEFAULT_METHOD
 }
 
 export function resolveMethod(setting: MethodSetting, place: MethodContext | null): MethodId {
   return setting === 'auto' ? autoMethod(place) : setting
+}
+
+/** adhan's own identifiers. `shafi` is the Asr of the Shafi'i, Maliki and Hanbali schools alike. */
+export type MadhabId = 'shafi' | 'hanafi'
+export type MadhabSetting = 'auto' | MadhabId
+
+export const DEFAULT_MADHAB: MadhabId = 'shafi'
+
+/**
+ * Where nearly every mosque keeps the later, Hanafi Asr. Turkey is left out on
+ * purpose: Diyanet's timetable uses the first-shadow Asr.
+ */
+const HANAFI_COUNTRIES: ReadonlySet<string> = new Set(['PK', 'IN', 'BD', 'AF'])
+
+/** The Asr school "Automatic" stands for at a place, found the same way as its method. */
+export function autoMadhab(place: MethodContext | null): MadhabId {
+  const country = place ? countryOf(place) : undefined
+  return country !== undefined && HANAFI_COUNTRIES.has(country) ? 'hanafi' : DEFAULT_MADHAB
+}
+
+export function resolveMadhab(setting: MadhabSetting, place: MethodContext | null): MadhabId {
+  return setting === 'auto' ? autoMadhab(place) : setting
 }
 
 export interface MethodAngles {

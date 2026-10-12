@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CalculationSettingsSection } from './CalculationSettingsSection'
@@ -48,20 +48,77 @@ describe('CalculationSettingsSection', () => {
 
     await user.selectOptions(methodSelect(), 'Umm al-Qura, Makkah')
     expect(settings().method).toBe('UmmAlQura')
-    expect(screen.queryByText(/^Automatic uses .* here$/)).toBeNull()
+    // (The Asr row has an "Automatic uses … here" line of its own.)
+    expect(screen.queryByText(/^Automatic uses .*(Survey|Makkah).* here$/)).toBeNull()
     expect(screen.getByText('Fajr 18.5° · Isha 90 minutes after Maghrib, 120 in Ramadan')).toBeInTheDocument()
 
     await user.selectOptions(methodSelect(), 'Qatar')
     expect(screen.getByText('Fajr 18° · Isha 90 minutes after Maghrib')).toBeInTheDocument()
   })
 
-  it('switches the Asr school', async () => {
-    const user = userEvent.setup()
-    render(<CalculationSettingsSection />)
-    const group = screen.getByRole('radiogroup', { name: 'Asr time' })
-    expect(within(group).getByRole('radio', { name: 'Standard' })).toBeChecked()
-    await user.click(within(group).getByRole('radio', { name: 'Hanafi' }))
-    expect(settings().madhab).toBe('hanafi')
+  describe('Asr school', () => {
+    const group = () => screen.getByRole('radiogroup', { name: 'Asr time' })
+    const option = (name: string) => within(group()).getByRole('radio', { name })
+
+    it('offers Automatic, Standard and Hanafi, with Automatic chosen on a new install', () => {
+      render(<CalculationSettingsSection />)
+      expect(within(group()).getAllByRole('radio').map((radio) => radio.parentElement?.textContent)).toEqual([
+        'Automatic',
+        'Standard',
+        'Hanafi',
+      ])
+      expect(option('Automatic')).toBeChecked()
+      expect(settings().madhab).toBe('auto')
+    })
+
+    it('says what Automatic stands for at the saved location, like the method row', () => {
+      render(<CalculationSettingsSection />)
+      expect(screen.getByText('Automatic uses Standard here')).toBeInTheDocument()
+    })
+
+    it('follows the country of the saved location to the Hanafi Asr', () => {
+      resetStores({ location: { ...CAIRO, latitude: 24.8607, longitude: 67.0011, countryCode: 'PK', timeZone: 'Asia/Karachi' } })
+      render(<CalculationSettingsSection />)
+      expect(screen.getByText('Automatic uses Hanafi here')).toBeInTheDocument()
+      // Known only by its time zone, as after a fix taken offline.
+      act(() => resetStores({ location: { ...CAIRO, countryCode: null, timeZone: 'Asia/Dhaka' } }))
+      expect(screen.getByText('Automatic uses Hanafi here')).toBeInTheDocument()
+      // Turkey's own timetable uses the standard Asr.
+      act(() => resetStores({ location: { ...CAIRO, countryCode: 'TR', timeZone: 'Europe/Istanbul' } }))
+      expect(screen.getByText('Automatic uses Standard here')).toBeInTheDocument()
+    })
+
+    it('says what Automatic uses before a location is set', () => {
+      resetStores()
+      render(<CalculationSettingsSection />)
+      expect(screen.getByText('Automatic uses Standard until a location is set')).toBeInTheDocument()
+    })
+
+    it('stores an explicit school and stops describing Automatic', async () => {
+      const user = userEvent.setup()
+      render(<CalculationSettingsSection />)
+      await user.click(option('Hanafi'))
+      expect(settings().madhab).toBe('hanafi')
+      expect(option('Hanafi')).toBeChecked()
+      expect(screen.queryByText(/^Automatic uses (Standard|Hanafi)/)).toBeNull()
+
+      await user.click(option('Standard'))
+      expect(settings().madhab).toBe('shafi')
+      await user.click(option('Automatic'))
+      expect(settings().madhab).toBe('auto')
+      expect(screen.getByText('Automatic uses Standard here')).toBeInTheDocument()
+    })
+
+    it('shows a stored Standard as chosen even where Automatic would be Hanafi', () => {
+      resetStores({
+        location: { ...CAIRO, countryCode: 'PK', timeZone: 'Asia/Karachi' },
+        prayerTimes: { madhab: 'shafi' },
+      })
+      render(<CalculationSettingsSection />)
+      expect(option('Standard')).toBeChecked()
+      expect(screen.queryByText(/^Automatic uses (Standard|Hanafi)/)).toBeNull()
+      expect(screen.getByText('Automatic uses University of Islamic Sciences, Karachi here')).toBeInTheDocument()
+    })
   })
 
   it('explains the automatic high-latitude rule and stores an explicit one', async () => {
@@ -126,8 +183,14 @@ describe('CalculationSettingsSection', () => {
     await user.click(screen.getByRole('button', { name: 'Adjust' }))
     const dialog = screen.getByRole('dialog')
 
-    expect(within(within(dialog).getByRole('group', { name: 'Fajr, minutes' })).getByRole('button', { name: 'Increase' })).toBeDisabled()
-    expect(within(within(dialog).getByRole('group', { name: 'Asr, minutes' })).getByRole('button', { name: 'Decrease' })).toBeDisabled()
+    // The shared stepper marks a button at its limit aria-disabled (it keeps keyboard focus) and ignores presses on it.
+    const fajrUp = within(within(dialog).getByRole('group', { name: 'Fajr, minutes' })).getByRole('button', { name: 'Increase' })
+    const asrDown = within(within(dialog).getByRole('group', { name: 'Asr, minutes' })).getByRole('button', { name: 'Decrease' })
+    expect(fajrUp).toHaveAttribute('aria-disabled', 'true')
+    expect(asrDown).toHaveAttribute('aria-disabled', 'true')
+    await user.click(fajrUp)
+    await user.click(asrDown)
+    expect(settings().adjustments).toMatchObject({ fajr: 30, asr: -30 })
 
     await user.click(within(dialog).getByRole('button', { name: 'Reset all to zero' }))
     expect(Object.values(settings().adjustments)).toEqual([0, 0, 0, 0, 0, 0])
@@ -144,6 +207,8 @@ describe('CalculationSettingsSection', () => {
     render(<CalculationSettingsSection />)
     expect(screen.getByRole('region', { name: 'حساب مواقيت الصلاة' })).toBeInTheDocument()
     expect(screen.getByText('المعتمَد تلقائيًا هنا: الهيئة المصرية العامة للمساحة')).toBeInTheDocument()
+    expect(screen.getByText('المعتمَد تلقائيًا هنا: الجمهور')).toBeInTheDocument()
+    expect(within(screen.getByRole('radiogroup', { name: 'وقت العصر' })).getByRole('radio', { name: 'تلقائي' })).toBeChecked()
     expect(screen.getByText('الفجر ١٩٫٥° · العشاء ١٧٫٥°')).toBeInTheDocument()
     expect(document.body).not.toHaveTextContent(/times\.|[A-Za-z]{4,}/)
   })
@@ -213,6 +278,57 @@ describe('NotificationSettingsSection', () => {
     await user.click(toggle())
     expect(api.requestPermission).not.toHaveBeenCalled()
     expect(settings().notifications).toBe(false)
+  })
+
+  it('does not interrupt a screen reader on arrival when notifications are already blocked', () => {
+    stubNotification('denied')
+    render(<NotificationSettingsSection />)
+    expect(screen.getByText(/Notifications are blocked for this app/)).toBeInTheDocument()
+    // Nobody did anything yet: the notice is there to be read, not announced over the page heading.
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it('announces the block as the answer to switching reminders on, each time', async () => {
+    const user = userEvent.setup()
+    stubNotification('denied')
+    render(<NotificationSettingsSection />)
+
+    await user.click(toggle())
+    const first = await screen.findByRole('alert')
+    expect(first).toHaveTextContent(/Notifications are blocked for this app/)
+
+    // A second try puts a new alert in, since one that is already there would not be read out again.
+    await user.click(toggle())
+    await waitFor(() => expect(first).not.toBeInTheDocument())
+    expect(screen.getByRole('alert')).toHaveTextContent(/Notifications are blocked for this app/)
+    expect(screen.getAllByText(/Notifications are blocked for this app/)).toHaveLength(1)
+  })
+
+  it('goes back to plain information once the block has been lifted and set again in the browser', async () => {
+    const user = userEvent.setup()
+    const api = stubNotification('denied')
+    render(<NotificationSettingsSection />)
+    await user.click(toggle())
+    await screen.findByRole('alert')
+
+    const returnWith = (permission: NotificationPermission) => {
+      api.permission = permission
+      act(() => void document.dispatchEvent(new Event('visibilitychange')))
+    }
+    returnWith('default')
+    expect(screen.queryByText(/Notifications are blocked for this app/)).toBeNull()
+    returnWith('denied')
+    expect(screen.getByText(/Notifications are blocked for this app/)).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it('announces a refusal given in the browser’s own prompt', async () => {
+    const user = userEvent.setup()
+    stubNotification('default', 'denied')
+    render(<NotificationSettingsSection />)
+    expect(screen.queryByRole('alert')).toBeNull()
+    await user.click(toggle())
+    expect(await screen.findByRole('alert')).toHaveTextContent(/Notifications are blocked for this app/)
   })
 
   it('stays off when the prompt is dismissed', async () => {

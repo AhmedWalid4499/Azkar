@@ -6,15 +6,15 @@ import { Notice, Row, Section } from '../../../shared/ui'
 import { usePlace } from '../hooks'
 import { LocationActions } from './LocationActions'
 import styles from './location.module.css'
-import { coordinatesLabel } from './place'
+import { useLocationLabel } from './useLocationLabel'
 
 /** Settings: the saved place, when it was set, and the two ways to change it. */
 export function LocationSettingsSection() {
-  const i18n = useI18n()
-  const { t, locale } = i18n
+  const { t, locale } = useI18n()
   const hour12 = useSettings((state) => state.timeFormat === '12h')
   const location = useLocationStore((state) => state.location)
   const place = usePlace()
+  const label = useLocationLabel()
 
   const updatedAt = location && Number.isFinite(location.updatedAt) ? new Date(location.updatedAt) : null
   const updated = updatedAt
@@ -28,12 +28,7 @@ export function LocationSettingsSection() {
     <Section title={t('times.location.title')} footer={t('times.location.footer')}>
       {place && location ? (
         <Row
-          label={
-            <span dir="auto">
-              {(typeof location.label === 'string' && location.label) ||
-                coordinatesLabel(place.latitude, place.longitude, i18n)}
-            </span>
-          }
+          label={<span dir="auto">{label}</span>}
           description={
             <>
               <span className={styles.detail}>

@@ -164,6 +164,17 @@ describe('NextPrayerCard', () => {
       expect(document.body).not.toHaveTextContent(/invalid|NaN/i)
     })
 
+    it('does not call it Asr time before sunrise on a day the sun barely rises', () => {
+      // 24 November in Tromsø: sunrise 10:32, Dhuhr 11:32, sunset 12:29. adhan alone puts Asr at 08:31.
+      vi.setSystemTime(zonedInstant('2026-11-24', '08:40', 'Europe/Oslo'))
+      resetStores({ location: TROMSO })
+      renderCard()
+      expect(screen.getByText('Dhuhr')).toBeInTheDocument()
+      expect(screen.getByText('11:32')).toBeInTheDocument()
+      expect(screen.queryByText(/time now/)).toBeNull()
+      expect(document.body).not.toHaveTextContent(/invalid|NaN/i)
+    })
+
     it('asks for the location again when the saved one is unusable', () => {
       useLocationStore.setState({ location: { ...CAIRO, latitude: 'north' } as unknown as SavedLocation })
       renderCard()

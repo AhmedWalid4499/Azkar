@@ -1,4 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { useLocationStore } from '../../shared/location'
+import type { SavedLocation } from '../../shared/location'
 import { exportBackup } from '../../shared/storage'
 import {
   DEFAULT_PRAYER_TIMES_SETTINGS,
@@ -22,7 +24,20 @@ async function rehydrateFrom(stored: unknown) {
   return settingsOf()
 }
 
+const KARACHI: SavedLocation = {
+  latitude: 24.8607,
+  longitude: 67.0011,
+  timeZone: 'Asia/Karachi',
+  label: 'Karachi, Pakistan',
+  countryCode: 'PK',
+  source: 'manual',
+  updatedAt: Date.UTC(2026, 8, 1),
+}
+
+const storedRaw = () => localStorage.getItem(PRAYER_TIMES_STORAGE_KEY)
+
 beforeEach(() => {
+  useLocationStore.setState({ location: null })
   store.setState(DEFAULT_PRAYER_TIMES_SETTINGS)
 })
 
@@ -45,12 +60,17 @@ describe('sanitizeSettings', () => {
       }),
     ).toEqual({
       method: 'Turkey',
-      madhab: 'shafi',
+      madhab: 'auto',
       highLatitudeRule: 'twilightangle',
       polar: 'unresolved',
       adjustments: { fajr: 2, sunrise: 0, dhuhr: 30, asr: -30, maghrib: 1, isha: 0 },
       notifications: false,
     })
+  })
+
+  it('accepts the three Asr schools and nothing else', () => {
+    for (const madhab of ['auto', 'shafi', 'hanafi']) expect(sanitizeSettings({ madhab }).madhab).toBe(madhab)
+    for (const madhab of ['Auto', 'maliki', '', null, 2, {}]) expect(sanitizeSettings({ madhab }).madhab).toBe('auto')
   })
 
   it('rejects method names that are not presets, including adhan’s blank one and inherited keys', () => {
@@ -114,6 +134,102 @@ describe('persisted store', () => {
     })
     expect(await rehydrateFrom({ version: 99, state: 'garbage' })).toEqual(DEFAULT_PRAYER_TIMES_SETTINGS)
     expect(await rehydrateFrom({ version: PRAYER_TIMES_VERSION, state: null })).toEqual(DEFAULT_PRAYER_TIMES_SETTINGS)
+  })
+})
+
+describe('the Asr school across an update', () => {
+  /** What the previous build stored once any setting had been changed: every field, with its Asr school spelt out. */
+  const stored = (madhab: 'shafi' | 'hanafi') => ({
+    version: 1,
+    state: { method: 'auto', madhab, highLatitudeRule: 'auto', polar: 'unresolved', adjustments: DEFAULT_PRAYER_TIMES_SETTINGS.adjustments, notifications: false },
+  })
+
+  it('is automatic on a new install', async () => {
+    expect(DEFAULT_PRAYER_TIMES_SETTINGS.madhab).toBe('auto')
+    localStorage.removeItem(PRAYER_TIMES_STORAGE_KEY)
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe('auto')
+  })
+
+  it.each(['shafi', 'hanafi'] as const)('keeps a stored "%s" exactly as stored, in a country where Automatic would differ', async (madhab) => {
+    useLocationStore.setState({ location: madhab === 'shafi' ? KARACHI : { ...KARACHI, countryCode: 'EG', timeZone: 'Africa/Cairo' } })
+    const raw = JSON.stringify(stored(madhab))
+    localStorage.setItem(PRAYER_TIMES_STORAGE_KEY, raw)
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe(madhab)
+    // Read, not migrated: what is in storage has not been touched.
+    expect(storedRaw()).toBe(raw)
+    expect(PRAYER_TIMES_VERSION).toBe(1)
+  })
+
+  it('keeps the standard Asr for an install that predates the choice and never saved a setting', async () => {
+    // The previous build wrote nothing here until a setting was changed: all it left behind is the location.
+    useLocationStore.setState({ location: KARACHI })
+    localStorage.removeItem(PRAYER_TIMES_STORAGE_KEY)
+
+    await store.persist.rehydrate()
+    expect(settingsOf()).toEqual({ ...DEFAULT_PRAYER_TIMES_SETTINGS, madhab: 'shafi' })
+    // Reading decides it the same way every time and writes nothing.
+    expect(storedRaw()).toBeNull()
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe('shafi')
+
+    // The first setting that person changes saves the school along with it.
+    store.getState().setNotifications(true)
+    expect(JSON.parse(storedRaw() ?? 'null').state.madhab).toBe('shafi')
+    store.getState().setMadhab('auto')
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe('auto')
+  })
+
+  it('writes a new install’s settings down when it saves its first location, so it is not taken for an older one', async () => {
+    localStorage.removeItem(PRAYER_TIMES_STORAGE_KEY)
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe('auto')
+    expect(storedRaw()).toBeNull()
+
+    const before = settingsOf()
+    const listener = vi.fn()
+    const unsubscribe = store.subscribe(listener)
+    useLocationStore.getState().setLocation(KARACHI)
+    unsubscribe()
+    expect(JSON.parse(storedRaw() ?? 'null')).toEqual({ version: PRAYER_TIMES_VERSION, state: DEFAULT_PRAYER_TIMES_SETTINGS })
+    // Saved like any other change, so whatever follows the store's writes (the tab sync) hears of this one; no setting moved.
+    expect(listener).toHaveBeenCalledOnce()
+    expect(settingsOf()).toEqual(before)
+    expect(settingsOf().adjustments).toBe(before.adjustments)
+
+    // The next start finds a location and its own saved settings: still automatic.
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe('auto')
+  })
+
+  it('does that once: a later change of location rewrites nothing and notifies nobody', () => {
+    useLocationStore.getState().setLocation(KARACHI)
+    store.getState().setMadhab('hanafi')
+    const raw = storedRaw()
+    const listener = vi.fn()
+    const unsubscribe = store.subscribe(listener)
+
+    useLocationStore.getState().setLocation({ ...KARACHI, latitude: 31.5204, longitude: 74.3587, label: 'Lahore, Pakistan' })
+    useLocationStore.getState().clearLocation()
+    useLocationStore.getState().setLocation(KARACHI)
+    unsubscribe()
+
+    expect(storedRaw()).toBe(raw)
+    expect(listener).not.toHaveBeenCalled()
+  })
+
+  it('still saves the location when the settings cannot be written', () => {
+    localStorage.removeItem(PRAYER_TIMES_STORAGE_KEY)
+    const setItem = Storage.prototype.setItem
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, value: string) {
+      if (key === PRAYER_TIMES_STORAGE_KEY) throw new DOMException('full', 'QuotaExceededError')
+      setItem.call(this, key, value)
+    })
+    expect(() => useLocationStore.getState().setLocation(KARACHI)).not.toThrow()
+    expect(useLocationStore.getState().location).toBe(KARACHI)
+    expect(JSON.parse(localStorage.getItem(useLocationStore.persist.getOptions().name ?? '') ?? 'null').state.location).toEqual(KARACHI)
   })
 })
 

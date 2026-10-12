@@ -4,7 +4,7 @@ import { useLocationStore } from '../../shared/location'
 import { useSettings } from '../../shared/settings'
 import { usePrayerTimesStore } from './config'
 import { PrayerNotifier } from './PrayerNotifier'
-import { CAIRO, resetStores, zonedInstant } from './test-helpers'
+import { CAIRO, resetStores, TROMSO, zonedInstant } from './test-helpers'
 
 const TODAY = '2026-10-12'
 const cairo = (clock: string, dateKey = TODAY) => zonedInstant(dateKey, clock, 'Africa/Cairo')
@@ -104,6 +104,20 @@ describe('PrayerNotifier', () => {
     expect(shown).toHaveLength(0)
   })
 
+  it('does not remind anyone of an Asr that would fall before sunrise', async () => {
+    // 24 November in Tromsø: sunrise 10:32, Dhuhr 11:32, sunset 12:29. adhan alone puts Asr at 08:31.
+    vi.setSystemTime(zonedInstant('2026-11-24', '08:30:40', 'Europe/Oslo'))
+    resetStores({ location: TROMSO, prayerTimes: { notifications: true } })
+    render(<PrayerNotifier />)
+    await advance(10 * 60_000)
+    expect(shown).toHaveLength(0)
+
+    await advance(3 * 60 * 60_000)
+    expect(shown).toEqual([
+      { title: 'It’s time for Dhuhr', options: expect.objectContaining({ body: '11:32 · Tromsø, Norway', tag: 'azkar-prayer-2026-11-24-dhuhr' }) },
+    ])
+  })
+
   it('does nothing, and does not throw, where notifications do not exist', async () => {
     vi.stubGlobal('Notification', undefined)
     render(<PrayerNotifier />)
@@ -164,13 +178,135 @@ describe('PrayerNotifier', () => {
     expect(shown.map((entry) => entry.title)).toEqual(['It’s time for Maghrib'])
   })
 
-  it('re-checks when the page becomes visible again', async () => {
-    render(<PrayerNotifier />)
-    vi.setSystemTime(cairo('15:59:20'))
-    act(() => void document.dispatchEvent(new Event('visibilitychange')))
-    // Asr began twenty seconds ago while the tab was frozen; the next one to wait for is Maghrib.
-    await advance(60_000)
-    expect(shown).toHaveLength(0)
+  describe('waking up', () => {
+    const wake = () => act(() => void document.dispatchEvent(new Event('visibilitychange')))
+    const titles = () => shown.map((entry) => entry.title)
+
+    it('shows a reminder that came due while the page was suspended, when the wake-up is heard before the timer', async () => {
+      render(<PrayerNotifier />)
+      // Locked at 15:58:30 with Asr at 15:59, unlocked at 16:00: no timer ran in between, and
+      // the page learns it is visible again before its stalled timer gets a turn.
+      vi.setSystemTime(cairo('16:00:00'))
+      wake()
+      await advance(0)
+      expect(shown).toEqual([
+        { title: 'It’s time for Asr', options: expect.objectContaining({ body: '15:59 · Cairo, Egypt', tag: 'azkar-prayer-2026-10-12-asr' }) },
+      ])
+
+      // The timer finds nothing left to do, and Maghrib is next.
+      await advance(10 * 60_000)
+      expect(titles()).toEqual(['It’s time for Asr'])
+      await advance(2.5 * 60 * 60_000)
+      expect(titles()).toEqual(['It’s time for Asr', 'It’s time for Maghrib'])
+    })
+
+    it('shows it once when the timer got there first', async () => {
+      render(<PrayerNotifier />)
+      await advance(31_000)
+      expect(titles()).toEqual(['It’s time for Asr'])
+      wake()
+      wake()
+      await advance(60_000)
+      expect(titles()).toEqual(['It’s time for Asr'])
+    })
+
+    it('leaves it to the timer while the page is still hidden', async () => {
+      render(<PrayerNotifier />)
+      vi.setSystemTime(cairo('16:00:00'))
+      vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+      wake()
+      await advance(0)
+      expect(shown).toHaveLength(0)
+      await advance(30_000)
+      expect(titles()).toEqual(['It’s time for Asr'])
+    })
+
+    it('still skips one that is more than five minutes overdue', async () => {
+      render(<PrayerNotifier />)
+      vi.setSystemTime(cairo('16:04:30'))
+      wake()
+      await advance(60_000)
+      expect(shown).toHaveLength(0)
+
+      await advance(2.5 * 60 * 60_000)
+      expect(titles()).toEqual(['It’s time for Maghrib'])
+    })
+
+    it('reminds of the latest prayer only when several passed during a long sleep', async () => {
+      render(<PrayerNotifier />)
+      // Asleep through Asr (15:59) and woken a minute after Maghrib (18:28).
+      vi.setSystemTime(cairo('18:29:00'))
+      wake()
+      await advance(0)
+      expect(titles()).toEqual(['It’s time for Maghrib'])
+      await advance(60_000)
+      expect(titles()).toEqual(['It’s time for Maghrib'])
+    })
+
+    it('does not remind of a prayer that had already begun when the app was opened', async () => {
+      vi.setSystemTime(cairo('16:01:00'))
+      render(<PrayerNotifier />)
+      wake()
+      await advance(60_000)
+      expect(shown).toHaveLength(0)
+    })
+
+    it('shows one that came due in a sleep across midnight, when the new day is noticed before the reminder’s timer runs', async () => {
+      vi.setSystemTime(cairo('23:50:00'))
+      render(<PrayerNotifier />)
+      // Asleep until a minute after Fajr (05:29). The first thing to run is the clock tick that
+      // turns the day over, and the timetable is rebuilt around the 13th before the stalled timer has its turn.
+      vi.setSystemTime(cairo('05:30:00', '2026-10-13'))
+      await advance(15_000)
+      expect(shown.map((entry) => entry.options.tag)).toEqual(['azkar-prayer-2026-10-13-fajr'])
+      expect(shown[0]?.options.body).toBe('05:29 · Cairo, Egypt')
+
+      wake()
+      await advance(10 * 60_000)
+      expect(titles()).toEqual(['It’s time for Fajr'])
+    })
+
+    it('does not hand a prayer that came due during the sleep on to a place chosen since', async () => {
+      render(<PrayerNotifier />)
+      // Alexandria's Asr is at 16:03, four minutes after Cairo's: it began twenty seconds before the place changed.
+      vi.setSystemTime(cairo('16:03:20'))
+      act(() => useLocationStore.getState().setLocation({ ...CAIRO, latitude: 31.2001, longitude: 29.9187, label: 'Alexandria, Egypt' }))
+      wake()
+      await advance(60_000)
+      expect(shown).toHaveLength(0)
+
+      await advance(2.5 * 60 * 60_000)
+      expect(shown.map((entry) => entry.options.body)).toEqual(['18:32 · Alexandria, Egypt'])
+    })
+
+    it('does not bring back one that came due while reminders were switched off', async () => {
+      render(<PrayerNotifier />)
+      act(() => usePrayerTimesStore.getState().setNotifications(false))
+      vi.setSystemTime(cairo('16:00:00'))
+      act(() => usePrayerTimesStore.getState().setNotifications(true))
+      wake()
+      await advance(60_000)
+      expect(shown).toHaveLength(0)
+    })
+  })
+
+  describe('naming the place', () => {
+    const unnamed = { ...CAIRO, label: '', countryCode: null }
+
+    it('gives the coordinates when the place has no name, in the language of the reminder', async () => {
+      useLocationStore.setState({ location: unnamed })
+      render(<PrayerNotifier />)
+      await advance(31_000)
+      expect(shown[0]?.options.body).toBe('15:59 · 30.04° N, 31.24° E')
+    })
+
+    it('writes them in Arabic when the interface is Arabic, however the location was saved', async () => {
+      useLocationStore.setState({ location: unnamed })
+      useSettings.setState({ language: 'ar' })
+      render(<PrayerNotifier />)
+      await advance(31_000)
+      expect(shown[0]?.options.body).toBe('١٥:٥٩ · ٣٠٫٠٤° شمالًا، ٣١٫٢٤° شرقًا')
+    })
   })
 
   it('uses the service worker when one is active', async () => {

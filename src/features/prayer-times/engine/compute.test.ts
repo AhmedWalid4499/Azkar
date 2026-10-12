@@ -1,5 +1,6 @@
+import { CalculationMethod, Coordinates, PolarCircleResolution, PrayerTimes } from 'adhan'
 import { afterEach, describe, expect, it } from 'vitest'
-import { dateKeyInZone, deviceTimeZone, shiftDateKey, zonedParts } from '../../../shared/date'
+import { dateKeyInZone, deviceTimeZone, partsOfDateKey, shiftDateKey, zonedParts } from '../../../shared/date'
 import { PRAYERS, TIME_SLOTS } from '../../../shared/types'
 import type { PrayerDay, TimeSlot } from '../../../shared/types'
 import {
@@ -12,6 +13,8 @@ import {
   resolveHighLatitudeRule,
 } from './compute'
 import type { CalculationConfig, Place } from './compute'
+import type { MethodId } from './methods'
+import { asrInstant, solarAltitude, solarTransit } from './solar'
 import { setDeviceZone as moveDevice, restoreDeviceZone } from '../test-helpers'
 
 const CAIRO: Place = { latitude: 30.0444, longitude: 31.2357, timeZone: 'Africa/Cairo', countryCode: 'EG' }
@@ -28,6 +31,12 @@ const STOCKHOLM: Place = { latitude: 59.3293, longitude: 18.0686, timeZone: 'Eur
 const BERLIN: Place = { latitude: 52.52, longitude: 13.405, timeZone: 'Europe/Berlin', countryCode: 'DE' }
 const EDMONTON: Place = { latitude: 53.5461, longitude: -113.4938, timeZone: 'America/Edmonton', countryCode: 'CA' }
 const TROMSO: Place = { latitude: 69.6492, longitude: 18.9553, timeZone: 'Europe/Oslo', countryCode: 'NO' }
+const MURMANSK: Place = { latitude: 68.9585, longitude: 33.0827, timeZone: 'Europe/Moscow', countryCode: 'RU' }
+const ROVANIEMI: Place = { latitude: 66.5039, longitude: 25.7294, timeZone: 'Europe/Helsinki', countryCode: 'FI' }
+const KIRUNA: Place = { latitude: 67.8558, longitude: 20.2253, timeZone: 'Europe/Stockholm', countryCode: 'SE' }
+const LONGYEARBYEN: Place = { latitude: 78.2232, longitude: 15.6267, timeZone: 'Arctic/Longyearbyen', countryCode: 'NO' }
+const MCMURDO: Place = { latitude: -77.8419, longitude: 166.6863, timeZone: 'Antarctica/McMurdo', countryCode: 'AQ' }
+const ISTANBUL: Place = { latitude: 41.0082, longitude: 28.9784, timeZone: 'Europe/Istanbul', countryCode: 'TR' }
 
 const config = (overrides: Partial<CalculationConfig> = {}): CalculationConfig => ({ ...DEFAULT_CALCULATION, ...overrides })
 
@@ -38,6 +47,32 @@ function clock(day: PrayerDay, slot: TimeSlot): string {
 
 function instants(day: PrayerDay): string[] {
   return TIME_SLOTS.map((slot) => day.times[slot].toISOString())
+}
+
+/** adhan asked directly, with nothing of the engine's own in between. */
+function adhanTimes(
+  dateKey: string,
+  place: Place,
+  method: MethodId = 'MuslimWorldLeague',
+  polar: keyof typeof PolarCircleResolution = 'Unresolved',
+): PrayerDay['times'] {
+  const { year, month, day } = partsOfDateKey(dateKey)
+  const params = CalculationMethod[method]()
+  params.highLatitudeRule = 'twilightangle'
+  params.polarCircleResolution = PolarCircleResolution[polar]
+  const times = new PrayerTimes(new Coordinates(place.latitude, place.longitude), new Date(year, month - 1, day, 12), params)
+  return { fajr: times.fajr, sunrise: times.sunrise, dhuhr: times.dhuhr, asr: times.asr, maghrib: times.maghrib, isha: times.isha }
+}
+
+/** Every day from `from`, `count` of them. */
+function days(from: string, count: number): string[] {
+  return Array.from({ length: count }, (_, index) => shiftDateKey(from, index))
+}
+
+/** Whether a day's Asr, if it has one, sits strictly inside its own afternoon. */
+function asrIsInItsAfternoon({ times }: PrayerDay): boolean {
+  if (!isValidTime(times.asr)) return true
+  return times.asr > times.dhuhr && (!isValidTime(times.maghrib) || times.asr < times.maghrib)
 }
 
 /** Device zones chosen to break naive date handling: both sides of the date line, half-hour offsets, odd DST. */
@@ -219,6 +254,21 @@ describe('settings', () => {
     }
   })
 
+  it('follows the country for the automatic Asr school, like the method', () => {
+    const asr = (place: Place, overrides: Partial<CalculationConfig> = {}) =>
+      computePrayerDay('2026-10-12', place, config(overrides)).times.asr.getTime()
+    expect(DEFAULT_CALCULATION.madhab).toBe('auto')
+    // Karachi: 15:39 by the first shadow, 16:30 by the Hanafi rule its mosques use.
+    expect(clock(computePrayerDay('2026-10-12', KARACHI, config()), 'asr')).toBe('16:30')
+    expect(asr(KARACHI)).toBe(asr(KARACHI, { madhab: 'hanafi' }))
+    expect(asr(KARACHI, { madhab: 'shafi' })).toBeLessThan(asr(KARACHI))
+    // Known only by its time zone, as after a fix taken offline.
+    expect(asr({ ...KARACHI, countryCode: null })).toBe(asr(KARACHI, { madhab: 'hanafi' }))
+    for (const place of [CAIRO, MAKKAH, LONDON, NEW_YORK, ISTANBUL]) {
+      expect(asr(place), place.timeZone).toBe(asr(place, { madhab: 'shafi' }))
+    }
+  })
+
   it('resolves the automatic method from the country', () => {
     const auto = computePrayerDay('2026-07-15', CAIRO, config({ method: 'auto' }))
     expect(instants(auto)).toEqual(instants(computePrayerDay('2026-07-15', CAIRO, config({ method: 'Egyptian' }))))
@@ -329,5 +379,267 @@ describe('days without a sunrise or sunset', () => {
     expect(isValidTime(null)).toBe(false)
     expect(isValidTime(undefined)).toBe(false)
     expect(isValidTime(new Date(0))).toBe(true)
+  })
+})
+
+describe('Asr at ordinary latitudes', () => {
+  const MID_MONTHS = Array.from({ length: 12 }, (_, month) => `2026-${String(month + 1).padStart(2, '0')}-15`)
+  const SOLSTICES = ['2026-06-21', '2026-12-21']
+
+  // Midwinter noon is 14° up in Berlin and 13° in Edmonton: the lowest sun adhan is still left to.
+  it.each([
+    ['Cairo', CAIRO],
+    ['Makkah', MAKKAH],
+    ['New York', NEW_YORK],
+    ['Sydney', SYDNEY],
+    ['London', LONDON],
+    ['Karachi', KARACHI],
+    ['Honolulu', HONOLULU],
+    ['Berlin', BERLIN],
+    ['Edmonton', EDMONTON],
+  ])('%s gets exactly what adhan computes, all year', (_name, place) => {
+    for (const dateKey of [...MID_MONTHS, ...SOLSTICES]) {
+      for (const method of ['MuslimWorldLeague', 'Dubai', 'Singapore'] as const) {
+        const day = computePrayerDay(dateKey, place, config({ method, madhab: 'shafi' }))
+        const direct = adhanTimes(dateKey, place, method)
+        expect(instants(day), `${dateKey}, ${method}`).toEqual(TIME_SLOTS.map((slot) => direct[slot].toISOString()))
+      }
+    }
+  })
+
+  it('leaves Stockholm to adhan from February to October, when its noon sun is above ten degrees', () => {
+    for (const dateKey of MID_MONTHS.slice(1, 10)) {
+      const day = computePrayerDay(dateKey, STOCKHOLM, config({ method: 'MuslimWorldLeague' }))
+      expect(day.times.asr.toISOString(), dateKey).toBe(adhanTimes(dateKey, STOCKHOLM).asr.toISOString())
+    }
+  })
+
+  it('agrees with adhan within a minute where the low sun is not moving, at the winter solstice', () => {
+    // Under ten degrees the engine's own solver is in charge; with the declination at a standstill adhan is still right.
+    const reykjavik: Place = { latitude: 64.1466, longitude: -21.9426, timeZone: 'Atlantic/Reykjavik', countryCode: 'IS' }
+    for (const place of [STOCKHOLM, reykjavik]) {
+      const day = computePrayerDay('2026-12-21', place, config({ method: 'MuslimWorldLeague' }))
+      const minutesApart = (day.times.asr.getTime() - adhanTimes('2026-12-21', place).asr.getTime()) / 60_000
+      expect(Math.abs(minutesApart), place.timeZone).toBeLessThanOrEqual(1)
+    }
+  })
+})
+
+describe('Asr when the noon sun is near the horizon', () => {
+  const mwl = (overrides: Partial<CalculationConfig> = {}) => config({ method: 'MuslimWorldLeague', ...overrides })
+
+  // What adhan alone answers on these days, all of them with a sunrise and a sunset.
+  it.each([
+    { name: 'Tromsø, before sunrise', place: TROMSO, dateKey: '2026-11-24', adhan: '08:31' },
+    { name: 'Tromsø, in the small hours', place: TROMSO, dateKey: '2026-11-23', adhan: '01:26' },
+    { name: 'Tromsø, after Isha', place: TROMSO, dateKey: '2027-01-19', adhan: '19:13' },
+    { name: 'Murmansk, in the small hours', place: MURMANSK, dateKey: '2026-11-27', adhan: '00:50' },
+    { name: 'Rovaniemi, before Dhuhr', place: ROVANIEMI, dateKey: '2026-12-18', adhan: '11:40' },
+  ])('shows no Asr rather than a wrong one: $name ($dateKey)', ({ place, dateKey, adhan }) => {
+    const direct = adhanTimes(dateKey, place)
+    expect(clock({ dateKey, timeZone: place.timeZone, times: direct }, 'asr')).toBe(adhan)
+    expect(direct.asr > direct.dhuhr && direct.asr < direct.maghrib).toBe(false)
+
+    const day = computePrayerDay(dateKey, place, mwl())
+    expect(isValidTime(day.times.asr)).toBe(false)
+    expect(hasMissingTimes(day)).toBe(true)
+    // The sun does rise and set, and the rest of the day is untouched.
+    for (const slot of ['fajr', 'sunrise', 'dhuhr', 'maghrib', 'isha'] as const) {
+      expect(day.times[slot].toISOString(), slot).toBe(direct[slot].toISOString())
+    }
+  })
+
+  /**
+   * The weeks either side, when adhan's Asr still looks plausible. Each time
+   * below was confirmed during review by two independent solvers (the first
+   * instant after culmination at which the shadow has grown by the object's
+   * height); `adhan` is how many minutes later adhan puts it.
+   */
+  it.each([
+    { place: TROMSO, dateKey: '2026-11-01', asr: '12:21', adhan: -5 },
+    { place: TROMSO, dateKey: '2026-11-10', asr: '11:58', adhan: -10 },
+    { place: TROMSO, dateKey: '2026-11-15', asr: '11:46', adhan: -16 },
+    { place: TROMSO, dateKey: '2026-11-20', asr: '11:35', adhan: -39 },
+    { place: TROMSO, dateKey: '2026-11-22', asr: '11:32', adhan: -104 },
+    { place: TROMSO, dateKey: '2027-01-25', asr: '12:10', adhan: 25 },
+    { place: TROMSO, dateKey: '2027-02-01', asr: '12:29', adhan: 11 },
+    { place: TROMSO, dateKey: '2027-02-10', asr: '12:55', adhan: 6 },
+    { place: ROVANIEMI, dateKey: '2026-12-03', asr: '12:19', adhan: -11 },
+  ])('corrects the drift around those days: $place.timeZone $dateKey', ({ place, dateKey, asr, adhan }) => {
+    const day = computePrayerDay(dateKey, place, mwl())
+    expect(clock(day, 'asr')).toBe(asr)
+    expect((adhanTimes(dateKey, place).asr.getTime() - day.times.asr.getTime()) / 60_000).toBe(adhan)
+    expect(asrIsInItsAfternoon(day)).toBe(true)
+    expect(hasMissingTimes(day)).toBe(false)
+  })
+
+  it('reports the moment the shadow has grown by the object’s height, or twice that for the Hanafi school', () => {
+    const { latitude, longitude } = TROMSO
+    const shadow = (instant: number) => 1 / Math.tan((solarAltitude(instant, latitude, longitude) * Math.PI) / 180)
+    for (const dateKey of ['2026-11-01', '2026-11-15', '2027-02-01']) {
+      for (const [madhab, factor] of [['shafi', 1], ['hanafi', 2]] as const) {
+        const day = computePrayerDay(dateKey, TROMSO, mwl({ madhab }))
+        // Dhuhr is a minute after the transit in this method; both are rounded to the minute.
+        const transit = solarTransit(day.times.dhuhr.getTime() - 60_000, longitude)
+        const growth = (instant: number) => shadow(instant) - shadow(transit)
+        expect(growth(day.times.asr.getTime() - 60_000), `${dateKey} ${madhab}`).toBeLessThan(factor)
+        expect(growth(day.times.asr.getTime() + 60_000), `${dateKey} ${madhab}`).toBeGreaterThan(factor)
+      }
+    }
+  })
+
+  it('applies the method’s minutes, the user’s minutes and the rounding to its own Asr, as adhan does to its', () => {
+    const asr = (overrides: Partial<CalculationConfig>) => computePrayerDay('2026-11-15', TROMSO, config(overrides)).times.asr
+    const base = asr({ method: 'MuslimWorldLeague' })
+    const minutesAfterBase = (overrides: Partial<CalculationConfig>) => (asr(overrides).getTime() - base.getTime()) / 60_000
+
+    expect(base.getUTCSeconds()).toBe(0)
+    // Dubai publishes Asr three minutes late and Diyanet four; both use the same angles as the base.
+    expect(minutesAfterBase({ method: 'Dubai' })).toBe(3)
+    expect(minutesAfterBase({ method: 'Turkey' })).toBe(4)
+    expect(minutesAfterBase({ method: 'MuslimWorldLeague', adjustments: { ...DEFAULT_CALCULATION.adjustments, asr: 7 } })).toBe(7)
+    expect(minutesAfterBase({ method: 'Turkey', adjustments: { ...DEFAULT_CALCULATION.adjustments, asr: -2 } })).toBe(2)
+
+    // Singapore rounds every time up to the next minute, a whole one when it is already on the minute.
+    const { longitude, latitude } = TROMSO
+    const exact = asrInstant(solarTransit(base.getTime(), longitude), latitude, longitude, 1)
+    const roundedUp = asr({ method: 'Singapore' }).getTime()
+    expect(roundedUp).toBeGreaterThan(exact)
+    expect(roundedUp - exact).toBeLessThanOrEqual(61_000)
+    expect(roundedUp % 60_000).toBe(0)
+  })
+
+  it.each([
+    ['Tromsø', TROMSO],
+    ['Murmansk', MURMANSK],
+    ['Rovaniemi', ROVANIEMI],
+    ['Kiruna', KIRUNA],
+    ['Longyearbyen', LONGYEARBYEN],
+    ['McMurdo', MCMURDO],
+  ])('never presents an Asr outside Dhuhr..Maghrib on any day of the year: %s', (_name, place) => {
+    for (const dateKey of days('2026-07-01', 366)) {
+      for (const madhab of ['shafi', 'hanafi'] as const) {
+        expect(asrIsInItsAfternoon(computePrayerDay(dateKey, place, mwl({ madhab }))), `${dateKey} ${madhab}`).toBe(true)
+      }
+    }
+  })
+
+  it('holds that for the methods that shift Dhuhr and Asr, and for a user’s own minutes', () => {
+    const adjustments = { fajr: 0, sunrise: 0, dhuhr: 30, asr: -30, maghrib: -30, isha: 0 }
+    for (const dateKey of days('2026-10-20', 130)) {
+      for (const overrides of [{ method: 'Turkey' }, { method: 'MoonsightingCommittee' }, { method: 'Dubai' }, { adjustments }] as const) {
+        expect(asrIsInItsAfternoon(computePrayerDay(dateKey, TROMSO, config(overrides))), dateKey).toBe(true)
+      }
+    }
+  })
+
+  it('leaves Asr unshown when the user’s own minutes would put it before Dhuhr', () => {
+    // Reykjavik's midwinter Asr is 21 minutes after Dhuhr: half an hour either way swaps them.
+    const reykjavik: Place = { latitude: 64.1466, longitude: -21.9426, timeZone: 'Atlantic/Reykjavik', countryCode: 'IS' }
+    const adjustments = { fajr: 0, sunrise: 0, dhuhr: 30, asr: -30, maghrib: 0, isha: 0 }
+    expect(clock(computePrayerDay('2026-12-21', reykjavik, config()), 'asr')).toBe('13:47')
+    const crossed = computePrayerDay('2026-12-21', reykjavik, config({ adjustments }))
+    expect(isValidTime(crossed.times.asr)).toBe(false)
+    expect(clock(crossed, 'dhuhr')).toBe('13:57')
+
+    // Where there is room for them, the same minutes are simply applied.
+    const london = computePrayerDay('2026-12-21', LONDON, config({ adjustments }))
+    expect(clock(london, 'dhuhr')).toBe('12:34')
+    expect(clock(london, 'asr')).toBe('13:08')
+  })
+
+  it('keeps Asr on a day the sun never sets, when there is no Maghrib to precede', () => {
+    const day = computePrayerDay('2026-06-21', TROMSO, mwl())
+    expect(isValidTime(day.times.maghrib)).toBe(false)
+    expect(clock(day, 'asr')).toBe('17:58')
+    expect(day.times.asr.toISOString()).toBe(adhanTimes('2026-06-21', TROMSO).asr.toISOString())
+  })
+})
+
+describe('borrowing the nearest latitude', () => {
+  const nearest = (overrides: Partial<CalculationConfig> = {}) =>
+    config({ method: 'MuslimWorldLeague', polar: 'nearestLatitude', ...overrides })
+
+  it.each([
+    ['Tromsø', TROMSO],
+    ['Murmansk', MURMANSK],
+    ['Rovaniemi', ROVANIEMI],
+    ['Kiruna', KIRUNA],
+    ['Longyearbyen', LONGYEARBYEN],
+    ['McMurdo', MCMURDO],
+  ])('gives every time, in order, on every day of the year: %s', (_name, place) => {
+    for (const dateKey of days('2026-07-01', 366)) {
+      const day = computePrayerDay(dateKey, place, nearest())
+      expect(hasMissingTimes(day), dateKey).toBe(false)
+      expect(day.times.asr > day.times.dhuhr && day.times.asr < day.times.maghrib, dateKey).toBe(true)
+      expect(day.times.sunrise < day.times.dhuhr, dateKey).toBe(true)
+    }
+  })
+
+  // adhan's own nearest-latitude answer on these days still had Asr before Dhuhr, or no change at all.
+  it.each([
+    { place: TROMSO, dateKey: '2026-11-24', dhuhr: '11:32', asr: '11:33' },
+    { place: TROMSO, dateKey: '2026-11-28', dhuhr: '11:33', asr: '11:37' },
+    { place: MURMANSK, dateKey: '2026-11-27', dhuhr: '12:36', asr: '12:39' },
+    { place: ROVANIEMI, dateKey: '2026-12-18', dhuhr: '12:15', asr: '12:19' },
+  ])('fills in an Asr after Dhuhr where adhan’s own version does not: $place.timeZone $dateKey', ({ place, dateKey, dhuhr, asr }) => {
+    const direct = adhanTimes(dateKey, place, 'MuslimWorldLeague', 'AqrabBalad')
+    expect(direct.asr > direct.dhuhr).toBe(false)
+
+    const day = computePrayerDay(dateKey, place, nearest())
+    expect(clock(day, 'dhuhr')).toBe(dhuhr)
+    expect(clock(day, 'asr')).toBe(asr)
+  })
+
+  it('takes the whole day from one latitude, so sunrise and Maghrib move with Asr', () => {
+    const own = computePrayerDay('2026-11-24', TROMSO, config({ method: 'MuslimWorldLeague' }))
+    const borrowed = computePrayerDay('2026-11-24', TROMSO, nearest())
+    // Further south the sun is up for longer; the meridian, and with it Dhuhr, is the same.
+    expect(borrowed.times.sunrise.getTime()).toBeLessThan(own.times.sunrise.getTime())
+    expect(borrowed.times.maghrib.getTime()).toBeGreaterThan(own.times.maghrib.getTime())
+    expect(borrowed.times.dhuhr.getTime()).toBe(own.times.dhuhr.getTime())
+  })
+
+  it('changes nothing on a day that is already whole', () => {
+    for (const [place, dateKey] of [[TROMSO, '2026-11-15'], [TROMSO, '2026-03-20'], [ROVANIEMI, '2026-12-03'], [LONDON, '2026-12-21'], [CAIRO, '2026-06-21']] as const) {
+      expect(instants(computePrayerDay(dateKey, place, nearest())), `${place.timeZone} ${dateKey}`).toEqual(
+        instants(computePrayerDay(dateKey, place, config({ method: 'MuslimWorldLeague' }))),
+      )
+    }
+  })
+
+  it('is not steered by the user’s own minutes', () => {
+    // Asr is 16 minutes after Dhuhr here: ten minutes each way cross them, and a degree south would uncross them.
+    const adjustments = { fajr: 0, sunrise: 0, dhuhr: 10, asr: -10, maghrib: 0, isha: 0 }
+    const plain = computePrayerDay('2026-11-15', TROMSO, nearest())
+    const tuned = computePrayerDay('2026-11-15', TROMSO, nearest({ adjustments }))
+    expect(tuned.times.sunrise.getTime()).toBe(plain.times.sunrise.getTime())
+    expect(tuned.times.maghrib.getTime()).toBe(plain.times.maghrib.getTime())
+    expect(isValidTime(tuned.times.asr)).toBe(false)
+  })
+
+  it('matches adhan’s own answer under the midnight sun, where that was already right', () => {
+    for (const dateKey of ['2026-05-25', '2026-06-21', '2026-07-20']) {
+      const direct = adhanTimes(dateKey, TROMSO, 'MuslimWorldLeague', 'AqrabBalad')
+      expect(instants(computePrayerDay(dateKey, TROMSO, nearest())), dateKey).toEqual(TIME_SLOTS.map((slot) => direct[slot].toISOString()))
+    }
+  })
+
+  it('does not borrow from a latitude where the night never ends, though a method may still answer there', () => {
+    // The Moonsighting Committee's Fajr and Isha are not measured from the night. At the latitude that used to be
+    // borrowed for 20 May the sun does not rise again on the 21st, and every time still came out: Fajr 23:01 for a
+    // sunrise at 01:03.
+    const day = computePrayerDay('2026-05-20', TROMSO, nearest({ method: 'MoonsightingCommittee' }))
+    expect(TIME_SLOTS.map((slot) => clock(day, slot))).toEqual(['01:24', '01:37', '12:46', '17:30', '23:57', '00:07'])
+
+    // From before the midnight sun to after it, and whatever the method, the day is the one adhan's own version borrows.
+    for (const method of ['MuslimWorldLeague', 'MoonsightingCommittee', 'Turkey'] as const) {
+      for (const dateKey of days('2026-05-10', 85)) {
+        const direct = adhanTimes(dateKey, TROMSO, method, 'AqrabBalad')
+        expect(instants(computePrayerDay(dateKey, TROMSO, nearest({ method }))), `${method} ${dateKey}`).toEqual(
+          TIME_SLOTS.map((slot) => direct[slot].toISOString()),
+        )
+      }
+    }
   })
 })

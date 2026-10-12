@@ -1,18 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { useLocationStore } from '../../shared/location'
 import { storageKey } from '../../shared/storage'
 import { TIME_SLOTS } from '../../shared/types'
 import type { TimeSlot } from '../../shared/types'
 import { clampAdjustment, DEFAULT_CALCULATION, HIGH_LATITUDE_RULES, NO_ADJUSTMENTS } from './engine/compute'
-import type {
-  Adjustments,
-  CalculationConfig,
-  HighLatitudeSetting,
-  MadhabSetting,
-  PolarSetting,
-} from './engine/compute'
+import type { Adjustments, CalculationConfig, HighLatitudeSetting, PolarSetting } from './engine/compute'
 import { isMethodId } from './engine/methods'
-import type { MethodSetting } from './engine/methods'
+import type { MadhabSetting, MethodSetting } from './engine/methods'
 
 export const PRAYER_TIMES_STORAGE_KEY = storageKey('prayer-times')
 export const PRAYER_TIMES_VERSION = 1
@@ -58,7 +53,7 @@ export function sanitizeSettings(value: unknown): PrayerTimesSettings {
   const { method, madhab, highLatitudeRule, polar } = stored
   return {
     method: method === 'auto' || isMethodId(method) ? method : DEFAULT_CALCULATION.method,
-    madhab: madhab === 'hanafi' || madhab === 'shafi' ? madhab : DEFAULT_CALCULATION.madhab,
+    madhab: madhab === 'auto' || madhab === 'hanafi' || madhab === 'shafi' ? madhab : DEFAULT_CALCULATION.madhab,
     highLatitudeRule:
       highLatitudeRule === 'auto' || (HIGH_LATITUDE_RULES as readonly unknown[]).includes(highLatitudeRule)
         ? (highLatitudeRule as HighLatitudeSetting)
@@ -67,6 +62,17 @@ export function sanitizeSettings(value: unknown): PrayerTimesSettings {
     adjustments: sanitizeAdjustments(stored.adjustments),
     notifications: stored.notifications === true,
   }
+}
+
+/**
+ * What an install with nothing saved here starts from. Before the Asr school
+ * could follow the country, the settings were only written once one of them
+ * was changed, and until then Asr was the standard one. Such an install is
+ * told from a new one by the location it already has, and it keeps the
+ * standard Asr: an update must never move a prayer by an hour on its own.
+ */
+function unsavedSettings(): Partial<PrayerTimesSettings> | undefined {
+  return useLocationStore.getState().location ? { madhab: 'shafi' } : undefined
 }
 
 export const usePrayerTimesStore = create<PrayerTimesState>()(
@@ -94,12 +100,28 @@ export const usePrayerTimesStore = create<PrayerTimesState>()(
         notifications,
       }),
       // Version 1 is the only shape so far; anything stamped differently is
-      // read field by field like every other load.
+      // read field by field like every other load. Adding 'auto' to the Asr
+      // school needed no new version: a saved school is kept exactly as it is.
       migrate: (persisted) => sanitizeSettings(persisted),
-      merge: (persisted, current) => ({ ...current, ...sanitizeSettings(persisted) }),
+      merge: (persisted, current) => ({ ...current, ...sanitizeSettings(persisted ?? unsavedSettings()) }),
     },
   ),
 )
+
+// A new install would look like an older one (see `unsavedSettings`) as soon as
+// it saved its first location. Its settings are written down at that moment, so
+// the automatic Asr school it started with is still its own the next time.
+useLocationStore.subscribe((state, previous) => {
+  if (!state.location || previous.location) return
+  try {
+    if (localStorage.getItem(PRAYER_TIMES_STORAGE_KEY) !== null) return
+    // An empty change: no setting differs, but the store saves on every call and
+    // tells its listeners, the tab sync among them, that it has.
+    usePrayerTimesStore.setState({})
+  } catch {
+    // Storage is full or unavailable: nothing here may stop the location from being saved.
+  }
+})
 
 let lastCalculation: CalculationConfig = DEFAULT_CALCULATION
 

@@ -13,10 +13,17 @@ export function NotificationSettingsSection() {
   const setEnabled = usePrayerTimesStore((state) => state.setNotifications)
   const [permission, setPermission] = useState(notificationState)
   const [dismissed, setDismissed] = useState(false)
+  // How many times in this visit the switch was turned on and met the browser's block.
+  const [refusals, setRefusals] = useState(0)
 
   // The permission can change in the browser's own settings while this page is in the background.
   useEffect(() => {
-    const refresh = () => setPermission(notificationState())
+    const refresh = () => {
+      const current = notificationState()
+      setPermission(current)
+      // Unblocked there: should it be blocked again, that is no longer the answer to anything done here.
+      if (current !== 'denied') setRefusals(0)
+    }
     document.addEventListener('visibilitychange', refresh)
     return () => document.removeEventListener('visibilitychange', refresh)
   }, [])
@@ -33,6 +40,7 @@ export function NotificationSettingsSection() {
     setPermission(result)
     setEnabled(result === 'granted')
     setDismissed(result === 'default')
+    if (result === 'denied') setRefusals((count) => count + 1)
   }
 
   return (
@@ -47,8 +55,10 @@ export function NotificationSettingsSection() {
         }
       />
       {permission === 'denied' && (
-        <div className={styles.block}>
-          <Notice tone="warn" alert>
+        // Standing information on arrival; an alert only as the answer to the user's own attempt,
+        // and put in afresh for each attempt so that it is announced every time.
+        <div key={refusals} className={styles.block}>
+          <Notice tone="warn" alert={refusals > 0}>
             {t('times.notify.denied')}
           </Notice>
         </div>

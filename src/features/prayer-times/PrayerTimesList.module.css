@@ -10,14 +10,24 @@
   list-style: none;
 }
 
+/* Wraps: when the name and the time no longer fit side by side (large text on
+   a narrow screen), the time drops to a line of its own instead of running
+   into the name. */
 .row {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  align-content: center;
+  column-gap: var(--space-3);
   min-height: 56px;
   padding-block: var(--space-1);
   padding-inline: var(--space-4);
+}
+
+/* Room at the end for the trailing control, which sits over this padding. */
+.withTrailing {
+  padding-inline-end: calc(var(--space-2) + 44px + var(--space-3));
 }
 
 .row + .row {
@@ -29,35 +39,44 @@
   color: var(--ink-2);
 }
 
+/* Asks for its narrowest form (the badge under the name) and grows from there,
+   so the badge gives way before the time does. */
 .label {
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   align-items: center;
   column-gap: var(--space-2);
+  width: min-content;
   min-width: 0;
 }
 
+/* A name is one word; it breaks only when a whole line cannot hold it. */
 .name {
+  min-width: 0;
   font-weight: 600;
+  overflow-wrap: break-word;
 }
 
+/* Stays at the end of the row on whichever line it lands. */
 .time {
   flex: none;
+  margin-inline-start: auto;
   font-weight: 600;
   text-align: end;
   white-space: nowrap;
 }
 
-/* Sized for a 44px control whether or not one has mounted yet. */
+/* Sized for a 44px control whether or not one has mounted yet. Out of the
+   flow, so it stays centred at the end of the row when the time wraps. */
 .trailing {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--space-2);
   display: flex;
-  flex: none;
   align-items: center;
   justify-content: center;
   min-width: 44px;
-  min-height: 44px;
-  margin-inline-end: calc(-1 * var(--space-2));
 }
 
 /* Sunrise is information, not a prayer: quieter than its neighbours. */

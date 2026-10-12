@@ -8,7 +8,12 @@ export interface SavedLocation {
   longitude: number
   /** IANA zone the prayer times are shown in. */
   timeZone: string
-  /** Human label such as "Cairo, Egypt", or formatted coordinates when no name could be resolved. */
+  /**
+   * The place's name, such as "Cairo, Egypt", in the language it was looked up
+   * in. Empty when no name could be resolved: the coordinates are then shown
+   * instead, formatted at display time in the interface language (see
+   * `useLocationLabel` in the prayer-times feature) and never stored here.
+   */
   label: string
   /** ISO 3166-1 alpha-2, upper-case. Drives the default calculation method. */
   countryCode: string | null
@@ -29,7 +34,9 @@ function isFiniteInRange(value: unknown, min: number, max: number): value is num
 /**
  * Stored locations can come from an imported backup file, and the time zone is
  * handed straight to Intl all over the app, where a bad one throws. Anything
- * without usable coordinates is dropped; lesser damage is repaired.
+ * without usable coordinates is dropped; lesser damage is repaired. Only the
+ * fields above are kept. An empty label is a valid one (no name was resolved)
+ * and stays empty; a label that is not text becomes empty too.
  */
 export function sanitizeLocation(value: unknown): SavedLocation | null {
   if (typeof value !== 'object' || value === null) return null

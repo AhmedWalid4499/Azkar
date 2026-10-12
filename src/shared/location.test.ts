@@ -35,4 +35,17 @@ describe('sanitizeLocation', () => {
     expect(repaired).toMatchObject({ label: '', countryCode: null, source: 'manual', updatedAt: 0 })
     expect(sanitizeLocation({ ...cairo, countryCode: 'eg' })?.countryCode).toBe('EG')
   })
+
+  it('keeps an empty label, which means no name was resolved, rather than inventing one', () => {
+    const unnamed = { ...cairo, label: '', countryCode: null, source: 'gps' }
+    expect(sanitizeLocation(unnamed)).toEqual(unnamed)
+    // A missing label is the same thing; coordinates are formatted where they are shown, never stored.
+    const { label: _label, ...withoutLabel } = unnamed
+    expect(sanitizeLocation(withoutLabel)).toEqual(unnamed)
+  })
+
+  it('keeps only the fields it knows', () => {
+    const stored = { ...cairo, labels: { en: 'Cairo', ar: 'القاهرة' }, accuracy: 12, setLocation: 'not a function' }
+    expect(sanitizeLocation(stored)).toEqual(cairo)
+  })
 })

@@ -7,7 +7,8 @@ export const strings = defineStrings({
     'times.listSeparator': ', ',
 
     'times.unavailable': 'Not available',
-    'times.unavailable.hint': 'Some times can’t be calculated here today because the sun doesn’t rise or doesn’t set.',
+    'times.unavailable.hint':
+      'Some times can’t be calculated here today because the sun doesn’t rise, doesn’t set, or stays too close to the horizon.',
     'times.unavailable.action': 'Open the high-latitude settings',
 
     'times.badge.now': 'Now',
@@ -103,6 +104,8 @@ export const strings = defineStrings({
     'times.method.MoonsightingCommittee': 'Moonsighting Committee',
     'times.calc.asr': 'Asr time',
     'times.calc.asr.description': 'Standard follows the Shafi‘i, Maliki and Hanbali schools. Hanafi places Asr later.',
+    'times.calc.asr.autoResolved': 'Automatic uses {school} here',
+    'times.calc.asr.autoNoLocation': 'Automatic uses {school} until a location is set',
     'times.calc.asr.shafi': 'Standard',
     'times.calc.asr.hanafi': 'Hanafi',
     'times.calc.highLat': 'High-latitude rule',
@@ -114,7 +117,7 @@ export const strings = defineStrings({
     'times.calc.highLat.twilightangle': 'Twilight angle',
     'times.calc.polar': 'Polar day and night',
     'times.calc.polar.description':
-      'When the sun doesn’t rise or doesn’t set, borrow the times of the nearest latitude where it does.',
+      'When the sun doesn’t rise, doesn’t set, or stays too close to the horizon, borrow the times of the nearest latitude where every time can be calculated.',
     'times.calc.adjust': 'Fine-tune times',
     'times.calc.adjust.none': 'No adjustments',
     'times.calc.adjust.summary': '{list} (minutes)',
@@ -144,7 +147,8 @@ export const strings = defineStrings({
     'times.listSeparator': '، ',
 
     'times.unavailable': 'غير متاح',
-    'times.unavailable.hint': 'تعذّر حساب بعض المواقيت هنا اليوم لأن الشمس لا تشرق أو لا تغرب.',
+    'times.unavailable.hint':
+      'تعذّر حساب بعض المواقيت هنا اليوم لأن الشمس لا تشرق، أو لا تغرب، أو تبقى قريبة جدًّا من الأفق.',
     'times.unavailable.action': 'فتح إعدادات خطوط العرض العليا',
 
     'times.badge.now': 'الآن',
@@ -204,7 +208,7 @@ export const strings = defineStrings({
     'times.location.zoneChanged':
       'تغيّرت المنطقة الزمنية لجهازك منذ حفظ هذا الموقع. إن كنت قد سافرت فحدِّث موقعك.',
     'times.location.footer':
-      'يبقى موقعك على هذا الجهاز ولا يُحدَّث في الخلفية أبدًا. لا يجري الاتصال بخدمة البحث إلا عند ضغطك على أحد هذين الزرّين، فتتلقّى حينها موقعك التقريبي لمعرفة اسمه، أو اسم المدينة الذي تكتبه.',
+      'يبقى موقعك على هذا الجهاز ولا يُحدَّث في الخلفية أبدًا. لا يجري الاتصال بخدمة البحث إلا عند ضغطك على أحد هذين الزرّين، فتتلقّى الخدمة حينها موقعك التقريبي لمعرفة اسمه، أو اسم المدينة الذي تكتبه.',
 
     'times.prompt.title': 'حدِّد موقعك',
     'times.prompt.body': 'تُحسب مواقيت الصلاة على جهازك بحسب مكانك، ويُحفظ موقعك على هذا الجهاز فقط.',
@@ -248,6 +252,8 @@ export const strings = defineStrings({
     'times.method.MoonsightingCommittee': 'لجنة رؤية الهلال العالمية',
     'times.calc.asr': 'وقت العصر',
     'times.calc.asr.description': 'قول الجمهور هو مذهب الشافعية والمالكية والحنابلة، أما المذهب الحنفي فيؤخّر وقت العصر.',
+    'times.calc.asr.autoResolved': 'المعتمَد تلقائيًا هنا: {school}',
+    'times.calc.asr.autoNoLocation': 'المعتمَد تلقائيًا إلى أن يُحدَّد الموقع: {school}',
     'times.calc.asr.shafi': 'الجمهور',
     'times.calc.asr.hanafi': 'الحنفي',
     'times.calc.highLat': 'قاعدة خطوط العرض العليا',
@@ -258,7 +264,8 @@ export const strings = defineStrings({
     'times.calc.highLat.seventhofthenight': 'سُبع الليل',
     'times.calc.highLat.twilightangle': 'زاوية الشفق',
     'times.calc.polar': 'النهار والليل القطبيان',
-    'times.calc.polar.description': 'إذا لم تشرق الشمس أو لم تغرب، تُعتمد مواقيت أقرب خط عرض يحدث فيه الشروق والغروب.',
+    'times.calc.polar.description':
+      'إذا لم تشرق الشمس، أو لم تغرب، أو بقيت قريبة جدًّا من الأفق، تُعتمد مواقيت أقرب خط عرض يمكن فيه حساب المواقيت كلها.',
     'times.calc.adjust': 'ضبط المواقيت',
     'times.calc.adjust.none': 'بلا تعديل',
     'times.calc.adjust.summary': '{list} (بالدقائق)',

@@ -11,5 +11,5 @@ export function useLocationLabel(): string | null {
   const i18n = useI18n()
   const location = useLocationStore((state) => state.location)
   if (!location) return null
-  return location.label || coordinatesLabel(location.latitude, location.longitude, i18n)
+  return (typeof location.label === 'string' && location.label) || coordinatesLabel(location.latitude, location.longitude, i18n)
 }

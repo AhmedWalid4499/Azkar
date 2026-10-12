@@ -20,6 +20,8 @@ export function LocationActions({ gpsLabel }: LocationActionsProps) {
   const [searching, setSearching] = useState(false)
   const busy = status !== 'idle'
   const progress = busy ? t(status === 'locating' ? 'times.location.locating' : 'times.location.naming') : ''
+  // How it ended, when that needs saying: the position was saved but has no name.
+  const outcome = unnamed && !busy ? t(`times.location.unnamed.${unnamed}`) : ''
 
   return (
     <div className={styles.actions}>
@@ -40,16 +42,17 @@ export function LocationActions({ gpsLabel }: LocationActionsProps) {
           {progress}
         </p>
       )}
-      <p className="visually-hidden" role="status">
-        {progress}
-      </p>
+      {/* One region, always present, so progress and outcome are both announced as its content changes.
+          Progress is spoken only (the spinner above shows it); the outcome is also the visible notice. */}
+      <div className={outcome ? undefined : 'visually-hidden'} role="status">
+        {outcome ? <Notice>{outcome}</Notice> : progress}
+      </div>
 
       {error && (
         <Notice tone="danger" alert>
           {t(`times.location.error.${error}`)}
         </Notice>
       )}
-      {unnamed && !busy && <Notice>{t(`times.location.unnamed.${unnamed}`)}</Notice>}
 
       <Sheet open={searching} onClose={() => setSearching(false)} title={t('times.location.search')}>
         <CitySearch

@@ -6,7 +6,7 @@ import { Button, Row, Section, Segmented, Select, Sheet, Stepper, Switch } from 
 import { usePrayerTimesStore } from './config'
 import { ADJUSTMENT_LIMIT, HIGH_LATITUDE_RULES, isPolarLatitude, resolveHighLatitudeRule } from './engine/compute'
 import type { HighLatitudeSetting } from './engine/compute'
-import { autoMethod, isMethodId, METHOD_IDS, methodAngles } from './engine/methods'
+import { autoMadhab, autoMethod, isMethodId, METHOD_IDS, methodAngles } from './engine/methods'
 import type { MethodId } from './engine/methods'
 import { formatSigned } from './format'
 import { usePlace } from './hooks'
@@ -81,7 +81,18 @@ export function CalculationSettingsSection() {
       <Row
         stacked
         label={t('times.calc.asr')}
-        description={t('times.calc.asr.description')}
+        description={
+          <>
+            {settings.madhab === 'auto' && (
+              <span className={styles.line}>
+                {t(place ? 'times.calc.asr.autoResolved' : 'times.calc.asr.autoNoLocation', {
+                  school: t(`times.calc.asr.${autoMadhab(place)}`),
+                })}
+              </span>
+            )}
+            <span className={styles.line}>{t('times.calc.asr.description')}</span>
+          </>
+        }
         control={
           <Segmented
             block
@@ -89,6 +100,7 @@ export function CalculationSettingsSection() {
             value={settings.madhab}
             onChange={settings.setMadhab}
             options={[
+              { value: 'auto', label: t('times.calc.auto') },
               { value: 'shafi', label: t('times.calc.asr.shafi') },
               { value: 'hanafi', label: t('times.calc.asr.hanafi') },
             ]}
