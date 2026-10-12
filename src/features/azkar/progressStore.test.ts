@@ -116,6 +116,29 @@ describe('history', () => {
     store().decrement(DAY, 'morning', 'tasbih')
     expect(store().history).toEqual({ [DAY]: ['morning'] })
   })
+
+  it('keeps one record per session and day, so undoing the end of a second reading withdraws it', () => {
+    // Known behaviour, documented rather than wanted: the record does not remember which
+    // reading earned it. Nothing reads the history yet; a feature that does may need more.
+    completeMorning()
+    store().resetSession(DAY, 'morning')
+
+    store().complete(DAY, 'morning', 'tasbih')
+    store().complete(DAY, 'morning', 'hamd')
+    for (let i = 0; i < 9; i++) store().increment(DAY, 'morning', 'takbir')
+    expect(store().history).toEqual({ [DAY]: ['morning'] }) // second reading one count short: untouched
+
+    store().increment(DAY, 'morning', 'takbir')
+    expect(store().history).toEqual({ [DAY]: ['morning'] }) // second reading complete: still one record
+
+    store().decrement(DAY, 'morning', 'takbir')
+    expect(store().history).toEqual({}) // the first reading's completion goes with it
+    const stored = JSON.parse(localStorage.getItem(AZKAR_PROGRESS_STORAGE_KEY)!) as { state: { history: unknown } }
+    expect(stored.state.history).toEqual({})
+
+    store().increment(DAY, 'morning', 'takbir')
+    expect(store().history).toEqual({ [DAY]: ['morning'] }) // and comes back when the count is redone
+  })
 })
 
 describe('pruning', () => {

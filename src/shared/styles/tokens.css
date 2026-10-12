@@ -11,17 +11,20 @@
   --surface-3: #e6dfcf;
   --line: #e0d8c6;
   --line-strong: #cfc5ae;
+  /* A switch that is off: its track has to stand out from the card by itself, which a hairline colour cannot. */
+  --switch-off: #a08c5f;
+  --switch-knob: #ffffff;
 
   --ink: #17231f;
   --ink-2: #44534d;
-  --ink-3: #62706a;
+  --ink-3: #5e6b65;
 
   --primary: #0e6b54;
   --primary-strong: #0a5341;
   --primary-soft: #dcede5;
   --on-primary: #ffffff;
 
-  --accent: #b5822a;
+  --accent: #a87827;
   --accent-ink: #7f5a12;
   --accent-soft: #f5e8cc;
 
@@ -92,6 +95,7 @@
     --surface-3: #25332e;
     --line: #26342f;
     --line-strong: #35463f;
+    --switch-off: #567266;
 
     --ink: #e9f0ec;
     --ink-2: #b4c2bb;
@@ -134,6 +138,7 @@
   --surface-3: #25332e;
   --line: #26342f;
   --line-strong: #35463f;
+  --switch-off: #567266;
 
   --ink: #e9f0ec;
   --ink-2: #b4c2bb;

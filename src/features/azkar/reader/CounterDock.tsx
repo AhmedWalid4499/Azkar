@@ -1,4 +1,4 @@
-import { Check, CheckCheck, ChevronLeft, ChevronRight, Undo2 } from 'lucide-react'
+import { Check, CheckCheck, ChevronLeft, ChevronRight, Redo2, Undo2 } from 'lucide-react'
 import type { KeyboardEvent, RefObject } from 'react'
 import { useI18n } from '../../../shared/i18n'
 import { IconButton } from '../../../shared/ui'
@@ -28,7 +28,10 @@ function ignoreKeyRepeat(event: KeyboardEvent<HTMLButtonElement>) {
   if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault()
 }
 
-/** The controls pinned above the tab bar: the big counter, with undo and navigation over it. */
+/**
+ * The controls pinned above the tab bar: the big counter, with undo and
+ * navigation over it, or beside it where the screen is short.
+ */
 export function CounterDock({
   count,
   target,
@@ -46,6 +49,8 @@ export function CounterDock({
   const done = count >= target
   const Previous = dir === 'rtl' ? ChevronRight : ChevronLeft
   const Next = dir === 'rtl' ? ChevronLeft : ChevronRight
+  // Undo points back the way the text came from. Lucide's redo arrow is its undo arrow mirrored.
+  const Undo = dir === 'rtl' ? Redo2 : Undo2
 
   // Once the count is reached the same button moves on, so one thumb does everything.
   const hint = !done ? t('azkar.counter.hint') : sessionComplete ? t('azkar.counter.finish') : t('azkar.reader.next')
@@ -58,22 +63,26 @@ export function CounterDock({
   return (
     <div className={styles.dock}>
       <div className={styles.dockInner}>
+        {/*
+          aria-disabled rather than disabled: each of these can run out under the reader's finger
+          (the first or last dhikr, a count back at zero), and a disabled button drops keyboard focus.
+        */}
         <div className={styles.tools}>
-          <IconButton label={t('azkar.reader.previous')} disabled={!canGoPrevious} onClick={onPrevious}>
+          <IconButton label={t('azkar.reader.previous')} aria-disabled={!canGoPrevious} onClick={onPrevious}>
             <Previous aria-hidden size={22} />
           </IconButton>
           <div className={styles.toolsMiddle}>
-            <IconButton label={t('azkar.counter.undo')} disabled={count === 0} onClick={onUndo}>
-              <Undo2 aria-hidden size={20} />
+            <IconButton label={t('azkar.counter.undo')} aria-disabled={count === 0} onClick={onUndo}>
+              <Undo aria-hidden size={20} />
             </IconButton>
             {target >= MARK_ALL_FROM && !done && (
               <button type="button" className={styles.tool} onClick={onMarkAll}>
                 <CheckCheck aria-hidden size={18} />
-                {t('azkar.counter.markAll')}
+                <span className={styles.toolLabel}>{t('azkar.counter.markAll')}</span>
               </button>
             )}
           </div>
-          <IconButton label={t('azkar.reader.next')} disabled={!canGoNext} onClick={onNext}>
+          <IconButton label={t('azkar.reader.next')} aria-disabled={!canGoNext} onClick={onNext}>
             <Next aria-hidden size={22} />
           </IconButton>
         </div>

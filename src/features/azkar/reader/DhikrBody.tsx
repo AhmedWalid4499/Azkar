@@ -7,7 +7,7 @@ import type { Dhikr } from '../data'
 import type { ReaderPrefs } from '../settingsStore'
 import styles from './reader.module.css'
 import { Recitation } from './Recitation'
-import { isShortPassage, localized } from './text'
+import { isShortPassage, localizedProse, writesArabicIndicDigits } from './text'
 
 interface DhikrBodyProps {
   dhikr: Dhikr
@@ -20,13 +20,15 @@ interface DhikrBodyProps {
 }
 
 export function DhikrBody({ dhikr, position, total, prefs, gestures }: DhikrBodyProps) {
-  const { t, lang } = useI18n()
+  const { t, lang, n } = useI18n()
   const headingId = useId()
   const transliteration = prefs.showTransliteration ? dhikr.transliteration?.trim() : undefined
   const translation = prefs.showTranslation ? dhikr.translation?.trim() : undefined
-  const reference = localized(dhikr.reference, lang)
-  const virtue = dhikr.virtue ? localized(dhikr.virtue, lang) : ''
-  const note = dhikr.note ? localized(dhikr.note, lang) : ''
+  // Only the prose around the dhikr follows the digits setting; the recitation is shown exactly as stored.
+  const arabicDigits = writesArabicIndicDigits(n)
+  const reference = localizedProse(dhikr.reference, lang, arabicDigits)
+  const virtue = dhikr.virtue ? localizedProse(dhikr.virtue, lang, arabicDigits) : ''
+  const note = dhikr.note ? localizedProse(dhikr.note, lang, arabicDigits) : ''
 
   return (
     <article

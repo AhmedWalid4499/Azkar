@@ -289,6 +289,63 @@
   opacity: 0.9;
 }
 
+/*
+ * Short screens: a phone on its side, a split screen, a desktop window zoomed in.
+ * Pinned, the header and the two-row dock leave about one line for the dhikr.
+ * Here the header scrolls away with the text and the dock becomes a single row.
+ * The tab bar belongs to the app shell and stays as it is.
+ */
+@media (max-height: 520px) {
+  .reader {
+    /*
+     * 1px border, 8px, the 48px counter, 8px: 65px. The rest is for the counter's two
+     * lines of text at twice their size, which still have to clear the last line.
+     */
+    --dock-space: 76px;
+  }
+
+  .header {
+    position: static;
+  }
+
+  .dockInner {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+  }
+
+  .tools {
+    flex: none;
+  }
+
+  .counter {
+    flex: 1;
+    gap: 0;
+    min-width: 0;
+    min-height: 48px;
+    margin-inline: 0;
+  }
+}
+
+/* Short and narrow at once: "Mark all done" keeps its icon and its name, and leaves its width to the counter. */
+@media (max-height: 520px) and (max-width: 479px) {
+  .tool {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+
+  .toolLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* ---------- Overview sheet ---------- */
 
 .overviewList {

@@ -25,6 +25,11 @@
   flex: none;
 }
 
+/* The external-link arrow in a right-to-left line. */
+.mirrored {
+  transform: scaleX(-1);
+}
+
 .detail {
   color: var(--ink-2);
   font-size: var(--text-s);

@@ -25,16 +25,6 @@
   font-size: var(--text-s);
 }
 
-.header .navDisabled[aria-disabled='true'] {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.header .navDisabled[aria-disabled='true']:hover {
-  background: transparent;
-  color: var(--ink-2);
-}
-
 .grid {
   width: 100%;
   margin-top: var(--space-2);
@@ -95,7 +85,10 @@
   line-height: 1;
 }
 
-/* Today: a ring around the number. Selected: the whole cell is tinted. A day can be both. */
+/*
+ * Today: a ring around the number. Selected: the whole cell is tinted and
+ * ringed, since the tint alone is too faint to tell apart. A day can be both.
+ */
 .today .number {
   box-shadow: inset 0 0 0 2px var(--primary);
   font-weight: 700;
@@ -104,6 +97,17 @@
 .selected,
 .selected:hover:not(:disabled) {
   background: var(--primary-soft);
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+/*
+ * The focus ring has the selection ring's colour and, on any other day, its place.
+ * On the selected day it is drawn around the cell instead, a hairline clear of that
+ * ring, as on the chosen option of a segmented control. Inside the cell it would
+ * crowd the number and the marks; outside, it stays within the card's padding.
+ */
+.selected:focus-visible {
+  outline-offset: 1px;
 }
 
 .selected .number {

@@ -140,11 +140,8 @@ export function MonthCalendar({ month, today, selected, onSelect, onMonthChange,
             {/* aria-disabled rather than disabled, so focus is not dropped when the last step is reached. */}
             <IconButton
               label={t('log.calendar.next')}
-              className={cx(atCurrentMonth && styles.navDisabled)}
               aria-disabled={atCurrentMonth}
-              onClick={() => {
-                if (!atCurrentMonth) onMonthChange(shiftMonth(month, 1))
-              }}
+              onClick={() => onMonthChange(shiftMonth(month, 1))}
             >
               <Next aria-hidden size={22} />
             </IconButton>

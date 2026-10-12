@@ -68,11 +68,18 @@ export const strings = defineStrings({
 
     'azkar.sources.title': 'Sources and credits',
     'azkar.sources.footer': 'Each dhikr shows its reference beneath the text.',
-    'azkar.sources.license': 'Licence: {license}',
+    'azkar.sources.license': 'Licence:',
     'azkar.sources.newTab': 'opens in a new tab',
     'azkar.sources.adhan': 'Prayer-time calculation',
+    'azkar.sources.react': 'User interface',
+    'azkar.sources.reactRouter': 'Moving between pages',
+    'azkar.sources.zustand': 'Keeping settings and progress on the device',
+    'azkar.sources.workbox': 'Offline use',
+    'azkar.sources.lucide': 'Icons',
     'azkar.sources.amiri': 'Typeface for the azkar text',
     'azkar.sources.plex': 'Typeface for the Arabic interface',
+    'azkar.sources.licenses': 'Open-source licences',
+    'azkar.sources.licenses.detail': 'The full licence texts of the software built into this app',
   },
   ar: {
     'azkar.title': 'الأذكار',
@@ -148,10 +155,37 @@ export const strings = defineStrings({
 
     'azkar.sources.title': 'المصادر والتراخيص',
     'azkar.sources.footer': 'يظهر مصدر كل ذِكر أسفل نصّه.',
-    'azkar.sources.license': 'الترخيص: {license}',
+    'azkar.sources.license': 'الترخيص:',
     'azkar.sources.newTab': 'يُفتح في تبويب جديد',
     'azkar.sources.adhan': 'حساب مواقيت الصلاة',
+    'azkar.sources.react': 'واجهة المستخدم',
+    'azkar.sources.reactRouter': 'التنقل بين الصفحات',
+    'azkar.sources.zustand': 'حفظ الإعدادات والتقدّم على الجهاز',
+    'azkar.sources.workbox': 'العمل دون اتصال بالإنترنت',
+    'azkar.sources.lucide': 'الأيقونات',
     'azkar.sources.amiri': 'خط نصوص الأذكار',
     'azkar.sources.plex': 'خط الواجهة العربية',
+    'azkar.sources.licenses': 'تراخيص البرمجيات المفتوحة المصدر',
+    'azkar.sources.licenses.detail': 'النصوص الكاملة لتراخيص البرمجيات المضمَّنة في هذا التطبيق',
   },
 })
+
+/**
+ * What each source of the dataset was used for, in Arabic. azkar.json words these credits in
+ * English only, and the English interface shows them as they are; the Arabic interface shows
+ * these instead. Keyed by the part of a source's address that stays the same when its pinned
+ * revision changes (see `arabicUsedFor` in sources.ts). Numbers follow the digits setting when shown,
+ * so a verse is cited by its surah's name: "2:255" keeps its left-to-right order inside a right-to-left
+ * line, where in Arabic-Indic digits it can be taken for verse 2 of surah 255.
+ */
+export const sourceUsedForAr: Readonly<Record<string, string>> = {
+  'github.com/abdorizak/Hisnul-Muslim':
+    'اختيار الأذكار وترتيبها، وعدد مرات التكرار، والنصوص العربية للمصادر والفضائل والملاحظات (مقتطفات من حواشي الباب، مع تصحيح أرقام الأحاديث التي كانت تشير إلى حديث آخر)',
+  'github.com/asellam/HisnElMuslim':
+    'النص العربي المشكول لجميع الأذكار، ومنها صيغ المساء الخاصة، والاستعاذة قبل آية الكرسي',
+  'github.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB':
+    'ثلاث كلمات يكتمل بتشكيلها النص المذكور أعلاه، وخاتمة مصدر أحد الأذكار، ومقابلة نصوص جميع الأذكار للتحقق منها',
+  'github.com/fawazahmed0/hadith-api':
+    'صحيح مسلم، الحديث رقم 2723، وهو الأصل الذي يُقابَل به ذِكر المساء الوارد فيه كلمةً كلمة، والتحقق من أرقام الأحاديث المذكورة في المصادر',
+  'tanzil.net': 'جميع النصوص القرآنية: آية الكرسي (البقرة: 255)، والسور من 112 إلى 114، والبسملة (الفاتحة: 1)',
+}

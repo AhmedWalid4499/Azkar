@@ -30,12 +30,17 @@ describe('AzkarSettingsSection', () => {
 
     fireEvent.click(increase)
     expect(settings().arabicScale).toBe(5)
-    expect(increase).toBeDisabled()
+    // At the limit the button is aria-disabled, not disabled, so a keyboard user's focus stays on it.
+    expect(increase).toHaveAttribute('aria-disabled', 'true')
+    expect(increase).toBeEnabled()
+    fireEvent.click(increase)
+    expect(settings().arabicScale).toBe(5)
 
     const decrease = screen.getByRole('button', { name: 'Decrease' })
-    for (let i = 0; i < 4; i++) fireEvent.click(decrease)
+    for (let i = 0; i < 5; i++) fireEvent.click(decrease)
     expect(settings().arabicScale).toBe(1)
-    expect(decrease).toBeDisabled()
+    expect(decrease).toHaveAttribute('aria-disabled', 'true')
+    expect(decrease).toBeEnabled()
     expect(preview.style.fontSize).toBe('1.375rem')
   })
 

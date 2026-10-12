@@ -37,7 +37,11 @@ export interface ProgressState extends ProgressData {
   decrement: (dateKey: DateKey, collection: CollectionId, dhikrId: string) => void
   /** Sets a dhikr straight to its target. */
   complete: (dateKey: DateKey, collection: CollectionId, dhikrId: string) => void
-  /** Clears a session's counts for one day. A completion already in the history stays. */
+  /**
+   * Clears a session's counts for one day and leaves the history as it is. A completion
+   * recorded before the reset is not protected from then on, though: read the session to
+   * the end again, undo that final count, and the day's record goes (see `applyCount`).
+   */
   resetSession: (dateKey: DateKey, collection: CollectionId) => void
 }
 
@@ -150,9 +154,15 @@ function withCompletion(
 /**
  * Applies `change` to one dhikr's count. The history follows the counting: the
  * session is recorded the moment its last dhikr reaches its target, and
- * withdrawn again if that very step is undone. Counts that leave the session
- * as incomplete as it was (reading it a second time after "Start over", say)
- * do not touch the record of the first completion.
+ * withdrawn again when a count is taken back from a complete session. Counts
+ * that leave the session as complete or as incomplete as it was do not touch
+ * the history, so reading it a second time after "Start over" keeps the first
+ * completion on record while that reading is under way.
+ *
+ * A day holds one record per session, with nothing to say which reading earned
+ * it. So once a second reading has itself reached the end, undoing its final
+ * count withdraws the record, the first reading's completion with it, and
+ * counting that step again restores it.
  */
 function applyCount(
   state: ProgressState,

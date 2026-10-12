@@ -129,7 +129,7 @@ export const SOURCES = [
     license:
       'The book and its footnotes belong to their author and publisher; no licence is stated for the text. The repository it was read from is MIT-licensed (Copyright (c) 2023 Abdorizak Abdalla), which covers that repository, not the book. Only short citations and one-sentence virtues from the footnotes of one chapter are quoted here',
     usedFor:
-      'Selection and order of the adhkar, repeat counts, and the Arabic references, virtues and notes (extracts of the chapter footnotes; hadith numbers that pointed at another hadith are corrected)',
+      'Selection and order of the azkar, repeat counts, and the Arabic references, virtues and notes (extracts of the chapter footnotes; hadith numbers that pointed at another hadith are corrected)',
   },
   {
     name: 'asellam/HisnElMuslim',

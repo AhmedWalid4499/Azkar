@@ -43,9 +43,23 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
 }
 
-export function IconButton({ label, className, type = 'button', children, ...rest }: IconButtonProps) {
+/**
+ * Pass `aria-disabled` rather than `disabled` where the button can run out of
+ * steps while it has focus (a stepper at its limit, "next" on the last page):
+ * a disabled button drops keyboard focus, an aria-disabled one keeps it and
+ * simply ignores being pressed.
+ */
+export function IconButton({ label, className, type = 'button', children, onClick, ...rest }: IconButtonProps) {
+  const unavailable = rest['aria-disabled'] === true || rest['aria-disabled'] === 'true'
   return (
-    <button type={type} className={cx('ui-icon-button', className)} aria-label={label} title={label} {...rest}>
+    <button
+      type={type}
+      className={cx('ui-icon-button', className)}
+      aria-label={label}
+      title={label}
+      {...rest}
+      onClick={unavailable ? undefined : onClick}
+    >
       {children}
     </button>
   )
@@ -212,13 +226,22 @@ export function Stepper({ value, onChange, min, max, step = 1, label, format }: 
   const clamp = (next: number) => Math.min(max, Math.max(min, next))
   return (
     <div className="ui-stepper" role="group" aria-label={label}>
-      <IconButton label={t('action.decrease')} disabled={value <= min} onClick={() => onChange(clamp(value - step))}>
+      {/* aria-disabled, not disabled: the button being pressed is the one that reaches the limit. */}
+      <IconButton
+        label={t('action.decrease')}
+        aria-disabled={value <= min}
+        onClick={() => onChange(clamp(value - step))}
+      >
         <Minus aria-hidden size={18} />
       </IconButton>
       <output className="ui-stepper__value tabular" aria-live="polite">
         {format ? format(value) : n(value)}
       </output>
-      <IconButton label={t('action.increase')} disabled={value >= max} onClick={() => onChange(clamp(value + step))}>
+      <IconButton
+        label={t('action.increase')}
+        aria-disabled={value >= max}
+        onClick={() => onChange(clamp(value + step))}
+      >
         <Plus aria-hidden size={18} />
       </IconButton>
     </div>

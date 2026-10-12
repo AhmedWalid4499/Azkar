@@ -123,15 +123,34 @@ describe('counting', () => {
   it('takes back an accidental tap', () => {
     renderRoute('/azkar/morning')
     const undo = screen.getByRole('button', { name: 'Undo one count' })
-    expect(undo).toBeDisabled()
+    expect(undo).toHaveAttribute('aria-disabled', 'true')
 
     tap(2)
+    expect(undo).toHaveAttribute('aria-disabled', 'false')
     fireEvent.click(undo)
     expect(counter()).toHaveTextContent('1 / 3')
     expect(morningCounts()).toEqual({ tasbih: 1 })
 
     fireEvent.click(undo)
-    expect(undo).toBeDisabled()
+    expect(undo).toHaveAttribute('aria-disabled', 'true')
+    expect(morningCounts()).toBeUndefined()
+  })
+
+  it('keeps keyboard focus on Undo when the count is back at zero, and ignores further presses', () => {
+    renderRoute('/azkar/morning')
+    const undo = screen.getByRole('button', { name: 'Undo one count' })
+    tap()
+    vibrate.mockClear()
+    undo.focus()
+    fireEvent.click(undo)
+    expect(vibrate).toHaveBeenCalledOnce()
+
+    // A disabled button would drop focus here, and the next Enter would land on the page and count.
+    expect(undo).toBeEnabled()
+    expect(undo).toHaveFocus()
+    fireEvent.click(undo)
+    fireEvent.keyDown(undo, { key: 'Enter' })
+    expect(vibrate).toHaveBeenCalledOnce()
     expect(morningCounts()).toBeUndefined()
   })
 
@@ -262,20 +281,47 @@ describe('navigation', () => {
     renderRoute('/azkar/morning')
     const previous = screen.getByRole('button', { name: 'Previous dhikr' })
     const next = screen.getByRole('button', { name: 'Next dhikr' })
-    expect(previous).toBeDisabled()
+    expect(previous).toHaveAttribute('aria-disabled', 'true')
+    expect(next).toHaveAttribute('aria-disabled', 'false')
 
     tap(2)
     fireEvent.click(next)
     expect(screen.getByText('2 of 3')).toBeInTheDocument()
     fireEvent.click(next)
     expect(screen.getByText('3 of 3')).toBeInTheDocument()
-    expect(next).toBeDisabled()
+    expect(next).toHaveAttribute('aria-disabled', 'true')
+    expect(previous).toHaveAttribute('aria-disabled', 'false')
     tap(4)
 
     fireEvent.click(previous)
     fireEvent.click(previous)
     expect(counter()).toHaveTextContent('2 / 3')
     expect(morningCounts()).toEqual({ tasbih: 2, takbir: 4 })
+  })
+
+  it('keeps keyboard focus on a navigation button at either end of the session', () => {
+    renderRoute('/azkar/morning')
+    const previous = screen.getByRole('button', { name: 'Previous dhikr' })
+    const next = screen.getByRole('button', { name: 'Next dhikr' })
+
+    next.focus()
+    fireEvent.click(next)
+    fireEvent.click(next)
+    expect(screen.getByText('3 of 3')).toBeInTheDocument()
+    // Not disabled: the reader keeps their place, and the button just stops responding.
+    expect(next).toBeEnabled()
+    expect(next).toHaveFocus()
+    fireEvent.click(next)
+    expect(screen.getByText('3 of 3')).toBeInTheDocument()
+
+    previous.focus()
+    fireEvent.click(previous)
+    fireEvent.click(previous)
+    expect(screen.getByText('1 of 3')).toBeInTheDocument()
+    expect(previous).toBeEnabled()
+    expect(previous).toHaveFocus()
+    fireEvent.click(previous)
+    expect(screen.getByText('1 of 3')).toBeInTheDocument()
   })
 
   it('goes forward with the right arrow in a left-to-right interface', () => {
@@ -298,6 +344,18 @@ describe('navigation', () => {
     expect(screen.getByText('٢ من ٣')).toBeInTheDocument()
     fireEvent.keyDown(document.body, { key: 'ArrowRight' })
     expect(screen.getByText('١ من ٣')).toBeInTheDocument()
+  })
+
+  it('draws the undo arrow pointing back along the line, whichever way the line runs', () => {
+    const undoIcon = (name: string) => screen.getByRole('button', { name }).querySelector('svg')
+    const { unmount } = renderRoute('/azkar/morning')
+    expect(undoIcon('Undo one count')).toHaveClass('lucide-undo-2')
+    unmount()
+
+    resetStores('ar')
+    renderRoute('/azkar/morning')
+    // Lucide's redo glyph is its undo glyph mirrored.
+    expect(undoIcon('التراجع عن مرة واحدة')).toHaveClass('lucide-redo-2')
   })
 
   it('turns the page with a sideways swipe, mirrored in a right-to-left interface', () => {
