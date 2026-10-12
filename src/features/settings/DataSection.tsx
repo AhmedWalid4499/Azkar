@@ -2,10 +2,16 @@ import { useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { dateKeyInZone } from '../../shared/date'
 import { useI18n } from '../../shared/i18n'
-import { clearAllData, exportBackup, importBackup, isBackupFile } from '../../shared/storage'
+import { backupDate, clearAllData, exportBackup, importBackup, isBackupFile } from '../../shared/storage'
 import type { BackupFile } from '../../shared/storage'
 import { Button, Row, Section, Sheet } from '../../shared/ui'
 import styles from './DataSection.module.css'
+
+/**
+ * A real backup is tens of kilobytes. The limit only keeps a file that cannot
+ * be one from being read into memory.
+ */
+const MAX_BACKUP_BYTES = 5 * 1024 * 1024
 
 function downloadJson(filename: string, value: unknown) {
   const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' }))
@@ -22,7 +28,7 @@ export function DataSection() {
   const { t, locale } = useI18n()
   const fileInput = useRef<HTMLInputElement>(null)
   const [pendingImport, setPendingImport] = useState<BackupFile | null>(null)
-  const [importError, setImportError] = useState(false)
+  const [importError, setImportError] = useState<'invalid' | 'failed' | null>(null)
   const [confirmingReset, setConfirmingReset] = useState(false)
 
   const handleExport = () => {
@@ -36,18 +42,26 @@ export function DataSection() {
     event.target.value = ''
     if (!file) return
     try {
+      if (file.size > MAX_BACKUP_BYTES) throw new Error('too large')
       const parsed: unknown = JSON.parse(await file.text())
       if (!isBackupFile(parsed)) throw new Error('not a backup')
-      setImportError(false)
+      setImportError(null)
       setPendingImport(parsed)
     } catch {
-      setImportError(true)
+      setImportError('invalid')
     }
   }
 
   const confirmImport = () => {
     if (!pendingImport) return
-    importBackup(pendingImport)
+    try {
+      importBackup(pendingImport)
+    } catch {
+      // Nothing was changed: importBackup puts the previous data back when it cannot write the new.
+      setPendingImport(null)
+      setImportError('failed')
+      return
+    }
     window.location.reload()
   }
 
@@ -56,9 +70,11 @@ export function DataSection() {
     window.location.reload()
   }
 
-  const exportedAt = pendingImport
-    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(pendingImport.exportedAt))
-    : ''
+  // The date is only there to help recognise the file; a backup without a usable one is still a backup.
+  const exportedAt = pendingImport ? backupDate(pendingImport) : null
+  const confirmBody = exportedAt
+    ? t('settings.import.confirmBody', { date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(exportedAt) })
+    : t('settings.import.confirmBodyNoDate')
 
   return (
     <Section title={t('settings.data')} footer={t('settings.data.footer')}>
@@ -76,7 +92,7 @@ export function DataSection() {
         description={
           importError ? (
             <span role="alert" className={styles.error}>
-              {t('settings.import.invalid')}
+              {t(`settings.import.${importError}`)}
             </span>
           ) : (
             t('settings.import.description')
@@ -113,7 +129,7 @@ export function DataSection() {
         onClose={() => setPendingImport(null)}
         title={t('settings.import.confirmTitle')}
       >
-        <p className={styles.body}>{t('settings.import.confirmBody', { date: exportedAt })}</p>
+        <p className={styles.body}>{confirmBody}</p>
         <div className={styles.actions}>
           <Button block variant="primary" onClick={confirmImport}>
             {t('settings.import.confirm')}

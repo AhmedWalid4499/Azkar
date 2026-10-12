@@ -1,17 +1,16 @@
 import { useId } from 'react'
 import { useI18n } from '../../shared/i18n'
-import { useSettings } from '../../shared/settings'
+import { HIJRI_OFFSET_MAX, HIJRI_OFFSET_MIN, useSettings } from '../../shared/settings'
 import { PageHeader, Row, Section, Segmented, Stepper, Switch } from '../../shared/ui'
 import { AzkarSettingsSection, AzkarSourcesSection } from '../azkar'
 import { CalculationSettingsSection, LocationSettingsSection, NotificationSettingsSection } from '../prayer-times'
 import { DataSection } from './DataSection'
+import { formatSigned } from './format'
 
 export function SettingsPage() {
-  const { t, lang, n } = useI18n()
+  const { t, lang, locale } = useI18n()
   const settings = useSettings()
   const digitsId = useId()
-
-  const formatOffset = (value: number) => (value > 0 ? `+${n(value)}` : n(value))
 
   return (
     <div className="page">
@@ -34,8 +33,9 @@ export function SettingsPage() {
               onChange={(language) => settings.update({ language })}
               options={[
                 { value: 'system', label: t('settings.language.system') },
-                { value: 'en', label: 'English' },
-                { value: 'ar', label: 'العربية' },
+                // Each language is named in itself, whatever the interface language, and marked so it is read as such.
+                { value: 'en', label: <span lang="en">English</span> },
+                { value: 'ar', label: <span lang="ar">العربية</span> },
               ]}
             />
           }
@@ -67,8 +67,8 @@ export function SettingsPage() {
               value={settings.timeFormat}
               onChange={(timeFormat) => settings.update({ timeFormat })}
               options={[
-                { value: '12h', label: t('settings.timeFormat.12h') },
-                { value: '24h', label: t('settings.timeFormat.24h') },
+                { value: '12h', label: t('settings.timeFormat.hours', { count: 12 }) },
+                { value: '24h', label: t('settings.timeFormat.hours', { count: 24 }) },
               ]}
             />
           }
@@ -94,9 +94,9 @@ export function SettingsPage() {
             <Stepper
               label={t('settings.hijriOffset')}
               value={settings.hijriOffset}
-              min={-2}
-              max={2}
-              format={formatOffset}
+              min={HIJRI_OFFSET_MIN}
+              max={HIJRI_OFFSET_MAX}
+              format={(value) => formatSigned(value, locale)}
               onChange={(hijriOffset) => settings.update({ hijriOffset })}
             />
           }

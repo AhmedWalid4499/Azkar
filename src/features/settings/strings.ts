@@ -12,8 +12,7 @@ export const strings = defineStrings({
     'settings.theme.light': 'Light',
     'settings.theme.dark': 'Dark',
     'settings.timeFormat': 'Time format',
-    'settings.timeFormat.12h': '12-hour',
-    'settings.timeFormat.24h': '24-hour',
+    'settings.timeFormat.hours': '{count}-hour',
     'settings.arabicDigits': 'Arabic-Indic numerals',
     'settings.arabicDigits.description': 'Show ١٢٣ instead of 123',
     'settings.hijriOffset': 'Hijri date adjustment',
@@ -29,8 +28,12 @@ export const strings = defineStrings({
     'settings.import.confirmTitle': 'Replace your data?',
     'settings.import.confirmBody':
       'Importing this backup from {date} will replace everything currently stored in the app on this device.',
+    'settings.import.confirmBodyNoDate':
+      'Importing this backup will replace everything currently stored in the app on this device.',
     'settings.import.confirm': 'Replace and import',
     'settings.import.invalid': 'That file is not an Azkar backup.',
+    'settings.import.failed':
+      'The backup could not be saved, so nothing was changed. This device’s storage may be full.',
     'settings.reset': 'Erase all data',
     'settings.reset.description': 'Remove your log, progress and settings',
     'settings.reset.confirmTitle': 'Erase everything?',
@@ -55,8 +58,7 @@ export const strings = defineStrings({
     'settings.theme.light': 'فاتح',
     'settings.theme.dark': 'داكن',
     'settings.timeFormat': 'صيغة الوقت',
-    'settings.timeFormat.12h': '١٢ ساعة',
-    'settings.timeFormat.24h': '٢٤ ساعة',
+    'settings.timeFormat.hours': '{count} ساعة',
     'settings.arabicDigits': 'الأرقام العربية المشرقية',
     'settings.arabicDigits.description': 'عرض ١٢٣ بدلًا من 123',
     'settings.hijriOffset': 'تعديل التاريخ الهجري',
@@ -72,8 +74,11 @@ export const strings = defineStrings({
     'settings.import.confirmTitle': 'استبدال بياناتك؟',
     'settings.import.confirmBody':
       'استيراد هذه النسخة الاحتياطية بتاريخ {date} سيستبدل كل ما هو محفوظ حاليًا في التطبيق على هذا الجهاز.',
+    'settings.import.confirmBodyNoDate':
+      'استيراد هذه النسخة الاحتياطية سيستبدل كل ما هو محفوظ حاليًا في التطبيق على هذا الجهاز.',
     'settings.import.confirm': 'استبدال واستيراد',
     'settings.import.invalid': 'هذا الملف ليس نسخة احتياطية من تطبيق أذكار.',
+    'settings.import.failed': 'تعذّر حفظ النسخة الاحتياطية، فلم يتغيّر شيء. قد تكون مساحة التخزين على هذا الجهاز ممتلئة.',
     'settings.reset': 'مسح كل البيانات',
     'settings.reset.description': 'حذف السجل والتقدّم والإعدادات',
     'settings.reset.confirmTitle': 'مسح كل شيء؟',

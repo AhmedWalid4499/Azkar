@@ -8,9 +8,24 @@ export function storageKey(name: string): string {
   return `${STORAGE_PREFIX}${name}`
 }
 
+/**
+ * The keys the app reads, one per persisted store. A backup may carry other
+ * `azkar:` keys (written by a newer build, say); import leaves those out, since
+ * nothing would ever read them.
+ */
+export const STORE_KEYS: readonly string[] = [
+  'settings',
+  'location',
+  'prayer-times',
+  'prayer-log',
+  'azkar-progress',
+  'azkar-settings',
+].map(storageKey)
+
 export interface BackupFile {
   app: 'azkar'
   version: 1
+  /** Informational only, and not checked by `isBackupFile`: read it through `backupDate`. */
   exportedAt: string
   data: Record<string, unknown>
 }
@@ -46,11 +61,37 @@ export function isBackupFile(value: unknown): value is BackupFile {
   return Object.keys(candidate.data).every((key) => key.startsWith(STORAGE_PREFIX))
 }
 
-/** Replaces all stored data with the backup. Reload afterwards so stores rehydrate. */
+/** When the backup was exported, or `null` if the file does not say so in a form that can be shown. */
+export function backupDate(backup: BackupFile): Date | null {
+  const exportedAt: unknown = backup.exportedAt
+  if (typeof exportedAt !== 'string') return null
+  const date = new Date(exportedAt)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+/**
+ * Replaces all stored data with the backup. Reload afterwards so stores rehydrate.
+ *
+ * All or nothing: if the backup cannot be written in full (the storage quota,
+ * usually), what was stored before is put back and the error is rethrown.
+ */
 export function importBackup(backup: BackupFile): void {
-  for (const key of ownKeys()) localStorage.removeItem(key)
-  for (const [key, value] of Object.entries(backup.data)) {
-    localStorage.setItem(key, JSON.stringify(value))
+  // Serialised before anything is removed, so no failure here can cost the old data.
+  const incoming = Object.entries(backup.data)
+    .filter(([key]) => STORE_KEYS.includes(key))
+    .map(([key, value]) => [key, JSON.stringify(value)] as const)
+  const previous = ownKeys().map((key) => [key, localStorage.getItem(key)] as const)
+
+  try {
+    for (const [key] of previous) localStorage.removeItem(key)
+    for (const [key, raw] of incoming) localStorage.setItem(key, raw)
+  } catch (error) {
+    for (const [key] of incoming) localStorage.removeItem(key)
+    // It fitted before, so it fits again.
+    for (const [key, raw] of previous) {
+      if (raw !== null) localStorage.setItem(key, raw)
+    }
+    throw error
   }
 }
 

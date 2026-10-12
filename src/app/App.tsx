@@ -7,6 +7,8 @@ import { TodayPage } from '../features/today/TodayPage'
 import { useI18n } from '../shared/i18n'
 import { useSettings } from '../shared/settings'
 import { AppShell } from './AppShell'
+import { ErrorBoundary } from './ErrorBoundary'
+import { syncThemeColor } from './themeColor'
 
 /** Keeps <html> in step with the chosen language, direction and theme. */
 function useDocumentAttributes() {
@@ -24,10 +26,11 @@ function useDocumentAttributes() {
     const root = document.documentElement
     if (theme === 'system') delete root.dataset.theme
     else root.dataset.theme = theme
+    syncThemeColor(theme)
   }, [theme])
 }
 
-export function App() {
+function AppRoutes() {
   useDocumentAttributes()
   return (
     <HashRouter>
@@ -41,5 +44,13 @@ export function App() {
         </Route>
       </Routes>
     </HashRouter>
+  )
+}
+
+export function App() {
+  return (
+    <ErrorBoundary>
+      <AppRoutes />
+    </ErrorBoundary>
   )
 }

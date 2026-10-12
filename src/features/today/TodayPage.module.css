@@ -45,3 +45,49 @@
   font-size: var(--text-l);
   font-weight: 700;
 }
+
+/* Receives the focus when the location prompt gives way to the next-prayer card. */
+.arrival {
+  border-radius: var(--radius-l);
+}
+
+/* Laid out like a row of the timetable below it, so the two toggles line up. */
+.lastNight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-4);
+}
+
+.lastNightIcon {
+  flex: none;
+  color: var(--ink-2);
+}
+
+.lastNightLabel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lastNightName {
+  font-weight: 600;
+}
+
+.lastNightDay {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.lastNightToggle {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin-inline-end: calc(-1 * var(--space-2));
+}

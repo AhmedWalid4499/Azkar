@@ -68,3 +68,49 @@
 .tabbar__tab:focus-visible {
   outline-offset: -3px;
 }
+
+/* ---------- Error screen (ErrorBoundary) ---------- */
+
+.app-error {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: var(--content-max);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding-block: calc(var(--space-8) + env(safe-area-inset-top)) calc(var(--space-8) + env(safe-area-inset-bottom));
+  padding-inline: var(--gutter);
+}
+
+/* English and Arabic, one under the other, each in its own direction. */
+.app-error__title,
+.app-error__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.app-error__title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.app-error__text {
+  color: var(--ink-2);
+}
+
+.app-error__text:not(:first-of-type) {
+  margin-block-start: var(--space-4);
+}
+
+.app-error__action {
+  flex-wrap: wrap;
+  column-gap: var(--space-3);
+  padding-block: var(--space-2);
+}
+
+.app-error [lang='ar'] {
+  font-family: var(--font-arabic-ui);
+}
