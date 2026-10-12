@@ -7,6 +7,15 @@ import pkg from './package.json' with { type: 'json' }
 /** `--bg` of the light theme in src/shared/styles/tokens.css: the splash screen and window chrome. */
 const PARCHMENT = '#f5f1e8'
 
+/**
+ * Copyright and permission notices of every bundled package (React, React
+ * Router, zustand, adhan, Lucide, workbox-window, the fonts), which their MIT,
+ * ISC and OFL licences require to travel with each copy. Not the default
+ * `.vite/license.md`: the Pages upload leaves dot-directories out, and a .md
+ * file is served as text/markdown, which some browsers download instead of showing.
+ */
+const LICENSES_FILE = 'licenses.txt'
+
 const shortcutIcons = [{ src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
 
 // Every URL here is relative, so it resolves against the manifest's own location
@@ -54,7 +63,9 @@ export default defineConfig({
       workbox: {
         // The whole app shell. Legacy .woff copies are left out: every browser that
         // runs a service worker takes the .woff2 listed first in @font-face.
-        globPatterns: ['**/*.{html,js,css,woff2,svg,png,ico}'],
+        // The licence notices are precached too, so the link in Settings opens offline
+        // and is answered with the file itself rather than the navigation fallback.
+        globPatterns: ['**/*.{html,js,css,woff2,svg,png,ico}', LICENSES_FILE],
         globIgnores: ['**/node_modules/**/*', 'sw-notifications.js'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
@@ -69,6 +80,9 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    license: { fileName: LICENSES_FILE },
+  },
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },

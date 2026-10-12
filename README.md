@@ -19,13 +19,14 @@ Status: early version (0.1.0).
 
 - The five prayers and sunrise for your location, calculated on the device. Works offline once a location is saved.
 - A countdown to the next prayer and the Hijri date.
-- Twelve calculation methods, chosen automatically from your country and changeable in Settings; Standard or Hanafi Asr; high-latitude rules; per-prayer adjustments of up to 30 minutes to match your mosque's timetable.
+- Twelve calculation methods and the Asr school, both chosen automatically from your country and changeable in Settings; high-latitude rules; per-prayer adjustments of up to 30 minutes to match your mosque's timetable.
 - Location from the device's GPS or by searching for a city.
 - Optional reminders at each prayer time while the app is open.
 
 **Prayer log**
 
 - Mark each prayer as on time, in congregation, late (made up), missed or excused. One tap from the Today page logs "on time".
+- Between midnight and Fajr the Today page also offers last night's Isha while it is still unlogged, so ticking it off late counts for the day it belongs to.
 - A month calendar that also names the Hijri months it spans, current and best streaks, 7-day and 30-day completion, and a monthly breakdown per prayer.
 
 **Throughout**
@@ -33,13 +34,14 @@ Status: early version (0.1.0).
 - English and Arabic, light and dark themes, 12- or 24-hour clock, Arabic-Indic or Western digits.
 - Installable (Android, iOS, desktop) and fully usable offline.
 - Export your data to a file, import it on another device, or erase it, from Settings.
+- Can be open in several tabs or windows at once, or installed next to a browser tab: a change made in one reaches the others, and erasing or importing in one reloads them.
 
 ## How prayer times are calculated
 
 Times are computed on your device by the open-source [adhan](https://github.com/batoulapps/adhan-js) library from four inputs: your coordinates, the date, a calculation method (the sun's angle below the horizon at Fajr and Isha) and the school used for Asr. No timetable is downloaded.
 
 - **Method.** "Automatic" picks the method closest to what the religious authority of your country publishes: Egyptian General Authority of Survey in Egypt, Umm al-Qura in Saudi Arabia, the Dubai, Kuwait and Qatar methods in those countries, Diyanet in Turkey, the Institute of Geophysics in Iran, the University of Islamic Sciences, Karachi in Pakistan, India, Bangladesh, Afghanistan and Malaysia, the Singapore (MUIS) method in Singapore, Indonesia and Brunei, ISNA in the United States and Canada, the Moonsighting Committee in the United Kingdom, and the Muslim World League everywhere else. Any of the twelve can be chosen by hand.
-- **Asr.** "Standard" (Shafi'i, Maliki and Hanbali) is the default; "Hanafi" places Asr later.
+- **Asr.** "Automatic" uses the Hanafi time in Pakistan, India, Bangladesh and Afghanistan, where most mosques follow it, and "Standard" (Shafi'i, Maliki and Hanbali) everywhere else; either can be chosen by hand. A setting you have already saved is never changed for you.
 - **High latitudes.** Around midsummer at high latitudes, when twilight lasts most or all of the night, Fajr and Isha are capped by a high-latitude rule. "Automatic" uses the twilight-angle rule, which leaves ordinary days untouched; middle of the night and one-seventh of the night can be chosen instead. Above 65° an optional setting borrows the times of the nearest latitude where the sun still rises and sets.
 - **Ramadan.** With the Umm al-Qura method, Isha is held 120 minutes after Maghrib during Ramadan instead of 90, as the Umm al-Qura calendar does.
 - **Adjustments.** Each time can be moved by up to 30 minutes either way.
@@ -83,7 +85,7 @@ If you find a mistake in a text, a count, a reference or a translation, please o
 ## Privacy
 
 - **Everything is stored on your device.** Settings, the saved location, reading progress and the prayer log live in the browser's local storage, under keys starting with `azkar:`. There is no server, no account, no analytics and no cookie. Clearing the browser's site data, or "Erase all data" in Settings, removes it all.
-- **Backups are files you keep.** Export writes a JSON file to your device; nothing is uploaded.
+- **Backups are files you keep.** Export writes a JSON file to your device; nothing is uploaded. Importing replaces what is stored only if the whole backup can be saved; if it cannot (the browser's storage is full, say), nothing is changed.
 - **Fonts and icons are bundled** with the app, so nothing is fetched from a font or CDN service.
 - **The app contacts a third party in exactly two cases, both started by you:**
   - *Use my location.* The browser asks for permission and gives the app your position. It is saved on the device rounded to three decimals (about 100 m). To show a place name, the coordinates rounded to **two decimals (about 1 km)** and the interface language are sent once to [BigDataCloud](https://www.bigdatacloud.com/)'s reverse-geocoding service.
@@ -125,8 +127,8 @@ scripts/
   azkar/                   Fetches, builds and verifies the azkar dataset
   pwa/                     SVG icon sources and the icon generator
 src/
-  main.tsx                 Entry point: fonts, global styles, service-worker registration
-  app/                     Routes and the app shell (tab bar)
+  main.tsx                 Entry point: fonts, global styles, tab sync, service-worker registration
+  app/                     Routes, the app shell (tab bar), the error screen, keeping open tabs in step
   features/
     today/                 Home page: next prayer, today's times, azkar cards
     azkar/                 Session picker, reader, progress; data/azkar.json is the dataset
@@ -134,7 +136,7 @@ src/
     prayer-log/            Log store, statistics, calendar and log page
     settings/              Settings page, backup export and import
   pwa/                     Service-worker registration and the "new version" banner
-  shared/                  i18n, design tokens and global styles, UI primitives, date and storage helpers
+  shared/                  i18n, design tokens and global styles, UI primitives, date, storage and tab-sync helpers
 .github/workflows/         Build, test and deploy to GitHub Pages
 ```
 
@@ -160,9 +162,9 @@ The site is built with relative URLs and hash-based routes, so the same build wo
 
 - **Reminders only work while the app is open.** A web app cannot schedule a notification for a time when it is closed. Reminders arrive while Azkar is open or in a background tab, can be up to about a minute late in a throttled background tab, and are skipped when they are more than five minutes overdue (for example after the device was asleep). On iPhone and iPad notifications are only available after the app has been added to the Home Screen.
 - **The Hijri date may differ from your local moon sighting.** It is calculated (Umm al-Qura calendar), not observed. Settings has an offset of up to two days either way.
-- **Prayer times are a calculation.** They can differ by a few minutes from a mosque's timetable; choose its method or fine-tune the times. In Pakistan, India, Bangladesh and Afghanistan most mosques use the Hanafi Asr, which has to be switched on in Settings. Near the poles, when the sun does not rise or set, some times cannot be calculated unless the polar setting is switched on.
+- **Prayer times are a calculation.** They can differ by a few minutes from a mosque's timetable; choose its method or fine-tune the times. Near the poles, on days when the sun does not rise or set, or stays too close to the horizon for Asr, some times cannot be calculated; the polar setting then borrows the whole day from the nearest latitude where every time exists.
 - **Data stays on one device.** There is no sync; use export and import to move it. Browsers may clear the storage of sites that are not installed and not visited for a long time, so export a backup now and then.
-- **A place name keeps the language it was fetched in** until the location is updated.
+- **A place name keeps the language it was fetched in** until the location is updated. Coordinates shown in place of a name follow the interface language.
 - **Only the morning and evening azkar are included** at present. The translations are in English only.
 - **Location lookups depend on two free third-party services:** Open-Meteo (free for non-commercial use) and BigDataCloud (under its fair-use policy). If either changes its terms or goes away, city search or place names stop working; prayer times for a saved location do not.
 
@@ -181,6 +183,8 @@ The app is built on the work of others:
 | [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api), with data from [GeoNames](https://www.geonames.org/) | City search | CC BY 4.0, free for non-commercial use |
 | [BigDataCloud](https://www.bigdatacloud.com/) reverse geocoding | Place name for a GPS position | Free client-side API under its fair-use policy |
 | The azkar and Qur'an text sources | See [Where the azkar come from](#where-the-azkar-come-from) | As listed there |
+
+The build collects the copyright and licence notices of every package bundled into the app (adhan, the two typefaces, Lucide, React, React Router, zustand and Workbox's window helper) into `licenses.txt`, which is published next to the app and stored for offline use with it.
 
 ## Licence
 
