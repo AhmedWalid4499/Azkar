@@ -35,3 +35,9 @@ android/.idea/
 *.keystore
 *.p12
 *.mobileprovision
+
+# Native iOS app (apple/)
+apple/AzkarKit/.build/
+apple/AzkarKit/.swiftpm/
+apple/**/xcuserdata/
+apple/build/
