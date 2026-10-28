@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The dark theme background (bg token) in src/shared/styles/tokens.css. -->
+    <color name="azkar_background">#0E1513</color>
+</resources>

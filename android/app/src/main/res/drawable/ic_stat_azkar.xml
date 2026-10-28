@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon of prayer-time reminders: the crescent and star of scripts/pwa/icon.svg in one colour.
+     Android draws notification icons from their alpha alone and tints them (iconColor in capacitor.config.ts).
+     The art spans 108..412 x 100..420 of 512 units; the 384-unit window centred on it leaves the 2dp margin of the 24dp grid. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="384"
+    android:viewportHeight="384">
+    <group
+        android:translateX="-68"
+        android:translateY="-68">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M328 112a160 160 0 1 0 72 240 128 128 0 1 1-72-240z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M360 176 374.5 211.3 412.5 214.1 383.4 238.8 392.4 275.9 360 255.8 327.6 275.9 336.6 238.8 307.5 214.1 345.5 211.3z" />
+    </group>
+</vector>

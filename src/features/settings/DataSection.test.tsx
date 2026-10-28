@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS, useSettings } from '../../shared/settings'
@@ -10,6 +10,16 @@ const OLD_LOG = JSON.stringify({ state: { entries: { '2026-10-10': { fajr: 'onti
 const NEW_LOG = { state: { entries: { '2026-09-01': { asr: 'late' } } }, version: 1 }
 
 const reload = vi.fn()
+
+const native = vi.hoisted(() => ({
+  app: false,
+  saveTextFile: vi.fn(async (_name: string, _text: string, _mimeType: string) => true),
+}))
+vi.mock('../../native', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../native')>()),
+  isNativeApp: () => native.app,
+  saveTextFile: native.saveTextFile,
+}))
 
 function backupFile(content: object | string, name = 'azkar-backup.json') {
   return new File([typeof content === 'string' ? content : JSON.stringify(content)], name, { type: 'application/json' })
@@ -32,6 +42,69 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllGlobals()
   useSettings.setState(DEFAULT_SETTINGS)
+  native.app = false
+})
+
+describe('DataSection export', () => {
+  it('hands the whole backup over as a JSON file named for the day', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(2026, 9, 26, 21, 30))
+    try {
+      render(<DataSection />)
+      await userEvent.click(screen.getByRole('button', { name: 'Export backup' }))
+    } finally {
+      vi.useRealTimers()
+    }
+
+    expect(native.saveTextFile).toHaveBeenCalledTimes(1)
+    const [name, text, mimeType] = native.saveTextFile.mock.calls[0]!
+    expect(name).toBe('azkar-backup-2026-10-26.json')
+    expect(mimeType).toBe('application/json')
+    expect(JSON.parse(text)).toMatchObject({ app: 'azkar', version: 1, data: { [LOG_KEY]: JSON.parse(OLD_LOG) } })
+  })
+
+  it('says so when the file could not be made, and clears that once it works', async () => {
+    native.saveTextFile.mockRejectedValueOnce(new Error('disk full'))
+    render(<DataSection />)
+    await userEvent.click(screen.getByRole('button', { name: 'Export backup' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('The backup could not be created. Please try again.')
+
+    await userEvent.click(screen.getByRole('button', { name: 'Export backup' }))
+    await waitFor(() => expect(screen.queryByRole('alert')).toBeNull())
+    expect(screen.getByText('Download everything as a file')).toBeInTheDocument()
+  })
+
+  it('opens one share sheet at a time', async () => {
+    let close: (saved: boolean) => void = () => {}
+    native.saveTextFile.mockImplementationOnce(() => new Promise((resolve) => (close = resolve)))
+    render(<DataSection />)
+    const button = screen.getByRole('button', { name: 'Export backup' })
+    await userEvent.click(button)
+    await userEvent.click(button)
+    expect(native.saveTextFile).toHaveBeenCalledTimes(1)
+
+    // Closing the sheet without choosing anything is not a failure.
+    await act(async () => close(false))
+    expect(screen.queryByRole('alert')).toBeNull()
+    await userEvent.click(button)
+    expect(native.saveTextFile).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('DataSection in the app', () => {
+  it('says the data lives in the app on this device, and offers to save or send the backup', () => {
+    native.app = true
+    render(<DataSection />)
+    expect(screen.getByText('Save or send everything as a file')).toBeInTheDocument()
+    expect(screen.getByText(/stored only on this device, inside the app, and removing the app removes them/)).toBeInTheDocument()
+    expect(screen.queryByText(/browser data/)).toBeNull()
+  })
+
+  it('keeps the website’s wording in a browser', () => {
+    render(<DataSection />)
+    expect(screen.getByText('Download everything as a file')).toBeInTheDocument()
+    expect(screen.getByText(/before clearing your browser data/)).toBeInTheDocument()
+  })
 })
 
 describe('DataSection import', () => {

@@ -11,7 +11,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "preview": "vite preview",
-    "icons": "node scripts/pwa/generate-icons.mjs"
+    "icons": "node scripts/pwa/generate-icons.mjs",
+    "build:app": "npm run build && cap sync",
+    "ios": "cap open ios",
+    "android": "cap open android",
+    "assets": "node resources/render-sources.mjs && capacitor-assets generate --ios --android --assetPath resources --splashBackgroundColor '#f5f1e8' --splashBackgroundColorDark '#0e1513'"
   },
   "engines": {
     "node": ">=24.15.0"

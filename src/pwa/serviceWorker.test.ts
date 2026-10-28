@@ -1,8 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { RegisterSWOptions } from 'virtual:pwa-register'
 
-const mocks = vi.hoisted(() => ({ registerSW: vi.fn() }))
+const mocks = vi.hoisted(() => ({ registerSW: vi.fn(), native: false }))
 vi.mock('virtual:pwa-register', () => ({ registerSW: mocks.registerSW }))
+vi.mock('../native', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../native')>()),
+  isNativeApp: () => mocks.native,
+}))
 
 interface NodeEvents {
   on: (event: string, listener: (...args: unknown[]) => void) => void
@@ -42,6 +46,7 @@ async function setup({ controlled = true }: { controlled?: boolean } = {}) {
 afterEach(() => {
   vi.useRealTimers()
   Reflect.deleteProperty(navigator, 'serviceWorker')
+  mocks.native = false
 })
 
 describe('registerServiceWorker', () => {
@@ -51,6 +56,20 @@ describe('registerServiceWorker', () => {
     const { registerServiceWorker, useUpdateStore } = await import('./serviceWorker')
     await registerServiceWorker()
     expect(mocks.registerSW).not.toHaveBeenCalled()
+    expect(useUpdateStore.getState().status).toBe('idle')
+  })
+
+  it('never registers inside the iOS and Android apps, even where the web view has service workers', async () => {
+    vi.resetModules()
+    mocks.native = true
+    const container = installContainer(false)
+    mocks.registerSW.mockReset()
+    const { registerServiceWorker, useUpdateStore } = await import('./serviceWorker')
+    await registerServiceWorker(vi.fn())
+
+    expect(mocks.registerSW).not.toHaveBeenCalled()
+    container.dispatchEvent(new Event('controllerchange'))
+    container.dispatchEvent(new Event('controllerchange'))
     expect(useUpdateStore.getState().status).toBe('idle')
   })
 

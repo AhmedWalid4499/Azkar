@@ -5,6 +5,8 @@ import { PrayerNotifier } from '../features/prayer-times'
 import { UpdateBanner } from '../pwa'
 import { useI18n } from '../shared/i18n'
 import type { StringKey } from '../shared/i18n'
+import { LocalFileSheet } from './LocalFileSheet'
+import { useNativeBackButton } from './useNativeBackButton'
 import './app.css'
 
 const TABS: ReadonlyArray<{ to: string; label: StringKey; icon: typeof Sunrise; end?: boolean }> = [
@@ -17,6 +19,7 @@ const TABS: ReadonlyArray<{ to: string; label: StringKey; icon: typeof Sunrise; 
 export function AppShell() {
   const { t } = useI18n()
   const { pathname } = useLocation()
+  useNativeBackButton()
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -29,6 +32,7 @@ export function AppShell() {
         <Outlet />
       </main>
       <UpdateBanner />
+      <LocalFileSheet />
       <nav className="tabbar" aria-label={t('nav.label')}>
         <div className="tabbar__inner">
           {TABS.map(({ to, label, icon: Icon, end }) => (

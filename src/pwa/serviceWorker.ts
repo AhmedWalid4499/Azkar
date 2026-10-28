@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { isNativeApp } from '../native'
 
 /** An open app asks the server for a new version at most this often, when it returns to the foreground. */
 const UPDATE_CHECK_INTERVAL_MS = 60 * 60_000
@@ -52,7 +53,9 @@ function watchForUpdates(registration: ServiceWorkerRegistration) {
 
 /**
  * Registers the service worker that makes the app work offline. Call once, in
- * production builds only (see src/main.tsx).
+ * production builds only (see src/app/start.tsx). Never in the iOS and Android
+ * apps: they carry their files with them, and a worker there would only serve
+ * an old copy over the one an app update installed.
  *
  * The page is never reloaded on its own: someone may be in the middle of
  * reciting. A new version waits, UpdateBanner offers it, and only
@@ -61,7 +64,7 @@ function watchForUpdates(registration: ServiceWorkerRegistration) {
  * @param reload Replaces the page; a parameter so that tests can observe it.
  */
 export async function registerServiceWorker(reload: () => void = () => window.location.reload()): Promise<void> {
-  if (!('serviceWorker' in navigator)) return
+  if (isNativeApp() || !('serviceWorker' in navigator)) return
   reloadPage = reload
 
   const container = navigator.serviceWorker

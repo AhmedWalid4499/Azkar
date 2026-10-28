@@ -55,7 +55,7 @@ export default defineConfig({
       strategies: 'generateSW',
       // A waiting update is offered in a banner (src/pwa); the page is never reloaded behind the reader's back.
       registerType: 'prompt',
-      // Registered from src/main.tsx, in production builds only.
+      // Registered from src/app/start.tsx, in production websites only (never inside the iOS and Android apps).
       injectRegister: false,
       manifest,
       // The globs below already pick the icons up from dist/.
@@ -91,5 +91,7 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     restoreMocks: true,
+    // Whole-page tests with user-event run several seconds each when every file runs at once.
+    testTimeout: 20_000,
   },
 })

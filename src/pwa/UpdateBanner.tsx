@@ -1,5 +1,6 @@
 import { X } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
+import { isNativeApp } from '../native'
 import { useI18n } from '../shared/i18n'
 import { Button, IconButton } from '../shared/ui'
 import { applyUpdate, dismissUpdate, useUpdateStore } from './serviceWorker'
@@ -12,6 +13,7 @@ const READER_PATH = /^\/azkar\/[^/]+/
  * Offers a waiting app update, floating just above the tab bar. Mounted once in
  * the app shell. It holds back while the adhkar reader is open and appears when
  * the user leaves it; nothing here reloads the page without a press on Reload.
+ * Never in the iOS and Android apps, which are updated through their stores.
  */
 export function UpdateBanner() {
   const { t } = useI18n()
@@ -19,7 +21,7 @@ export function UpdateBanner() {
   const status = useUpdateStore((state) => state.status)
   const dismissed = useUpdateStore((state) => state.dismissed)
 
-  if (status === 'idle' || dismissed || READER_PATH.test(pathname)) return null
+  if (status === 'idle' || dismissed || READER_PATH.test(pathname) || isNativeApp()) return null
 
   const applying = status === 'applying'
   return (

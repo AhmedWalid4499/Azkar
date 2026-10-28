@@ -10,6 +10,8 @@ import { isNativeApp } from './platform'
  */
 
 let mirroring = false
+/** Set once the native copy has been read in full. Until then nothing may be written to it. */
+let restored = false
 
 /** Run before any store module is imported, so the stores hydrate from restored data. */
 export async function restoreFromNative(): Promise<void> {
@@ -21,8 +23,9 @@ export async function restoreFromNative(): Promise<void> {
       const { value } = await Preferences.get({ key })
       if (value !== null) localStorage.setItem(key, value)
     }
+    restored = true
   } catch {
-    // Start from whatever the web view still has.
+    // Start from whatever the web view still has, and leave the native copy alone (see mirrorToNative).
   }
 }
 
@@ -34,9 +37,14 @@ function mirror(task: () => Promise<unknown>): void {
  * From now on, every write of an app key to localStorage is copied to native
  * preferences. Storage's own methods are wrapped on the prototype because
  * assigning to localStorage.setItem would store an item named "setItem".
+ *
+ * Only after `restoreFromNative` has succeeded: if the native copy could not be
+ * read, the web view may be missing data that only that copy still holds, and
+ * mirroring would write this session's partial state over it. It is read again
+ * at the next launch.
  */
 export function mirrorToNative(): void {
-  if (!isNativeApp() || mirroring) return
+  if (!isNativeApp() || !restored || mirroring) return
   mirroring = true
 
   const proto = Storage.prototype

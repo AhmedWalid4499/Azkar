@@ -13,6 +13,12 @@ vi.mock('./serviceWorker', async (importOriginal) => ({
   applyUpdate: vi.fn(),
 }))
 
+const platform = vi.hoisted(() => ({ native: false }))
+vi.mock('../native', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../native')>()),
+  isNativeApp: () => platform.native,
+}))
+
 function renderAt(path: string) {
   return render(
     <MemoryRouter initialEntries={[path]}>
@@ -31,6 +37,7 @@ beforeEach(() => {
 afterEach(() => {
   useSettings.setState(DEFAULT_SETTINGS)
   useUpdateStore.setState({ status: 'idle', dismissed: false })
+  platform.native = false
 })
 
 describe('UpdateBanner', () => {
@@ -78,6 +85,13 @@ describe('UpdateBanner', () => {
     useUpdateStore.setState({ status: 'ready' })
     renderAt(path)
     expect(banner()).toBeInTheDocument()
+  })
+
+  it('never shows inside the iOS and Android apps, which their stores update', () => {
+    platform.native = true
+    useUpdateStore.setState({ status: 'ready' })
+    renderAt('/')
+    expect(banner()).not.toBeInTheDocument()
   })
 
   it('is translated', () => {

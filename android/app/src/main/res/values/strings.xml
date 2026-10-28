@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Azkar</string>
+    <string name="title_activity_main">Azkar</string>
+    <string name="package_name" translatable="false">io.github.ahmedwalid4499.azkar</string>
+    <string name="custom_url_scheme" translatable="false">io.github.ahmedwalid4499.azkar</string>
+</resources>

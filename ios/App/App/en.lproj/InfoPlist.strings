@@ -1,0 +1,5 @@
+/* The name under the app icon. */
+"CFBundleDisplayName" = "Azkar";
+
+/* Asked the first time "Use my location" is pressed. */
+"NSLocationWhenInUseUsageDescription" = "Azkar uses your location to calculate prayer times on this device and saves it only here. To show the name of the place, an approximate position is sent to a place-name lookup service.";

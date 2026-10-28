@@ -1,0 +1,5 @@
+/* The name under the app icon. */
+"CFBundleDisplayName" = "أذكار";
+
+/* Asked the first time "Use my location" is pressed. */
+"NSLocationWhenInUseUsageDescription" = "يستخدم أذكار موقعك لحساب مواقيت الصلاة على هذا الجهاز، ولا يحفظه إلا عليه. ولعرض اسم المكان يُرسَل موقع تقريبي إلى خدمة للبحث عن أسماء الأماكن.";

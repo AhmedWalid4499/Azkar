@@ -9,6 +9,7 @@ import { useSettings } from '../shared/settings'
 import { AppShell } from './AppShell'
 import { ErrorBoundary } from './ErrorBoundary'
 import { syncThemeColor } from './themeColor'
+import { useNativeStatusBar } from './useNativeStatusBar'
 
 /** Keeps <html> in step with the chosen language, direction and theme. */
 function useDocumentAttributes() {
@@ -28,6 +29,8 @@ function useDocumentAttributes() {
     else root.dataset.theme = theme
     syncThemeColor(theme)
   }, [theme])
+
+  useNativeStatusBar(theme)
 }
 
 function AppRoutes() {

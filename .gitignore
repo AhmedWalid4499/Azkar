@@ -25,3 +25,13 @@ dist-ssr
 
 # Local assistant tooling
 .claude/
+
+# Native apps. ios/ and android/ carry Capacitor's own .gitignore files for build output,
+# the web assets copied into them and generated config; these are extra.
+android/.idea/
+*.xcuserstate
+# Signing keys and profiles never belong in the repository.
+*.jks
+*.keystore
+*.p12
+*.mobileprovision

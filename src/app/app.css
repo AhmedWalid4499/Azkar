@@ -2,6 +2,21 @@
   min-height: 100dvh;
 }
 
+/* The iOS and Android apps draw the page under a transparent status bar: what scrolls up
+   behind it is veiled, as the tab bar does at the bottom. No height where nothing is drawn there. */
+.app::before {
+  content: '';
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 10;
+  height: env(safe-area-inset-top);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  pointer-events: none;
+}
+
 .app__main {
   width: 100%;
   max-width: var(--content-max);
@@ -67,6 +82,18 @@
 
 .tabbar__tab:focus-visible {
   outline-offset: -3px;
+}
+
+/* ---------- A file the app ships with, shown in the app (LocalFileSheet) ---------- */
+
+.app-file {
+  margin: 0;
+  color: var(--ink-2);
+  font-family: var(--font-latin);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* ---------- Error screen (ErrorBoundary) ---------- */

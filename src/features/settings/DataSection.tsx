@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { isNativeApp, saveTextFile } from '../../native'
 import { dateKeyInZone } from '../../shared/date'
 import { useI18n } from '../../shared/i18n'
 import { backupDate, clearAllData, exportBackup, importBackup, isBackupFile } from '../../shared/storage'
@@ -13,27 +14,31 @@ import styles from './DataSection.module.css'
  */
 const MAX_BACKUP_BYTES = 5 * 1024 * 1024
 
-function downloadJson(filename: string, value: unknown) {
-  const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' }))
-  const link = document.createElement('a')
-  link.href = url
-  link.download = filename
-  document.body.append(link)
-  link.click()
-  link.remove()
-  URL.revokeObjectURL(url)
-}
-
 export function DataSection() {
   const { t, locale } = useI18n()
   const fileInput = useRef<HTMLInputElement>(null)
+  /** The share sheet is up: a second press would be turned down by the system. */
+  const exporting = useRef(false)
+  const [exportFailed, setExportFailed] = useState(false)
   const [pendingImport, setPendingImport] = useState<BackupFile | null>(null)
   const [importError, setImportError] = useState<'invalid' | 'failed' | null>(null)
   const [confirmingReset, setConfirmingReset] = useState(false)
+  // Where the data lives, and so what can take it away, differs between the website and the app.
+  const inApp = isNativeApp()
 
-  const handleExport = () => {
+  // A download in a browser; in the app, the share sheet (Save to Files, Drive, mail and so on).
+  const handleExport = async () => {
+    if (exporting.current) return
+    exporting.current = true
     const now = new Date()
-    downloadJson(`azkar-backup-${dateKeyInZone(now)}.json`, exportBackup(now))
+    try {
+      await saveTextFile(`azkar-backup-${dateKeyInZone(now)}.json`, JSON.stringify(exportBackup(now), null, 2), 'application/json')
+      setExportFailed(false)
+    } catch {
+      setExportFailed(true)
+    } finally {
+      exporting.current = false
+    }
   }
 
   const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -77,10 +82,18 @@ export function DataSection() {
     : t('settings.import.confirmBodyNoDate')
 
   return (
-    <Section title={t('settings.data')} footer={t('settings.data.footer')}>
+    <Section title={t('settings.data')} footer={t(inApp ? 'settings.data.footer.app' : 'settings.data.footer')}>
       <Row
         label={t('settings.export')}
-        description={t('settings.export.description')}
+        description={
+          exportFailed ? (
+            <span role="alert" className={styles.error}>
+              {t('settings.export.failed')}
+            </span>
+          ) : (
+            t(inApp ? 'settings.export.description.app' : 'settings.export.description')
+          )
+        }
         control={
           <Button size="s" onClick={handleExport}>
             {t('settings.export')}
