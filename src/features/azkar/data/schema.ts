@@ -14,6 +14,21 @@ export interface Bilingual {
   ar: string
 }
 
+/** The five obligatory prayers, as in src/shared/types (repeated here so the data layer stays self-contained). */
+export type AfterPrayerName = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
+
+/**
+ * How a dhikr of the after-prayer list applies to each prayer. Some are said
+ * only after certain prayers (for example after Fajr and Maghrib), and some
+ * are repeated a different number of times after certain prayers.
+ */
+export interface AfterPrayerRule {
+  /** The prayers it is said after. Absent means all five. */
+  prayers?: AfterPrayerName[]
+  /** Repetitions after particular prayers, overriding `repeat` for those. */
+  repeat?: Partial<Record<AfterPrayerName, number>>
+}
+
 export interface Dhikr {
   /** Stable slug. Progress is stored against it, so never rename one. */
   id: string
@@ -35,6 +50,8 @@ export interface Dhikr {
   reference: Bilingual
   /** Set when `arabic` contains Qur'an, so tests can check it verbatim. */
   quran?: QuranRef[]
+  /** Only on items of the after-prayer list: which prayers it follows and how often. */
+  afterPrayer?: AfterPrayerRule
 }
 
 export interface AzkarSource {
@@ -51,4 +68,8 @@ export interface AzkarData {
   items: Record<string, Dhikr>
   /** Ordered dhikr ids per session. Morning and evening wordings that differ are separate items. */
   collections: Partial<Record<CollectionId, string[]>>
+  /** Ordered dhikr ids recited after the obligatory prayers. Each item may carry an `afterPrayer` rule. */
+  afterPrayer?: string[]
+  /** Ordered dhikr ids offered as presets in the tasbih counter: short formulas to repeat. */
+  tasbih?: string[]
 }
