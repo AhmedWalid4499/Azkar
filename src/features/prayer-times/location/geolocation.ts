@@ -1,3 +1,5 @@
+import { getNativePosition, isNativeApp, NativeGeoError } from '../../../native'
+
 export type GeoErrorCode = 'unsupported' | 'insecure' | 'denied' | 'unavailable' | 'timeout'
 
 export class GeoError extends Error {
@@ -81,4 +83,22 @@ export function requestPosition(): Promise<Position> {
       finish(() => reject(new GeoError('unavailable')))
     }
   })
+}
+
+/** The installed app's reading, from the system location service after its own permission prompt. */
+async function requestNativePosition(): Promise<Position> {
+  let position: Position
+  try {
+    position = await getNativePosition(POSITION_TIMEOUT_MS)
+  } catch (error) {
+    throw new GeoError(error instanceof NativeGeoError ? error.code : 'unavailable')
+  }
+  const { latitude, longitude } = position
+  if (!isValidCoordinate(latitude, longitude)) throw new GeoError('unavailable')
+  return { latitude, longitude }
+}
+
+/** "Use my location": the system location service in the installed app, the browser's everywhere else. */
+export function locateDevice(): Promise<Position> {
+  return isNativeApp() ? requestNativePosition() : requestPosition()
 }

@@ -35,6 +35,15 @@ export interface I18n {
   n: (value: number) => string
 }
 
+/**
+ * Wraps text that carries its own direction (a person's or a place's name) in
+ * Unicode isolates, so an Arabic name in an English sentence, or the other way
+ * round, cannot reorder the words around it.
+ */
+export function isolate(text: string): string {
+  return `\u2068${text}\u2069`
+}
+
 export function detectSystemLang(): Lang {
   const preferred = typeof navigator === 'undefined' ? [] : (navigator.languages ?? [navigator.language])
   const first = preferred[0]?.toLowerCase() ?? 'en'

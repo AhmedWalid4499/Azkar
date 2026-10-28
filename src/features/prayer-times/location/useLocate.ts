@@ -5,7 +5,7 @@ import { useLocationStore } from '../../../shared/location'
 import type { SavedLocation } from '../../../shared/location'
 import { LookupError, reverseGeocode } from './geocoding'
 import type { LookupErrorCode } from './geocoding'
-import { GeoError, requestPosition } from './geolocation'
+import { GeoError, locateDevice } from './geolocation'
 import type { GeoErrorCode } from './geolocation'
 import { placeLabel } from './place'
 
@@ -55,7 +55,7 @@ export function useLocate(): LocateState & { locate: () => Promise<void>; dismis
     let latitude: number
     let longitude: number
     try {
-      const position = await requestPosition()
+      const position = await locateDevice()
       latitude = roundForStorage(position.latitude)
       longitude = roundForStorage(position.longitude)
     } catch (error) {

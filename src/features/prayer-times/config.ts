@@ -10,11 +10,28 @@ import { isMethodId } from './engine/methods'
 import type { MadhabSetting, MethodSetting } from './engine/methods'
 
 export const PRAYER_TIMES_STORAGE_KEY = storageKey('prayer-times')
-export const PRAYER_TIMES_VERSION = 1
+/** 1: calculation settings and the prayer reminder switch. 2: adds `azkarReminders`. */
+export const PRAYER_TIMES_VERSION = 2
+
+export type AzkarSession = 'morning' | 'evening'
+
+/** When the morning azkar reminder comes: as Fajr begins, or once the sun has risen. */
+export type MorningReminderTime = 'fajr' | 'sunrise'
+
+export interface AzkarReminderSettings {
+  morning: boolean
+  evening: boolean
+  morningAt: MorningReminderTime
+}
 
 export interface PrayerTimesSettings extends CalculationConfig {
-  /** Show a notification at each prayer time while the app is open. */
+  /**
+   * Remind at each of the five prayer times: by the system in the installed app,
+   * while the page is open on the web.
+   */
   notifications: boolean
+  /** Reminders to read the morning azkar (at Fajr or after sunrise) and the evening azkar (at Asr). */
+  azkarReminders: AzkarReminderSettings
 }
 
 export interface PrayerTimesState extends PrayerTimesSettings {
@@ -25,9 +42,17 @@ export interface PrayerTimesState extends PrayerTimesSettings {
   setAdjustment: (slot: TimeSlot, minutes: number) => void
   resetAdjustments: () => void
   setNotifications: (enabled: boolean) => void
+  setAzkarReminder: (session: AzkarSession, enabled: boolean) => void
+  setMorningReminderTime: (at: MorningReminderTime) => void
 }
 
-export const DEFAULT_PRAYER_TIMES_SETTINGS: PrayerTimesSettings = { ...DEFAULT_CALCULATION, notifications: false }
+export const DEFAULT_AZKAR_REMINDERS: AzkarReminderSettings = { morning: false, evening: false, morningAt: 'fajr' }
+
+export const DEFAULT_PRAYER_TIMES_SETTINGS: PrayerTimesSettings = {
+  ...DEFAULT_CALCULATION,
+  notifications: false,
+  azkarReminders: DEFAULT_AZKAR_REMINDERS,
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -41,6 +66,15 @@ function sanitizeAdjustments(value: unknown): Adjustments {
     adjustments[slot] = typeof minutes === 'number' ? clampAdjustment(minutes) : 0
   }
   return adjustments
+}
+
+function sanitizeAzkarReminders(value: unknown): AzkarReminderSettings {
+  const stored = isRecord(value) ? value : {}
+  return {
+    morning: stored.morning === true,
+    evening: stored.evening === true,
+    morningAt: stored.morningAt === 'sunrise' ? 'sunrise' : DEFAULT_AZKAR_REMINDERS.morningAt,
+  }
 }
 
 /**
@@ -61,6 +95,7 @@ export function sanitizeSettings(value: unknown): PrayerTimesSettings {
     polar: polar === 'nearestLatitude' || polar === 'unresolved' ? polar : DEFAULT_CALCULATION.polar,
     adjustments: sanitizeAdjustments(stored.adjustments),
     notifications: stored.notifications === true,
+    azkarReminders: sanitizeAzkarReminders(stored.azkarReminders),
   }
 }
 
@@ -87,21 +122,27 @@ export const usePrayerTimesStore = create<PrayerTimesState>()(
         set((state) => ({ adjustments: { ...state.adjustments, [slot]: clampAdjustment(minutes) } })),
       resetAdjustments: () => set({ adjustments: NO_ADJUSTMENTS }),
       setNotifications: (notifications) => set({ notifications }),
+      setAzkarReminder: (session, enabled) =>
+        set((state) => ({ azkarReminders: { ...state.azkarReminders, [session]: enabled } })),
+      setMorningReminderTime: (morningAt) => set((state) => ({ azkarReminders: { ...state.azkarReminders, morningAt } })),
     }),
     {
       name: PRAYER_TIMES_STORAGE_KEY,
       version: PRAYER_TIMES_VERSION,
-      partialize: ({ method, madhab, highLatitudeRule, polar, adjustments, notifications }): PrayerTimesSettings => ({
+      partialize: ({
         method,
         madhab,
         highLatitudeRule,
         polar,
         adjustments,
         notifications,
-      }),
-      // Version 1 is the only shape so far; anything stamped differently is
-      // read field by field like every other load. Adding 'auto' to the Asr
-      // school needed no new version: a saved school is kept exactly as it is.
+        azkarReminders,
+      }): PrayerTimesSettings => ({ method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders }),
+      // Version 2 only added `azkarReminders`, so version 1 data keeps every
+      // field it has and gets the reminders off. Anything stamped otherwise,
+      // older, newer or hand-made, is read field by field like every load.
+      // Adding 'auto' to the Asr school needed no new version: a saved school
+      // is kept exactly as it is.
       migrate: (persisted) => sanitizeSettings(persisted),
       merge: (persisted, current) => ({ ...current, ...sanitizeSettings(persisted ?? unsavedSettings()) }),
     },

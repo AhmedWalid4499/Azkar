@@ -4,6 +4,10 @@ export const strings = defineStrings({
   en: {
     'settings.title': 'Settings',
 
+    'settings.you': 'You',
+    'settings.name': 'Your name',
+    'settings.name.description': 'Used to greet you and in your reminders. It stays on this device.',
+    'settings.name.placeholder': 'e.g. Ahmed',
     'settings.general': 'General',
     'settings.language': 'Language',
     'settings.language.system': 'Auto',
@@ -21,8 +25,12 @@ export const strings = defineStrings({
     'settings.data': 'Your data',
     'settings.data.footer':
       'Your prayer log, progress and settings are stored only on this device. Export a backup before clearing your browser data or switching phones.',
+    'settings.data.footer.app':
+      'Your prayer log, progress and settings are stored only on this device, inside the app, and removing the app removes them. Export a backup before you do, or before switching phones.',
     'settings.export': 'Export backup',
     'settings.export.description': 'Download everything as a file',
+    'settings.export.description.app': 'Save or send everything as a file',
+    'settings.export.failed': 'The backup could not be created. Please try again.',
     'settings.import': 'Import backup',
     'settings.import.description': 'Restore from a file you exported',
     'settings.import.confirmTitle': 'Replace your data?',
@@ -50,6 +58,10 @@ export const strings = defineStrings({
   ar: {
     'settings.title': 'الإعدادات',
 
+    'settings.you': 'أنت',
+    'settings.name': 'اسمك',
+    'settings.name.description': 'نُحيّيك به ونذكره في تنبيهاتك، ويبقى على هذا الجهاز فقط.',
+    'settings.name.placeholder': 'مثلًا: أحمد',
     'settings.general': 'عام',
     'settings.language': 'اللغة',
     'settings.language.system': 'تلقائي',
@@ -67,8 +79,12 @@ export const strings = defineStrings({
     'settings.data': 'بياناتك',
     'settings.data.footer':
       'سجل صلواتك وتقدّمك وإعداداتك محفوظة على هذا الجهاز فقط. صدِّر نسخة احتياطية قبل مسح بيانات المتصفح أو تغيير هاتفك.',
+    'settings.data.footer.app':
+      'سجل صلواتك وتقدّمك وإعداداتك محفوظة داخل التطبيق على هذا الجهاز فقط، وتُحذف بحذف التطبيق. صدِّر نسخة احتياطية قبل حذفه أو قبل تغيير هاتفك.',
     'settings.export': 'تصدير نسخة احتياطية',
     'settings.export.description': 'تنزيل كل البيانات في ملف',
+    'settings.export.description.app': 'حفظ كل البيانات في ملف أو إرسالها',
+    'settings.export.failed': 'تعذّر إنشاء النسخة الاحتياطية. حاول مرة أخرى.',
     'settings.import': 'استيراد نسخة احتياطية',
     'settings.import.description': 'الاستعادة من ملف سبق تصديره',
     'settings.import.confirmTitle': 'استبدال بياناتك؟',

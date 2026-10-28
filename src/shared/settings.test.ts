@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { formatHijri } from './date'
-import { DEFAULT_SETTINGS, sanitizeSettings, SETTINGS_STORAGE_KEY, useSettings } from './settings'
+import { DEFAULT_SETTINGS, NAME_MAX_LENGTH, sanitizeName, sanitizeSettings, SETTINGS_STORAGE_KEY, useSettings } from './settings'
 
 function store(state: unknown, version = 1) {
   localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ state, version }))
@@ -14,7 +14,7 @@ afterEach(() => {
 
 describe('sanitizeSettings', () => {
   it('keeps valid settings as they are', () => {
-    const settings = { language: 'ar', theme: 'dark', timeFormat: '24h', arabicDigits: false, hijriOffset: -2 }
+    const settings = { language: 'ar', theme: 'dark', timeFormat: '24h', arabicDigits: false, hijriOffset: -2, name: 'Ahmed' }
     expect(sanitizeSettings(settings)).toEqual(settings)
   })
 
@@ -44,6 +44,37 @@ describe('sanitizeSettings', () => {
     expect(Object.keys(sanitizeSettings({ ...DEFAULT_SETTINGS, update: 1, extra: 'x' })).sort()).toEqual(
       Object.keys(DEFAULT_SETTINGS).sort(),
     )
+  })
+})
+
+describe('sanitizeName', () => {
+  it('keeps a name as typed, in any script', () => {
+    expect(sanitizeName('Ahmed')).toBe('Ahmed')
+    expect(sanitizeName('أحمد وليد')).toBe('أحمد وليد')
+  })
+
+  it('makes it one tidy line', () => {
+    expect(sanitizeName('  Ahmed \n\t Walid  ')).toBe('Ahmed Walid')
+  })
+
+  it('drops invisible characters that would scramble the sentences it is shown in', () => {
+    expect(sanitizeName('\u202eAhmed\u200f\u0000')).toBe('Ahmed')
+    expect(sanitizeName('\u2068أحمد\u2069')).toBe('أحمد')
+  })
+
+  it('caps the length without splitting a character', () => {
+    expect(Array.from(sanitizeName('a'.repeat(100)))).toHaveLength(NAME_MAX_LENGTH)
+    expect(sanitizeName('😀'.repeat(50))).toBe('😀'.repeat(NAME_MAX_LENGTH))
+  })
+
+  it('gives an empty name for anything that is not text', () => {
+    for (const value of [undefined, null, 7, {}, ['Ahmed'], true]) expect(sanitizeName(value)).toBe('')
+  })
+
+  it('is part of the settings, empty by default', () => {
+    expect(DEFAULT_SETTINGS.name).toBe('')
+    expect(sanitizeSettings({ name: '  Sara ' }).name).toBe('Sara')
+    expect(sanitizeSettings({ name: 42 }).name).toBe('')
   })
 })
 

@@ -355,4 +355,58 @@ describe('NotificationSettingsSection', () => {
     await waitFor(() => expect(settings().notifications).toBe(true))
     expect(api.requestPermission).not.toHaveBeenCalled()
   })
+
+  describe('azkar reminders', () => {
+    const morning = () => screen.getByRole('switch', { name: 'Remind me of the morning azkar' })
+    const evening = () => screen.getByRole('switch', { name: 'Remind me of the evening azkar' })
+
+    it('switches each on and off on its own, asking for permission like the prayer reminders', async () => {
+      const user = userEvent.setup()
+      const api = stubNotification('default', 'granted')
+      render(<NotificationSettingsSection />)
+      expect(screen.getByText('When Asr begins')).toBeInTheDocument()
+
+      await user.click(evening())
+      await waitFor(() => expect(evening()).toBeChecked())
+      expect(api.requestPermission).toHaveBeenCalledTimes(1)
+      expect(settings().azkarReminders).toEqual({ morning: false, evening: true, morningAt: 'fajr' })
+      expect(morning()).not.toBeChecked()
+      expect(toggle()).not.toBeChecked()
+
+      await user.click(morning())
+      await waitFor(() => expect(morning()).toBeChecked())
+      await user.click(evening())
+      expect(settings().azkarReminders).toEqual({ morning: true, evening: false, morningAt: 'fajr' })
+    })
+
+    it('stays off and shows the browser advice when notifications are blocked', async () => {
+      const user = userEvent.setup()
+      stubNotification('denied')
+      render(<NotificationSettingsSection />)
+      await user.click(morning())
+      expect(await screen.findByRole('alert')).toHaveTextContent(/Allow them in your browser’s site settings/)
+      expect(settings().azkarReminders.morning).toBe(false)
+    })
+
+    it('lets the morning reminder come at Fajr or after sunrise', async () => {
+      const user = userEvent.setup()
+      stubNotification('granted')
+      render(<NotificationSettingsSection />)
+      expect(screen.queryByRole('radiogroup', { name: 'Morning reminder' })).toBeNull()
+      await user.click(morning())
+      const choice = await screen.findByRole('radiogroup', { name: 'Morning reminder' })
+      await user.click(within(choice).getByRole('radio', { name: 'After sunrise' }))
+      expect(settings().azkarReminders.morningAt).toBe('sunrise')
+      expect(within(choice).getByRole('radio', { name: 'After sunrise' })).toBeChecked()
+    })
+
+    it('shows them off when the stored wish has no permission behind it', () => {
+      stubNotification('default')
+      resetStores({ location: CAIRO, prayerTimes: { azkarReminders: { morning: true, evening: true, morningAt: 'sunrise' } } })
+      render(<NotificationSettingsSection />)
+      expect(morning()).not.toBeChecked()
+      expect(evening()).not.toBeChecked()
+      expect(screen.queryByRole('radiogroup', { name: 'Morning reminder' })).toBeNull()
+    })
+  })
 })

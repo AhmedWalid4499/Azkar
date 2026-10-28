@@ -16,7 +16,7 @@ import { toPlace } from './location/place'
  */
 const cache = new WeakMap<Place, WeakMap<CalculationConfig, Map<DateKey, PrayerDay>>>()
 
-function prayerDayFor(dateKey: DateKey, place: Place, config: CalculationConfig): PrayerDay {
+export function prayerDayFor(dateKey: DateKey, place: Place, config: CalculationConfig): PrayerDay {
   let byConfig = cache.get(place)
   if (!byConfig) cache.set(place, (byConfig = new WeakMap()))
   let byDay = byConfig.get(config)

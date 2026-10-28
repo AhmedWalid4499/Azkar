@@ -6,6 +6,7 @@ import { AzkarSettingsSection, AzkarSourcesSection } from '../azkar'
 import { CalculationSettingsSection, LocationSettingsSection, NotificationSettingsSection } from '../prayer-times'
 import { DataSection } from './DataSection'
 import { formatSigned } from './format'
+import { NameField } from './NameField'
 
 export function SettingsPage() {
   const { t, lang, locale } = useI18n()
@@ -16,6 +17,7 @@ export function SettingsPage() {
     <div className="page">
       <PageHeader title={t('settings.title')} />
 
+      <NameField />
       <LocationSettingsSection />
       <CalculationSettingsSection />
       <NotificationSettingsSection />

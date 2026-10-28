@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useLocationStore } from '../../shared/location'
 import type { SavedLocation } from '../../shared/location'
-import { exportBackup } from '../../shared/storage'
+import { exportBackup, importBackup } from '../../shared/storage'
 import {
+  DEFAULT_AZKAR_REMINDERS,
   DEFAULT_PRAYER_TIMES_SETTINGS,
   PRAYER_TIMES_STORAGE_KEY,
   PRAYER_TIMES_VERSION,
@@ -14,8 +15,8 @@ import {
 const store = usePrayerTimesStore
 
 function settingsOf(state = store.getState()) {
-  const { method, madhab, highLatitudeRule, polar, adjustments, notifications } = state
-  return { method, madhab, highLatitudeRule, polar, adjustments, notifications }
+  const { method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders } = state
+  return { method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders }
 }
 
 async function rehydrateFrom(stored: unknown) {
@@ -65,7 +66,24 @@ describe('sanitizeSettings', () => {
       polar: 'unresolved',
       adjustments: { fajr: 2, sunrise: 0, dhuhr: 30, asr: -30, maghrib: 1, isha: 0 },
       notifications: false,
+      azkarReminders: DEFAULT_AZKAR_REMINDERS,
     })
+  })
+
+  it('reads each azkar reminder choice on its own', () => {
+    expect(sanitizeSettings({ azkarReminders: { morning: true, evening: 'yes', morningAt: 'sunrise' } }).azkarReminders).toEqual({
+      morning: true,
+      evening: false,
+      morningAt: 'sunrise',
+    })
+    expect(sanitizeSettings({ azkarReminders: { morning: 1, evening: true, morningAt: 'noon' } }).azkarReminders).toEqual({
+      morning: false,
+      evening: true,
+      morningAt: 'fajr',
+    })
+    for (const junk of [null, 'on', [], 3]) {
+      expect(sanitizeSettings({ azkarReminders: junk }).azkarReminders).toEqual(DEFAULT_AZKAR_REMINDERS)
+    }
   })
 
   it('accepts the three Asr schools and nothing else', () => {
@@ -137,6 +155,57 @@ describe('persisted store', () => {
   })
 })
 
+describe('version 1 data, from before the azkar reminders', () => {
+  /** Exactly what the previous build wrote, with every setting moved off its default. */
+  const V1 = {
+    version: 1,
+    state: {
+      method: 'Karachi',
+      madhab: 'hanafi',
+      highLatitudeRule: 'seventhofthenight',
+      polar: 'nearestLatitude',
+      adjustments: { fajr: -3, sunrise: 0, dhuhr: 2, asr: 0, maghrib: 1, isha: 5 },
+      notifications: true,
+    },
+  }
+
+  it('keeps every setting it held and adds the azkar reminders, switched off', async () => {
+    expect(await rehydrateFrom(V1)).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS })
+    expect(JSON.parse(storedRaw() ?? 'null')).toEqual({
+      version: 2,
+      state: { ...V1.state, azkarReminders: { morning: false, evening: false, morningAt: 'fajr' } },
+    })
+  })
+
+  it('migrates the same way through the store’s own migrate function', () => {
+    const { migrate } = store.persist.getOptions()
+    expect(migrate?.(structuredClone(V1.state), 1)).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS })
+  })
+
+  it('comes through an imported backup unchanged but for the new field', async () => {
+    importBackup({ app: 'azkar', version: 1, exportedAt: '2026-09-01T08:00:00.000Z', data: { [PRAYER_TIMES_STORAGE_KEY]: V1 } })
+    await store.persist.rehydrate()
+    expect(settingsOf()).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS })
+  })
+
+  it('keeps the azkar reminders of version 2 data as they are', async () => {
+    const state = { ...V1.state, azkarReminders: { morning: true, evening: true, morningAt: 'sunrise' } }
+    expect(await rehydrateFrom({ version: 2, state })).toEqual(state)
+    store.getState().setAzkarReminder('evening', false)
+    store.getState().setMorningReminderTime('fajr')
+    expect(JSON.parse(storedRaw() ?? 'null').state.azkarReminders).toEqual({ morning: true, evening: false, morningAt: 'fajr' })
+  })
+
+  it('reads a tampered version 2 backup field by field', async () => {
+    const restored = await rehydrateFrom({
+      version: 2,
+      state: { ...V1.state, azkarReminders: { morning: 'true', evening: true, morningAt: 'dhuhr', extra: 1 } },
+    })
+    expect(restored.azkarReminders).toEqual({ morning: false, evening: true, morningAt: 'fajr' })
+    expect(restored.method).toBe('Karachi')
+  })
+})
+
 describe('the Asr school across an update', () => {
   /** What the previous build stored once any setting had been changed: every field, with its Asr school spelt out. */
   const stored = (madhab: 'shafi' | 'hanafi') => ({
@@ -157,9 +226,16 @@ describe('the Asr school across an update', () => {
     localStorage.setItem(PRAYER_TIMES_STORAGE_KEY, raw)
     await store.persist.rehydrate()
     expect(store.getState().madhab).toBe(madhab)
-    // Read, not migrated: what is in storage has not been touched.
-    expect(storedRaw()).toBe(raw)
-    expect(PRAYER_TIMES_VERSION).toBe(1)
+    // Version 2 (the azkar reminders) rewrites version 1 data, with the school exactly as it was stored.
+    expect(JSON.parse(storedRaw() ?? 'null')).toEqual({
+      version: PRAYER_TIMES_VERSION,
+      state: { ...stored(madhab).state, azkarReminders: DEFAULT_AZKAR_REMINDERS },
+    })
+    // Reading the rewritten data again changes nothing.
+    const migrated = storedRaw()
+    await store.persist.rehydrate()
+    expect(store.getState().madhab).toBe(madhab)
+    expect(storedRaw()).toBe(migrated)
   })
 
   it('keeps the standard Asr for an install that predates the choice and never saved a setting', async () => {

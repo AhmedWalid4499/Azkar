@@ -86,3 +86,21 @@ describe('SettingsPage', () => {
     expect(within(group).getByRole('status').textContent).toBe('0')
   })
 })
+
+describe('your name', () => {
+  it('is saved as you type, tidied, and the field keeps what you typed', async () => {
+    const user = userEvent.setup()
+    renderSettings({ language: 'en' })
+    const field = screen.getByRole('textbox', { name: 'Your name' })
+    await user.type(field, '  Ahmed ')
+    expect(field).toHaveValue('  Ahmed ')
+    expect(useSettings.getState().name).toBe('Ahmed')
+    await user.tab()
+    expect(field).toHaveValue('Ahmed')
+  })
+
+  it('shows the saved name and is labelled in Arabic', () => {
+    renderSettings({ language: 'ar', name: 'أحمد' })
+    expect(screen.getByRole('textbox', { name: 'اسمك' })).toHaveValue('أحمد')
+  })
+})

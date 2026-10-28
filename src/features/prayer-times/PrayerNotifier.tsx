@@ -1,88 +1,68 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
+import { isNativeApp } from '../../native'
 import { useI18n } from '../../shared/i18n'
-import type { UpcomingPrayer } from '../../shared/types'
+import { useSettings } from '../../shared/settings'
 import { usePrayerTimesStore } from './config'
-import { nextPrayerAt } from './engine/schedule'
 import { useClockFormat } from './format'
 import { usePrayerSchedule } from './hooks'
 import { useLocationLabel } from './location/useLocationLabel'
-import { notificationState, showNotification } from './notifications'
+import { showNotification } from './notifications'
+import { NativeReminders } from './reminders/NativeReminders'
+import { reminderEntries, reminderText } from './reminders/plan'
+import type { ReminderEntry } from './reminders/plan'
+import { useWebReminders } from './reminders/useWebReminders'
 
-/**
- * Timers are checked at least this often: a background tab or a sleeping
- * device can stretch a long timeout, and the wall clock is what counts.
- */
-const HEARTBEAT_MS = 30_000
-/** A reminder this late (the device was asleep) would only confuse. */
-const TOO_LATE_MS = 5 * 60_000
+const NONE = { prayers: false, morning: false, evening: false } as const
 
-/** Mounted once in the app shell. Schedules prayer-time reminders while the app is open; renders nothing. */
-export function PrayerNotifier() {
+/** The web's reminders, shown from timers while the page is open. */
+function WebReminders() {
   const { t, lang, dir } = useI18n()
   const formatTime = useClockFormat()
-  const enabled = usePrayerTimesStore((state) => state.notifications)
+  const prayersOn = usePrayerTimesStore((state) => state.notifications)
+  const azkar = usePrayerTimesStore((state) => state.azkarReminders)
   const schedule = usePrayerSchedule()
   const place = useLocationLabel()
-  // What the effect below is waiting for, for its next run to pick up (see `awaited`).
-  const waitingFor = useRef<UpcomingPrayer | null>(null)
+  const name = useSettings((state) => state.name)
 
-  useEffect(() => {
-    // Permission is checked again at the moment of showing: it can be granted or revoked while this runs.
-    if (!enabled || !schedule || notificationState() === 'unsupported') {
-      waitingFor.current = null
-      return
-    }
+  const prayers = useMemo(
+    () => (prayersOn && schedule ? reminderEntries(schedule.days, { ...NONE, morningAt: 'fajr', prayers: true }) : null),
+    [prayersOn, schedule],
+  )
+  const { morning, evening, morningAt } = azkar
+  const sessions = useMemo(
+    () => (schedule && (morning || evening) ? reminderEntries(schedule.days, { ...NONE, morning, evening, morningAt }) : null),
+    [schedule, morning, evening, morningAt],
+  )
 
-    const notify = (prayer: UpcomingPrayer) => {
-      const time = formatTime(prayer.at, schedule.timeZone)
-      void showNotification(t('times.notify.message.title', { prayer: t(`prayer.${prayer.prayer}`) }), {
-        body: place ? t('times.notify.message.body', { time, place }) : time,
-        // One per prayer: a second tab replaces the first one's notification instead of stacking.
-        tag: `azkar-prayer-${prayer.dateKey}-${prayer.prayer}`,
+  // Permission is checked again at the moment of showing: it can be granted or revoked while the timers run.
+  const notify = useCallback(
+    (entry: ReminderEntry) => {
+      if (!schedule) return
+      const { title, body } = reminderText(entry, { t, formatTime, timeZone: schedule.timeZone, place, name })
+      void showNotification(title, {
+        body,
+        // One per reminder: a second tab replaces the first one's notification instead of stacking.
+        tag: entry.kind === 'prayer' ? `azkar-prayer-${entry.key}` : `azkar-reminder-${entry.key}`,
         // Relative, so it resolves under whatever sub-path the app is served from.
         icon: './pwa-192x192.png',
         lang,
         dir,
       })
-    }
+    },
+    [schedule, t, formatTime, place, name, lang, dir],
+  )
 
-    let timer: number | undefined
-    // The prayer being waited for. A restart of this effect carries on waiting for
-    // it only when the timetable still has that prayer at that very instant: the
-    // day turned over (on waking, often before the timer below has had its turn)
-    // or the language changed. A new place or new settings move the instant, so
-    // they start afresh and the old place's prayer cannot fire.
-    const before = waitingFor.current
-    const isSame = (entry: UpcomingPrayer) =>
-      entry.prayer === before?.prayer && entry.dateKey === before.dateKey && entry.at.getTime() === before.at.getTime()
-    let awaited: UpcomingPrayer | null = schedule.timeline.find(isSame) ?? null
-    // The timer and a wake-up both come through here, in either order: whichever
-    // arrives first after the time has come shows the reminder, and the other finds nothing left.
-    const arm = () => {
-      window.clearTimeout(timer)
-      const now = Date.now()
-      if (awaited && awaited.at.getTime() <= now) {
-        const since = awaited.at.getTime()
-        // After a long sleep more than one may have passed: only the latest can still be on time.
-        const arrived = schedule.timeline.findLast((entry) => entry.at.getTime() >= since && entry.at.getTime() <= now)
-        if (arrived && now - arrived.at.getTime() < TOO_LATE_MS) notify(arrived)
-      }
-      awaited = nextPrayerAt(schedule.timeline, new Date(now))
-      waitingFor.current = awaited
-      if (!awaited) return
-      timer = window.setTimeout(arm, Math.min(awaited.at.getTime() - now, HEARTBEAT_MS))
-    }
-
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') arm()
-    }
-    arm()
-    document.addEventListener('visibilitychange', onVisible)
-    return () => {
-      window.clearTimeout(timer)
-      document.removeEventListener('visibilitychange', onVisible)
-    }
-  }, [enabled, schedule, place, t, lang, dir, formatTime])
-
+  useWebReminders(prayers, notify)
+  useWebReminders(sessions, notify)
   return null
+}
+
+/**
+ * Mounted once in the app shell, inside the router. Reminds of the prayer
+ * times and, when asked, of the morning and evening azkar: by system
+ * notifications in the installed app, from timers while the page is open on
+ * the web. Renders nothing.
+ */
+export function PrayerNotifier() {
+  return isNativeApp() ? <NativeReminders /> : <WebReminders />
 }

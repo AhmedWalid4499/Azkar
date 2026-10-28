@@ -37,6 +37,10 @@ export const strings = defineStrings({
     'times.location.naming': 'Location saved. Looking up the place name…',
     'times.location.error.denied':
       'Location access is blocked for this app. Allow it in your browser’s site settings, or search for your city instead.',
+    'times.location.error.denied.ios':
+      'Location access is off for Azkar. Allow it in the Settings app under Privacy & Security › Location Services › Azkar, or search for your city instead.',
+    'times.location.error.denied.android':
+      'Location access is off for Azkar. Allow it in your phone’s Settings under Apps › Azkar › Permissions › Location, or search for your city instead.',
     'times.location.error.unavailable':
       'Your device couldn’t work out where it is. Check that location services are on, or search for your city.',
     'times.location.error.timeout': 'Finding your location took too long. Try again, or search for your city.',
@@ -132,15 +136,41 @@ export const strings = defineStrings({
       'Calculation methods differ from region to region, and each mosque follows one of them. Choose the settings your local mosque uses so these times match its timetable.',
 
     'times.notify.title': 'Reminders',
+    'times.remindPrompt.title': 'Get notified at prayer times',
+    'times.remindPrompt.body': 'Azkar can tell you when each prayer begins, even when the app is closed.',
+    'times.remindPrompt.turnOn': 'Turn on',
+    'times.remindPrompt.notNow': 'Not now',
     'times.notify.switch': 'Notify me at prayer times',
     'times.notify.description': 'A notification when each of the five prayers begins',
+    'times.notify.morning': 'Remind me of the morning azkar',
+    'times.notify.morning.fajr': 'When Fajr begins',
+    'times.notify.morning.sunrise': 'After sunrise',
+    'times.notify.morningAt': 'Morning reminder',
+    'times.notify.morningAt.fajr': 'At Fajr',
+    'times.notify.morningAt.sunrise': 'After sunrise',
+    'times.notify.evening': 'Remind me of the evening azkar',
+    'times.notify.evening.description': 'When Asr begins',
     'times.notify.denied':
       'Notifications are blocked for this app. Allow them in your browser’s site settings, then switch this on again.',
+    'times.notify.denied.ios':
+      'Notifications are turned off for Azkar. To allow them, open the Settings app, find Azkar, tap Notifications and turn on Allow Notifications. Then switch this on again.',
+    'times.notify.denied.android':
+      'Notifications are turned off for Azkar. To allow them, open your phone’s Settings, go to Apps, choose Azkar, tap Notifications and turn them on. Then switch this on again.',
     'times.notify.dismissed': 'Permission wasn’t given, so reminders stay off.',
     'times.notify.footer':
       'Reminders arrive only while Azkar is open or in a background tab, and can be a little late if the device is asleep. A web app can’t alert you once it is closed.',
+    'times.notify.footer.app':
+      'Reminders are set on this device for the week ahead, so they arrive even when Azkar is closed. They are renewed each time you open the app.',
     'times.notify.message.title': 'It’s time for {prayer}',
+    'times.notify.message.titleNamed': '{name}, it’s time for {prayer}',
     'times.notify.message.body': '{time} · {place}',
+    'times.notify.azkar.morning.title': 'Time for the morning azkar',
+    'times.notify.azkar.evening.title': 'Time for the evening azkar',
+    'times.notify.azkar.morning.titleNamed': '{name}, time for the morning azkar',
+    'times.notify.azkar.evening.titleNamed': '{name}, time for the evening azkar',
+    'times.notify.azkar.after.fajr': 'Fajr began at {time}',
+    'times.notify.azkar.after.sunrise': 'The sun rose at {time}',
+    'times.notify.azkar.after.asr': 'Asr began at {time}',
   },
   ar: {
     'times.title': 'مواقيت الصلاة',
@@ -185,6 +215,10 @@ export const strings = defineStrings({
     'times.location.naming': 'حُفظ الموقع. جارٍ البحث عن اسم المكان…',
     'times.location.error.denied':
       'لم يُسمح للتطبيق بمعرفة موقعك. فعِّل إذن الموقع من إعدادات المتصفح، أو ابحث عن مدينتك بدلًا من ذلك.',
+    'times.location.error.denied.ios':
+      'الوصول إلى الموقع متوقف لتطبيق أذكار. اسمح به من تطبيق الإعدادات في «الخصوصية والأمن» ثم «خدمات الموقع» ثم «أذكار»، أو ابحث عن مدينتك بدلًا من ذلك.',
+    'times.location.error.denied.android':
+      'الوصول إلى الموقع متوقف لتطبيق أذكار. اسمح به من «الإعدادات» في هاتفك: «التطبيقات» ثم «أذكار» ثم «الأذونات» ثم «الموقع»، أو ابحث عن مدينتك بدلًا من ذلك.',
     'times.location.error.unavailable': 'تعذّر على جهازك تحديد مكانه. تأكّد من تشغيل خدمات الموقع، أو ابحث عن مدينتك.',
     'times.location.error.timeout': 'استغرق تحديد موقعك وقتًا أطول من اللازم. أعد المحاولة، أو ابحث عن مدينتك.',
     'times.location.error.unsupported': 'هذا المتصفح لا يتيح مشاركة الموقع. ابحث عن مدينتك بدلًا من ذلك.',
@@ -279,14 +313,40 @@ export const strings = defineStrings({
       'تختلف طرق الحساب من منطقة إلى أخرى، ولكل مسجد طريقة يعتمدها. اختر الإعدادات المعمول بها في مسجد حيّك لتوافق هذه المواقيتُ جدولَه.',
 
     'times.notify.title': 'التنبيهات',
+    'times.remindPrompt.title': 'التنبيه عند دخول وقت الصلاة',
+    'times.remindPrompt.body': 'يستطيع التطبيق أن ينبّهك عند دخول وقت كل صلاة، حتى وهو مغلق.',
+    'times.remindPrompt.turnOn': 'تفعيل',
+    'times.remindPrompt.notNow': 'ليس الآن',
     'times.notify.switch': 'التنبيه عند دخول وقت الصلاة',
     'times.notify.description': 'إشعار عند دخول وقت كل صلاة من الصلوات الخمس',
+    'times.notify.morning': 'التذكير بأذكار الصباح',
+    'times.notify.morning.fajr': 'عند دخول وقت الفجر',
+    'times.notify.morning.sunrise': 'بعد شروق الشمس',
+    'times.notify.morningAt': 'وقت التذكير الصباحي',
+    'times.notify.morningAt.fajr': 'عند الفجر',
+    'times.notify.morningAt.sunrise': 'بعد الشروق',
+    'times.notify.evening': 'التذكير بأذكار المساء',
+    'times.notify.evening.description': 'عند دخول وقت العصر',
     'times.notify.denied':
       'الإشعارات محظورة لهذا التطبيق. اسمح بها من إعدادات الموقع في المتصفح، ثم فعِّل هذا الخيار من جديد.',
+    'times.notify.denied.ios':
+      'الإشعارات متوقفة لتطبيق أذكار. للسماح بها افتح تطبيق الإعدادات، وابحث عن «أذكار»، ثم اضغط «الإشعارات» وفعِّل «السماح بالإشعارات»، ثم فعِّل هذا الخيار من جديد.',
+    'times.notify.denied.android':
+      'الإشعارات متوقفة لتطبيق أذكار. للسماح بها افتح «الإعدادات» في هاتفك، ثم «التطبيقات»، واختر «أذكار»، ثم اضغط «الإشعارات» وفعِّلها، ثم فعِّل هذا الخيار من جديد.',
     'times.notify.dismissed': 'لم يُمنح الإذن، لذا تبقى التنبيهات متوقفة.',
     'times.notify.footer':
       'تصل التنبيهات ما دام تطبيق أذكار مفتوحًا أو في تبويب في الخلفية فقط، وقد تتأخر قليلًا إذا كان الجهاز في وضع السكون. لا يستطيع تطبيق الويب تنبيهك بعد إغلاقه.',
+    'times.notify.footer.app':
+      'تُضبط التنبيهات على هذا الجهاز للأسبوع المقبل، فتصلك حتى إن كان تطبيق أذكار مغلقًا، وتتجدّد كلما فتحت التطبيق.',
     'times.notify.message.title': 'حان وقت صلاة {prayer}',
+    'times.notify.message.titleNamed': 'حان وقت صلاة {prayer} يا {name}',
     'times.notify.message.body': '{time} · {place}',
+    'times.notify.azkar.morning.title': 'حان وقت أذكار الصباح',
+    'times.notify.azkar.evening.title': 'حان وقت أذكار المساء',
+    'times.notify.azkar.morning.titleNamed': 'حان وقت أذكار الصباح يا {name}',
+    'times.notify.azkar.evening.titleNamed': 'حان وقت أذكار المساء يا {name}',
+    'times.notify.azkar.after.fajr': 'دخل وقت الفجر الساعة {time}',
+    'times.notify.azkar.after.sunrise': 'أشرقت الشمس الساعة {time}',
+    'times.notify.azkar.after.asr': 'دخل وقت العصر الساعة {time}',
   },
 })

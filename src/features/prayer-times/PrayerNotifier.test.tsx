@@ -358,6 +358,59 @@ describe('PrayerNotifier', () => {
     })
   })
 
+  describe('azkar reminders', () => {
+    const tags = () => shown.map((entry) => entry.options.tag)
+
+    it('reminds of the evening azkar as Asr begins, on its own switch', async () => {
+      usePrayerTimesStore.setState({ notifications: false, azkarReminders: { morning: false, evening: true, morningAt: 'fajr' } })
+      render(<PrayerNotifier />)
+      await advance(31_000)
+      expect(shown).toEqual([
+        {
+          title: 'Time for the evening azkar',
+          options: { body: 'Asr began at 15:59', tag: 'azkar-reminder-2026-10-12-evening', icon: './pwa-192x192.png', lang: 'en', dir: 'ltr' },
+        },
+      ])
+    })
+
+    it('reminds of the morning azkar at Fajr, next to the Fajr reminder', async () => {
+      vi.setSystemTime(cairo('05:28:00', '2026-10-13'))
+      usePrayerTimesStore.setState({ azkarReminders: { morning: true, evening: false, morningAt: 'fajr' } })
+      render(<PrayerNotifier />)
+      await advance(90_000)
+      expect(tags()).toEqual(['azkar-prayer-2026-10-13-fajr', 'azkar-reminder-2026-10-13-morning'])
+      expect(shown[1]).toMatchObject({ title: 'Time for the morning azkar', options: { body: 'Fajr began at 05:29' } })
+    })
+
+    it('or after sunrise, when that is the choice', async () => {
+      vi.setSystemTime(cairo('05:28:00', '2026-10-13'))
+      usePrayerTimesStore.setState({ notifications: false, azkarReminders: { morning: true, evening: false, morningAt: 'sunrise' } })
+      render(<PrayerNotifier />)
+      await advance(10 * 60_000)
+      expect(shown).toHaveLength(0)
+      await advance(90 * 60_000)
+      expect(shown).toEqual([
+        { title: 'Time for the morning azkar', options: expect.objectContaining({ body: 'The sun rose at 06:56', tag: 'azkar-reminder-2026-10-13-morning' }) },
+      ])
+    })
+
+    it('stops as soon as the reminder is switched off', async () => {
+      usePrayerTimesStore.setState({ notifications: false, azkarReminders: { morning: false, evening: true, morningAt: 'fajr' } })
+      render(<PrayerNotifier />)
+      act(() => usePrayerTimesStore.getState().setAzkarReminder('evening', false))
+      await advance(60_000)
+      expect(shown).toHaveLength(0)
+    })
+
+    it('is written in Arabic when the interface is Arabic', async () => {
+      useSettings.setState({ language: 'ar', timeFormat: '12h' })
+      usePrayerTimesStore.setState({ notifications: false, azkarReminders: { morning: false, evening: true, morningAt: 'fajr' } })
+      render(<PrayerNotifier />)
+      await advance(31_000)
+      expect(shown[0]).toMatchObject({ title: 'حان وقت أذكار المساء', options: { body: 'دخل وقت العصر الساعة ٣:٥٩ م', lang: 'ar', dir: 'rtl' } })
+    })
+  })
+
   it('leaves no timers behind when unmounted', async () => {
     const { unmount } = render(<PrayerNotifier />)
     expect(vi.getTimerCount()).toBeGreaterThan(0)

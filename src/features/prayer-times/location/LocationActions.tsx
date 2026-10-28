@@ -1,12 +1,21 @@
 import { LoaderCircle, LocateFixed, Search } from 'lucide-react'
 import { useState } from 'react'
+import { appPlatform } from '../../../native'
 import { useI18n } from '../../../shared/i18n'
+import type { StringKey } from '../../../shared/i18n'
 import { useLocationStore } from '../../../shared/location'
 import { Button, Notice, Sheet } from '../../../shared/ui'
 import { CitySearch } from './CitySearch'
 import styles from './location.module.css'
+import type { GeoErrorCode } from './geolocation'
 import { cityToLocation } from './place'
 import { useLocate } from './useLocate'
+
+/** In the app a refusal is undone in the system Settings app, not in a browser's site settings. */
+function errorKey(error: GeoErrorCode): StringKey {
+  const platform = appPlatform()
+  return error === 'denied' && platform !== 'web' ? `times.location.error.denied.${platform}` : `times.location.error.${error}`
+}
 
 interface LocationActionsProps {
   /** Wording of the GPS button: "Use my location" or "Update location". */
@@ -50,7 +59,7 @@ export function LocationActions({ gpsLabel }: LocationActionsProps) {
 
       {error && (
         <Notice tone="danger" alert>
-          {t(`times.location.error.${error}`)}
+          {t(errorKey(error))}
         </Notice>
       )}
 
