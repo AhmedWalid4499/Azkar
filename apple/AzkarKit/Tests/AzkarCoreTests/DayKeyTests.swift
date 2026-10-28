@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import AzkarKit
+@testable import AzkarCore
 
 @Suite("DayKey")
 struct DayKeyTests {

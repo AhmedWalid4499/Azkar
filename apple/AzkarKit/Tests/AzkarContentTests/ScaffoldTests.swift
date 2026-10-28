@@ -1,7 +1,7 @@
 import Adhan
 import Foundation
 import Testing
-@testable import AzkarKit
+@testable import AzkarContent
 
 @Suite("Scaffold")
 struct ScaffoldTests {
