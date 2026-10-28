@@ -46,6 +46,42 @@ describe('public surface', () => {
     )
   })
 
+  it('exports what the Today page, the prayer log and the tracker read of bedtime, after-prayer and tasbih', () => {
+    expect(Object.keys(azkar)).toEqual(
+      expect.arrayContaining([
+        'computeSleepStreak',
+        'sleepCompletionRate',
+        'useSleepStreak',
+        'useSleepCompletionRate',
+        'AfterPrayerPrompt',
+        'afterPrayerDateKey',
+        'afterPrayerPath',
+        'availableAfterPrayers',
+        'afterPrayerInRange',
+        'computeAfterPrayerStreaks',
+        'afterPrayerCompletionRate',
+        'afterPrayerLifetime',
+        'useAfterPrayerDateKey',
+        'useAfterPrayerSessions',
+        'useAfterPrayerInRange',
+        'useAfterPrayerStreaks',
+        'useAfterPrayerCompletionRate',
+        'useAfterPrayerLifetime',
+        'useAfterPrayerStanding',
+        'TASBIH_PATH',
+        'tasbihDateKey',
+        'tasbihDayCount',
+        'tasbihInRange',
+        'tasbihCountSince',
+        'tasbihLifetime',
+        'useTasbihDateKey',
+        'useTasbihDay',
+        'useTasbihInRange',
+        'useTasbihLifetime',
+      ]),
+    )
+  })
+
   it('renders the Today cards and both settings sections side by side', () => {
     render(
       <MemoryRouter>

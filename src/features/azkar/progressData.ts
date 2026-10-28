@@ -39,7 +39,7 @@ export interface SessionRecord {
   completedAt?: number
   /**
    * Every dhikr reached its count that day. "Start over" keeps it. Taking back a count from a
-   * session that is complete withdraws it, as version 1 did (see `applyCount` in progressStore).
+   * session that is complete withdraws it, as version 1 did (see `countIn` in readingCounts).
    */
   completed: boolean
   /** Adhkar at their count in the day's current reading (back to 0 after "Start over"). */
@@ -71,46 +71,61 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-function isWhole(value: unknown, max: number): value is number {
+export function isWhole(value: unknown, max: number): value is number {
   return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= max
 }
 
-function isInstant(value: unknown): value is number {
+export function isInstant(value: unknown): value is number {
   return typeof value === 'number' && Number.isInteger(value) && value >= EARLIEST_TIME && value < LATEST_TIME
 }
 
-function isDhikrId(id: string): boolean {
+export function isDhikrId(id: string): boolean {
   return id.length > 0 && id.length <= MAX_ID_LENGTH
 }
 
 /** Positive whole counts up to `max`, by id. `null` when none is left. */
-function sanitizeTally(value: unknown, max: number): Record<string, number> | null {
+export function sanitizeTally(value: unknown, max: number): Record<string, number> | null {
   if (!isRecord(value)) return null
   const entries = Object.entries(value).filter(([id, count]) => isDhikrId(id) && isWhole(count, max) && count > 0)
   // fromEntries defines own properties, so an id such as "__proto__" stays inert.
   return entries.length > 0 ? (Object.fromEntries(entries) as Record<string, number>) : null
 }
 
-function sanitizeDayCounts(value: unknown): DayCounts | null {
+/** The entries of `keys` that `sanitize` accepts. `null` when none is left. */
+export function sanitizeSlots<K extends string, V>(
+  value: unknown,
+  keys: readonly K[],
+  sanitize: (entry: unknown) => V | null,
+): Partial<Record<K, V>> | null {
   if (!isRecord(value)) return null
-  const day: DayCounts = {}
-  for (const collection of COLLECTION_IDS) {
-    const counts = Object.hasOwn(value, collection) ? sanitizeTally(value[collection], MAX_STORED_COUNT) : null
-    if (counts) day[collection] = counts
+  const slots: Partial<Record<K, V>> = {}
+  for (const key of keys) {
+    const entry = Object.hasOwn(value, key) ? sanitize(value[key]) : null
+    if (entry !== null) slots[key] = entry
   }
-  return Object.keys(day).length > 0 ? day : null
+  return Object.keys(slots).length > 0 ? slots : null
+}
+
+/** What `sanitizeDay` accepts of each real calendar day. */
+export function sanitizeDated<V>(value: unknown, sanitizeDay: (day: unknown) => V | null): Record<DateKey, V> {
+  const days: Record<DateKey, V> = {}
+  if (!isRecord(value)) return days
+  for (const key of Object.keys(value)) {
+    if (!isValidDateKey(key)) continue
+    const day = sanitizeDay(value[key])
+    if (day !== null) days[key] = day
+  }
+  return days
+}
+
+/** Per-dhikr counts, by slot (a session or a prayer). */
+export function sanitizeCounts<K extends string>(value: unknown, keys: readonly K[]): Partial<Record<K, Counts>> | null {
+  return sanitizeSlots(value, keys, (counts) => sanitizeTally(counts, MAX_STORED_COUNT))
 }
 
 /** Per-dhikr counts on real calendar days, for known sessions. Shared by both versions of the store. */
 export function sanitizeDays(value: unknown): Record<DateKey, DayCounts> {
-  const days: Record<DateKey, DayCounts> = {}
-  if (!isRecord(value)) return days
-  for (const key of Object.keys(value)) {
-    if (!isValidDateKey(key)) continue
-    const day = sanitizeDayCounts(value[key])
-    if (day) days[key] = day
-  }
-  return days
+  return sanitizeDated(value, (day) => sanitizeCounts(day, COLLECTION_IDS))
 }
 
 /**
@@ -131,25 +146,8 @@ export function sanitizeRecord(value: unknown): SessionRecord | null {
   return record
 }
 
-function sanitizeDaySessions(value: unknown): DaySessions | null {
-  if (!isRecord(value)) return null
-  const day: DaySessions = {}
-  for (const collection of COLLECTION_IDS) {
-    const record = Object.hasOwn(value, collection) ? sanitizeRecord(value[collection]) : null
-    if (record) day[collection] = record
-  }
-  return Object.keys(day).length > 0 ? day : null
-}
-
 export function sanitizeSessions(value: unknown): Record<DateKey, DaySessions> {
-  const sessions: Record<DateKey, DaySessions> = {}
-  if (!isRecord(value)) return sessions
-  for (const key of Object.keys(value)) {
-    if (!isValidDateKey(key)) continue
-    const day = sanitizeDaySessions(value[key])
-    if (day) sessions[key] = day
-  }
-  return sessions
+  return sanitizeDated(value, (day) => sanitizeSlots(day, COLLECTION_IDS, sanitizeRecord))
 }
 
 export function sumOf(tally: Readonly<Record<string, number>>): number {

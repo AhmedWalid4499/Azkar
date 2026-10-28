@@ -2,9 +2,9 @@ import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CalculationSettingsSection } from './CalculationSettingsSection'
-import { usePrayerTimesStore } from './config'
+import { DEFAULT_UNLOGGED_REMINDERS, usePrayerTimesStore } from './config'
 import { NotificationSettingsSection } from './NotificationSettingsSection'
-import { CAIRO, resetStores, TROMSO } from './test-helpers'
+import { CAIRO, resetStores, TROMSO, UNLOGGED_OFF } from './test-helpers'
 
 const settings = () => usePrayerTimesStore.getState()
 
@@ -407,6 +407,123 @@ describe('NotificationSettingsSection', () => {
       expect(morning()).not.toBeChecked()
       expect(evening()).not.toBeChecked()
       expect(screen.queryByRole('radiogroup', { name: 'Morning reminder' })).toBeNull()
+    })
+  })
+
+  describe('reminders of prayers not logged yet', () => {
+    const unloggedSwitch = () => screen.getByRole('switch', { name: 'Remind me of prayers I haven’t logged' })
+    const leadSelect = () => screen.queryByRole('combobox', { name: 'How long before the time ends' })
+    const ishaChoice = () => screen.queryByRole('radiogroup', { name: 'End of Isha’s time' })
+    const withDefaults = () => resetStores({ location: CAIRO, prayerTimes: { unloggedReminders: DEFAULT_UNLOGGED_REMINDERS } })
+
+    it('are on by default once reminders are allowed, fifteen minutes before the end, with Isha at the middle of the night', () => {
+      stubNotification('granted')
+      withDefaults()
+      render(<NotificationSettingsSection />)
+      expect(unloggedSwitch()).toBeChecked()
+      expect(screen.getByText('15 minutes before a prayer’s time ends, if it isn’t logged yet')).toBeInTheDocument()
+      expect(leadSelect()).toHaveValue('15')
+      expect(within(leadSelect()!).getAllByRole('option').map((option) => option.textContent)).toEqual([
+        '10 minutes',
+        '15 minutes',
+        '30 minutes',
+        '45 minutes',
+        '1 hour',
+      ])
+      expect(within(ishaChoice()!).getByRole('radio', { name: 'Middle of the night' })).toBeChecked()
+      expect(screen.getByText(/halfway from Maghrib to Fajr.*according to a hadith in Sahih Muslim/)).toBeInTheDocument()
+    })
+
+    it('show off, without their choices, until reminders are allowed', () => {
+      stubNotification('default')
+      withDefaults()
+      render(<NotificationSettingsSection />)
+      expect(unloggedSwitch()).not.toBeChecked()
+      expect(leadSelect()).toBeNull()
+      expect(ishaChoice()).toBeNull()
+      // The wish is kept for when they are.
+      expect(settings().unloggedReminders.enabled).toBe(true)
+    })
+
+    it('ask for permission when switched on, like the other reminders', async () => {
+      const user = userEvent.setup()
+      const api = stubNotification('default', 'granted')
+      render(<NotificationSettingsSection />)
+      expect(settings().unloggedReminders).toEqual(UNLOGGED_OFF)
+      await user.click(unloggedSwitch())
+      await waitFor(() => expect(unloggedSwitch()).toBeChecked())
+      expect(api.requestPermission).toHaveBeenCalledTimes(1)
+      expect(settings().unloggedReminders.enabled).toBe(true)
+      // The prayer-time reminders stay as they were.
+      expect(toggle()).not.toBeChecked()
+    })
+
+    it('stay off and say why when notifications are blocked', async () => {
+      const user = userEvent.setup()
+      stubNotification('default', 'denied')
+      render(<NotificationSettingsSection />)
+      await user.click(unloggedSwitch())
+      expect(await screen.findByRole('alert')).toHaveTextContent(/Notifications are blocked for this app/)
+      expect(settings().unloggedReminders.enabled).toBe(false)
+      expect(unloggedSwitch()).not.toBeChecked()
+    })
+
+    it('can be switched off, which hides their choices', async () => {
+      const user = userEvent.setup()
+      stubNotification('granted')
+      withDefaults()
+      render(<NotificationSettingsSection />)
+      await user.click(unloggedSwitch())
+      expect(settings().unloggedReminders).toEqual({ ...DEFAULT_UNLOGGED_REMINDERS, enabled: false })
+      expect(leadSelect()).toBeNull()
+      expect(ishaChoice()).toBeNull()
+    })
+
+    it('store how long before the end they come, and say it', async () => {
+      const user = userEvent.setup()
+      stubNotification('granted')
+      withDefaults()
+      render(<NotificationSettingsSection />)
+      await user.selectOptions(leadSelect()!, '45 minutes')
+      expect(settings().unloggedReminders.leadMinutes).toBe(45)
+      expect(leadSelect()).toHaveValue('45')
+      expect(screen.getByText('45 minutes before a prayer’s time ends, if it isn’t logged yet')).toBeInTheDocument()
+      await user.selectOptions(leadSelect()!, '1 hour')
+      expect(settings().unloggedReminders.leadMinutes).toBe(60)
+      expect(screen.getByText('1 hour before a prayer’s time ends, if it isn’t logged yet')).toBeInTheDocument()
+    })
+
+    it('let Isha’s reminder count to Fajr instead', async () => {
+      const user = userEvent.setup()
+      stubNotification('granted')
+      withDefaults()
+      render(<NotificationSettingsSection />)
+      await user.click(within(ishaChoice()!).getByRole('radio', { name: 'Fajr' }))
+      expect(settings().unloggedReminders.ishaEnds).toBe('fajr')
+      expect(within(ishaChoice()!).getByRole('radio', { name: 'Fajr' })).toBeChecked()
+      await user.click(within(ishaChoice()!).getByRole('radio', { name: 'Middle of the night' }))
+      expect(settings().unloggedReminders.ishaEnds).toBe('middle')
+    })
+
+    it('are fully translated into Arabic, with Arabic plurals and digits', () => {
+      stubNotification('granted')
+      resetStores({ location: CAIRO, settings: { language: 'ar' }, prayerTimes: { unloggedReminders: DEFAULT_UNLOGGED_REMINDERS } })
+      render(<NotificationSettingsSection />)
+      expect(screen.getByRole('switch', { name: 'التذكير بالصلوات غير المسجَّلة' })).toBeChecked()
+      expect(screen.getByText('قبل خروج وقت الصلاة بـ١٥ دقيقة إن لم تُسجَّل بعد')).toBeInTheDocument()
+      const lead = screen.getByRole('combobox', { name: 'مدة التذكير قبل خروج الوقت' })
+      expect(within(lead).getAllByRole('option').map((option) => option.textContent)).toEqual([
+        '١٠ دقائق',
+        '١٥ دقيقة',
+        '٣٠ دقيقة',
+        '٤٥ دقيقة',
+        'ساعة واحدة',
+      ])
+      const isha = screen.getByRole('radiogroup', { name: 'نهاية وقت العشاء' })
+      expect(within(isha).getByRole('radio', { name: 'منتصف الليل' })).toBeChecked()
+      expect(within(isha).getByRole('radio', { name: 'الفجر' })).not.toBeChecked()
+      expect(screen.getByText(/آخر الوقت المختار لصلاة العشاء بحسب حديث في صحيح مسلم/)).toBeInTheDocument()
+      expect(screen.getByRole('region', { name: 'التنبيهات' })).not.toHaveTextContent(/times\.|[A-Za-z]{4,}/)
     })
   })
 })

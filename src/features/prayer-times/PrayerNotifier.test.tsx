@@ -2,7 +2,10 @@ import { act, render } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useLocationStore } from '../../shared/location'
 import { useSettings } from '../../shared/settings'
-import { usePrayerTimesStore } from './config'
+import type { PrayerName } from '../../shared/types'
+import type { PrayerStatus } from '../prayer-log'
+import { usePrayerLog } from '../prayer-log/store'
+import { DEFAULT_UNLOGGED_REMINDERS, usePrayerTimesStore } from './config'
 import { PrayerNotifier } from './PrayerNotifier'
 import { CAIRO, resetStores, TROMSO, zonedInstant } from './test-helpers'
 
@@ -418,5 +421,102 @@ describe('PrayerNotifier', () => {
     expect(vi.getTimerCount()).toBe(0)
     await advance(60 * 60_000)
     expect(shown).toHaveLength(0)
+  })
+
+  describe('reminders of prayers not logged yet', () => {
+    const titles = () => shown.map((entry) => entry.title)
+    const log = (dateKey: string, prayer: PrayerName, status: PrayerStatus | null) =>
+      act(() => usePrayerLog.getState().setStatus(dateKey, prayer, status))
+
+    beforeEach(() => {
+      usePrayerLog.setState({ entries: {}, loggedAt: {}, sunnah: {} })
+      // Only these, so each test hears nothing else.
+      usePrayerTimesStore.setState({ notifications: false, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
+    })
+
+    it('remind of a prayer not logged fifteen minutes before its time ends', async () => {
+      render(<PrayerNotifier />)
+      // Asr ends at Maghrib, 18:28: the reminder comes at 18:13.
+      await advance(2 * 60 * 60_000 + 14 * 60_000)
+      expect(shown).toHaveLength(0)
+      await advance(30_000)
+      expect(shown).toEqual([
+        {
+          title: 'You haven’t logged Asr yet',
+          options: {
+            body: 'Asr time ends in 15 minutes, at 18:28',
+            tag: 'azkar-unlogged-2026-10-12-asr-unlogged',
+            icon: './pwa-192x192.png',
+            lang: 'en',
+            dir: 'ltr',
+          },
+        },
+      ])
+      // Then Maghrib's, before Isha begins at 19:45.
+      await advance(80 * 60_000)
+      expect(titles()).toEqual(['You haven’t logged Asr yet', 'You haven’t logged Maghrib yet'])
+    })
+
+    it('say nothing for a prayer logged in the meantime', async () => {
+      render(<PrayerNotifier />)
+      await advance(2 * 60 * 60_000)
+      log('2026-10-12', 'asr', 'ontime')
+      await advance(30 * 60_000)
+      expect(shown).toHaveLength(0)
+      // The next prayer, not logged, still has its reminder, at 19:30.
+      await advance(62 * 60_000)
+      expect(titles()).toEqual(['You haven’t logged Maghrib yet'])
+    })
+
+    it('speak again once the status is cleared', async () => {
+      log('2026-10-12', 'asr', 'missed')
+      render(<PrayerNotifier />)
+      await advance(60 * 60_000)
+      log('2026-10-12', 'asr', null)
+      await advance(80 * 60_000)
+      expect(titles()).toEqual(['You haven’t logged Asr yet'])
+    })
+
+    it('end Isha at the middle of the night by default, or at Fajr when chosen', async () => {
+      vi.setSystemTime(cairo('23:40:00'))
+      const { unmount } = render(<PrayerNotifier />)
+      await advance(4 * 60_000)
+      expect(shown).toEqual([
+        {
+          title: 'You haven’t logged Isha yet',
+          options: expect.objectContaining({ body: 'The preferred time for Isha ends in 15 minutes, at 23:58', tag: 'azkar-unlogged-2026-10-12-isha-unlogged' }),
+        },
+      ])
+      unmount()
+
+      shown.length = 0
+      act(() => usePrayerTimesStore.getState().setIshaDeadline('fajr'))
+      vi.setSystemTime(cairo('05:10:00', '2026-10-13'))
+      render(<PrayerNotifier />)
+      await advance(5 * 60_000)
+      expect(shown).toEqual([
+        { title: 'You haven’t logged Isha yet', options: expect.objectContaining({ body: 'Isha time ends in 15 minutes, at 05:29' }) },
+      ])
+    })
+
+    it('address the user by name, in Arabic too', async () => {
+      useSettings.setState({ language: 'ar', timeFormat: '12h', name: 'Ahmed' })
+      vi.setSystemTime(cairo('18:12:40'))
+      render(<PrayerNotifier />)
+      await advance(30_000)
+      expect(shown).toEqual([
+        {
+          title: 'لم تُسجَّل صلاة العصر بعد يا \u2068Ahmed\u2069',
+          options: expect.objectContaining({ body: 'يخرج وقت العصر بعد ١٥ دقيقة، الساعة ٦:٢٨ م', lang: 'ar', dir: 'rtl' }),
+        },
+      ])
+    })
+
+    it('stay silent when switched off', async () => {
+      act(() => usePrayerTimesStore.getState().setUnloggedReminders(false))
+      render(<PrayerNotifier />)
+      await advance(4 * 60 * 60_000)
+      expect(shown).toHaveLength(0)
+    })
   })
 })

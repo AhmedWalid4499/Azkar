@@ -6,12 +6,12 @@ import { DEFAULT_SETTINGS, useSettings } from '../../../shared/settings'
 import type { Lang } from '../../../shared/types'
 import { AzkarRoutes } from '../AzkarRoutes'
 import { CurrentPath } from './CurrentPath'
-import { useAzkarProgress } from '../progressStore'
+import { emptyAzkarProgress, useAzkarProgress } from '../progressStore'
 import { DEFAULT_AZKAR_SETTINGS, useAzkarSettings } from '../settingsStore'
 
 /** Stores outlive a test, so each one starts from a known state: English, UTC, nothing counted. */
 export function resetStores(lang: Lang = 'en', timeZone = 'UTC') {
-  useAzkarProgress.setState({ days: {}, sessions: {}, totals: {}, totalRecitations: 0 })
+  useAzkarProgress.setState(emptyAzkarProgress())
   useAzkarSettings.setState({ ...DEFAULT_AZKAR_SETTINGS })
   useSettings.setState({ ...DEFAULT_SETTINGS, language: lang })
   useLocationStore.setState({

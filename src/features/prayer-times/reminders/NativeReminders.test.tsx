@@ -3,12 +3,15 @@ import { MemoryRouter, useLocation } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useLocationStore } from '../../../shared/location'
 import { useSettings } from '../../../shared/settings'
-import { usePrayerTimesStore } from '../config'
-import type { AzkarReminderSettings } from '../config'
+import type { PrayerName } from '../../../shared/types'
+import type { PrayerStatus } from '../../prayer-log'
+import { usePrayerLog } from '../../prayer-log/store'
+import { DEFAULT_UNLOGGED_REMINDERS, usePrayerTimesStore } from '../config'
+import type { AzkarReminderSettings, UnloggedReminderSettings } from '../config'
 import { bringToForeground, device, LocalNotifications, pendingOf, resetDevice, tapNotification } from '../native-fakes'
 import { PrayerNotifier } from '../PrayerNotifier'
 import { CAIRO, resetStores, zonedInstant } from '../test-helpers'
-import { AZKAR_GROUP, PRAYER_GROUP, REMINDER_LIMIT } from './plan'
+import { AZKAR_GROUP, PRAYER_GROUP, REMINDER_LIMIT, UNLOGGED_GROUP } from './plan'
 
 vi.mock('@capacitor/core', async (original) => (await import('../native-fakes')).mockCore(await original()))
 vi.mock('@capacitor/local-notifications', async () => (await import('../native-fakes')).localNotificationsModule)
@@ -202,6 +205,23 @@ describe('PrayerNotifier in the installed app', () => {
       expect(prayers()[0]).toMatchObject({ id: 202610122, body: '16:09 · Cairo, Egypt' })
     })
 
+    it('leaves a newer schedule alone when an older one hears back about the permission only after it', async () => {
+      // The first check is answered only once a second one, from coming back to the foreground, has done its work.
+      let answerFirst = () => {}
+      LocalNotifications.checkPermissions.mockImplementationOnce(
+        () => new Promise((resolve) => (answerFirst = () => resolve({ display: device.notifications }))),
+      )
+      renderApp()
+      await settle()
+      bringToForeground()
+      await settle()
+      expect(prayers()).toHaveLength(36)
+
+      answerFirst()
+      await settle()
+      expect(prayers()).toHaveLength(36)
+    })
+
     it('when the place gets its name', async () => {
       useLocationStore.setState({ location: { ...CAIRO, label: '', countryCode: null } })
       renderApp()
@@ -299,6 +319,236 @@ describe('PrayerNotifier in the installed app', () => {
       renderApp('/')
       await settle()
       expect(screen.getByTestId('path')).toHaveTextContent('/azkar/morning')
+    })
+  })
+})
+
+describe('the "not logged yet" reminders in the installed app', () => {
+  const unlogged = () => pendingOf(UNLOGGED_GROUP)
+  const unloggedIds = () => unlogged().map(({ id }) => id)
+  const setUnlogged = (patch: Partial<UnloggedReminderSettings>) =>
+    act(() => usePrayerTimesStore.setState((state) => ({ unloggedReminders: { ...state.unloggedReminders, ...patch } })))
+  const log = (dateKey: string, prayer: PrayerName, status: PrayerStatus | null) =>
+    act(() => usePrayerLog.getState().setStatus(dateKey, prayer, status))
+
+  beforeEach(() => {
+    usePrayerLog.setState({ entries: {}, loggedAt: {}, sunnah: {} })
+    usePrayerTimesStore.setState({ unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
+  })
+
+  it('are on by default with the prayer reminders, in a group of their own, written out in full', async () => {
+    renderApp()
+    await settle()
+    expect(unlogged()[0]).toEqual({
+      id: 1_202_610_122,
+      title: 'You haven’t logged Asr yet',
+      body: 'Asr time ends in 15 minutes, at 18:28',
+      schedule: { at: cairo('18:13'), allowWhileIdle: true },
+      extra: { group: UNLOGGED_GROUP, prayer: 'asr', date: '2026-10-12' },
+      sound: 'default',
+    })
+    expect(unlogged().slice(1, 4).map(({ id, body, schedule }) => [id, body, schedule?.at])).toEqual([
+      [1_202_610_123, 'Maghrib time ends in 15 minutes, at 19:45', cairo('19:30')],
+      [1_202_610_124, 'The preferred time for Isha ends in 15 minutes, at 23:58', cairo('23:43')],
+      [1_202_610_130, 'Fajr time ends in 15 minutes, at 06:56', cairo('06:41', '2026-10-13')],
+    ])
+    // With the prayers, ten a day: the soonest fifty reach the 17th's Dhuhr.
+    expect(device.pending.size).toBe(REMINDER_LIMIT)
+    expect([prayers().length, unlogged().length]).toEqual([25, 25])
+    expect(unlogged().at(-1)?.id).toBe(1_202_610_171)
+  })
+
+  it('come on their own too, without the prayer-time reminders', async () => {
+    usePrayerTimesStore.setState({ notifications: false })
+    renderApp()
+    await settle()
+    expect(prayers()).toEqual([])
+    // Five a day for the week: from this Asr's to the 19th's Dhuhr (15:43), before a week has passed at 15:58:30.
+    expect(unlogged()).toHaveLength(35)
+    expect(unlogged().at(-1)?.id).toBe(1_202_610_191)
+  })
+
+  it('open Today when tapped', async () => {
+    renderApp('/settings')
+    await settle()
+    act(() => tapNotification({ id: 1_202_610_122, extra: { group: UNLOGGED_GROUP, prayer: 'asr', date: '2026-10-12' } }))
+    expect(screen.getByTestId('path')).toHaveTextContent(/^\/$/)
+  })
+
+  it('are cancelled the moment the prayer is logged, and come back when its status is cleared', async () => {
+    renderApp()
+    await settle()
+    expect(unloggedIds()).toContain(1_202_610_122)
+
+    log('2026-10-12', 'asr', 'ontime')
+    await settle()
+    expect(unloggedIds()).not.toContain(1_202_610_122)
+    expect(unloggedIds()).toContain(1_202_610_123)
+    // The prayer-time reminder is a different matter and stays.
+    expect(prayers().map(({ id }) => id)).toContain(202_610_122)
+
+    log('2026-10-12', 'asr', null)
+    await settle()
+    expect(unlogged()[0]).toMatchObject({ id: 1_202_610_122, schedule: { at: cairo('18:13') } })
+  })
+
+  it('are cancelled for every status, missed and excused included', async () => {
+    renderApp()
+    await settle()
+    log('2026-10-12', 'maghrib', 'missed')
+    log('2026-10-12', 'isha', 'excused')
+    await settle()
+    expect(unloggedIds()).not.toContain(1_202_610_123)
+    expect(unloggedIds()).not.toContain(1_202_610_124)
+  })
+
+  it('are never scheduled for a prayer logged before the app opened', async () => {
+    log('2026-10-12', 'asr', 'jamaah')
+    renderApp()
+    await settle()
+    const everScheduled = LocalNotifications.schedule.mock.calls.flatMap(([{ notifications }]) => notifications.map(({ id }) => id))
+    expect(everScheduled).not.toContain(1_202_610_122)
+    expect(everScheduled).toContain(1_202_610_123)
+  })
+
+  it('are not scheduled again when a status only changes into another', async () => {
+    renderApp()
+    await settle()
+    log('2026-10-12', 'asr', 'ontime')
+    await settle()
+    LocalNotifications.schedule.mockClear()
+    LocalNotifications.cancel.mockClear()
+    log('2026-10-12', 'asr', 'jamaah')
+    await settle()
+    expect(LocalNotifications.schedule).not.toHaveBeenCalled()
+    expect(LocalNotifications.cancel).not.toHaveBeenCalled()
+  })
+
+  it('remind of last night’s Isha after midnight until Fajr, when that is its end, unless it was logged', async () => {
+    vi.setSystemTime(cairo('01:00', '2026-10-13'))
+    usePrayerTimesStore.setState({ notifications: false })
+    setUnlogged({ ishaEnds: 'fajr' })
+    renderApp()
+    await settle()
+    expect(unlogged()[0]).toMatchObject({
+      id: 1_202_610_124,
+      body: 'Isha time ends in 15 minutes, at 05:29',
+      schedule: { at: cairo('05:14', '2026-10-13') },
+      extra: { date: '2026-10-12' },
+    })
+    log('2026-10-12', 'isha', 'late')
+    await settle()
+    expect(unlogged()[0]?.id).toBe(1_202_610_130)
+  })
+
+  it('follow the chosen lead time and end of Isha', async () => {
+    renderApp()
+    await settle()
+    setUnlogged({ leadMinutes: 30 })
+    await settle()
+    expect(unlogged()[0]).toMatchObject({ id: 1_202_610_122, body: 'Asr time ends in 30 minutes, at 18:28', schedule: { at: cairo('17:58') } })
+
+    setUnlogged({ ishaEnds: 'fajr' })
+    await settle()
+    const isha = unlogged().find(({ id }) => id === 1_202_610_124)
+    expect(isha).toMatchObject({ body: 'Isha time ends in 30 minutes, at 05:29', schedule: { at: cairo('04:59', '2026-10-13') } })
+  })
+
+  it('are cleared when switched off, leaving the prayer reminders, and need the permission like them', async () => {
+    renderApp()
+    await settle()
+    setUnlogged({ enabled: false })
+    await settle()
+    expect(unlogged()).toEqual([])
+    expect(prayers()).toHaveLength(36)
+
+    setUnlogged({ enabled: true })
+    device.notifications = 'denied'
+    bringToForeground()
+    await settle()
+    expect(device.pending.size).toBe(0)
+  })
+
+  it('are written in Arabic and address the user by name', async () => {
+    useSettings.setState({ language: 'ar', timeFormat: '12h', name: 'أحمد' })
+    renderApp()
+    await settle()
+    expect(unlogged()[0]).toMatchObject({ title: 'لم تُسجَّل صلاة العصر بعد يا \u2068أحمد\u2069', body: 'يخرج وقت العصر بعد ١٥ دقيقة، الساعة ٦:٢٨ م' })
+    act(() => useSettings.setState({ language: 'en', timeFormat: '24h', name: 'Ahmed' }))
+    await settle()
+    expect(unlogged()[0]?.title).toBe('\u2068Ahmed\u2069, you haven’t logged Asr yet')
+  })
+
+  describe('with every kind of reminder on', () => {
+    beforeEach(() => {
+      usePrayerTimesStore.setState({ azkarReminders: { morning: true, evening: true, morningAt: 'fajr' } })
+    })
+
+    it('keeps the soonest within the limit, every kind alike', async () => {
+      renderApp()
+      await settle()
+      expect(device.pending.size).toBe(REMINDER_LIMIT)
+      expect([prayers().length, unlogged().length, azkar().length]).toEqual([21, 20, 9])
+      // The cut falls after the 16th's Asr (15:56) and its evening azkar at the same minute.
+      expect(prayers().at(-1)?.id).toBe(202_610_162)
+      expect(azkar().at(-1)?.id).toBe(202_610_166)
+      expect(unlogged().at(-1)?.id).toBe(1_202_610_161)
+    })
+
+    it('never holds more than the limit at any moment while reminders come and go', async () => {
+      const schedule = LocalNotifications.schedule.getMockImplementation()!
+      const cancel = LocalNotifications.cancel.getMockImplementation()!
+      let peak = 0
+      LocalNotifications.schedule.mockImplementation(async (options) => {
+        const result = await schedule(options)
+        peak = Math.max(peak, device.pending.size)
+        return result
+      })
+      // A cancellation takes a round trip to the system, during which another group can be scheduled.
+      LocalNotifications.cancel.mockImplementation(async (options) => {
+        await new Promise((resolve) => setTimeout(resolve, 5))
+        return cancel(options)
+      })
+      const settleSlowly = async () => {
+        for (let round = 0; round < 6; round++) await act(() => new Promise((resolve) => setTimeout(resolve, 5)))
+      }
+      try {
+        setUnlogged({ enabled: false })
+        renderApp()
+        await settleSlowly()
+        expect(device.pending.size).toBe(REMINDER_LIMIT)
+        // On: the prayers and azkar give up their later days to the newcomers.
+        setUnlogged({ enabled: true })
+        await settleSlowly()
+        expect(unlogged()).toHaveLength(20)
+        // Off again: the prayers and azkar take their days back.
+        setUnlogged({ enabled: false })
+        await settleSlowly()
+        expect([prayers().length, azkar().length]).toEqual([36, 14])
+        // And everything moves at once with the place.
+        setUnlogged({ enabled: true })
+        act(() => useLocationStore.getState().setLocation({ ...CAIRO, latitude: 21.4225, longitude: 39.8262, timeZone: 'Asia/Riyadh', label: 'Makkah', countryCode: 'SA' }))
+        await settleSlowly()
+        expect(device.pending.size).toBe(REMINDER_LIMIT)
+        expect(peak).toBe(REMINDER_LIMIT)
+      } finally {
+        LocalNotifications.schedule.mockImplementation(schedule)
+        LocalNotifications.cancel.mockImplementation(cancel)
+      }
+    })
+
+    it('makes room for later reminders as prayers are logged', async () => {
+      renderApp()
+      await settle()
+      log('2026-10-12', 'asr', 'ontime')
+      log('2026-10-12', 'maghrib', 'jamaah')
+      await settle()
+      expect(device.pending.size).toBe(REMINDER_LIMIT)
+      expect(unloggedIds()).not.toContain(1_202_610_122)
+      expect(unloggedIds()).not.toContain(1_202_610_123)
+      // The two places go to the 16th's Asr reminder (18:08) and Maghrib (18:23).
+      expect(unloggedIds()).toContain(1_202_610_162)
+      expect(prayers().at(-1)?.id).toBe(202_610_163)
     })
   })
 })

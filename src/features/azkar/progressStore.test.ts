@@ -545,10 +545,11 @@ describe('sanitizeProgress', () => {
 })
 
 describe('persistence', () => {
-  it('stores only the data, under the app’s prefix and version 2, so backups include it', () => {
+  it('stores only the data, under the app’s prefix and version 3, so backups include it', () => {
     store().increment(DAY, 'morning', 'tasbih')
     const raw: unknown = JSON.parse(localStorage.getItem(AZKAR_PROGRESS_STORAGE_KEY)!)
-    expect(AZKAR_PROGRESS_VERSION).toBe(2)
+    // Version 3 added the after-prayer azkar and the tasbih counter, and left the rest as it was.
+    expect(AZKAR_PROGRESS_VERSION).toBe(3)
     expect(raw).toEqual({
       state: {
         days: { [DAY]: { morning: { tasbih: 1 } } },
@@ -557,10 +558,12 @@ describe('persistence', () => {
         },
         totals: { tasbih: 1 },
         totalRecitations: 1,
+        afterPrayer: { days: {}, sessions: {}, totals: {} },
+        tasbih: { days: {}, totals: {}, free: 0 },
         // Nothing completed yet: see the next test.
         history: {},
       },
-      version: 2,
+      version: 3,
     })
     expect(exportBackup().data[AZKAR_PROGRESS_STORAGE_KEY]).toEqual(raw)
   })

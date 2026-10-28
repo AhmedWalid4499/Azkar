@@ -4,18 +4,18 @@ import { Link } from 'react-router-dom'
 import { useI18n } from '../../../shared/i18n'
 import { Button } from '../../../shared/ui'
 import { cx } from '../cx'
-import type { CollectionId } from '../data'
 import styles from './reader.module.css'
 
 const ACCEPTANCE_DUA = 'تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ'
 
 interface CompletionScreenProps {
-  collection: CollectionId
+  /** E.g. "Morning azkar complete". */
+  title: string
   onReview: () => void
 }
 
-/** The quiet end of a session. */
-export function CompletionScreen({ collection, onReview }: CompletionScreenProps) {
+/** The quiet end of a reading. */
+export function CompletionScreen({ title, onReview }: CompletionScreenProps) {
   const { t, lang } = useI18n()
   const headingId = useId()
   const heading = useRef<HTMLHeadingElement>(null)
@@ -31,7 +31,7 @@ export function CompletionScreen({ collection, onReview }: CompletionScreenProps
         <Check size={34} strokeWidth={2.25} />
       </div>
       <h1 id={headingId} ref={heading} tabIndex={-1} className={styles.completeTitle}>
-        {t(`azkar.complete.title.${collection}`)}
+        {title}
       </h1>
       <p className={cx('recitation', styles.completeDua)} lang="ar" dir="rtl">
         {ACCEPTANCE_DUA}

@@ -18,7 +18,64 @@
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
 		A1F64E06F731FFABDEF7F8F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C43D6772E8A37E2E1D652886 /* InfoPlist.strings */; };
 		B7A3C2D1E4F5061728394A5B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C8B4D3E2F5061728394A5B6C /* PrivacyInfo.xcprivacy */; };
+		7A2B3C4D5E6F000000000100 /* AppBridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000101 /* AppBridgeViewController.swift */; };
+		7A2B3C4D5E6F000000000102 /* AzkarWidgetPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000103 /* AzkarWidgetPlugin.swift */; };
+		7A2B3C4D5E6F000000000104 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000105 /* WidgetSnapshot.swift */; };
+		7A2B3C4D5E6F000000000106 /* WidgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000107 /* WidgetStore.swift */; };
+		7A2B3C4D5E6F000000000108 /* AzkarWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000109 /* AzkarWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A2B3C4D5E6F00000000010A /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000105 /* WidgetSnapshot.swift */; };
+		7A2B3C4D5E6F00000000010B /* WidgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000107 /* WidgetStore.swift */; };
+		7A2B3C4D5E6F00000000010C /* AzkarWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000010D /* AzkarWidgetBundle.swift */; };
+		7A2B3C4D5E6F00000000010E /* PrayerTimesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000010F /* PrayerTimesWidget.swift */; };
+		7A2B3C4D5E6F000000000110 /* WidgetTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000111 /* WidgetTimeline.swift */; };
+		7A2B3C4D5E6F000000000112 /* WidgetText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000113 /* WidgetText.swift */; };
+		7A2B3C4D5E6F000000000114 /* WidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000115 /* WidgetViews.swift */; };
+		7A2B3C4D5E6F000000000116 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000117 /* Theme.swift */; };
+		7A2B3C4D5E6F000000000118 /* MarkPrayedIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000119 /* MarkPrayedIntent.swift */; };
+		7A2B3C4D5E6F00000000011A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000011B /* Assets.xcassets */; };
+		7A2B3C4D5E6F00000000011C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000145 /* Localizable.strings */; };
+		7A2B3C4D5E6F00000000011E /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000105 /* WidgetSnapshot.swift */; };
+		7A2B3C4D5E6F00000000011F /* WidgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000107 /* WidgetStore.swift */; };
+		7A2B3C4D5E6F000000000120 /* PrayerTimesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000010F /* PrayerTimesWidget.swift */; };
+		7A2B3C4D5E6F000000000121 /* WidgetTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000111 /* WidgetTimeline.swift */; };
+		7A2B3C4D5E6F000000000122 /* WidgetText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000113 /* WidgetText.swift */; };
+		7A2B3C4D5E6F000000000123 /* WidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000115 /* WidgetViews.swift */; };
+		7A2B3C4D5E6F000000000124 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000117 /* Theme.swift */; };
+		7A2B3C4D5E6F000000000125 /* MarkPrayedIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000119 /* MarkPrayedIntent.swift */; };
+		7A2B3C4D5E6F000000000126 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000127 /* Fixtures.swift */; };
+		7A2B3C4D5E6F000000000128 /* WidgetSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000129 /* WidgetSnapshotTests.swift */; };
+		7A2B3C4D5E6F00000000012A /* WidgetStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000012B /* WidgetStoreTests.swift */; };
+		7A2B3C4D5E6F00000000012C /* WidgetTimelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000012D /* WidgetTimelineTests.swift */; };
+		7A2B3C4D5E6F00000000012E /* WidgetTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000012F /* WidgetTextTests.swift */; };
+		7A2B3C4D5E6F000000000130 /* WidgetRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000131 /* WidgetRenderTests.swift */; };
+		7A2B3C4D5E6F000000000132 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F00000000011B /* Assets.xcassets */; };
+		7A2B3C4D5E6F000000000133 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000145 /* Localizable.strings */; };
+		7A2B3C4D5E6F000000000134 /* snapshot.fixture.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A2B3C4D5E6F000000000135 /* snapshot.fixture.json */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7A2B3C4D5E6F00000000014B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A2B3C4D5E6F000000000147;
+			remoteInfo = AzkarWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7A2B3C4D5E6F00000000013C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7A2B3C4D5E6F000000000108 /* AzkarWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
@@ -35,6 +92,32 @@
 		956E495220DF12101359E938 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		73CFFEB531F2B366493ECD35 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B4D3E2F5061728394A5B6C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000101 /* AppBridgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBridgeViewController.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000103 /* AzkarWidgetPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzkarWidgetPlugin.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000136 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000105 /* WidgetSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshot.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000107 /* WidgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStore.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000010D /* AzkarWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzkarWidgetBundle.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000010F /* PrayerTimesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesWidget.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000111 /* WidgetTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetTimeline.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000113 /* WidgetText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetText.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000115 /* WidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViews.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000117 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000119 /* MarkPrayedIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkPrayedIntent.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000011B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000137 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000138 /* AzkarWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AzkarWidget.entitlements; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000139 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000013A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000127 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000129 /* WidgetSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshotTests.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000012B /* WidgetStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStoreTests.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000012D /* WidgetTimelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetTimelineTests.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F00000000012F /* WidgetTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetTextTests.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000131 /* WidgetRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetRenderTests.swift; sourceTree = "<group>"; };
+		7A2B3C4D5E6F000000000135 /* snapshot.fixture.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = snapshot.fixture.json; path = ../../src/features/widget/snapshot.fixture.json; sourceTree = SOURCE_ROOT; };
+		7A2B3C4D5E6F000000000109 /* AzkarWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AzkarWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A2B3C4D5E6F00000000013B /* AzkarWidgetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AzkarWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +129,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7A2B3C4D5E6F000000000141 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A2B3C4D5E6F000000000142 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -54,6 +153,9 @@
 			children = (
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
 				504EC3061FED79650016851F /* App */,
+				7A2B3C4D5E6F000000000143 /* Shared */,
+				7A2B3C4D5E6F000000000144 /* AzkarWidget */,
+				7A2B3C4D5E6F000000000146 /* AzkarWidgetTests */,
 				504EC3051FED79650016851F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,6 +164,8 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* App.app */,
+				7A2B3C4D5E6F000000000109 /* AzkarWidgetExtension.appex */,
+				7A2B3C4D5E6F00000000013B /* AzkarWidgetTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -72,6 +176,9 @@
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				7A2B3C4D5E6F000000000101 /* AppBridgeViewController.swift */,
+				7A2B3C4D5E6F000000000103 /* AzkarWidgetPlugin.swift */,
+				7A2B3C4D5E6F000000000136 /* App.entitlements */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -84,6 +191,47 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		7A2B3C4D5E6F000000000143 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7A2B3C4D5E6F000000000105 /* WidgetSnapshot.swift */,
+				7A2B3C4D5E6F000000000107 /* WidgetStore.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		7A2B3C4D5E6F000000000144 /* AzkarWidget */ = {
+			isa = PBXGroup;
+			children = (
+				7A2B3C4D5E6F00000000010D /* AzkarWidgetBundle.swift */,
+				7A2B3C4D5E6F00000000010F /* PrayerTimesWidget.swift */,
+				7A2B3C4D5E6F000000000111 /* WidgetTimeline.swift */,
+				7A2B3C4D5E6F000000000113 /* WidgetText.swift */,
+				7A2B3C4D5E6F000000000115 /* WidgetViews.swift */,
+				7A2B3C4D5E6F000000000117 /* Theme.swift */,
+				7A2B3C4D5E6F000000000119 /* MarkPrayedIntent.swift */,
+				7A2B3C4D5E6F00000000011B /* Assets.xcassets */,
+				7A2B3C4D5E6F000000000145 /* Localizable.strings */,
+				7A2B3C4D5E6F000000000137 /* Info.plist */,
+				7A2B3C4D5E6F000000000138 /* AzkarWidget.entitlements */,
+			);
+			path = AzkarWidget;
+			sourceTree = "<group>";
+		};
+		7A2B3C4D5E6F000000000146 /* AzkarWidgetTests */ = {
+			isa = PBXGroup;
+			children = (
+				7A2B3C4D5E6F000000000127 /* Fixtures.swift */,
+				7A2B3C4D5E6F000000000129 /* WidgetSnapshotTests.swift */,
+				7A2B3C4D5E6F00000000012B /* WidgetStoreTests.swift */,
+				7A2B3C4D5E6F00000000012D /* WidgetTimelineTests.swift */,
+				7A2B3C4D5E6F00000000012F /* WidgetTextTests.swift */,
+				7A2B3C4D5E6F000000000131 /* WidgetRenderTests.swift */,
+				7A2B3C4D5E6F000000000135 /* snapshot.fixture.json */,
+			);
+			path = AzkarWidgetTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -94,10 +242,12 @@
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
+				7A2B3C4D5E6F00000000013C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7A2B3C4D5E6F00000000014C /* PBXTargetDependency */,
 			);
 			name = App;
 			packageProductDependencies = (
@@ -106,6 +256,42 @@
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7A2B3C4D5E6F000000000147 /* AzkarWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A2B3C4D5E6F000000000149 /* Build configuration list for PBXNativeTarget "AzkarWidgetExtension" */;
+			buildPhases = (
+				7A2B3C4D5E6F00000000013D /* Sources */,
+				7A2B3C4D5E6F000000000141 /* Frameworks */,
+				7A2B3C4D5E6F00000000013F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+
+			);
+			name = AzkarWidgetExtension;
+			productName = AzkarWidgetExtension;
+			productReference = 7A2B3C4D5E6F000000000109 /* AzkarWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		7A2B3C4D5E6F000000000148 /* AzkarWidgetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A2B3C4D5E6F00000000014A /* Build configuration list for PBXNativeTarget "AzkarWidgetTests" */;
+			buildPhases = (
+				7A2B3C4D5E6F00000000013E /* Sources */,
+				7A2B3C4D5E6F000000000142 /* Frameworks */,
+				7A2B3C4D5E6F000000000140 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+
+			);
+			name = AzkarWidgetTests;
+			productName = AzkarWidgetTests;
+			productReference = 7A2B3C4D5E6F00000000013B /* AzkarWidgetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -141,6 +327,8 @@
 			projectRoot = "";
 			targets = (
 				504EC3031FED79650016851F /* App */,
+				7A2B3C4D5E6F000000000147 /* AzkarWidgetExtension */,
+				7A2B3C4D5E6F000000000148 /* AzkarWidgetTests */,
 			);
 		};
 /* End PBXProject section */
@@ -161,6 +349,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7A2B3C4D5E6F00000000013F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A2B3C4D5E6F00000000011A /* Assets.xcassets in Resources */,
+				7A2B3C4D5E6F00000000011C /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A2B3C4D5E6F000000000140 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A2B3C4D5E6F000000000132 /* Assets.xcassets in Resources */,
+				7A2B3C4D5E6F000000000133 /* Localizable.strings in Resources */,
+				7A2B3C4D5E6F000000000134 /* snapshot.fixture.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -170,10 +377,59 @@
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
+				7A2B3C4D5E6F000000000100 /* AppBridgeViewController.swift in Sources */,
+				7A2B3C4D5E6F000000000102 /* AzkarWidgetPlugin.swift in Sources */,
+				7A2B3C4D5E6F000000000104 /* WidgetSnapshot.swift in Sources */,
+				7A2B3C4D5E6F000000000106 /* WidgetStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A2B3C4D5E6F00000000013D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A2B3C4D5E6F00000000010A /* WidgetSnapshot.swift in Sources */,
+				7A2B3C4D5E6F00000000010B /* WidgetStore.swift in Sources */,
+				7A2B3C4D5E6F00000000010C /* AzkarWidgetBundle.swift in Sources */,
+				7A2B3C4D5E6F00000000010E /* PrayerTimesWidget.swift in Sources */,
+				7A2B3C4D5E6F000000000110 /* WidgetTimeline.swift in Sources */,
+				7A2B3C4D5E6F000000000112 /* WidgetText.swift in Sources */,
+				7A2B3C4D5E6F000000000114 /* WidgetViews.swift in Sources */,
+				7A2B3C4D5E6F000000000116 /* Theme.swift in Sources */,
+				7A2B3C4D5E6F000000000118 /* MarkPrayedIntent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A2B3C4D5E6F00000000013E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A2B3C4D5E6F00000000011E /* WidgetSnapshot.swift in Sources */,
+				7A2B3C4D5E6F00000000011F /* WidgetStore.swift in Sources */,
+				7A2B3C4D5E6F000000000120 /* PrayerTimesWidget.swift in Sources */,
+				7A2B3C4D5E6F000000000121 /* WidgetTimeline.swift in Sources */,
+				7A2B3C4D5E6F000000000122 /* WidgetText.swift in Sources */,
+				7A2B3C4D5E6F000000000123 /* WidgetViews.swift in Sources */,
+				7A2B3C4D5E6F000000000124 /* Theme.swift in Sources */,
+				7A2B3C4D5E6F000000000125 /* MarkPrayedIntent.swift in Sources */,
+				7A2B3C4D5E6F000000000126 /* Fixtures.swift in Sources */,
+				7A2B3C4D5E6F000000000128 /* WidgetSnapshotTests.swift in Sources */,
+				7A2B3C4D5E6F00000000012A /* WidgetStoreTests.swift in Sources */,
+				7A2B3C4D5E6F00000000012C /* WidgetTimelineTests.swift in Sources */,
+				7A2B3C4D5E6F00000000012E /* WidgetTextTests.swift in Sources */,
+				7A2B3C4D5E6F000000000130 /* WidgetRenderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7A2B3C4D5E6F00000000014C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A2B3C4D5E6F000000000147 /* AzkarWidgetExtension */;
+			targetProxy = 7A2B3C4D5E6F00000000014B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		504EC30B1FED79650016851F /* Main.storyboard */ = {
@@ -199,6 +455,15 @@
 				73CFFEB531F2B366493ECD35 /* ar */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7A2B3C4D5E6F000000000145 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A2B3C4D5E6F000000000139 /* en */,
+				7A2B3C4D5E6F00000000013A /* ar */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -318,6 +583,7 @@
 			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = App/Info.plist;
@@ -340,6 +606,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = App/Info.plist;
@@ -352,6 +619,104 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.ahmedwalid4499.azkar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A2B3C4D5E6F00000000014D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = AzkarWidget/AzkarWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = AzkarWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ahmedwalid4499.azkar.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A2B3C4D5E6F00000000014E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = AzkarWidget/AzkarWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = AzkarWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ahmedwalid4499.azkar.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A2B3C4D5E6F00000000014F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.ahmedwalid4499.azkar.widget-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A2B3C4D5E6F000000000150 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.ahmedwalid4499.azkar.widget-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -374,6 +739,24 @@
 			buildConfigurations = (
 				504EC3171FED79650016851F /* Debug */,
 				504EC3181FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A2B3C4D5E6F000000000149 /* Build configuration list for PBXNativeTarget "AzkarWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A2B3C4D5E6F00000000014D /* Debug */,
+				7A2B3C4D5E6F00000000014E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A2B3C4D5E6F00000000014A /* Build configuration list for PBXNativeTarget "AzkarWidgetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A2B3C4D5E6F00000000014F /* Debug */,
+				7A2B3C4D5E6F000000000150 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

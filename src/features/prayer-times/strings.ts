@@ -137,11 +137,20 @@ export const strings = defineStrings({
 
     'times.notify.title': 'Reminders',
     'times.remindPrompt.title': 'Get notified at prayer times',
-    'times.remindPrompt.body': 'Azkar can tell you when each prayer begins, even when the app is closed.',
+    'times.remindPrompt.body':
+      'Azkar can tell you when each prayer begins, and shortly before its time ends if you haven’t logged it, even when the app is closed.',
     'times.remindPrompt.turnOn': 'Turn on',
     'times.remindPrompt.notNow': 'Not now',
     'times.notify.switch': 'Notify me at prayer times',
     'times.notify.description': 'A notification when each of the five prayers begins',
+    'times.notify.unlogged': 'Remind me of prayers I haven’t logged',
+    'times.notify.unlogged.description': '{duration} before a prayer’s time ends, if it isn’t logged yet',
+    'times.notify.unloggedLead': 'How long before the time ends',
+    'times.notify.ishaEnds': 'End of Isha’s time',
+    'times.notify.ishaEnds.description':
+      'The middle of the night, halfway from Maghrib to Fajr, ends Isha’s preferred time according to a hadith in Sahih Muslim.',
+    'times.notify.ishaEnds.middle': 'Middle of the night',
+    'times.notify.ishaEnds.fajr': 'Fajr',
     'times.notify.morning': 'Remind me of the morning azkar',
     'times.notify.morning.fajr': 'When Fajr begins',
     'times.notify.morning.sunrise': 'After sunrise',
@@ -160,7 +169,7 @@ export const strings = defineStrings({
     'times.notify.footer':
       'Reminders arrive only while Azkar is open or in a background tab, and can be a little late if the device is asleep. A web app can’t alert you once it is closed.',
     'times.notify.footer.app':
-      'Reminders are set on this device for the week ahead, so they arrive even when Azkar is closed. They are renewed each time you open the app.',
+      'Reminders are set on this device for the days ahead, so they arrive even when Azkar is closed. They are renewed each time you open the app.',
     'times.notify.message.title': 'It’s time for {prayer}',
     'times.notify.message.titleNamed': '{name}, it’s time for {prayer}',
     'times.notify.message.body': '{time} · {place}',
@@ -171,6 +180,10 @@ export const strings = defineStrings({
     'times.notify.azkar.after.fajr': 'Fajr began at {time}',
     'times.notify.azkar.after.sunrise': 'The sun rose at {time}',
     'times.notify.azkar.after.asr': 'Asr began at {time}',
+    'times.notify.unlogged.title': 'You haven’t logged {prayer} yet',
+    'times.notify.unlogged.titleNamed': '{name}, you haven’t logged {prayer} yet',
+    'times.notify.unlogged.body': '{prayer} time ends in {duration}, at {time}',
+    'times.notify.unlogged.body.preferred': 'The preferred time for {prayer} ends in {duration}, at {time}',
   },
   ar: {
     'times.title': 'مواقيت الصلاة',
@@ -314,11 +327,20 @@ export const strings = defineStrings({
 
     'times.notify.title': 'التنبيهات',
     'times.remindPrompt.title': 'التنبيه عند دخول وقت الصلاة',
-    'times.remindPrompt.body': 'يستطيع التطبيق أن ينبّهك عند دخول وقت كل صلاة، حتى وهو مغلق.',
+    'times.remindPrompt.body':
+      'يستطيع التطبيق أن ينبّهك عند دخول وقت كل صلاة، وقُبيل خروجه إن لم تُسجَّل الصلاة، حتى وهو مغلق.',
     'times.remindPrompt.turnOn': 'تفعيل',
     'times.remindPrompt.notNow': 'ليس الآن',
     'times.notify.switch': 'التنبيه عند دخول وقت الصلاة',
     'times.notify.description': 'إشعار عند دخول وقت كل صلاة من الصلوات الخمس',
+    'times.notify.unlogged': 'التذكير بالصلوات غير المسجَّلة',
+    'times.notify.unlogged.description': 'قبل خروج وقت الصلاة بـ{duration} إن لم تُسجَّل بعد',
+    'times.notify.unloggedLead': 'مدة التذكير قبل خروج الوقت',
+    'times.notify.ishaEnds': 'نهاية وقت العشاء',
+    'times.notify.ishaEnds.description':
+      'منتصف الليل، أي منتصف ما بين المغرب والفجر، هو آخر الوقت المختار لصلاة العشاء بحسب حديث في صحيح مسلم.',
+    'times.notify.ishaEnds.middle': 'منتصف الليل',
+    'times.notify.ishaEnds.fajr': 'الفجر',
     'times.notify.morning': 'التذكير بأذكار الصباح',
     'times.notify.morning.fajr': 'عند دخول وقت الفجر',
     'times.notify.morning.sunrise': 'بعد شروق الشمس',
@@ -337,7 +359,7 @@ export const strings = defineStrings({
     'times.notify.footer':
       'تصل التنبيهات ما دام تطبيق أذكار مفتوحًا أو في تبويب في الخلفية فقط، وقد تتأخر قليلًا إذا كان الجهاز في وضع السكون. لا يستطيع تطبيق الويب تنبيهك بعد إغلاقه.',
     'times.notify.footer.app':
-      'تُضبط التنبيهات على هذا الجهاز للأسبوع المقبل، فتصلك حتى إن كان تطبيق أذكار مغلقًا، وتتجدّد كلما فتحت التطبيق.',
+      'تُضبط التنبيهات على هذا الجهاز للأيام المقبلة، فتصلك حتى إن كان تطبيق أذكار مغلقًا، وتتجدّد كلما فتحت التطبيق.',
     'times.notify.message.title': 'حان وقت صلاة {prayer}',
     'times.notify.message.titleNamed': 'حان وقت صلاة {prayer} يا {name}',
     'times.notify.message.body': '{time} · {place}',
@@ -348,5 +370,9 @@ export const strings = defineStrings({
     'times.notify.azkar.after.fajr': 'دخل وقت الفجر الساعة {time}',
     'times.notify.azkar.after.sunrise': 'أشرقت الشمس الساعة {time}',
     'times.notify.azkar.after.asr': 'دخل وقت العصر الساعة {time}',
+    'times.notify.unlogged.title': 'لم تُسجَّل صلاة {prayer} بعد',
+    'times.notify.unlogged.titleNamed': 'لم تُسجَّل صلاة {prayer} بعد يا {name}',
+    'times.notify.unlogged.body': 'يخرج وقت {prayer} بعد {duration}، الساعة {time}',
+    'times.notify.unlogged.body.preferred': 'ينتهي الوقت المختار لصلاة {prayer} بعد {duration}، الساعة {time}',
   },
 })

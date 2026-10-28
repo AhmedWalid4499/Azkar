@@ -124,3 +124,132 @@
   background: color-mix(in srgb, currentcolor 14%, transparent);
   font-weight: 600;
 }
+
+/* ---------- After prayer ---------- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionTitle {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.sectionDescription {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.prayerList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  list-style: none;
+}
+
+.prayerList > li + li {
+  border-top: 1px solid var(--line);
+}
+
+.prayerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 60px;
+  padding: var(--space-2) var(--space-4);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.15s var(--ease);
+}
+
+.prayerRow:hover {
+  background: var(--surface-2);
+}
+
+.prayerRow:focus-visible {
+  outline-offset: -3px;
+}
+
+.prayerText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.prayerName {
+  font-weight: 600;
+}
+
+.prayerState {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.prayerDone {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.prayerChevron {
+  flex: none;
+  color: var(--ink-3);
+}
+
+/* ---------- Tasbih ---------- */
+
+.tasbih {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+
+.tasbih .link::after {
+  border-radius: var(--radius-l);
+}
+
+.tasbihIcon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.tasbihText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tasbihTitle {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.tasbihToday {
+  color: var(--primary);
+  font-size: var(--text-s);
+  font-weight: 600;
+}

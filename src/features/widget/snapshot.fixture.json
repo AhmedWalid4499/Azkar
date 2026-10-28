@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "lang": "ar",
+  "arabicDigits": true,
+  "timeZone": "Africa/Cairo",
+  "name": "أحمد",
+  "days": [
+    {
+      "date": "2026-10-12",
+      "prayers": [
+        {
+          "prayer": "fajr",
+          "at": 1791772080000,
+          "time": "٥:٢٨ ص"
+        },
+        {
+          "prayer": "dhuhr",
+          "at": 1791798180000,
+          "time": "١٢:٤٣ م"
+        },
+        {
+          "prayer": "asr",
+          "at": 1791809940000,
+          "time": "٣:٥٩ م"
+        },
+        {
+          "prayer": "maghrib",
+          "at": 1791818880000,
+          "time": "٦:٢٨ م"
+        },
+        {
+          "prayer": "isha",
+          "at": 1791823500000,
+          "time": "٧:٤٥ م"
+        }
+      ],
+      "log": {
+        "fajr": "jamaah",
+        "dhuhr": "ontime"
+      }
+    },
+    {
+      "date": "2026-10-13",
+      "prayers": [
+        {
+          "prayer": "fajr",
+          "at": 1791858540000,
+          "time": "٥:٢٩ ص"
+        },
+        {
+          "prayer": "dhuhr",
+          "at": 1791884520000,
+          "time": "١٢:٤٢ م"
+        },
+        {
+          "prayer": "asr",
+          "at": 1791896280000,
+          "time": "٣:٥٨ م"
+        },
+        {
+          "prayer": "maghrib",
+          "at": 1791905220000,
+          "time": "٦:٢٧ م"
+        }
+      ],
+      "log": {}
+    }
+  ],
+  "labels": {
+    "nextPrayer": "الصلاة القادمة",
+    "tomorrow": "غدًا",
+    "greeting": "السلام عليكم يا ⁨أحمد⁩",
+    "countdown": "الوقت المتبقي",
+    "loggedRow": "{prayer}، {time}: {status}",
+    "unloggedRow": "{prayer}، {time}: غير مسجَّلة. تسجيلها «في وقتها».",
+    "noLocation": "افتح أذكار واختر موقعك لتظهر مواقيت الصلاة هنا.",
+    "stale": "افتح أذكار لتحديث مواقيت الصلاة.",
+    "prayer.fajr": "الفجر",
+    "prayer.dhuhr": "الظهر",
+    "prayer.asr": "العصر",
+    "prayer.maghrib": "المغرب",
+    "prayer.isha": "العشاء",
+    "status.ontime": "في وقتها",
+    "status.jamaah": "جماعة",
+    "status.late": "قضاء",
+    "status.missed": "فائتة",
+    "status.excused": "عذر"
+  }
+}

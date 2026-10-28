@@ -1,0 +1,90 @@
+{
+  "state": {
+    "days": {
+      "2026-10-12": {
+        "morning": {
+          "ayat-al-kursi": 1,
+          "al-ikhlas-al-falaq-an-nas": 3,
+          "morning-asbahna-wa-asbaha-al-mulk": 1,
+          "morning-allahumma-bika-asbahna": 1,
+          "sayyid-al-istighfar": 1,
+          "morning-asbahtu-ushhiduka": 4,
+          "morning-ma-asbaha-bi-min-nimah": 1,
+          "allahumma-afini-fi-badani": 3,
+          "hasbiyallahu-la-ilaha-illa-huwa": 7,
+          "allahumma-inni-asaluka-al-afwa-wal-afiyah": 1,
+          "allahumma-alim-al-ghayb-wash-shahadah": 1,
+          "bismillah-alladhi-la-yadurru": 3,
+          "raditu-billahi-rabban": 3,
+          "ya-hayyu-ya-qayyum": 1,
+          "morning-asbahna-rabbil-alamin": 1,
+          "morning-asbahna-ala-fitrat-al-islam": 1,
+          "subhanallahi-wa-bihamdih": 100,
+          "la-ilaha-illallah-wahdahu-ten-times": 10,
+          "la-ilaha-illallah-wahdahu-hundred-times": 100,
+          "subhanallahi-wa-bihamdih-adada-khalqih": 3,
+          "allahumma-inni-asaluka-ilman-nafian": 1,
+          "astaghfirullah-wa-atubu-ilayh": 100,
+          "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad": 10
+        },
+        "evening": {
+          "ayat-al-kursi": 1,
+          "al-ikhlas-al-falaq-an-nas": 1
+        }
+      }
+    },
+    "sessions": {
+      "2026-10-12": {
+        "morning": {
+          "startedAt": 1791784200000,
+          "completed": true,
+          "done": 23,
+          "total": 23,
+          "recitations": 357,
+          "lastAt": 1791784200000,
+          "completedAt": 1791784200000
+        },
+        "evening": {
+          "startedAt": 1791821400000,
+          "completed": false,
+          "done": 1,
+          "total": 20,
+          "recitations": 2,
+          "lastAt": 1791821400000
+        }
+      }
+    },
+    "totals": {
+      "ayat-al-kursi": 2,
+      "al-ikhlas-al-falaq-an-nas": 4,
+      "morning-asbahna-wa-asbaha-al-mulk": 1,
+      "morning-allahumma-bika-asbahna": 1,
+      "sayyid-al-istighfar": 1,
+      "morning-asbahtu-ushhiduka": 4,
+      "morning-ma-asbaha-bi-min-nimah": 1,
+      "allahumma-afini-fi-badani": 3,
+      "hasbiyallahu-la-ilaha-illa-huwa": 7,
+      "allahumma-inni-asaluka-al-afwa-wal-afiyah": 1,
+      "allahumma-alim-al-ghayb-wash-shahadah": 1,
+      "bismillah-alladhi-la-yadurru": 3,
+      "raditu-billahi-rabban": 3,
+      "ya-hayyu-ya-qayyum": 1,
+      "morning-asbahna-rabbil-alamin": 1,
+      "morning-asbahna-ala-fitrat-al-islam": 1,
+      "subhanallahi-wa-bihamdih": 100,
+      "la-ilaha-illallah-wahdahu-ten-times": 10,
+      "la-ilaha-illallah-wahdahu-hundred-times": 100,
+      "subhanallahi-wa-bihamdih-adada-khalqih": 3,
+      "allahumma-inni-asaluka-ilman-nafian": 1,
+      "astaghfirullah-wa-atubu-ilayh": 100,
+      "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad": 10
+    },
+    "totalRecitations": 359,
+    "history": {
+      "2026-10-12": [
+        "morning"
+      ]
+    }
+  },
+  "version": 2
+}

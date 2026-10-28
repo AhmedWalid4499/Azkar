@@ -25,3 +25,6 @@ export function isCollectionId(value: unknown): value is CollectionId {
 export function collectionPath(collection: CollectionId): string {
   return `/azkar/${collection}`
 }
+
+/** The tasbih counter. */
+export const TASBIH_PATH = '/azkar/tasbih'

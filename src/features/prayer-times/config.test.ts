@@ -5,6 +5,7 @@ import { exportBackup, importBackup } from '../../shared/storage'
 import {
   DEFAULT_AZKAR_REMINDERS,
   DEFAULT_PRAYER_TIMES_SETTINGS,
+  DEFAULT_UNLOGGED_REMINDERS,
   PRAYER_TIMES_STORAGE_KEY,
   PRAYER_TIMES_VERSION,
   sanitizeSettings,
@@ -15,8 +16,8 @@ import {
 const store = usePrayerTimesStore
 
 function settingsOf(state = store.getState()) {
-  const { method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders } = state
-  return { method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders }
+  const { method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders, unloggedReminders } = state
+  return { method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders, unloggedReminders }
 }
 
 async function rehydrateFrom(stored: unknown) {
@@ -67,6 +68,7 @@ describe('sanitizeSettings', () => {
       adjustments: { fajr: 2, sunrise: 0, dhuhr: 30, asr: -30, maghrib: 1, isha: 0 },
       notifications: false,
       azkarReminders: DEFAULT_AZKAR_REMINDERS,
+      unloggedReminders: DEFAULT_UNLOGGED_REMINDERS,
     })
   })
 
@@ -169,28 +171,37 @@ describe('version 1 data, from before the azkar reminders', () => {
     },
   }
 
+  // Version 3 (the "not logged yet" reminders) came later: version 1 data gets those at their defaults too.
   it('keeps every setting it held and adds the azkar reminders, switched off', async () => {
-    expect(await rehydrateFrom(V1)).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS })
+    expect(await rehydrateFrom(V1)).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
     expect(JSON.parse(storedRaw() ?? 'null')).toEqual({
-      version: 2,
-      state: { ...V1.state, azkarReminders: { morning: false, evening: false, morningAt: 'fajr' } },
+      version: 3,
+      state: {
+        ...V1.state,
+        azkarReminders: { morning: false, evening: false, morningAt: 'fajr' },
+        unloggedReminders: { enabled: true, leadMinutes: 15, ishaEnds: 'middle' },
+      },
     })
   })
 
   it('migrates the same way through the store’s own migrate function', () => {
     const { migrate } = store.persist.getOptions()
-    expect(migrate?.(structuredClone(V1.state), 1)).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS })
+    expect(migrate?.(structuredClone(V1.state), 1)).toEqual({
+      ...V1.state,
+      azkarReminders: DEFAULT_AZKAR_REMINDERS,
+      unloggedReminders: DEFAULT_UNLOGGED_REMINDERS,
+    })
   })
 
-  it('comes through an imported backup unchanged but for the new field', async () => {
+  it('comes through an imported backup unchanged but for the new fields', async () => {
     importBackup({ app: 'azkar', version: 1, exportedAt: '2026-09-01T08:00:00.000Z', data: { [PRAYER_TIMES_STORAGE_KEY]: V1 } })
     await store.persist.rehydrate()
-    expect(settingsOf()).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS })
+    expect(settingsOf()).toEqual({ ...V1.state, azkarReminders: DEFAULT_AZKAR_REMINDERS, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
   })
 
   it('keeps the azkar reminders of version 2 data as they are', async () => {
     const state = { ...V1.state, azkarReminders: { morning: true, evening: true, morningAt: 'sunrise' } }
-    expect(await rehydrateFrom({ version: 2, state })).toEqual(state)
+    expect(await rehydrateFrom({ version: 2, state })).toEqual({ ...state, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
     store.getState().setAzkarReminder('evening', false)
     store.getState().setMorningReminderTime('fajr')
     expect(JSON.parse(storedRaw() ?? 'null').state.azkarReminders).toEqual({ morning: true, evening: false, morningAt: 'fajr' })
@@ -203,6 +214,106 @@ describe('version 1 data, from before the azkar reminders', () => {
     })
     expect(restored.azkarReminders).toEqual({ morning: false, evening: true, morningAt: 'fajr' })
     expect(restored.method).toBe('Karachi')
+  })
+})
+
+describe('the "not logged yet" reminders', () => {
+  it('are on by default, fifteen minutes before the end, with Isha ending at the middle of the night', () => {
+    expect(DEFAULT_UNLOGGED_REMINDERS).toEqual({ enabled: true, leadMinutes: 15, ishaEnds: 'middle' })
+    expect(DEFAULT_PRAYER_TIMES_SETTINGS.unloggedReminders).toBe(DEFAULT_UNLOGGED_REMINDERS)
+    expect(sanitizeSettings(undefined).unloggedReminders).toEqual(DEFAULT_UNLOGGED_REMINDERS)
+  })
+
+  it('read each choice on its own, keeping a reminder switched off', () => {
+    expect(sanitizeSettings({ unloggedReminders: { enabled: false, leadMinutes: 45, ishaEnds: 'fajr' } }).unloggedReminders).toEqual({
+      enabled: false,
+      leadMinutes: 45,
+      ishaEnds: 'fajr',
+    })
+    expect(sanitizeSettings({ unloggedReminders: { enabled: 'no', leadMinutes: 60, ishaEnds: 'maghrib' } }).unloggedReminders).toEqual({
+      enabled: true,
+      leadMinutes: 60,
+      ishaEnds: 'middle',
+    })
+    for (const leadMinutes of [0, 5, 20, 90, '15', 15.5, null, Number.NaN]) {
+      expect(sanitizeSettings({ unloggedReminders: { leadMinutes } }).unloggedReminders.leadMinutes).toBe(15)
+    }
+    for (const leadMinutes of [10, 15, 30, 45, 60]) {
+      expect(sanitizeSettings({ unloggedReminders: { leadMinutes } }).unloggedReminders.leadMinutes).toBe(leadMinutes)
+    }
+    for (const junk of [null, 'on', [], 3, true]) {
+      expect(sanitizeSettings({ unloggedReminders: junk }).unloggedReminders).toEqual(DEFAULT_UNLOGGED_REMINDERS)
+    }
+  })
+
+  it('are changed one choice at a time, and saved', () => {
+    store.getState().setUnloggedReminders(false)
+    store.getState().setUnloggedLeadMinutes(30)
+    store.getState().setIshaDeadline('fajr')
+    expect(store.getState().unloggedReminders).toEqual({ enabled: false, leadMinutes: 30, ishaEnds: 'fajr' })
+    expect(JSON.parse(storedRaw() ?? 'null')).toEqual({
+      version: 3,
+      state: { ...DEFAULT_PRAYER_TIMES_SETTINGS, unloggedReminders: { enabled: false, leadMinutes: 30, ishaEnds: 'fajr' } },
+    })
+  })
+
+  it('refuse a lead time or an end of Isha that is not offered', () => {
+    store.getState().setUnloggedLeadMinutes(20 as never)
+    store.getState().setIshaDeadline('sunrise' as never)
+    expect(store.getState().unloggedReminders).toEqual(DEFAULT_UNLOGGED_REMINDERS)
+  })
+
+  it('leave the calculation untouched', () => {
+    const before = selectCalculation(store.getState())
+    store.getState().setUnloggedLeadMinutes(60)
+    expect(selectCalculation(store.getState())).toBe(before)
+  })
+})
+
+describe('version 2 data, from before the "not logged yet" reminders', () => {
+  /** Exactly what the previous build wrote, with every setting moved off its default. */
+  const V2 = {
+    version: 2,
+    state: {
+      method: 'Egyptian',
+      madhab: 'hanafi',
+      highLatitudeRule: 'middleofthenight',
+      polar: 'nearestLatitude',
+      adjustments: { fajr: 2, sunrise: -1, dhuhr: 0, asr: 3, maghrib: 0, isha: -4 },
+      notifications: true,
+      azkarReminders: { morning: true, evening: true, morningAt: 'sunrise' },
+    },
+  }
+
+  it('keeps every setting it held and adds the "not logged yet" reminders at their defaults', async () => {
+    expect(await rehydrateFrom(V2)).toEqual({ ...V2.state, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
+    expect(JSON.parse(storedRaw() ?? 'null')).toEqual({
+      version: 3,
+      state: { ...V2.state, unloggedReminders: { enabled: true, leadMinutes: 15, ishaEnds: 'middle' } },
+    })
+    // Reading the rewritten data again changes nothing.
+    const migrated = storedRaw()
+    await store.persist.rehydrate()
+    expect(storedRaw()).toBe(migrated)
+  })
+
+  it('migrates the same way through the store’s own migrate function', () => {
+    const { migrate } = store.persist.getOptions()
+    expect(migrate?.(structuredClone(V2.state), 2)).toEqual({ ...V2.state, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
+  })
+
+  it('comes through an imported backup unchanged but for the new field', async () => {
+    importBackup({ app: 'azkar', version: 1, exportedAt: '2026-10-01T08:00:00.000Z', data: { [PRAYER_TIMES_STORAGE_KEY]: V2 } })
+    await store.persist.rehydrate()
+    expect(settingsOf()).toEqual({ ...V2.state, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
+  })
+
+  it('keeps the "not logged yet" choices of version 3 data as they are, and reads a tampered one field by field', async () => {
+    const state = { ...V2.state, unloggedReminders: { enabled: false, leadMinutes: 60, ishaEnds: 'fajr' } }
+    expect(await rehydrateFrom({ version: 3, state })).toEqual(state)
+    const tampered = await rehydrateFrom({ version: 3, state: { ...V2.state, unloggedReminders: { enabled: 1, leadMinutes: 45, ishaEnds: 'dawn' } } })
+    expect(tampered.unloggedReminders).toEqual({ enabled: true, leadMinutes: 45, ishaEnds: 'middle' })
+    expect(tampered.azkarReminders).toEqual(V2.state.azkarReminders)
   })
 })
 
@@ -226,10 +337,10 @@ describe('the Asr school across an update', () => {
     localStorage.setItem(PRAYER_TIMES_STORAGE_KEY, raw)
     await store.persist.rehydrate()
     expect(store.getState().madhab).toBe(madhab)
-    // Version 2 (the azkar reminders) rewrites version 1 data, with the school exactly as it was stored.
+    // Versions 2 and 3 (the azkar and "not logged yet" reminders) rewrite version 1 data, with the school exactly as it was stored.
     expect(JSON.parse(storedRaw() ?? 'null')).toEqual({
       version: PRAYER_TIMES_VERSION,
-      state: { ...stored(madhab).state, azkarReminders: DEFAULT_AZKAR_REMINDERS },
+      state: { ...stored(madhab).state, azkarReminders: DEFAULT_AZKAR_REMINDERS, unloggedReminders: DEFAULT_UNLOGGED_REMINDERS },
     })
     // Reading the rewritten data again changes nothing.
     const migrated = storedRaw()

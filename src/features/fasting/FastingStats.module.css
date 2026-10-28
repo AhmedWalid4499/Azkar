@@ -1,0 +1,103 @@
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.group {
+  padding-block: var(--space-3);
+}
+
+.groupBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-s);
+  font-weight: 700;
+}
+
+.groupIcon {
+  flex: none;
+  color: var(--primary);
+}
+
+.figures {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+/* Name and figure share a line while they fit, and stack once large text needs the room. */
+.figure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: var(--space-3);
+  min-height: 36px;
+  border-block-start: 1px solid var(--line);
+}
+
+.label {
+  min-width: 0;
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.value,
+.strong {
+  margin: 0;
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+.strong {
+  font-size: var(--text-m);
+  font-weight: 700;
+}
+
+.before {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  padding-block-start: var(--space-2);
+  border-block-start: 1px solid var(--line);
+}
+
+.beforeLabel {
+  flex: 1 1 12em;
+  min-width: 0;
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+.input {
+  width: 6em;
+  min-height: 44px;
+  padding-block: 0;
+  padding-inline: var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--text-m);
+  text-align: center;
+}
+
+.note {
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+}

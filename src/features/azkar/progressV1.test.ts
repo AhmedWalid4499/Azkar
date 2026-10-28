@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { importBackup } from '../../shared/storage'
 import type { BackupFile } from '../../shared/storage'
-import { AZKAR_PROGRESS_STORAGE_KEY, sanitizeProgress, useAzkarProgress } from './progressStore'
+import { AZKAR_PROGRESS_STORAGE_KEY, sanitizeAzkarProgress, sanitizeProgress, useAzkarProgress } from './progressStore'
 import type { ProgressData } from './progressStore'
 import { migrateProgressV1, sanitizeProgressV1 } from './progressV1'
 
@@ -85,15 +85,15 @@ describe('migrating version 1', () => {
     expect(store().totalRecitations).toBe(31)
   })
 
-  it('writes the result back as version 2 straight away', async () => {
+  it('writes the result back as the current version straight away', async () => {
     await loadStored(V1_STORED)
     const stored = JSON.parse(localStorage.getItem(AZKAR_PROGRESS_STORAGE_KEY)!) as {
       state: Record<string, unknown>
       version: number
     }
-    expect(stored.version).toBe(2)
+    expect(stored.version).toBe(3)
     const { history, ...data } = stored.state
-    expect(data).toEqual(sanitizeProgress(store()))
+    expect(data).toEqual(sanitizeAzkarProgress(store()))
     // The completions are kept in version 1's shape too, as they were, should an older build open the data.
     expect(history).toEqual(sanitizeProgressV1(JSON.parse(V1_STORED).state).history)
   })

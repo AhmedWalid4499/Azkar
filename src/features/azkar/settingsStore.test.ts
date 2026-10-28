@@ -4,6 +4,7 @@ import { DEFAULT_SETTINGS, useSettings } from '../../shared/settings'
 import {
   AZKAR_SETTINGS_STORAGE_KEY,
   DEFAULT_AZKAR_SETTINGS,
+  MAX_TASBIH_TARGET,
   arabicFontSize,
   resolveAid,
   sanitizeAzkarSettings,
@@ -40,6 +41,46 @@ describe('sanitizeAzkarSettings', () => {
   it('accepts every text size step and nothing in between', () => {
     for (const scale of [1, 2, 3, 4, 5]) expect(sanitizeAzkarSettings({ arabicScale: scale }).arabicScale).toBe(scale)
     for (const scale of [0, 6, 2.5, '3', null]) expect(sanitizeAzkarSettings({ arabicScale: scale }).arabicScale).toBe(3)
+  })
+})
+
+describe('tasbih choices', () => {
+  it('start on the first preset with a target of 33', () => {
+    expect(DEFAULT_AZKAR_SETTINGS).toMatchObject({ tasbihPreset: null, tasbihFree: false, tasbihTarget: 33 })
+  })
+
+  it('keep a preset id, the free count and any whole target up to the maximum, or no target', () => {
+    expect(sanitizeAzkarSettings({ tasbihPreset: 'preset-two', tasbihFree: true, tasbihTarget: 7 })).toMatchObject({
+      tasbihPreset: 'preset-two',
+      tasbihFree: true,
+      tasbihTarget: 7,
+    })
+    expect(sanitizeAzkarSettings({ tasbihTarget: null }).tasbihTarget).toBeNull()
+    expect(sanitizeAzkarSettings({ tasbihTarget: MAX_TASBIH_TARGET }).tasbihTarget).toBe(MAX_TASBIH_TARGET)
+  })
+
+  it('fall back to the defaults for anything else', () => {
+    for (const tasbihTarget of [0, -3, 2.5, '33', MAX_TASBIH_TARGET + 1, true]) {
+      expect(sanitizeAzkarSettings({ tasbihTarget }).tasbihTarget).toBe(33)
+    }
+    for (const tasbihPreset of ['', 7, 'x'.repeat(101), {}]) {
+      expect(sanitizeAzkarSettings({ tasbihPreset }).tasbihPreset).toBeNull()
+    }
+    expect(sanitizeAzkarSettings({ tasbihFree: 'yes' }).tasbihFree).toBe(false)
+  })
+
+  it('are kept with the other settings, and read back from what an older build saved without them', async () => {
+    useAzkarSettings.getState().update({ tasbihPreset: 'preset-two', tasbihTarget: 100 })
+    expect(JSON.parse(localStorage.getItem(AZKAR_SETTINGS_STORAGE_KEY)!).state).toMatchObject({
+      tasbihPreset: 'preset-two',
+      tasbihTarget: 100,
+    })
+    localStorage.setItem(
+      AZKAR_SETTINGS_STORAGE_KEY,
+      JSON.stringify({ state: { arabicScale: 2, showTransliteration: null, showTranslation: null, haptics: true, keepAwake: true, autoAdvance: false }, version: 1 }),
+    )
+    await useAzkarSettings.persist.rehydrate()
+    expect(useAzkarSettings.getState()).toMatchObject({ arabicScale: 2, autoAdvance: false, tasbihPreset: null, tasbihTarget: 33 })
   })
 })
 

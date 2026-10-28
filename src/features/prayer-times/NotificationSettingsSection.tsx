@@ -1,24 +1,33 @@
 import { useCallback, useId, useState } from 'react'
 import { appPlatform } from '../../native'
 import { useI18n } from '../../shared/i18n'
-import { Notice, Row, Section, Segmented, Switch } from '../../shared/ui'
-import { usePrayerTimesStore } from './config'
+import { Notice, Row, Section, Segmented, Select, Switch } from '../../shared/ui'
+import { isUnloggedLead, UNLOGGED_LEAD_MINUTES, usePrayerTimesStore } from './config'
+import { describeDuration } from './format'
 import type { NotificationState } from './notifications'
 import { requestReminderPermission, useReminderPermission } from './reminders/permission'
 import styles from './settings.module.css'
 
 /**
- * Settings: the prayer-time reminder switch and the morning and evening azkar
- * reminders. Renders nothing where notifications do not exist.
+ * Settings: the prayer-time reminder switch, the "not logged yet" reminders
+ * with how long before the end of a prayer's time they come and where Isha's
+ * time ends, and the morning and evening azkar reminders. Renders nothing
+ * where notifications do not exist.
  */
 export function NotificationSettingsSection() {
-  const { t } = useI18n()
+  const { t, tp } = useI18n()
   const prayerId = useId()
+  const unloggedId = useId()
+  const leadId = useId()
   const morningId = useId()
   const eveningId = useId()
   const prayers = usePrayerTimesStore((state) => state.notifications)
+  const unlogged = usePrayerTimesStore((state) => state.unloggedReminders)
   const azkar = usePrayerTimesStore((state) => state.azkarReminders)
   const setPrayers = usePrayerTimesStore((state) => state.setNotifications)
+  const setUnlogged = usePrayerTimesStore((state) => state.setUnloggedReminders)
+  const setUnloggedLeadMinutes = usePrayerTimesStore((state) => state.setUnloggedLeadMinutes)
+  const setIshaDeadline = usePrayerTimesStore((state) => state.setIshaDeadline)
   const setAzkarReminder = usePrayerTimesStore((state) => state.setAzkarReminder)
   const setMorningReminderTime = usePrayerTimesStore((state) => state.setMorningReminderTime)
   const [dismissed, setDismissed] = useState(false)
@@ -50,6 +59,7 @@ export function NotificationSettingsSection() {
   // On only when it can actually work: the stored wish plus the permission.
   // While the app is still reading the permission, the wish is shown as it is.
   const shown = (wish: boolean) => wish && (permission === 'granted' || permission === null)
+  const lead = (minutes: number) => describeDuration(minutes * 60_000, { t, tp })
 
   return (
     <Section title={t('times.notify.title')} footer={t(platform === 'web' ? 'times.notify.footer' : 'times.notify.footer.app')}>
@@ -59,6 +69,57 @@ export function NotificationSettingsSection() {
         description={t('times.notify.description')}
         control={<Switch id={prayerId} checked={shown(prayers)} onChange={(next) => void toggle(setPrayers, next)} />}
       />
+      <Row
+        htmlFor={unloggedId}
+        label={t('times.notify.unlogged')}
+        description={t('times.notify.unlogged.description', { duration: lead(unlogged.leadMinutes) })}
+        control={
+          <Switch id={unloggedId} checked={shown(unlogged.enabled)} onChange={(next) => void toggle(setUnlogged, next)} />
+        }
+      />
+      {shown(unlogged.enabled) && (
+        <>
+          <Row
+            stacked
+            htmlFor={leadId}
+            label={t('times.notify.unloggedLead')}
+            control={
+              <Select
+                id={leadId}
+                className={styles.select}
+                value={String(unlogged.leadMinutes)}
+                onChange={(event) => {
+                  const minutes = Number(event.target.value)
+                  if (isUnloggedLead(minutes)) setUnloggedLeadMinutes(minutes)
+                }}
+              >
+                {UNLOGGED_LEAD_MINUTES.map((minutes) => (
+                  <option key={minutes} value={minutes}>
+                    {lead(minutes)}
+                  </option>
+                ))}
+              </Select>
+            }
+          />
+          <Row
+            stacked
+            label={t('times.notify.ishaEnds')}
+            description={t('times.notify.ishaEnds.description')}
+            control={
+              <Segmented
+                block
+                label={t('times.notify.ishaEnds')}
+                value={unlogged.ishaEnds}
+                onChange={setIshaDeadline}
+                options={[
+                  { value: 'middle', label: t('times.notify.ishaEnds.middle') },
+                  { value: 'fajr', label: t('times.notify.ishaEnds.fajr') },
+                ]}
+              />
+            }
+          />
+        </>
+      )}
       <Row
         htmlFor={morningId}
         label={t('times.notify.morning')}

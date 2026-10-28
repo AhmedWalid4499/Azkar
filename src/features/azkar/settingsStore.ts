@@ -13,6 +13,10 @@ export type ArabicScale = (typeof ARABIC_SCALES)[number]
 
 const ARABIC_SIZE_REM: Record<ArabicScale, number> = { 1: 1.375, 2: 1.5625, 3: 1.75, 4: 2, 5: 2.375 }
 
+/** The tasbih counter's ready-made targets; any other whole number up to the maximum is a custom one. */
+export const TASBIH_TARGETS = [33, 99, 100] as const
+export const MAX_TASBIH_TARGET = 100_000
+
 export interface AzkarSettings {
   arabicScale: ArabicScale
   /** `null` until the user chooses: shown in the English interface, hidden in the Arabic one. */
@@ -22,6 +26,12 @@ export interface AzkarSettings {
   haptics: boolean
   keepAwake: boolean
   autoAdvance: boolean
+  /** The tasbih preset last chosen, by dhikr id. `null` until one is: the first preset is offered. */
+  tasbihPreset: string | null
+  /** The tasbih counter counts freely rather than a preset. */
+  tasbihFree: boolean
+  /** Where the tasbih counter signals a round, or `null` for no target. */
+  tasbihTarget: number | null
 }
 
 interface AzkarSettingsState extends AzkarSettings {
@@ -35,6 +45,9 @@ export const DEFAULT_AZKAR_SETTINGS: AzkarSettings = {
   haptics: true,
   keepAwake: true,
   autoAdvance: true,
+  tasbihPreset: null,
+  tasbihFree: false,
+  tasbihTarget: 33,
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -43,6 +56,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isArabicScale(value: unknown): value is ArabicScale {
   return (ARABIC_SCALES as readonly unknown[]).includes(value)
+}
+
+export function isTasbihTarget(value: unknown): value is number {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 1 && value <= MAX_TASBIH_TARGET
 }
 
 /** Keeps every field that is valid and falls back to the default for the rest. */
@@ -55,10 +72,15 @@ export function sanitizeAzkarSettings(value: unknown): AzkarSettings {
     const stored = value[key]
     if (typeof stored === 'boolean' || stored === null) settings[key] = stored
   }
-  for (const key of ['haptics', 'keepAwake', 'autoAdvance'] as const) {
+  for (const key of ['haptics', 'keepAwake', 'autoAdvance', 'tasbihFree'] as const) {
     const stored = value[key]
     if (typeof stored === 'boolean') settings[key] = stored
   }
+  const { tasbihPreset, tasbihTarget } = value
+  if (tasbihPreset === null || (typeof tasbihPreset === 'string' && tasbihPreset.length > 0 && tasbihPreset.length <= 100)) {
+    settings.tasbihPreset = tasbihPreset
+  }
+  if (tasbihTarget === null || isTasbihTarget(tasbihTarget)) settings.tasbihTarget = tasbihTarget
   return settings
 }
 

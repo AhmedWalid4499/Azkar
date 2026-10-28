@@ -6,11 +6,10 @@ import { useI18n } from '../../../shared/i18n'
 import type { DateKey } from '../../../shared/types'
 import { IconButton, ProgressBar } from '../../../shared/ui'
 import { cx } from '../cx'
-import type { CollectionId } from '../data'
-import { readSessionCounts, useAzkarProgress } from '../progressStore'
+import { readingActions, useReading } from '../readings'
+import type { Reading } from '../readings'
 import { countOf, isDone, nextUnfinished, targetOf } from '../session'
 import { useReaderPrefs } from '../settingsStore'
-import { useSession } from '../useSession'
 import { useSwipe } from '../useSwipe'
 import { useWakeLock } from '../useWakeLock'
 import { CompletionScreen } from './CompletionScreen'
@@ -33,18 +32,22 @@ function prefersReducedMotion(): boolean {
 }
 
 interface ReaderProps {
-  collection: CollectionId
-  /** The day this session's counts are filed under. */
+  reading: Reading
+  /** The day this reading's counts are filed under. */
   dateKey: DateKey
+  title: string
+  /** Heading of the end screen. */
+  completeTitle: string
+  /** Shown before the position when the reader is not on the day the clock would choose. */
+  dateLabel?: string
 }
 
-/** One dhikr at a time, with the counter. Mount it afresh (via `key`) for each session and day. */
-export function Reader({ collection, dateKey }: ReaderProps) {
+/** One dhikr at a time, with the counter. Mount it afresh (via `key`) for each reading and day. */
+export function Reader({ reading, dateKey, title, completeTitle, dateLabel }: ReaderProps) {
   const { t, dir } = useI18n()
   const prefs = useReaderPrefs()
-  const { items, counts, summary } = useSession(collection, dateKey)
-  // The store's actions never change, so they can be read once without subscribing.
-  const progress = useAzkarProgress.getState()
+  const { items, counts, summary } = useReading(reading, dateKey)
+  const progress = readingActions(reading, dateKey)
 
   // Resume where the session was left: the first dhikr still short of its count.
   const [view, setView] = useState<'reading' | 'complete'>(() => (summary.status === 'complete' ? 'complete' : 'reading'))
@@ -81,12 +84,11 @@ export function Reader({ collection, dateKey }: ReaderProps) {
   const dhikr = items[index]
   const count = dhikr ? countOf(dhikr, counts) : 0
   const target = dhikr ? targetOf(dhikr) : 1
-  const title = t(`azkar.collection.${collection}`)
 
   /** Moves past the dhikr at `from`: to the next unfinished one, or to the end screen. */
   const advanceFrom = (from: number) => {
     cancelAdvance()
-    const next = nextUnfinished(items, readSessionCounts(dateKey, collection), from)
+    const next = nextUnfinished(items, progress.counts(), from)
     if (next === -1) setView('complete')
     else setIndex(next)
   }
@@ -103,12 +105,12 @@ export function Reader({ collection, dateKey }: ReaderProps) {
 
   const primary = () => {
     if (!dhikr || performance.now() < lockedUntil.current) return
-    if (isDone(dhikr, readSessionCounts(dateKey, collection))) {
+    if (isDone(dhikr, progress.counts())) {
       advanceFrom(index)
       return
     }
-    progress.increment(dateKey, collection, dhikr.id)
-    if (isDone(dhikr, readSessionCounts(dateKey, collection))) dhikrCompleted(index)
+    progress.increment(dhikr.id)
+    if (isDone(dhikr, progress.counts())) dhikrCompleted(index)
     else if (prefs.haptics) haptic('tick')
   }
 
@@ -117,13 +119,13 @@ export function Reader({ collection, dateKey }: ReaderProps) {
     cancelAdvance()
     lockedUntil.current = 0
     setAnnouncement('')
-    progress.decrement(dateKey, collection, dhikr.id)
+    progress.decrement(dhikr.id)
     if (prefs.haptics) haptic('tick')
   }
 
   const markAll = () => {
-    if (!dhikr || isDone(dhikr, readSessionCounts(dateKey, collection))) return
-    progress.complete(dateKey, collection, dhikr.id)
+    if (!dhikr || isDone(dhikr, progress.counts())) return
+    progress.complete(dhikr.id)
     dhikrCompleted(index)
   }
 
@@ -144,7 +146,7 @@ export function Reader({ collection, dateKey }: ReaderProps) {
     cancelAdvance()
     lockedUntil.current = 0
     setAnnouncement('')
-    progress.resetSession(dateKey, collection)
+    progress.reset()
     setOverviewOpen(false)
     setIndex(0)
     setView('reading')
@@ -195,7 +197,7 @@ export function Reader({ collection, dateKey }: ReaderProps) {
       </p>
 
       {view === 'complete' ? (
-        <CompletionScreen collection={collection} onReview={review} />
+        <CompletionScreen title={completeTitle} onReview={review} />
       ) : (
         <>
           <header className={styles.header}>
@@ -206,7 +208,9 @@ export function Reader({ collection, dateKey }: ReaderProps) {
               <div className={styles.headerText}>
                 <h1 className={styles.title}>{title}</h1>
                 <p className={cx(styles.position, 'tabular')}>
-                  {t('azkar.reader.position', { current: index + 1, total: items.length })}
+                  {dateLabel === undefined
+                    ? t('azkar.reader.position', { current: index + 1, total: items.length })
+                    : t('azkar.reader.datedPosition', { date: dateLabel, current: index + 1, total: items.length })}
                 </p>
               </div>
               <IconButton label={t('azkar.reader.overview')} onClick={() => setOverviewOpen(true)}>

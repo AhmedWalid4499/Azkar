@@ -1,0 +1,85 @@
+.dial {
+  display: block;
+  inline-size: min(100%, 300px);
+  aspect-ratio: 240 / 256;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.face {
+  fill: var(--surface-2);
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  transition: stroke 0.2s var(--ease);
+}
+
+.tick {
+  stroke: var(--ink-3);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
+.tickMajor {
+  stroke: var(--ink-2);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.letter,
+.north {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  fill: var(--ink-2);
+}
+
+.north {
+  font-weight: 700;
+  fill: var(--accent-ink);
+}
+
+.shaft {
+  stroke: var(--primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.head {
+  fill: var(--primary);
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.kaaba {
+  fill: var(--ink);
+}
+
+.kaabaBand {
+  fill: var(--accent);
+}
+
+.pivot {
+  fill: var(--surface);
+  stroke: var(--primary);
+  stroke-width: 3;
+}
+
+/* Where the phone points: fixed at the top, while the card turns under it. */
+.index {
+  fill: var(--ink-2);
+  stroke: var(--ink-2);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: fill 0.2s var(--ease), stroke 0.2s var(--ease);
+}
+
+.aligned .face {
+  stroke: var(--primary);
+  stroke-width: 3;
+}
+
+.aligned .index {
+  fill: var(--primary);
+  stroke: var(--primary);
+}

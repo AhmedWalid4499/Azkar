@@ -1,0 +1,35 @@
+/* The widgets' own wording. Once the app has published, the widgets show the app's wording instead,
+   in the app's language (src/features/widget/strings.ts); these are for the widget gallery, for
+   before the app's first publish, and for Siri and Shortcuts. Keep the two in step. */
+
+/* The widget's name and description in the widget gallery. */
+"widget.name" = "Prayer times";
+"widget.description" = "The next prayer with a countdown, and today’s prayers to mark as prayed.";
+
+/* Shown until the app has been opened once. */
+"notSetUp" = "Open Azkar to see prayer times here.";
+
+"nextPrayer" = "Next prayer";
+"tomorrow" = "Tomorrow";
+"countdown" = "Time remaining";
+"loggedRow" = "{prayer}, {time}: {status}";
+"unloggedRow" = "{prayer}, {time}: not logged. Mark as prayed on time.";
+"noLocation" = "Open Azkar and choose your location to see prayer times here.";
+"stale" = "Open Azkar to bring the prayer times up to date.";
+
+"prayer.fajr" = "Fajr";
+"prayer.dhuhr" = "Dhuhr";
+"prayer.asr" = "Asr";
+"prayer.maghrib" = "Maghrib";
+"prayer.isha" = "Isha";
+
+"status.ontime" = "On time";
+"status.jamaah" = "Jamaah";
+"status.late" = "Late";
+"status.missed" = "Missed";
+"status.excused" = "Excused";
+
+/* The action behind a tap on a prayer in the widget, and its two values. */
+"Mark as prayed" = "Mark as prayed";
+"Day" = "Day";
+"Prayer" = "Prayer";

@@ -1,0 +1,130 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-m);
+  font-weight: 700;
+}
+
+.context {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.reasons {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+
+.forbidden {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-s);
+  background: var(--warn-soft);
+  color: var(--ink);
+  font-size: var(--text-s);
+}
+
+.state {
+  color: var(--ink-3);
+  font-size: var(--text-s);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-block-end: var(--space-2);
+  padding: 0;
+  color: var(--ink-2);
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+.option {
+  display: block;
+  cursor: pointer;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  transition:
+    background-color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+
+.choice:hover {
+  background: var(--surface-2);
+}
+
+/* The radio itself is hidden, so its focus is drawn on the card beside it. */
+.option input:focus-visible + .choice {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.checked,
+.checked:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+/* An empty ring until chosen, then filled and ticked: the choice never rests on colour alone. */
+.mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ink-3);
+  border-radius: 50%;
+}
+
+.checked .mark {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.hint {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.clear {
+  align-self: flex-start;
+}

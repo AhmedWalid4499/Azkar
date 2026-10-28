@@ -77,7 +77,20 @@ function streakOf(
     collections.every((collection) => completedOn(key, collection) || key >= open[collection])
   const latest = collections.map((collection) => open[collection]).sort().at(-1)
   if (latest === undefined) return { current: 0, best: 0 }
+  return streakFrom(candidates, latest, complete, undecided)
+}
 
+/**
+ * The run of `complete` days counted back from `latest`, and the longest run among the
+ * `candidates` up to it. A day that is `undecided` neither breaks the current run nor adds to
+ * it. Some day before `latest` must be neither, or the count back would never end.
+ */
+export function streakFrom(
+  candidates: readonly DateKey[],
+  latest: DateKey,
+  complete: (key: DateKey) => boolean,
+  undecided: (key: DateKey) => boolean,
+): Streak {
   let best = 0
   let run = 0
   let previous: DateKey | null = null
@@ -182,6 +195,43 @@ export function azkarCompletionRate(
   }
 }
 
+/**
+ * The bedtime session's streak: consecutive nights on which it was completed. It is filed as
+ * the evening is (until Fajr, last night), and kept apart from the daily streaks, since many
+ * people read it only some nights.
+ */
+export function computeSleepStreak(sessions: SessionHistory, today: DateKey, phase: DayPhase): Streak {
+  if (!isValidDateKey(today)) return { current: 0, best: 0 }
+  const open = sessionDateKey('sleep', today, phase)
+  const complete = (key: DateKey) => key <= open && isCompleted(sessions, key, 'sleep')
+  return streakFrom(Object.keys(sessions).filter(isValidDateKey), open, complete, (key) => key >= open)
+}
+
+/**
+ * Share of the nights the bedtime session was completed over the last `days` calendar days,
+ * as `azkarCompletionRate` counts the daily sessions, but from the first night it was read.
+ */
+export function sleepCompletionRate(sessions: SessionHistory, today: DateKey, phase: DayPhase, days: number): AzkarRate {
+  const first = Object.keys(sessions)
+    .filter((key) => isValidDateKey(key) && sessions[key]?.sleep)
+    .sort()[0]
+  if (first === undefined || days <= 0 || !isValidDateKey(today)) return rateOf(0, 0)
+  const open = sessionDateKey('sleep', today, phase)
+  const windowStart = shiftDateKey(today, -(Math.floor(days) - 1))
+  let completed = 0
+  let due = 0
+  for (let key = first > windowStart ? first : windowStart; key <= today; key = shiftDateKey(key, 1)) {
+    if (isCompleted(sessions, key, 'sleep')) {
+      if (key > open) continue
+      completed += 1
+      due += 1
+    } else if (key < open) {
+      due += 1
+    }
+  }
+  return rateOf(completed, due)
+}
+
 /** A rate as a whole percentage, rounded down so that 100% means every due session was completed. */
 export function ratePercent({ completed, due }: AzkarRate): number | null {
   return due > 0 ? Math.floor((completed * 100) / due) : null
@@ -198,7 +248,7 @@ export interface DhikrTotal {
 export interface AzkarLifetime {
   /** Completed records per session, over every day still kept (about ten years). */
   sessionsCompleted: Record<CollectionId, number>
-  /** Every repetition ever counted. */
+  /** Every repetition ever counted in the reader, after the prayers too. */
   recitations: number
   /** Most recited first; ties by id. */
   byDhikr: DhikrTotal[]
@@ -209,6 +259,18 @@ function arabicSnippet(id: string): string | null {
   return dhikr ? snippet(dhikr.arabic) : null
 }
 
+/** A lifetime tally by dhikr id, most recited first; ties by id. */
+export function dhikrTotals(totals: Readonly<Record<string, number>>): DhikrTotal[] {
+  return Object.entries(totals)
+    .filter(([, recitations]) => recitations > 0)
+    .map(([id, recitations]) => ({ id, recitations, snippet: arabicSnippet(id) }))
+    .sort((a, b) => b.recitations - a.recitations || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+}
+
+/**
+ * Completed sessions, and every repetition counted in the reader: the after-prayer azkar's
+ * too, which `afterPrayerLifetime` also gives on their own. The tasbih counter is apart.
+ */
 export function lifetimeTotals(data: Pick<ProgressData, 'sessions' | 'totals' | 'totalRecitations'>): AzkarLifetime {
   const sessionsCompleted = Object.fromEntries(COLLECTION_IDS.map((id) => [id, 0])) as Record<CollectionId, number>
   for (const day of Object.values(data.sessions)) {
@@ -216,9 +278,5 @@ export function lifetimeTotals(data: Pick<ProgressData, 'sessions' | 'totals' | 
       if (day[collection]?.completed) sessionsCompleted[collection] += 1
     }
   }
-  const byDhikr = Object.entries(data.totals)
-    .filter(([, recitations]) => recitations > 0)
-    .map(([id, recitations]) => ({ id, recitations, snippet: arabicSnippet(id) }))
-    .sort((a, b) => b.recitations - a.recitations || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
-  return { sessionsCompleted, recitations: data.totalRecitations, byDhikr }
+  return { sessionsCompleted, recitations: data.totalRecitations, byDhikr: dhikrTotals(data.totals) }
 }

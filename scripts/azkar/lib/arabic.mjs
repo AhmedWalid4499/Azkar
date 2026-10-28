@@ -36,6 +36,14 @@ export function splitToken(token) {
   return { lead, core, trail }
 }
 
+/**
+ * `text` without whatever stands before its first letter or after its last letter or mark:
+ * punctuation, brackets, quotation marks. Used to cut an excerpt out of a longer record.
+ */
+export function trimEdges(text) {
+  return text.replace(/^[^\u0621-\u063A\u0641-\u064A\u0671]+/, '').replace(/[^\u0621-\u063A\u0641-\u064A\u0671\u064B-\u0652\u0670]+$/, '')
+}
+
 /** Remove every vowel, recitation and pause mark and the tatweel. For metadata, not for recited text. */
 export function stripMarks(text) {
   return text.replace(/[\u064B-\u0652\u0670\u06D6-\u06ED\u0640]/g, '')

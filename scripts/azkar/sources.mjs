@@ -61,6 +61,100 @@ export const RAW = [
     url: gh('fawazahmed0/hadith-api', HADITH_API, 'LICENSE'),
     sha256: '6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e',
   },
+  // One file per hadith whose wording a new item is checked against (see lib/raw.mjs, hadith()).
+  // Sahih Muslim's files are numbered by the API's own sequence; the comment gives the hadith.
+  // Muslim 591
+  {
+    path: 'raw/hadith-api/ara-muslim-1334.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/1334.json'),
+    sha256: 'cf2b14752610813116efd23939ebb71e8a1aef67295b8848fd0607d05af2d1c2',
+  },
+  // Muslim 593
+  {
+    path: 'raw/hadith-api/ara-muslim-1338.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/1338.json'),
+    sha256: 'b565cd16a1e4c5e2533ac50340b1fdcfe12f8535d261a700e8b4426ec6563c1d',
+  },
+  {
+    path: 'raw/hadith-api/ara-bukhari-844.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-bukhari/844.json'),
+    sha256: '5d23a7900b8561b10579ced955ab0949eae64cbffef50e75336724a8e7a821f0',
+  },
+  {
+    path: 'raw/hadith-api/ara-bukhari-6473.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-bukhari/6473.json'),
+    sha256: '257a0b3db3e1b3dd5886d291ff4f5eb2854f44feeb9011f0b2de2d9c2b6dc6ca',
+  },
+  // Muslim 594
+  {
+    path: 'raw/hadith-api/ara-muslim-1343.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/1343.json'),
+    sha256: '4d1b5508ca8ec4a5f27a539b2fa26f348eb94cb20709f3949d03a855b07cb7e3',
+  },
+  // Muslim 597
+  {
+    path: 'raw/hadith-api/ara-muslim-1352.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/1352.json'),
+    sha256: '935d41c8599847898fc054d45a87d5bf4d712a0875b015190666cc3a6e94a56f',
+  },
+  {
+    path: 'raw/hadith-api/ara-tirmidhi-3474.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-tirmidhi/3474.json'),
+    sha256: 'a2c16b0c892d30d66717e50bdd3ee31ca48ed564ae5ece40b80bb924493a1984',
+  },
+  {
+    path: 'raw/hadith-api/ara-bukhari-5017.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-bukhari/5017.json'),
+    sha256: '414d2d2839f8b470ef86f1e27a261e1718c0a191e20d412fe33a2c972a9caed7',
+  },
+  {
+    path: 'raw/hadith-api/ara-bukhari-6320.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-bukhari/6320.json'),
+    sha256: 'ddcf55047bd820de7634413d0fd4ee1eab75b8402c40f1aa9ec89509f159d882',
+  },
+  {
+    path: 'raw/hadith-api/ara-tirmidhi-3401.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-tirmidhi/3401.json'),
+    sha256: '056bd9c603ddbe0f16f0b20b283ecab57ed5666766e8cbfde397001be43cfb11',
+  },
+  // Muslim 2712
+  {
+    path: 'raw/hadith-api/ara-muslim-6888.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/6888.json'),
+    sha256: 'ed8f7ba4444c84399e7233981bdc16a93772995040fa3a249e8512d323064ec6',
+  },
+  {
+    path: 'raw/hadith-api/ara-abudawud-5045.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-abudawud/5045.json'),
+    sha256: 'c6ac458aad0c628f897b027634ceedb9208294b995241bc0a5be7dbb6e55ae34',
+  },
+  {
+    path: 'raw/hadith-api/ara-bukhari-6324.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-bukhari/6324.json'),
+    sha256: 'd0365a33e5efa587c47d6cd7e753a2a62f5ed6a4c9dd1abb2c658782e3a6f3d8',
+  },
+  // Muslim 2713
+  {
+    path: 'raw/hadith-api/ara-muslim-6889.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/6889.json'),
+    sha256: 'b69a84182be5180a218047f32e13563cec6c3ee8c804eea9cf0d92b1ef316de0',
+  },
+  // Muslim 2715
+  {
+    path: 'raw/hadith-api/ara-muslim-6894.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-muslim/6894.json'),
+    sha256: '9d38453518d9ec336a7b59de606ba0adbaf9fa42638f28ba58729683b155d316',
+  },
+  {
+    path: 'raw/hadith-api/ara-bukhari-6313.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-bukhari/6313.json'),
+    sha256: 'f356f0f670034795ce7fac985298d4efb1b66788bfc2c09652558cecc2764370',
+  },
+  {
+    path: 'raw/hadith-api/ara-tirmidhi-3383.json',
+    url: gh('fawazahmed0/hadith-api', HADITH_API, 'editions/ara-tirmidhi/3383.json'),
+    sha256: '3d111f4b7ed8ae88f0d36078b140a810fdf09b7b54e28848d4e50ccd35a1334f',
+  },
   {
     path: 'raw/tanzil-alquran-cloud/ayah-1-1.json',
     url: quran('ayah/1:1'),
@@ -72,9 +166,29 @@ export const RAW = [
     sha256: '6251e68f03339e5bbef6f5720aae206052a2b08f5369a0ce7dce9c07fda36b7d',
   },
   {
+    path: 'raw/tanzil-alquran-cloud/ayah-2-285.json',
+    url: quran('ayah/2:285'),
+    sha256: '6bd15da0d5611712d31a392c2fe368e5d92e3494a02a8ab345a93d9525a0f619',
+  },
+  {
+    path: 'raw/tanzil-alquran-cloud/ayah-2-286.json',
+    url: quran('ayah/2:286'),
+    sha256: 'd39dc7ccc25271fea1579dfd03b0460740e9488a09323d467dfee539b3326c64',
+  },
+  {
     path: 'raw/tanzil-alquran-cloud/ayah-9-129.json',
     url: quran('ayah/9:129'),
     sha256: '2f35c521e3293f4aa2f3a3d80281e6f1e8c32f1994781b83200e58f8b522e5d1',
+  },
+  {
+    path: 'raw/tanzil-alquran-cloud/surah-32.json',
+    url: quran('surah/32'),
+    sha256: 'abd9a22413335dd8499b97c46c91a32fb1ccfcc546ff597454b0c77fb02243e1',
+  },
+  {
+    path: 'raw/tanzil-alquran-cloud/surah-67.json',
+    url: quran('surah/67'),
+    sha256: '7a7ffea1c6346e1fb4e7997a051503cc4506cad2617997d47f471cb9a68b4f28',
   },
   {
     path: 'raw/tanzil-alquran-cloud/surah-112.json',
@@ -103,7 +217,9 @@ export const CACHE = [
     path: '.cache/tanzil-simple-plain.txt',
     url: 'https://tanzil.net/pub/download/index.php?quranType=simple-plain&marks=true&outType=txt-2&agree=true',
   },
+  { path: '.cache/hisnmuslim-25.json', url: 'https://www.hisnmuslim.com/api/ar/25.json' },
   { path: '.cache/hisnmuslim-27.json', url: 'https://www.hisnmuslim.com/api/ar/27.json' },
+  { path: '.cache/hisnmuslim-28.json', url: 'https://www.hisnmuslim.com/api/ar/28.json' },
   { path: '.cache/wird-data.json', url: gh('Open-Waqf/wird', WIRD, 'www/data.json') },
   {
     path: '.cache/fitrahive-morning.json',

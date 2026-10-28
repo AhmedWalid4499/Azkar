@@ -5,7 +5,7 @@ import type { SavedLocation } from '../../shared/location'
 import { DEFAULT_SETTINGS, useSettings } from '../../shared/settings'
 import type { AppSettings } from '../../shared/settings'
 import type { DateKey } from '../../shared/types'
-import { DEFAULT_PRAYER_TIMES_SETTINGS, usePrayerTimesStore } from './config'
+import { DEFAULT_PRAYER_TIMES_SETTINGS, DEFAULT_UNLOGGED_REMINDERS, usePrayerTimesStore } from './config'
 import type { PrayerTimesSettings } from './config'
 
 export const CAIRO: SavedLocation = {
@@ -52,13 +52,20 @@ export function zonedInstant(dateKey: DateKey, clock: string, timeZone: string):
   return new Date(guess)
 }
 
-/** Puts the three stores this feature reads into a known state. English, 24-hour unless overridden. */
+/** The "not logged yet" reminders switched off, as `resetStores` leaves them. */
+export const UNLOGGED_OFF = { ...DEFAULT_UNLOGGED_REMINDERS, enabled: false }
+
+/**
+ * Puts the three stores this feature reads into a known state. English, 24-hour
+ * unless overridden. The "not logged yet" reminders, on by default in the app,
+ * start off here so that each test hears only the reminders it switches on.
+ */
 export function resetStores(
   options: { location?: SavedLocation | null; settings?: Partial<AppSettings>; prayerTimes?: Partial<PrayerTimesSettings> } = {},
 ) {
   useSettings.setState({ ...DEFAULT_SETTINGS, language: 'en', timeFormat: '24h', ...options.settings })
   useLocationStore.setState({ location: options.location ?? null })
-  usePrayerTimesStore.setState({ ...DEFAULT_PRAYER_TIMES_SETTINGS, ...options.prayerTimes })
+  usePrayerTimesStore.setState({ ...DEFAULT_PRAYER_TIMES_SETTINGS, unloggedReminders: UNLOGGED_OFF, ...options.prayerTimes })
 }
 
 // The app's tsconfig carries no Node types, so the runner's environment is reached by hand.

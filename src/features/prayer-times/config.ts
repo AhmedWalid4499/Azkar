@@ -10,8 +10,12 @@ import { isMethodId } from './engine/methods'
 import type { MadhabSetting, MethodSetting } from './engine/methods'
 
 export const PRAYER_TIMES_STORAGE_KEY = storageKey('prayer-times')
-/** 1: calculation settings and the prayer reminder switch. 2: adds `azkarReminders`. */
-export const PRAYER_TIMES_VERSION = 2
+/**
+ * 1: calculation settings and the prayer reminder switch.
+ * 2: adds `azkarReminders`.
+ * 3: adds `unloggedReminders`.
+ */
+export const PRAYER_TIMES_VERSION = 3
 
 export type AzkarSession = 'morning' | 'evening'
 
@@ -24,6 +28,27 @@ export interface AzkarReminderSettings {
   morningAt: MorningReminderTime
 }
 
+/** Where Isha's time is taken to end for its "not logged yet" reminder. */
+export type IshaDeadline = 'middle' | 'fajr'
+
+/** How long before a prayer's time ends its "not logged yet" reminder can come, in minutes. */
+export const UNLOGGED_LEAD_MINUTES = [10, 15, 30, 45, 60] as const
+export type UnloggedLeadMinutes = (typeof UNLOGGED_LEAD_MINUTES)[number]
+
+export function isUnloggedLead(value: unknown): value is UnloggedLeadMinutes {
+  return (UNLOGGED_LEAD_MINUTES as readonly unknown[]).includes(value)
+}
+
+export interface UnloggedReminderSettings {
+  enabled: boolean
+  leadMinutes: UnloggedLeadMinutes
+  /**
+   * `middle`: the middle of the night between Maghrib and the next Fajr, the end
+   * of Isha's preferred time (Sahih Muslim). `fajr`: the next Fajr.
+   */
+  ishaEnds: IshaDeadline
+}
+
 export interface PrayerTimesSettings extends CalculationConfig {
   /**
    * Remind at each of the five prayer times: by the system in the installed app,
@@ -32,6 +57,8 @@ export interface PrayerTimesSettings extends CalculationConfig {
   notifications: boolean
   /** Reminders to read the morning azkar (at Fajr or after sunrise) and the evening azkar (at Asr). */
   azkarReminders: AzkarReminderSettings
+  /** A reminder shortly before each prayer's time ends while it is not logged. */
+  unloggedReminders: UnloggedReminderSettings
 }
 
 export interface PrayerTimesState extends PrayerTimesSettings {
@@ -44,14 +71,21 @@ export interface PrayerTimesState extends PrayerTimesSettings {
   setNotifications: (enabled: boolean) => void
   setAzkarReminder: (session: AzkarSession, enabled: boolean) => void
   setMorningReminderTime: (at: MorningReminderTime) => void
+  setUnloggedReminders: (enabled: boolean) => void
+  setUnloggedLeadMinutes: (minutes: UnloggedLeadMinutes) => void
+  setIshaDeadline: (ends: IshaDeadline) => void
 }
 
 export const DEFAULT_AZKAR_REMINDERS: AzkarReminderSettings = { morning: false, evening: false, morningAt: 'fajr' }
+
+/** On, so they come as soon as notifications are allowed; the switch in Settings turns them off. */
+export const DEFAULT_UNLOGGED_REMINDERS: UnloggedReminderSettings = { enabled: true, leadMinutes: 15, ishaEnds: 'middle' }
 
 export const DEFAULT_PRAYER_TIMES_SETTINGS: PrayerTimesSettings = {
   ...DEFAULT_CALCULATION,
   notifications: false,
   azkarReminders: DEFAULT_AZKAR_REMINDERS,
+  unloggedReminders: DEFAULT_UNLOGGED_REMINDERS,
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -77,6 +111,16 @@ function sanitizeAzkarReminders(value: unknown): AzkarReminderSettings {
   }
 }
 
+function sanitizeUnloggedReminders(value: unknown): UnloggedReminderSettings {
+  const stored = isRecord(value) ? value : {}
+  return {
+    // A choice made is kept either way; anything else is the default, which is on.
+    enabled: typeof stored.enabled === 'boolean' ? stored.enabled : DEFAULT_UNLOGGED_REMINDERS.enabled,
+    leadMinutes: isUnloggedLead(stored.leadMinutes) ? stored.leadMinutes : DEFAULT_UNLOGGED_REMINDERS.leadMinutes,
+    ishaEnds: stored.ishaEnds === 'fajr' || stored.ishaEnds === 'middle' ? stored.ishaEnds : DEFAULT_UNLOGGED_REMINDERS.ishaEnds,
+  }
+}
+
 /**
  * Reads settings out of whatever was stored. The data can come from an imported
  * or hand-edited backup, so each field is checked and falls back to its
@@ -96,6 +140,7 @@ export function sanitizeSettings(value: unknown): PrayerTimesSettings {
     adjustments: sanitizeAdjustments(stored.adjustments),
     notifications: stored.notifications === true,
     azkarReminders: sanitizeAzkarReminders(stored.azkarReminders),
+    unloggedReminders: sanitizeUnloggedReminders(stored.unloggedReminders),
   }
 }
 
@@ -125,6 +170,15 @@ export const usePrayerTimesStore = create<PrayerTimesState>()(
       setAzkarReminder: (session, enabled) =>
         set((state) => ({ azkarReminders: { ...state.azkarReminders, [session]: enabled } })),
       setMorningReminderTime: (morningAt) => set((state) => ({ azkarReminders: { ...state.azkarReminders, morningAt } })),
+      setUnloggedReminders: (enabled) => set((state) => ({ unloggedReminders: { ...state.unloggedReminders, enabled } })),
+      setUnloggedLeadMinutes: (minutes) =>
+        set((state) =>
+          isUnloggedLead(minutes) ? { unloggedReminders: { ...state.unloggedReminders, leadMinutes: minutes } } : state,
+        ),
+      setIshaDeadline: (ishaEnds) =>
+        set((state) =>
+          ishaEnds === 'middle' || ishaEnds === 'fajr' ? { unloggedReminders: { ...state.unloggedReminders, ishaEnds } } : state,
+        ),
     }),
     {
       name: PRAYER_TIMES_STORAGE_KEY,
@@ -137,10 +191,22 @@ export const usePrayerTimesStore = create<PrayerTimesState>()(
         adjustments,
         notifications,
         azkarReminders,
-      }): PrayerTimesSettings => ({ method, madhab, highLatitudeRule, polar, adjustments, notifications, azkarReminders }),
+        unloggedReminders,
+      }): PrayerTimesSettings => ({
+        method,
+        madhab,
+        highLatitudeRule,
+        polar,
+        adjustments,
+        notifications,
+        azkarReminders,
+        unloggedReminders,
+      }),
       // Version 2 only added `azkarReminders`, so version 1 data keeps every
-      // field it has and gets the reminders off. Anything stamped otherwise,
-      // older, newer or hand-made, is read field by field like every load.
+      // field it has and gets the azkar reminders off. Version 3 only added
+      // `unloggedReminders`, so older data keeps every field it has and gets
+      // them at their defaults. Anything stamped otherwise, older, newer or
+      // hand-made, is read field by field like every load.
       // Adding 'auto' to the Asr school needed no new version: a saved school
       // is kept exactly as it is.
       migrate: (persisted) => sanitizeSettings(persisted),

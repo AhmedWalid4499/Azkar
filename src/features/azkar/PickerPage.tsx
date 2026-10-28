@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { useI18n } from '../../shared/i18n'
 import type { DateKey } from '../../shared/types'
 import { Notice, PageHeader, ProgressBar } from '../../shared/ui'
+import { afterPrayerDateKey } from './afterPrayer'
+import { AfterPrayerList } from './AfterPrayerList'
 import { sessionDateKey, useAzkarClock } from './clock'
 import { COLLECTION_META, collectionPath } from './collections'
 import { cx } from './cx'
@@ -11,6 +13,7 @@ import type { CollectionId } from './data'
 import mood from './mood.module.css'
 import styles from './PickerPage.module.css'
 import { STATE_LABEL } from './stateLabel'
+import { TasbihEntry } from './TasbihEntry'
 import { useCompletedLabel, useSessionStanding } from './useSessionStanding'
 
 interface SessionCardProps {
@@ -61,7 +64,7 @@ function SessionCard({ collection, dateKey, recommended }: SessionCardProps) {
   )
 }
 
-/** `/azkar`: choose a session. */
+/** `/azkar`: choose a session, the azkar after a prayer, or the tasbih counter. */
 export function PickerPage() {
   const { t } = useI18n()
   const clock = useAzkarClock()
@@ -85,6 +88,8 @@ export function PickerPage() {
           ))}
         </ul>
       )}
+      <AfterPrayerList dateKey={afterPrayerDateKey(clock.today, clock.phase)} />
+      <TasbihEntry />
     </div>
   )
 }

@@ -3,8 +3,15 @@ import type { DateKey } from '../../shared/types'
 import { useAzkarClock } from './clock'
 import type { DaySessions } from './progressData'
 import { useAzkarProgress } from './progressStore'
-import { azkarCompletionRate, computeAzkarStreaks, lifetimeTotals, sessionsInRange } from './tracking'
-import type { AzkarCompletionRates, AzkarLifetime, AzkarStreaks, DatedSessions } from './tracking'
+import {
+  azkarCompletionRate,
+  computeAzkarStreaks,
+  computeSleepStreak,
+  lifetimeTotals,
+  sessionsInRange,
+  sleepCompletionRate,
+} from './tracking'
+import type { AzkarCompletionRates, AzkarLifetime, AzkarRate, AzkarStreaks, DatedSessions, Streak } from './tracking'
 
 /** Every session recorded for one day, or `undefined` when nothing was read that day. */
 export function useDaySessions(dateKey: DateKey): DaySessions | undefined {
@@ -29,6 +36,20 @@ export function useAzkarCompletionRate(days: number): AzkarCompletionRates {
   const sessions = useAzkarProgress((state) => state.sessions)
   const { today, phase } = useAzkarClock()
   return useMemo(() => azkarCompletionRate(sessions, today, phase, days), [sessions, today, phase, days])
+}
+
+/** The bedtime session's streak as of now, following the night rule. */
+export function useSleepStreak(): Streak {
+  const sessions = useAzkarProgress((state) => state.sessions)
+  const { today, phase } = useAzkarClock()
+  return useMemo(() => computeSleepStreak(sessions, today, phase), [sessions, today, phase])
+}
+
+/** Completion of the bedtime session over the last `days` days, from the first night it was read. */
+export function useSleepCompletionRate(days: number): AzkarRate {
+  const sessions = useAzkarProgress((state) => state.sessions)
+  const { today, phase } = useAzkarClock()
+  return useMemo(() => sleepCompletionRate(sessions, today, phase, days), [sessions, today, phase, days])
 }
 
 /** Completed sessions per collection, every repetition counted, and the count of each dhikr. */

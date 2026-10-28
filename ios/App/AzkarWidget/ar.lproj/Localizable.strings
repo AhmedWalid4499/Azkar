@@ -1,0 +1,35 @@
+/* The widgets' own wording. Once the app has published, the widgets show the app's wording instead,
+   in the app's language (src/features/widget/strings.ts); these are for the widget gallery, for
+   before the app's first publish, and for Siri and Shortcuts. Keep the two in step. */
+
+/* The widget's name and description in the widget gallery. */
+"widget.name" = "مواقيت الصلاة";
+"widget.description" = "الصلاة القادمة مع عدٍّ تنازلي، وصلوات اليوم لتسجيلها.";
+
+/* Shown until the app has been opened once. */
+"notSetUp" = "افتح أذكار لتظهر مواقيت الصلاة هنا.";
+
+"nextPrayer" = "الصلاة القادمة";
+"tomorrow" = "غدًا";
+"countdown" = "الوقت المتبقي";
+"loggedRow" = "{prayer}، {time}: {status}";
+"unloggedRow" = "{prayer}، {time}: غير مسجَّلة. تسجيلها «في وقتها».";
+"noLocation" = "افتح أذكار واختر موقعك لتظهر مواقيت الصلاة هنا.";
+"stale" = "افتح أذكار لتحديث مواقيت الصلاة.";
+
+"prayer.fajr" = "الفجر";
+"prayer.dhuhr" = "الظهر";
+"prayer.asr" = "العصر";
+"prayer.maghrib" = "المغرب";
+"prayer.isha" = "العشاء";
+
+"status.ontime" = "في وقتها";
+"status.jamaah" = "جماعة";
+"status.late" = "قضاء";
+"status.missed" = "فائتة";
+"status.excused" = "عذر";
+
+/* The action behind a tap on a prayer in the widget, and its two values. */
+"Mark as prayed" = "تسجيل الصلاة في وقتها";
+"Day" = "اليوم";
+"Prayer" = "الصلاة";

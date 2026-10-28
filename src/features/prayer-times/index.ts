@@ -12,3 +12,5 @@ export { PrayerNotifier } from './PrayerNotifier'
 export { PrayerTimesList } from './PrayerTimesList'
 export type { PrayerTimesListProps } from './PrayerTimesList'
 export { ReminderPrompt } from './reminders/ReminderPrompt'
+// The id of the pending "not logged yet" reminder of a prayer, which the widget cancels when the prayer is ticked off there.
+export { UNLOGGED_GROUP, UNLOGGED_ID_BASE, unloggedReminderId } from './reminders/plan'

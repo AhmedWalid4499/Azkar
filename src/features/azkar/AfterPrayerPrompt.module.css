@@ -1,0 +1,81 @@
+.prompt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+
+.icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.complete .icon {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.text :global(.ui-bar) {
+  margin-top: var(--space-1);
+}
+
+.title {
+  font-weight: 700;
+}
+
+/* The link names the card; its ::after stretches the hit area over all of it. */
+.link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-m);
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.state {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.action {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--primary);
+  font-size: var(--text-s);
+  font-weight: 600;
+}

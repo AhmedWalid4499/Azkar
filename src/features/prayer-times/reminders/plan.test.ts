@@ -5,8 +5,19 @@ import { computePrayerDay, DEFAULT_CALCULATION } from '../engine/compute'
 import type { Place } from '../engine/compute'
 import { toPlace } from '../location/place'
 import { CAIRO, TROMSO, zonedInstant } from '../test-helpers'
-import { REMINDER_LIMIT, reminderEntries, reminderId, reminderText, upcomingReminders, WINDOW_DAYS } from './plan'
+import {
+  compareReminders,
+  REMINDER_LIMIT,
+  reminderEntries,
+  reminderId,
+  reminderText,
+  UNLOGGED_ID_BASE,
+  unloggedReminderId,
+  upcomingReminders,
+  WINDOW_DAYS,
+} from './plan'
 import type { ReminderChoices, ReminderEntry } from './plan'
+import type { IsLogged, UnloggedChoices } from './unlogged'
 
 const cairo = toPlace(CAIRO) as Place
 const tromso = toPlace(TROMSO) as Place
@@ -143,25 +154,25 @@ describe('reminderText', () => {
   const [evening, morning] = upcoming(AZKAR_ONLY)
 
   it('names the prayer and gives its time and the place', () => {
-    expect(asr && reminderText(asr, { t: english.t, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' })).toEqual({
+    expect(asr && reminderText(asr, { t: english.t, tp: english.tp, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' })).toEqual({
       title: 'It’s time for Asr',
       body: '15:59 · Cairo, Egypt',
     })
-    expect(fajr && reminderText(fajr, { t: english.t, formatTime: clock('en', true), timeZone: 'Africa/Cairo', place: null })).toEqual({
+    expect(fajr && reminderText(fajr, { t: english.t, tp: english.tp, formatTime: clock('en', true), timeZone: 'Africa/Cairo', place: null })).toEqual({
       title: 'It’s time for Fajr',
       body: '5:29 AM',
     })
   })
 
   it('gives the time in the saved place’s zone, not the device’s', () => {
-    const text = asr && reminderText(asr, { t: english.t, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' })
+    const text = asr && reminderText(asr, { t: english.t, tp: english.tp, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' })
     expect(text?.body.startsWith('15:59')).toBe(true)
-    const elsewhere = asr && reminderText(asr, { t: english.t, formatTime: clock('en', false), timeZone: 'Asia/Tokyo', place: 'Cairo, Egypt' })
+    const elsewhere = asr && reminderText(asr, { t: english.t, tp: english.tp, formatTime: clock('en', false), timeZone: 'Asia/Tokyo', place: 'Cairo, Egypt' })
     expect(elsewhere?.body.startsWith('21:59')).toBe(true)
   })
 
   it('invites to the azkar with the time it is tied to', () => {
-    const wording = { t: english.t, formatTime: clock('en', true), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' }
+    const wording = { t: english.t, tp: english.tp, formatTime: clock('en', true), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' }
     expect(evening && reminderText(evening, wording)).toEqual({ title: 'Time for the evening azkar', body: 'Asr began at 3:59 PM' })
     expect(morning && reminderText(morning, wording)).toEqual({ title: 'Time for the morning azkar', body: 'Fajr began at 5:29 AM' })
     const [sunrise] = upcoming({ ...AZKAR_ONLY, evening: false, morningAt: 'sunrise' })
@@ -169,7 +180,7 @@ describe('reminderText', () => {
   })
 
   it('addresses the user by name when one is set, keeping the name isolated from the sentence', () => {
-    const named = (t: typeof english.t, name: string) => ({ t, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: null, name })
+    const named = (t: typeof english.t, name: string) => ({ t, tp: english.tp, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: null, name })
     expect(asr && reminderText(asr, named(english.t, 'Ahmed'))?.title).toBe('\u2068Ahmed\u2069, it’s time for Asr')
     expect(evening && reminderText(evening, named(english.t, 'Ahmed'))?.title).toBe('\u2068Ahmed\u2069, time for the evening azkar')
     expect(morning && reminderText(morning, named(english.t, 'Ahmed'))?.title).toBe('\u2068Ahmed\u2069, time for the morning azkar')
@@ -179,8 +190,173 @@ describe('reminderText', () => {
   })
 
   it('is written in Arabic, with Arabic digits and the 12-hour clock when chosen', () => {
-    const wording = { t: arabic.t, formatTime: clock(arabic.locale, true), timeZone: 'Africa/Cairo', place: 'القاهرة، مصر' }
+    const wording = { t: arabic.t, tp: arabic.tp, formatTime: clock(arabic.locale, true), timeZone: 'Africa/Cairo', place: 'القاهرة، مصر' }
     expect(asr && reminderText(asr, wording)).toEqual({ title: 'حان وقت صلاة العصر', body: '٣:٥٩ م · القاهرة، مصر' })
     expect(evening && reminderText(evening, wording)).toEqual({ title: 'حان وقت أذكار المساء', body: 'دخل وقت العصر الساعة ٣:٥٩ م' })
+  })
+})
+
+const NOTHING_LOGGED: IsLogged = () => false
+const unlogged = (patch: Partial<UnloggedChoices> = {}): UnloggedChoices => ({ leadMinutes: 15, ishaEnds: 'middle', isLogged: NOTHING_LOGGED, ...patch })
+const WITH_UNLOGGED: ReminderChoices = { ...EVERYTHING, unlogged: unlogged() }
+const UNLOGGED_ONLY: ReminderChoices = { prayers: false, morning: false, evening: false, morningAt: 'fajr', unlogged: unlogged() }
+
+describe('the "not logged yet" reminders in the plan', () => {
+  it('come in time order among the others, after a prayer and before azkar at the same instant', () => {
+    const entries = reminderEntries([dayIn(cairo)('2026-10-12'), dayIn(cairo)('2026-10-13')], WITH_UNLOGGED)
+    expect(keys(entries).slice(0, 12)).toEqual([
+      '2026-10-12-fajr',
+      '2026-10-12-morning',
+      '2026-10-12-fajr-unlogged',
+      '2026-10-12-dhuhr',
+      '2026-10-12-dhuhr-unlogged',
+      '2026-10-12-asr',
+      '2026-10-12-evening',
+      '2026-10-12-asr-unlogged',
+      '2026-10-12-maghrib',
+      '2026-10-12-maghrib-unlogged',
+      '2026-10-12-isha',
+      '2026-10-12-isha-unlogged',
+    ])
+  })
+
+  it('are ordered soonest first and, at the same instant, prayers before "not logged yet" before azkar', () => {
+    const instant = at('2026-10-12', '15:59')
+    const prayer: ReminderEntry = { kind: 'prayer', prayer: 'asr', dateKey: '2026-10-12', at: instant, key: 'p' }
+    const azkar: ReminderEntry = { kind: 'azkar', session: 'evening', after: 'asr', dateKey: '2026-10-12', at: instant, key: 'a' }
+    const notLogged: ReminderEntry = { kind: 'unlogged', prayer: 'dhuhr', dateKey: '2026-10-12', at: instant, endsAt: instant, preferred: false, key: 'u' }
+    const earlier: ReminderEntry = { ...azkar, at: at('2026-10-12', '15:58'), key: 'e' }
+    expect([azkar, notLogged, prayer, earlier].sort(compareReminders).map((entry) => entry.key)).toEqual(['e', 'p', 'u', 'a'])
+  })
+
+  it('are left out when switched off', () => {
+    expect(reminderEntries([dayIn(cairo)('2026-10-12'), dayIn(cairo)('2026-10-13')], EVERYTHING).some((entry) => entry.kind === 'unlogged')).toBe(false)
+  })
+
+  it('cover the week like the others, the last day’s Isha included, and none for a logged prayer', () => {
+    const logged = new Set(['2026-10-12-asr', '2026-10-13-fajr'])
+    const entries = upcoming({ ...UNLOGGED_ONLY, unlogged: unlogged({ isLogged: (dateKey, prayer) => logged.has(`${dateKey}-${prayer}`) }) })
+    // From 15:58:30 the 12th's Dhuhr reminder (15:44) has passed and its Asr is logged: Maghrib's comes first.
+    expect(entries[0]).toMatchObject({ key: '2026-10-12-maghrib-unlogged', at: at('2026-10-12', '19:30') })
+    expect(keys(entries)).not.toContain('2026-10-13-fajr-unlogged')
+    expect(keys(entries)).toContain('2026-10-13-dhuhr-unlogged')
+    // The 18th's Isha ends at the middle of a night that runs into the 19th: the window reaches it.
+    expect(keys(entries)).toContain('2026-10-18-isha-unlogged')
+    for (const entry of entries) {
+      expect(entry.at.getTime()).toBeGreaterThan(NOW.getTime())
+      expect(entry.at.getTime()).toBeLessThanOrEqual(NOW.getTime() + WINDOW_DAYS * 86_400_000)
+    }
+  })
+
+  it('still remind of last night’s Isha after midnight, until the next Fajr when that is its end', () => {
+    const entries = upcoming({ ...UNLOGGED_ONLY, unlogged: unlogged({ ishaEnds: 'fajr' }) }, at('2026-10-13', '01:00'))
+    expect(entries[0]).toMatchObject({ key: '2026-10-12-isha-unlogged', dateKey: '2026-10-12', at: at('2026-10-13', '05:14') })
+    const logged = upcoming(
+      { ...UNLOGGED_ONLY, unlogged: unlogged({ ishaEnds: 'fajr', isLogged: (dateKey, prayer) => dateKey === '2026-10-12' && prayer === 'isha' }) },
+      at('2026-10-13', '01:00'),
+    )
+    expect(logged[0]?.key).toBe('2026-10-13-fajr-unlogged')
+  })
+})
+
+describe('the limit with every kind of reminder on', () => {
+  it(`keeps the soonest ${REMINDER_LIMIT} of prayers, "not logged yet" and azkar together, well under iOS’s 64`, () => {
+    const entries = upcoming(WITH_UNLOGGED)
+    expect(entries).toHaveLength(REMINDER_LIMIT)
+    // Twelve a day: the week is cut after about four days, every kind alike.
+    expect(entries[0]?.key).toBe('2026-10-12-asr')
+    expect(entries.at(-1)?.key).toBe('2026-10-16-evening')
+    const count = (kind: ReminderEntry['kind']) => entries.filter((entry) => entry.kind === kind).length
+    // The 12th from Asr, the 13th to the 15th whole, the 16th to its Asr and evening azkar.
+    expect([count('prayer'), count('unlogged'), count('azkar')]).toEqual([21, 20, 9])
+    // Nothing kept comes after anything left out.
+    const everything = reminderEntries(
+      Array.from({ length: 10 }, (_, offset) => dayIn(cairo)(`2026-10-${String(11 + offset).padStart(2, '0')}`)),
+      WITH_UNLOGGED,
+    ).filter((entry) => entry.at.getTime() > NOW.getTime())
+    expect(keys(entries)).toEqual(keys(everything.slice(0, REMINDER_LIMIT)))
+  })
+
+  it('keeps the prayer and drops the azkar reminder when the limit falls between them at the same minute', () => {
+    // From 15:40 the 12th's Dhuhr reminder (15:44) comes first, which moves the cut one place earlier:
+    // between Asr and the evening azkar of the 16th, both at 15:56.
+    const entries = upcoming(WITH_UNLOGGED, at('2026-10-12', '15:40'))
+    expect(entries).toHaveLength(REMINDER_LIMIT)
+    expect(entries[0]?.key).toBe('2026-10-12-dhuhr-unlogged')
+    expect(entries.at(-1)).toMatchObject({ key: '2026-10-16-asr', at: at('2026-10-16', '15:56') })
+    expect(keys(entries)).not.toContain('2026-10-16-evening')
+  })
+
+  it('makes room for later reminders as prayers are logged', () => {
+    const logged: IsLogged = (dateKey) => dateKey === '2026-10-12'
+    const entries = upcoming({ ...EVERYTHING, unlogged: unlogged({ isLogged: logged }) })
+    expect(entries).toHaveLength(REMINDER_LIMIT)
+    expect(keys(entries).filter((key) => key.startsWith('2026-10-12') && key.endsWith('unlogged'))).toEqual([])
+    // The three places freed on the 12th go to the next three reminders of the 16th.
+    expect(keys(entries).slice(-3)).toEqual(['2026-10-16-asr-unlogged', '2026-10-16-maghrib', '2026-10-16-maghrib-unlogged'])
+  })
+})
+
+describe('unloggedReminderId', () => {
+  it('is 1_000_000_000 + YYYYMMDD * 10 + 0 to 4 for Fajr to Isha', () => {
+    expect(UNLOGGED_ID_BASE).toBe(1_000_000_000)
+    expect(unloggedReminderId('2026-10-12', 'fajr')).toBe(1_202_610_120)
+    expect(unloggedReminderId('2026-10-12', 'dhuhr')).toBe(1_202_610_121)
+    expect(unloggedReminderId('2026-10-12', 'asr')).toBe(1_202_610_122)
+    expect(unloggedReminderId('2026-10-12', 'maghrib')).toBe(1_202_610_123)
+    expect(unloggedReminderId('2026-10-12', 'isha')).toBe(1_202_610_124)
+    expect(unloggedReminderId('2027-01-05', 'isha')).toBe(1_000_000_000 + 20_270_105 * 10 + 4)
+  })
+
+  it('is what the plan gives its entries, stays inside a 32-bit integer and meets no other reminder’s id', () => {
+    const entries = upcoming(WITH_UNLOGGED)
+    for (const entry of entries.filter((candidate) => candidate.kind === 'unlogged')) {
+      expect(reminderId(entry)).toBe(unloggedReminderId(entry.dateKey, entry.prayer))
+    }
+    const ids = entries.map(reminderId)
+    expect(new Set(ids).size).toBe(ids.length)
+    expect(unloggedReminderId('9999-12-31', 'isha')).toBeLessThanOrEqual(2 ** 31 - 1)
+    // Every other reminder's id has nine digits; these have ten.
+    for (const entry of entries) expect(reminderId(entry) >= UNLOGGED_ID_BASE).toBe(entry.kind === 'unlogged')
+  })
+})
+
+describe('reminderText for a prayer not logged yet', () => {
+  const english = createI18n('en', true)
+  const arabic = createI18n('ar', true)
+  const clock = (locale: string, hour12: boolean) => (date: Date, timeZone: string) => formatClock(date, locale, timeZone, hour12)
+  const days = [dayIn(cairo)('2026-10-12'), dayIn(cairo)('2026-10-13')]
+  const entry = (prayer: string, patch: Partial<UnloggedChoices> = {}) =>
+    reminderEntries(days, { ...UNLOGGED_ONLY, unlogged: unlogged(patch) }).find((candidate) => candidate.key === `2026-10-12-${prayer}-unlogged`)!
+  const inEnglish = { t: english.t, tp: english.tp, formatTime: clock('en', false), timeZone: 'Africa/Cairo', place: 'Cairo, Egypt' }
+  const inArabic = { t: arabic.t, tp: arabic.tp, formatTime: clock(arabic.locale, true), timeZone: 'Africa/Cairo', place: 'القاهرة، مصر' }
+
+  it('names the prayer and says how long is left and until when', () => {
+    expect(reminderText(entry('asr'), inEnglish)).toEqual({ title: 'You haven’t logged Asr yet', body: 'Asr time ends in 15 minutes, at 18:28' })
+    expect(reminderText(entry('fajr', { leadMinutes: 60 }), inEnglish)).toEqual({
+      title: 'You haven’t logged Fajr yet',
+      body: 'Fajr time ends in 1 hour, at 06:55',
+    })
+  })
+
+  it('speaks of Isha’s preferred time when it ends at the middle of the night, and of its time when at Fajr', () => {
+    expect(reminderText(entry('isha'), inEnglish).body).toBe('The preferred time for Isha ends in 15 minutes, at 23:58')
+    expect(reminderText(entry('isha', { ishaEnds: 'fajr', leadMinutes: 30 }), inEnglish).body).toBe('Isha time ends in 30 minutes, at 05:29')
+  })
+
+  it('addresses the user by name when one is set', () => {
+    expect(reminderText(entry('asr'), { ...inEnglish, name: 'Ahmed' }).title).toBe('\u2068Ahmed\u2069, you haven’t logged Asr yet')
+    expect(reminderText(entry('asr'), { ...inArabic, name: 'أحمد' }).title).toBe('لم تُسجَّل صلاة العصر بعد يا \u2068أحمد\u2069')
+    expect(reminderText(entry('asr'), { ...inEnglish, name: '' }).title).toBe('You haven’t logged Asr yet')
+  })
+
+  it('is written in Arabic, with Arabic plurals, digits and the chosen clock', () => {
+    expect(reminderText(entry('asr'), inArabic)).toEqual({ title: 'لم تُسجَّل صلاة العصر بعد', body: 'يخرج وقت العصر بعد ١٥ دقيقة، الساعة ٦:٢٨ م' })
+    expect(reminderText(entry('maghrib', { leadMinutes: 10 }), inArabic).body).toBe('يخرج وقت المغرب بعد ١٠ دقائق، الساعة ٧:٤٥ م')
+    expect(reminderText(entry('dhuhr', { leadMinutes: 60 }), inArabic).body).toBe('يخرج وقت الظهر بعد ساعة واحدة، الساعة ٣:٥٩ م')
+    expect(reminderText(entry('isha'), inArabic)).toEqual({
+      title: 'لم تُسجَّل صلاة العشاء بعد',
+      body: 'ينتهي الوقت المختار لصلاة العشاء بعد ١٥ دقيقة، الساعة ١١:٥٨ م',
+    })
   })
 })

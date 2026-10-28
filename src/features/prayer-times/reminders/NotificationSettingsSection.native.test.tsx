@@ -2,7 +2,7 @@ import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSettings } from '../../../shared/settings'
-import { usePrayerTimesStore } from '../config'
+import { DEFAULT_UNLOGGED_REMINDERS, usePrayerTimesStore } from '../config'
 import { bringToForeground, device, LocalNotifications, resetDevice } from '../native-fakes'
 import { NotificationSettingsSection } from '../NotificationSettingsSection'
 import { CAIRO, resetStores } from '../test-helpers'
@@ -134,5 +134,22 @@ describe('NotificationSettingsSection in the installed app', () => {
     expect(screen.getByRole('switch', { name: 'التذكير بأذكار الصباح' })).toBeInTheDocument()
     expect(screen.getByRole('switch', { name: 'التذكير بأذكار المساء' })).toBeInTheDocument()
     expect(screen.getByText(/فتصلك حتى إن كان تطبيق أذكار مغلقًا/)).toBeInTheDocument()
+  })
+
+  it('offers the "not logged yet" reminders, on by default once the system allows notifications', async () => {
+    const user = userEvent.setup()
+    usePrayerTimesStore.setState({ unloggedReminders: DEFAULT_UNLOGGED_REMINDERS })
+    device.notifications = 'prompt'
+    render(<NotificationSettingsSection />)
+    const unlogged = () => screen.getByRole('switch', { name: 'Remind me of prayers I haven’t logged' })
+    await waitFor(() => expect(LocalNotifications.checkPermissions).toHaveBeenCalled())
+    await waitFor(() => expect(unlogged()).not.toBeChecked())
+
+    // Allowing them for the prayer times is enough.
+    await user.click(prayerSwitch())
+    await waitFor(() => expect(prayerSwitch()).toBeChecked())
+    expect(unlogged()).toBeChecked()
+    expect(screen.getByRole('combobox', { name: 'How long before the time ends' })).toHaveValue('15')
+    expect(LocalNotifications.requestPermissions).toHaveBeenCalledTimes(1)
   })
 })
