@@ -8,6 +8,8 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   background: var(--bg);
+  /* No double-tap zoom, so every tap is answered at once. Pinch zoom still works. */
+  touch-action: manipulation;
 }
 
 body {
@@ -20,7 +22,21 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  /* Keeps a browser's pull-to-refresh from reloading the app mid-session. */
   overscroll-behavior-y: none;
+}
+
+/* In the iPhone app the page bounces at its ends like every other iPhone screen. */
+:root[data-platform='ios'] body {
+  overscroll-behavior-y: auto;
+}
+
+/* In the app, controls behave like controls: no text selection or callout on a long press. */
+:root[data-platform='ios'] :is(button, a, label, summary, [role='button'], [role='tab'], [role='radio']),
+:root[data-platform='android'] :is(button, a, label, summary, [role='button'], [role='tab'], [role='radio']) {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 h1,

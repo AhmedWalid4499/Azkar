@@ -11,7 +11,7 @@ import '@fontsource/ibm-plex-sans-arabic/arabic-700.css'
 import './shared/styles/tokens.css'
 import './shared/styles/global.css'
 // Nothing above or here may import a store: see start().
-import { hideSplashScreen, mirrorToNative, restoreFromNative } from './native'
+import { appPlatform, hideSplashScreen, mirrorToNative, restoreFromNative } from './native'
 
 /** The launch screen comes down after this long even if the app has not started, rather than hide a failure. */
 const SPLASH_LIMIT_MS = 8_000
@@ -28,6 +28,11 @@ async function start(): Promise<void> {
   const { startApp } = await import('./app/start')
   await startApp(document.getElementById('root')!)
 }
+
+// Lets the styles tell the iPhone and Android apps apart from a browser (bounce, long-press behaviour).
+document.documentElement.dataset.platform = appPlatform()
+// iOS shows :active press states only on pages that listen for touches; without this, nothing reacts to a finger.
+document.addEventListener('touchstart', () => {}, { passive: true })
 
 const limit = setTimeout(() => void hideSplashScreen(), SPLASH_LIMIT_MS)
 void start()

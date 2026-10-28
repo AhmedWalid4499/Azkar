@@ -29,7 +29,10 @@ export function AppShell() {
     <div className="app">
       <PrayerNotifier />
       <main className="app__main">
-        <Outlet />
+        {/* Keyed by the path, so each screen opens with its fade-in. */}
+        <div key={pathname} className="app__page">
+          <Outlet />
+        </div>
       </main>
       <UpdateBanner />
       <LocalFileSheet />
