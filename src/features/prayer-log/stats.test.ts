@@ -7,6 +7,7 @@ import {
   computeStreaks,
   firstLoggedDay,
   monthBreakdown,
+  outstandingMissed,
   summarizeDay,
   totalOf,
   wholePercent,
@@ -346,5 +347,52 @@ describe('monthBreakdown', () => {
     const result = monthBreakdown(span('2025-12-25', '2026-01-05'), { year: 2025, month: 12 }, '2026-01-05')
     expect(result.elapsedDays).toBe(31)
     expect(result.byPrayer.fajr.ontime).toBe(7)
+  })
+})
+
+describe('outstandingMissed', () => {
+  it('is empty for a new user and for a log with nothing missed', () => {
+    expect(outstandingMissed({}, TODAY)).toEqual({ count: 0, dates: [], prayers: [] })
+    expect(outstandingMissed(span('2026-10-01', TODAY), TODAY)).toEqual({ count: 0, dates: [], prayers: [] })
+  })
+
+  it('lists every missed prayer, oldest day first and in the order of the day, today included', () => {
+    const entries: LogEntries = {
+      [TODAY]: { fajr: 'missed' },
+      '2026-10-03': { isha: 'missed', fajr: 'missed', dhuhr: 'ontime' },
+      '2025-12-31': { maghrib: 'missed' },
+    }
+    expect(outstandingMissed(entries, TODAY)).toEqual({
+      count: 4,
+      dates: ['2025-12-31', '2026-10-03', TODAY],
+      prayers: [
+        { dateKey: '2025-12-31', prayer: 'maghrib' },
+        { dateKey: '2026-10-03', prayer: 'fajr' },
+        { dateKey: '2026-10-03', prayer: 'isha' },
+        { dateKey: TODAY, prayer: 'fajr' },
+      ],
+    })
+  })
+
+  it('takes a prayer off once it is made up, that is logged as late', () => {
+    const missed: LogEntries = { [YESTERDAY]: { fajr: 'missed', asr: 'missed' } }
+    expect(outstandingMissed(missed, TODAY).count).toBe(2)
+    const madeUp: LogEntries = { [YESTERDAY]: { fajr: 'late', asr: 'missed' } }
+    expect(outstandingMissed(madeUp, TODAY)).toEqual({
+      count: 1,
+      dates: [YESTERDAY],
+      prayers: [{ dateKey: YESTERDAY, prayer: 'asr' }],
+    })
+    expect(outstandingMissed({ [YESTERDAY]: { fajr: 'late', asr: 'late' } }, TODAY).count).toBe(0)
+  })
+
+  it('owes nothing for excused or unlogged prayers, nor for days after today or keys that are not days', () => {
+    const entries = {
+      [YESTERDAY]: all('excused'),
+      '2026-10-09': {},
+      '2026-10-12': all('missed'),
+      'not-a-date': all('missed'),
+    } as LogEntries
+    expect(outstandingMissed(entries, TODAY)).toEqual({ count: 0, dates: [], prayers: [] })
   })
 })

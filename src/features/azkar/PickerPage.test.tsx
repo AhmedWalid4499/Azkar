@@ -83,6 +83,47 @@ describe('session picker', () => {
   })
 })
 
+describe('what was done', () => {
+  const at0612 = Date.parse(`${DAY}T06:12:00Z`)
+
+  it('says when a finished session was finished, and how far a started one got', () => {
+    useAzkarProgress.setState({
+      days: { [DAY]: { morning: { tasbih: 3, hamd: 1, takbir: 10 }, evening: { hamd: 1 } } },
+      sessions: {
+        [DAY]: {
+          morning: {
+            startedAt: at0612 - 600_000,
+            lastAt: at0612,
+            completedAt: at0612,
+            completed: true,
+            done: 3,
+            total: 3,
+            recitations: 14,
+          },
+          evening: { startedAt: at0612, lastAt: at0612, completed: false, done: 1, total: 2, recitations: 1 },
+        },
+      },
+    })
+    renderRoute('/azkar')
+    const morning = within(card(/Morning azkar/))
+    expect(morning.getByText(/^Done at 6:12\sAM$/)).toBeInTheDocument()
+    expect(morning.queryByText('Completed')).not.toBeInTheDocument()
+    const evening = within(card(/Evening azkar/))
+    expect(evening.getByText('1 of 2 done')).toBeInTheDocument()
+    expect(evening.getByText('Continue')).toBeInTheDocument()
+  })
+
+  it('keeps a completion from before "Start over" on show', () => {
+    useAzkarProgress.setState({
+      sessions: { [DAY]: { morning: { completedAt: at0612, completed: true, done: 0, total: 3, recitations: 14 } } },
+    })
+    renderRoute('/azkar')
+    const morning = within(card(/Morning azkar/))
+    expect(morning.getByText(/^Done at 6:12\sAM$/)).toBeInTheDocument()
+    expect(morning.getByRole('progressbar', { name: '3 of 3 done' })).toHaveAttribute('aria-valuenow', '100')
+  })
+})
+
 describe('recommended now', () => {
   const recommended = (name: RegExp) => within(card(name)).queryByText('Recommended now')
 

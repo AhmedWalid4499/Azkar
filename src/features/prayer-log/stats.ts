@@ -203,3 +203,35 @@ export function monthBreakdown(entries: LogEntries, month: MonthRef, today: Date
 export function totalOf(counts: StatusCounts): number {
   return PRAYER_STATUSES.reduce((sum, status) => sum + counts[status], 0)
 }
+
+export interface MissedPrayer {
+  dateKey: DateKey
+  prayer: PrayerName
+}
+
+export interface OutstandingMissed {
+  /** Obligatory prayers logged as missed and not yet made up. */
+  count: number
+  /** The days they fall on, oldest first, each listed once. */
+  dates: DateKey[]
+  /** Each of them, oldest day first and in the order of the day. */
+  prayers: MissedPrayer[]
+}
+
+/**
+ * Obligatory prayers still owed: every prayer whose status is `missed`, today
+ * included. A prayer made up later is logged as `late` instead, which takes it
+ * off this list. Entries dated after today are ignored.
+ */
+export function outstandingMissed(entries: LogEntries, today: DateKey): OutstandingMissed {
+  const dates: DateKey[] = []
+  const prayers: MissedPrayer[] = []
+  for (const key of pastKeys(entries, today)) {
+    const day = entries[key]
+    const missed = PRAYERS.filter((prayer) => day?.[prayer] === 'missed')
+    if (missed.length === 0) continue
+    dates.push(key)
+    for (const prayer of missed) prayers.push({ dateKey: key, prayer })
+  }
+  return { count: prayers.length, dates, prayers }
+}

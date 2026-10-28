@@ -1,0 +1,66 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  min-height: 44px;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  font-size: var(--text-s);
+  font-weight: 600;
+  text-align: start;
+  transition:
+    background-color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Not done: an empty ring, drawn dark enough to read as a control. */
+.mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ink-3);
+  border-radius: 50%;
+  transition: transform 0.1s var(--ease);
+}
+
+.chip:active:not(:disabled) .mark {
+  transform: scale(0.9);
+}
+
+/* Large text on a narrow screen: the label wraps inside the chip rather than spilling out of it. */
+.label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.done {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+.done:hover:not(:disabled) {
+  background: var(--primary-soft);
+}
+
+.done .mark {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}

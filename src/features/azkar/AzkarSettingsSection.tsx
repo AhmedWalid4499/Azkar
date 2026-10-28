@@ -1,12 +1,12 @@
 import { useId } from 'react'
+import { canHaptic } from '../../native'
 import { useI18n } from '../../shared/i18n'
 import { Row, Section, Stepper, Switch } from '../../shared/ui'
 import styles from './AzkarSettingsSection.module.css'
 import { cx } from './cx'
-import { canVibrate } from './haptics'
 import { ARABIC_SCALES, arabicFontSize, resolveAid, useAzkarSettings } from './settingsStore'
 import type { ArabicScale } from './settingsStore'
-import { wakeLockSupported } from './useWakeLock'
+import { keepAwakeSupported } from './useWakeLock'
 
 const PREVIEW_TEXT = 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'
 
@@ -85,7 +85,7 @@ export function AzkarSettingsSection() {
           />
         }
       />
-      {canVibrate() && (
+      {canHaptic() && (
         <Row
           htmlFor={`${ids}-haptics`}
           label={t('azkar.settings.haptics')}
@@ -99,7 +99,7 @@ export function AzkarSettingsSection() {
           }
         />
       )}
-      {wakeLockSupported() && (
+      {keepAwakeSupported() && (
         <Row
           htmlFor={`${ids}-keep-awake`}
           label={t('azkar.settings.keepAwake')}

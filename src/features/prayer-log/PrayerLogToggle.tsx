@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { haptic } from '../../native'
 import { formatDateKey } from '../../shared/date'
 import { useI18n } from '../../shared/i18n'
 import { useTodayKey } from '../../shared/time'
@@ -20,11 +21,6 @@ export interface PrayerLogToggleProps {
 }
 
 const CONFIRMATION_MS = 4000
-
-function lightHaptic() {
-  // Absent on iOS Safari; a no-op elsewhere until the user has interacted.
-  if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') navigator.vibrate(10)
-}
 
 /**
  * Compact control that shows and changes one prayer's logged status. Sits at
@@ -64,7 +60,7 @@ export function PrayerLogToggle({ prayer, dateKey }: PrayerLogToggleProps) {
     if (status === null) {
       setStatus(dateKey, prayer, 'ontime')
       setConfirmation(t('log.toggle.logged', { prayer: prayerName }))
-      lightHaptic()
+      haptic('tick')
     } else {
       setChoosing(true)
     }

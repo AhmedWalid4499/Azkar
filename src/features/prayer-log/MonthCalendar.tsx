@@ -7,6 +7,8 @@ import { useSettings } from '../../shared/settings'
 import { PRAYERS } from '../../shared/types'
 import type { DateKey } from '../../shared/types'
 import { Button, Card, IconButton } from '../../shared/ui'
+import { COLLECTION_META, useAzkarProgress } from '../azkar'
+import type { DaySessions } from '../azkar'
 import {
   buildMonthGrid,
   compareMonths,
@@ -41,8 +43,12 @@ interface MonthCalendarProps {
   onToday: () => void
 }
 
+/** The two daily sessions a day cell marks, in the order they are drawn. */
+const AZKAR_MARKS = ['morning', 'evening'] as const
+
 /**
- * Month grid of the log. Each day shows five marks, one per prayer.
+ * Month grid of the log. Each day shows five marks, one per prayer, and under
+ * them a sun once the morning azkar were completed and a crescent for the evening.
  *
  * Keyboard: the grid is a single tab stop. Arrow keys move by day (left and
  * right follow the reading direction) and by week, Home and End go to the
@@ -53,6 +59,7 @@ export function MonthCalendar({ month, today, selected, onSelect, onMonthChange,
   const { t, lang, dir, locale } = useI18n()
   const hijriOffset = useSettings((state) => state.hijriOffset)
   const entries = usePrayerLog((state) => state.entries)
+  const sessions = useAzkarProgress((state) => state.sessions)
   const titleId = useId()
   const grid = useRef<HTMLTableElement>(null)
   // A day to focus once it has rendered, for moves that land in another month.
@@ -169,6 +176,7 @@ export function MonthCalendar({ month, today, selected, onSelect, onMonthChange,
                         key={key}
                         dateKey={key}
                         log={entries[key]}
+                        sessions={sessions[key]}
                         isToday={key === today}
                         isFuture={key > today}
                         isSelected={key === selected}
@@ -182,6 +190,32 @@ export function MonthCalendar({ month, today, selected, onSelect, onMonthChange,
               ))}
             </tbody>
           </table>
+
+          <ul className={styles.legend} aria-label={t('log.calendar.legend')}>
+            <li className={styles.legendItem}>
+              <span className={styles.marks} aria-hidden>
+                {PRAYERS.map((prayer) => (
+                  <span key={prayer} className={cx(styles.mark, styles.filled, tone.ontime)} />
+                ))}
+              </span>
+              <span>{t('log.calendar.legend.prayers')}</span>
+            </li>
+            {AZKAR_MARKS.map((collection) => {
+              const Icon = COLLECTION_META[collection].icon
+              return (
+                <li key={collection} className={styles.legendItem}>
+                  <Icon
+                    aria-hidden
+                    size={12}
+                    strokeWidth={2.5}
+                    fill="currentColor"
+                    className={cx(styles.azkarMark, styles[collection])}
+                  />
+                  <span>{t(`log.calendar.legend.${collection}`)}</span>
+                </li>
+              )
+            })}
+          </ul>
 
           {awayFromToday && (
             <div className={styles.footer}>
@@ -199,6 +233,7 @@ export function MonthCalendar({ month, today, selected, onSelect, onMonthChange,
 interface DayCellProps {
   dateKey: DateKey
   log: DayLog | undefined
+  sessions: DaySessions | undefined
   isToday: boolean
   isFuture: boolean
   isSelected: boolean
@@ -210,6 +245,7 @@ interface DayCellProps {
 const DayCell = memo(function DayCell({
   dateKey,
   log,
+  sessions,
   isToday,
   isFuture,
   isSelected,
@@ -219,13 +255,19 @@ const DayCell = memo(function DayCell({
 }: DayCellProps) {
   const { t, tp, n, locale } = useI18n()
   const date = formatDateKey(dateKey, locale, FULL_DATE)
+  // A backup can hold records for days to come; they are not shown until the day arrives.
+  const azkarDone = AZKAR_MARKS.filter((collection) => !isFuture && sessions?.[collection]?.completed === true)
 
   let label: string
   if (isFuture) {
     label = t('log.calendar.day.future', { date })
   } else {
     const logged = PRAYERS.filter((prayer) => log?.[prayer] !== undefined).length
-    const summary = tp('log.summary', logged, { total: PRAYERS.length })
+    const parts = [tp('log.summary', logged, { total: PRAYERS.length })]
+    const [only] = azkarDone
+    if (azkarDone.length === AZKAR_MARKS.length) parts.push(t('log.calendar.azkar.both'))
+    else if (only !== undefined) parts.push(t(`log.calendar.azkar.${only}`))
+    const summary = parts.join(t('log.list.separator'))
     label = t(isToday ? 'log.calendar.day.today' : 'log.calendar.day', { date, summary })
   }
 
@@ -256,6 +298,20 @@ const DayCell = memo(function DayCell({
                 className={cx(styles.mark, status !== undefined && styles.filled, status !== undefined && tone[status])}
                 data-status={status ?? 'none'}
               />
+            )
+          })}
+        </span>
+        {/* Told apart by shape and place, not colour: a sun first, then a crescent; nothing until done. */}
+        <span className={styles.azkar} aria-hidden>
+          {AZKAR_MARKS.map((collection) => {
+            const Icon = COLLECTION_META[collection].icon
+            const done = azkarDone.includes(collection)
+            return (
+              <span key={collection} className={styles.azkarSlot} data-azkar={collection} data-done={done}>
+                {done && (
+                  <Icon size={10} strokeWidth={3} fill="currentColor" className={cx(styles.azkarMark, styles[collection])} />
+                )}
+              </span>
             )
           })}
         </span>

@@ -1,29 +1,34 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { haptic } from '../../native'
 import { PrayerLogToggle } from './PrayerLogToggle'
 import { usePrayerLog } from './store'
 import { freezeToday, resetApp, seedLog, setLanguage } from './test-utils'
 
+// Haptics go through the app's native layer, which picks the system's feedback or the browser's vibration.
+vi.mock('../../native', async (importOriginal) => ({ ...(await importOriginal<object>()), haptic: vi.fn() }))
+
 const TODAY = '2026-10-11'
 const YESTERDAY = '2026-10-10'
 const TOMORROW = '2026-10-12'
+/** The frozen clock: noon UTC on TODAY. */
+const NOON = Date.parse(`${TODAY}T12:00:00Z`)
 
 const entries = () => usePrayerLog.getState().entries
+const loggedAt = () => usePrayerLog.getState().loggedAt
 
 beforeEach(() => {
+  vi.mocked(haptic).mockClear()
   freezeToday(TODAY)
 })
 
 afterEach(() => {
   resetApp()
-  Reflect.deleteProperty(navigator, 'vibrate')
 })
 
 describe('an unlogged prayer', () => {
   it('is logged as on time with a single tap, with a light haptic', async () => {
-    const vibrate = vi.fn(() => true)
-    Object.defineProperty(navigator, 'vibrate', { value: vibrate, configurable: true })
     const user = userEvent.setup()
     render(<PrayerLogToggle prayer="fajr" dateKey={TODAY} />)
 
@@ -32,7 +37,7 @@ describe('an unlogged prayer', () => {
     await user.click(toggle)
 
     expect(entries()).toEqual({ [TODAY]: { fajr: 'ontime' } })
-    expect(vibrate).toHaveBeenCalledExactlyOnceWith(10)
+    expect(haptic).toHaveBeenCalledExactlyOnceWith('tick')
     expect(screen.getByRole('status')).toHaveTextContent('Fajr logged as prayed on time.')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     const logged = screen.getByRole('button', { name: 'Fajr: On time. Change status.' })
@@ -46,6 +51,15 @@ describe('an unlogged prayer', () => {
 
     await user.click(screen.getByRole('button', { name: /^Asr: not logged/ }))
     expect(entries()).toEqual({ [TODAY]: { asr: 'ontime' } })
+  })
+
+  it('records when it was logged', async () => {
+    const user = userEvent.setup()
+    render(<PrayerLogToggle prayer="asr" dateKey={TODAY} />)
+
+    await user.click(screen.getByRole('button', { name: /^Asr: not logged/ }))
+    expect(entries()).toEqual({ [TODAY]: { asr: 'ontime' } })
+    expect(loggedAt()).toEqual({ [TODAY]: { asr: NOON } })
   })
 
   it('can be logged with the keyboard', async () => {
@@ -131,6 +145,7 @@ describe('a logged prayer', () => {
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name }))
 
     expect(entries()[TODAY]).toEqual({ fajr: status, dhuhr: 'missed' })
+    expect(loggedAt()[TODAY]).toEqual({ fajr: NOON })
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: `Fajr: ${name}. Change status.` })).toHaveAttribute('data-status', status)
   })
@@ -139,10 +154,12 @@ describe('a logged prayer', () => {
     const user = userEvent.setup()
     render(<PrayerLogToggle prayer="dhuhr" dateKey={TODAY} />)
 
+    usePrayerLog.setState({ loggedAt: { [TODAY]: { fajr: NOON - 1000, dhuhr: NOON - 500 } } })
     await user.click(screen.getByRole('button', { name: 'Dhuhr: Missed. Change status.' }))
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Clear entry' }))
 
     expect(entries()).toEqual({ [TODAY]: { fajr: 'ontime' } })
+    expect(loggedAt()).toEqual({ [TODAY]: { fajr: NOON - 1000 } })
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Dhuhr: not logged/ })).toBeEnabled()
   })
@@ -166,6 +183,8 @@ describe('a logged prayer', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(entries()[TODAY]).toEqual({ fajr: 'ontime', dhuhr: 'missed' })
+    expect(loggedAt()).toEqual({})
+    expect(haptic).not.toHaveBeenCalled()
   })
 
   it('reflects a change made elsewhere', () => {
@@ -189,6 +208,7 @@ describe('which days can be logged', () => {
     expect(toggle).toBeDisabled()
     await user.click(toggle)
     expect(entries()).toEqual({})
+    expect(haptic).not.toHaveBeenCalled()
   })
 
   it('allows past days', async () => {

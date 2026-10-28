@@ -1,14 +1,16 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { useSettings } from '../../shared/settings'
 import { PRAYERS } from '../../shared/types'
 import type { DateKey, Lang } from '../../shared/types'
+import { useAzkarProgress } from '../azkar'
+import type { SessionRecord } from '../azkar'
 import { monthOfDateKey } from './calendar'
 import type { MonthRef } from './calendar'
 import { MonthCalendar } from './MonthCalendar'
-import { resetApp, seedLog, setLanguage } from './test-utils'
+import { resetApp, seedLog, seedSessions, setLanguage } from './test-utils'
 import type { DayLog, PrayerStatus } from './types'
 
 const TODAY = '2026-10-11'
@@ -478,5 +480,123 @@ describe('keyboard navigation', () => {
       await user.keyboard('{ArrowLeft}')
       expect(day(TODAY)).toHaveFocus()
     })
+  })
+})
+
+describe('azkar marks', () => {
+  const at = (dateKey: DateKey) => Date.parse(`${dateKey}T05:00:00Z`)
+  const done = (dateKey: DateKey): SessionRecord => ({
+    startedAt: at(dateKey),
+    lastAt: at(dateKey),
+    completedAt: at(dateKey),
+    completed: true,
+    done: 2,
+    total: 2,
+    recitations: 9,
+  })
+  const started = (dateKey: DateKey): SessionRecord => ({
+    startedAt: at(dateKey),
+    lastAt: at(dateKey),
+    completed: false,
+    done: 1,
+    total: 2,
+    recitations: 3,
+  })
+  /** Each slot under the prayer marks, in order, and whether it is drawn. */
+  const azkar = (dateKey: DateKey) =>
+    [...day(dateKey).querySelectorAll<HTMLElement>('[data-azkar]')].map(
+      (slot) => `${slot.dataset.azkar} ${slot.dataset.done === 'true' ? 'done' : 'blank'}`,
+    )
+  const icon = (dateKey: DateKey, collection: string) =>
+    day(dateKey).querySelector(`[data-azkar="${collection}"] svg`)
+
+  function seedWeek() {
+    seedLog({ '2026-10-09': all('ontime') })
+    seedSessions({
+      '2026-10-08': { morning: done('2026-10-08') },
+      '2026-10-09': { evening: done('2026-10-09') },
+      '2026-10-10': { morning: done('2026-10-10'), evening: done('2026-10-10'), sleep: done('2026-10-10') },
+      [TODAY]: { morning: started(TODAY) },
+    })
+  }
+
+  it('draws a sun once the morning azkar are completed and a crescent for the evening, in that order', () => {
+    seedWeek()
+    render(<Harness />)
+
+    expect(azkar('2026-10-08')).toEqual(['morning done', 'evening blank'])
+    expect(azkar('2026-10-09')).toEqual(['morning blank', 'evening done'])
+    expect(azkar('2026-10-10')).toEqual(['morning done', 'evening done'])
+    expect(icon('2026-10-10', 'morning')).toHaveClass('lucide-sun')
+    expect(icon('2026-10-10', 'evening')).toHaveClass('lucide-moon')
+    // Two different shapes, not one shape in two colours; nothing at all until a session is done.
+    expect(icon('2026-10-08', 'evening')).toBeNull()
+    // A session begun but not finished is not a mark: today's morning is under way.
+    expect(azkar(TODAY)).toEqual(['morning blank', 'evening blank'])
+    expect(azkar('2026-10-01')).toEqual(['morning blank', 'evening blank'])
+  })
+
+  it('keeps the five prayer marks as they were', () => {
+    seedWeek()
+    render(<Harness />)
+    const marks = [...day('2026-10-09').querySelectorAll<HTMLElement>('[data-status]')].map((mark) => mark.dataset.status)
+    expect(marks).toEqual(['ontime', 'ontime', 'ontime', 'ontime', 'ontime'])
+  })
+
+  it('names the azkar completed in each day’s label, and says nothing of them otherwise', () => {
+    seedWeek()
+    render(<Harness />)
+
+    expect(day('2026-10-08')).toHaveAccessibleName('Thursday, October 8, 2026, 0 of 5 logged, morning azkar done')
+    expect(day('2026-10-09')).toHaveAccessibleName('Friday, October 9, 2026, 5 of 5 logged, evening azkar done')
+    expect(day('2026-10-10')).toHaveAccessibleName(
+      'Saturday, October 10, 2026, 0 of 5 logged, morning and evening azkar done',
+    )
+    expect(day(TODAY)).toHaveAccessibleName('Today, Sunday, October 11, 2026, 0 of 5 logged')
+  })
+
+  it('names them in Arabic', () => {
+    setLanguage('ar')
+    seedWeek()
+    render(<Harness />)
+
+    expect(day('2026-10-08')).toHaveAccessibleName('الخميس، ٨ أكتوبر ٢٠٢٦، لم تُسجَّل أي صلاة، أذكار الصباح مكتملة')
+    expect(day('2026-10-10')).toHaveAccessibleName(
+      'السبت، ١٠ أكتوبر ٢٠٢٦، لم تُسجَّل أي صلاة، أذكار الصباح والمساء مكتملة',
+    )
+  })
+
+  it('marks a completion carried over from the first version of the store, which kept no times', () => {
+    seedSessions({ '2026-10-05': { morning: { completed: true, done: 2, total: 2, recitations: 0 } } })
+    render(<Harness />)
+    expect(azkar('2026-10-05')).toEqual(['morning done', 'evening blank'])
+  })
+
+  it('leaves days to come blank, even if a record is dated there', () => {
+    seedSessions({ '2026-10-12': { morning: done('2026-10-12'), evening: done('2026-10-12') } })
+    render(<Harness />)
+    expect(azkar('2026-10-12')).toEqual(['morning blank', 'evening blank'])
+    expect(day('2026-10-12')).toHaveAccessibleName('Monday, October 12, 2026, upcoming')
+  })
+
+  it('follows a session completed while the calendar is on show', () => {
+    render(<Harness />)
+    expect(azkar(TODAY)).toEqual(['morning blank', 'evening blank'])
+
+    act(() => useAzkarProgress.setState({ sessions: { [TODAY]: { evening: done(TODAY) } } }))
+    expect(azkar(TODAY)).toEqual(['morning blank', 'evening done'])
+    expect(day(TODAY)).toHaveAccessibleName('Today, Sunday, October 11, 2026, 0 of 5 logged, evening azkar done')
+  })
+
+  it('explains the marks in a key under the grid', () => {
+    render(<Harness />)
+    const key = screen.getByRole('list', { name: 'Key' })
+    expect(within(key).getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+      'Fajr to Isha',
+      'Morning azkar',
+      'Evening azkar',
+    ])
+    expect(key.querySelector('.lucide-sun')).not.toBeNull()
+    expect(key.querySelector('.lucide-moon')).not.toBeNull()
   })
 })

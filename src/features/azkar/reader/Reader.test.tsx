@@ -507,7 +507,8 @@ describe('completion', () => {
     renderRoute('/azkar/morning')
     finishMorning()
     expect(counter()).toHaveAccessibleName('Done. Finish')
-    expect(progress().history).toEqual({ [DAY]: ['morning'] })
+    // Timed at the final count, which is now: the fake clock has moved on through the reading.
+    expect(progress().sessions[DAY]?.morning).toMatchObject({ completed: true, completedAt: Date.now() })
 
     pass(ADVANCE_DELAY_MS)
     const heading = screen.getByRole('heading', { level: 1, name: 'Morning azkar complete' })
@@ -523,7 +524,7 @@ describe('completion', () => {
     tap()
     settle()
     tap(9)
-    expect(progress().history).toEqual({})
+    expect(progress().sessions[DAY]?.morning).toMatchObject({ completed: false, done: 2, recitations: 13 })
   })
 
   it('goes back to Today', () => {
@@ -549,7 +550,7 @@ describe('completion', () => {
     expect(screen.getByText('2 of 3')).toBeInTheDocument()
     tap()
     expect(screen.getByRole('heading', { name: 'Morning azkar complete' })).toBeInTheDocument()
-    expect(progress().history).toEqual({ [DAY]: ['morning'] })
+    expect(progress().sessions[DAY]?.morning).toMatchObject({ completed: true })
   })
 
   it('shows the end screen straight away when a finished session is reopened', () => {
@@ -614,6 +615,50 @@ describe('day rollover', () => {
     pass(4 * 60 * 60_000) // past 04:00, the stand-in for Fajr without a location's times
     expect(screen.getByText('1 of 2')).toBeInTheDocument()
     expect(counter()).toHaveTextContent('0 / 1')
+  })
+})
+
+describe('session records', () => {
+  it('files evening azkar read after midnight under the evening before, timed when they were read', () => {
+    const oneAm = Date.parse('2026-10-13T01:00:00Z')
+    vi.setSystemTime(oneAm)
+    renderRoute('/azkar/evening')
+    tap() // hamd ×1
+    settle()
+    tap(3) // tasbih ×3: the session is complete
+    const finishedAt = Date.now()
+    expect(progress().sessions).toEqual({
+      [DAY]: {
+        evening: {
+          startedAt: oneAm,
+          lastAt: finishedAt,
+          completedAt: finishedAt,
+          completed: true,
+          done: 2,
+          total: 2,
+          recitations: 4,
+        },
+      },
+    })
+    expect(progress().totals).toEqual({ hamd: 1, tasbih: 3 })
+  })
+
+  it('files the morning azkar under the calendar day, even before dawn', () => {
+    vi.setSystemTime(new Date('2026-10-13T01:00:00Z'))
+    renderRoute('/azkar/morning')
+    tap()
+    expect(Object.keys(progress().sessions)).toEqual(['2026-10-13'])
+  })
+
+  it('keeps every repetition through "Start over", in the record and the totals', () => {
+    renderRoute('/azkar/morning')
+    tap(2)
+    fireEvent.click(screen.getByRole('button', { name: 'All azkar' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Start over' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Start over' }))
+    tap()
+    expect(progress().sessions[DAY]?.morning).toMatchObject({ completed: false, done: 0, recitations: 3 })
+    expect(progress().totalRecitations).toBe(3)
   })
 })
 

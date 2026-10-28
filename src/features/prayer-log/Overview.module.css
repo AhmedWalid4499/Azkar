@@ -1,0 +1,60 @@
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.note {
+  padding-inline: var(--space-2);
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+}
+
+.more {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+}
+
+.moreTitle {
+  font-size: var(--text-s);
+  font-weight: 700;
+}
+
+.streaks {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+/* Name and figure share a line while they fit, and stack once large text needs the room. */
+.streak {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: var(--space-3);
+  min-height: 36px;
+  border-block-start: 1px solid var(--line);
+}
+
+.streakName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+.streakIcon {
+  flex: none;
+  color: var(--ink-2);
+}
+
+.streakValue {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}

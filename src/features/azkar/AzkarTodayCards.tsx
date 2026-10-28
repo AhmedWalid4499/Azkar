@@ -5,16 +5,13 @@ import type { DateKey } from '../../shared/types'
 import { ProgressRing } from '../../shared/ui'
 import styles from './AzkarTodayCards.module.css'
 import { sessionDateKey, useAzkarClock } from './clock'
-import { COLLECTION_META, collectionPath } from './collections'
+import { COLLECTION_META, collectionPath, DAILY_COLLECTIONS } from './collections'
 import { cx } from './cx'
 import { availableCollections } from './data'
 import type { CollectionId } from './data'
 import mood from './mood.module.css'
 import { STATE_LABEL } from './stateLabel'
-import { useSession } from './useSession'
-
-/** Bedtime adhkar are left to the Azkar tab; Today shows the two daily sessions. */
-const TODAY_COLLECTIONS: readonly CollectionId[] = ['morning', 'evening']
+import { useCompletedLabel, useSessionStanding } from './useSessionStanding'
 
 interface TodayCardProps {
   collection: CollectionId
@@ -24,20 +21,20 @@ interface TodayCardProps {
 
 function TodayCard({ collection, dateKey, recommended }: TodayCardProps) {
   const { t, dir } = useI18n()
-  const { summary } = useSession(collection, dateKey)
+  const standing = useSessionStanding(collection, dateKey)
+  const completedLabel = useCompletedLabel()
   const Icon = COLLECTION_META[collection].icon
   const Chevron = dir === 'rtl' ? ChevronLeft : ChevronRight
-  const complete = summary.status === 'complete'
+  const complete = standing.status === 'complete'
+  const progress = t('azkar.progress', { done: standing.done, total: standing.total })
+  const active = standing.status === 'active'
+  // What was done: when it was finished, or how far it got; otherwise an invitation to start.
+  const state = complete ? completedLabel(standing.completedAt) : active ? progress : t(STATE_LABEL[standing.status])
 
   return (
     <article className={cx(styles.card, mood[collection], recommended && styles.recommended)}>
       <div className={styles.top}>
-        <ProgressRing
-          value={summary.fraction}
-          size={48}
-          thickness={4}
-          label={t('azkar.progress', { done: summary.done, total: summary.total })}
-        >
+        <ProgressRing value={standing.fraction} size={48} thickness={4} label={progress}>
           {complete ? <Check aria-hidden size={22} strokeWidth={2.5} /> : <Icon aria-hidden size={20} />}
         </ProgressRing>
         {recommended && <span className={styles.badge}>{t('azkar.now')}</span>}
@@ -49,8 +46,9 @@ function TodayCard({ collection, dateKey, recommended }: TodayCardProps) {
             {t(`azkar.collection.${collection}`)}
           </Link>
         </h3>
-        <p className={styles.state}>
-          {t(STATE_LABEL[summary.status])}
+        {/* The ring already announces the progress, so it is not read out a second time here. */}
+        <p className={cx(styles.state, 'tabular')} aria-hidden={active || undefined}>
+          {state}
           {!complete && <Chevron aria-hidden size={16} />}
         </p>
       </div>
@@ -58,11 +56,11 @@ function TodayCard({ collection, dateKey, recommended }: TodayCardProps) {
   )
 }
 
-/** Morning and evening cards with today's progress, shown on the Today page. */
+/** Morning and evening cards with today's progress, shown on the Today page. Bedtime is left to the Azkar tab. */
 export function AzkarTodayCards() {
   const clock = useAzkarClock()
   const available = availableCollections()
-  const collections = TODAY_COLLECTIONS.filter((collection) => available.includes(collection))
+  const collections = DAILY_COLLECTIONS.filter((collection) => available.includes(collection))
   if (collections.length === 0) return null
 
   return (

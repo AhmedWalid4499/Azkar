@@ -7,6 +7,7 @@ import type { SavedLocation } from '../../shared/location'
 import { DEFAULT_SETTINGS, useSettings } from '../../shared/settings'
 import type { AppSettings } from '../../shared/settings'
 import { usePrayerLog } from '../prayer-log'
+import { DEFAULT_TODAY_LAYOUT, useTodayLayout } from './layoutStore'
 import { TodayPage } from './TodayPage'
 
 const CAIRO: SavedLocation = {
@@ -38,8 +39,11 @@ function setClock(iso: string) {
 
 const announcement = () => screen.getAllByRole('status').find((node) => /Location set|حُدِّد الموقع/.test(node.textContent ?? ''))
 
+const EMPTY_LOG = { entries: {}, loggedAt: {}, sunnah: {} }
+
 beforeEach(() => {
-  usePrayerLog.setState({ entries: {} })
+  usePrayerLog.setState(EMPTY_LOG)
+  useTodayLayout.setState(DEFAULT_TODAY_LAYOUT)
 })
 
 afterEach(() => {
@@ -48,7 +52,8 @@ afterEach(() => {
   delete (navigator as { geolocation?: unknown }).geolocation
   useSettings.setState(DEFAULT_SETTINGS)
   useLocationStore.setState({ location: null })
-  usePrayerLog.setState({ entries: {} })
+  usePrayerLog.setState(EMPTY_LOG)
+  useTodayLayout.setState(DEFAULT_TODAY_LAYOUT)
 })
 
 describe('location link', () => {
@@ -236,5 +241,55 @@ describe('last night’s Isha', () => {
     setClock('2026-10-12T21:20:00Z')
     renderToday({ location: MAKKAH, settings: { language: 'ar', arabicDigits: false } })
     expect(screen.getByRole('group', { name: /عشاء الليلة الماضية/ })).toHaveTextContent('من صلوات يوم الاثنين، 12 أكتوبر')
+  })
+})
+
+describe('sunnah prayers', () => {
+  const card = () => screen.queryByRole('heading', { level: 3, name: /^Sunnah prayers/ })
+
+  it('are offered under the timetable', async () => {
+    setClock('2026-10-13T06:00:00Z') // 09:00 in Makkah
+    renderToday({ location: MAKKAH })
+
+    const heading = card()!
+    const timetable = screen.getByRole('list')
+    expect(timetable.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(screen.getByRole('region', { name: 'Today’s prayers' })).toContainElement(heading)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Witr' }))
+    expect(usePrayerLog.getState().sunnah).toEqual({ '2026-10-13': { witr: Date.parse('2026-10-13T06:00:00Z') } })
+    // The obligatory log is not touched.
+    expect(usePrayerLog.getState().entries).toEqual({})
+  })
+
+  it('need a location, like the rest of the timetable', () => {
+    renderToday()
+    expect(card()).toBeNull()
+  })
+
+  it('file Witr with last night’s Isha before Fajr', async () => {
+    setClock('2026-10-12T21:20:00Z') // 00:20 on Tuesday in Makkah
+    renderToday({ location: MAKKAH })
+
+    const night = screen.getByRole('group', { name: 'Last night Counts for Monday, October 12' })
+    await userEvent.click(within(night).getByRole('button', { name: 'Witr' }))
+    await userEvent.click(within(screen.getByRole('group', { name: /^Last night’s Isha/ })).getByRole('button'))
+    expect(usePrayerLog.getState().entries).toEqual({ '2026-10-12': { isha: 'ontime' } })
+    expect(usePrayerLog.getState().sunnah).toEqual({ '2026-10-12': { witr: Date.parse('2026-10-12T21:20:00Z') } })
+  })
+})
+
+describe('greeting', () => {
+  it('greets by name when one is set, in both languages', () => {
+    const { unmount } = renderToday({ settings: { name: 'Ahmed' } })
+    expect(screen.getByText('As-salamu alaykum, ⁨Ahmed⁩')).toBeInTheDocument()
+    unmount()
+    renderToday({ settings: { language: 'ar', name: 'أحمد' } })
+    expect(screen.getByText('السلام عليكم يا ⁨أحمد⁩')).toBeInTheDocument()
+  })
+
+  it('keeps the plain greeting without a name', () => {
+    renderToday()
+    expect(screen.getByText('As-salamu alaykum')).toBeInTheDocument()
   })
 })

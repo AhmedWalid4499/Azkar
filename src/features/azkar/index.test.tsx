@@ -18,6 +18,34 @@ describe('public surface', () => {
     )
   })
 
+  it('exports what the tracker page reads', () => {
+    expect(Object.keys(azkar)).toEqual(
+      expect.arrayContaining([
+        'useDaySessions',
+        'useSessionsInRange',
+        'useAzkarStreaks',
+        'useAzkarCompletionRate',
+        'useAzkarLifetime',
+        'useSessionRecord',
+        'useAzkarProgress',
+        'useCompletedLabel',
+        'useTimeOfDay',
+        'sessionsInRange',
+        'computeAzkarStreaks',
+        'azkarCompletionRate',
+        'lifetimeTotals',
+        'ratePercent',
+        'sessionDateKey',
+        'useAzkarClock',
+        'COLLECTION_META',
+        'collectionPath',
+        'DAILY_COLLECTIONS',
+        'availableCollections',
+        'COLLECTION_IDS',
+      ]),
+    )
+  })
+
   it('renders the Today cards and both settings sections side by side', () => {
     render(
       <MemoryRouter>

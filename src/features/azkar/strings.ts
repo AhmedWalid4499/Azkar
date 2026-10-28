@@ -20,6 +20,7 @@ export const strings = defineStrings({
     'azkar.recommended': 'Recommended now',
     'azkar.now': 'Now',
     'azkar.progress': '{done} of {total} done',
+    'azkar.doneAt': 'Done at {time}',
 
     'azkar.reader.position': '{current} of {total}',
     'azkar.reader.heading': 'Dhikr {current} of {total}',
@@ -103,6 +104,7 @@ export const strings = defineStrings({
     'azkar.recommended': 'وقتها الآن',
     'azkar.now': 'الآن',
     'azkar.progress': 'اكتمل {done} من {total}',
+    'azkar.doneAt': 'اكتملت الساعة {time}',
 
     'azkar.reader.position': '{current} من {total}',
     'azkar.reader.heading': 'الذِّكر {current} من {total}',

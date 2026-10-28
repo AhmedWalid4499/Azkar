@@ -15,6 +15,9 @@ export const COLLECTION_META: Record<CollectionId, CollectionMeta> = {
   sleep: { arabicTitle: 'أذكار النوم', icon: MoonStar },
 }
 
+/** The two sessions of every day, which the Today page shows and the streaks and rates follow. Bedtime is left out. */
+export const DAILY_COLLECTIONS = ['morning', 'evening'] as const satisfies readonly CollectionId[]
+
 export function isCollectionId(value: unknown): value is CollectionId {
   return (COLLECTION_IDS as readonly unknown[]).includes(value)
 }

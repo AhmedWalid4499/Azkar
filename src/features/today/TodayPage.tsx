@@ -3,14 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { formatDateKey, formatHijri } from '../../shared/date'
-import { useI18n } from '../../shared/i18n'
+import { isolate, useI18n } from '../../shared/i18n'
 import { useLocationStore } from '../../shared/location'
 import { useSettings } from '../../shared/settings'
 import { useTodayKey } from '../../shared/time'
 import { AzkarTodayCards } from '../azkar'
 import { PrayerLogToggle } from '../prayer-log'
-import { LocationPrompt, NextPrayerCard, PrayerTimesList, useLocationLabel } from '../prayer-times'
+import { LocationPrompt, NextPrayerCard, PrayerTimesList, ReminderPrompt, useLocationLabel } from '../prayer-times'
 import { LastNightIsha } from './LastNightIsha'
+import { SunnahCard } from './SunnahCard'
 import styles from './TodayPage.module.css'
 
 /** Long enough to be read out, then removed so it is not found later as stray text. */
@@ -49,6 +50,7 @@ export function TodayPage() {
   const location = useLocationStore((state) => state.location)
   const place = useLocationLabel()
   const hijriOffset = useSettings((state) => state.hijriOffset)
+  const name = useSettings((state) => state.name)
   const nextPrayer = useRef<HTMLDivElement>(null)
   const arrived = useLocationArrival(location !== null, nextPrayer)
 
@@ -57,7 +59,7 @@ export function TodayPage() {
   return (
     <div className="page">
       <header className={styles.header}>
-        <p className={styles.greeting}>{t('today.greeting')}</p>
+        <p className={styles.greeting}>{name ? t('today.greeting.named', { name: isolate(name) }) : t('today.greeting')}</p>
         <h1 className={styles.date}>{formatDateKey(today, locale)}</h1>
         <p className={styles.hijri}>{formatHijri(today, locale, hijriOffset)}</p>
         {/* The name starts with the visible text, so the place is spoken and "click Cairo" finds the link. */}
@@ -75,6 +77,7 @@ export function TodayPage() {
       ) : (
         <LocationPrompt />
       )}
+      <ReminderPrompt />
       {/* The name can still improve after the first announcement, when the lookup answers. */}
       <p className="visually-hidden" role="status">
         {arrived && place ? t('today.locationSet', { place }) : ''}
@@ -97,6 +100,7 @@ export function TodayPage() {
             dateKey={today}
             renderTrailing={(prayer) => <PrayerLogToggle prayer={prayer} dateKey={today} />}
           />
+          <SunnahCard today={today} />
         </section>
       )}
     </div>

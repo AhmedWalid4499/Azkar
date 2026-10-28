@@ -2,8 +2,10 @@ import { vi } from 'vitest'
 import { useLocationStore } from '../../shared/location'
 import { DEFAULT_SETTINGS, useSettings } from '../../shared/settings'
 import type { DateKey, Lang } from '../../shared/types'
+import { useAzkarProgress } from '../azkar'
+import type { SessionHistory } from '../azkar'
 import { usePrayerLog } from './store'
-import type { LogEntries } from './types'
+import type { LogEntries, LoggedAtEntries, SunnahEntries } from './types'
 
 /**
  * Pins "today" for components that read it through `useTodayKey`: the clock is
@@ -26,10 +28,24 @@ export function seedLog(entries: LogEntries) {
   usePrayerLog.setState({ entries })
 }
 
+export function seedSunnah(sunnah: SunnahEntries) {
+  usePrayerLog.setState({ sunnah })
+}
+
+export function seedLoggedAt(loggedAt: LoggedAtEntries) {
+  usePrayerLog.setState({ loggedAt })
+}
+
+/** Azkar session records, as the azkar feature keeps them. */
+export function seedSessions(sessions: SessionHistory, totalRecitations = 0) {
+  useAzkarProgress.setState({ sessions, totalRecitations })
+}
+
 /** Puts every store these tests touch back to its defaults. Call from `afterEach`. */
 export function resetApp() {
   vi.useRealTimers()
-  usePrayerLog.setState({ entries: {} })
+  usePrayerLog.setState({ entries: {}, loggedAt: {}, sunnah: {} })
+  useAzkarProgress.setState({ days: {}, sessions: {}, totals: {}, totalRecitations: 0 })
   useSettings.setState({ ...DEFAULT_SETTINGS, language: 'en' })
   useLocationStore.setState({ location: null })
 }

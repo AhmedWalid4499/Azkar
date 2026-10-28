@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { PrayerDay } from '../../shared/types'
-import { isBeforeDawn } from './night'
+import { isBeforeDawn, sunnahDateKey } from './night'
 
 const ZONE = 'Asia/Riyadh'
 
@@ -35,5 +35,26 @@ describe('isBeforeDawn', () => {
       expect(isBeforeDawn(new Date('2026-10-13T01:00:00Z'), ZONE, today)).toBe(false) // 04:00
       expect(isBeforeDawn(new Date('2026-10-13T20:30:00Z'), ZONE, today)).toBe(false) // 23:30
     }
+  })
+})
+
+describe('sunnahDateKey', () => {
+  it('files the prayers of the night under the day before until Fajr', () => {
+    for (const sunnah of ['witr', 'qiyam', 'afterIsha'] as const) {
+      expect(sunnahDateKey(sunnah, '2026-10-13', true)).toBe('2026-10-12')
+      expect(sunnahDateKey(sunnah, '2026-10-13', false)).toBe('2026-10-13')
+    }
+  })
+
+  it('files the prayers of the day under today, before Fajr too', () => {
+    for (const sunnah of ['beforeFajr', 'duha', 'beforeDhuhr', 'afterDhuhr', 'afterMaghrib'] as const) {
+      expect(sunnahDateKey(sunnah, '2026-10-13', true)).toBe('2026-10-13')
+      expect(sunnahDateKey(sunnah, '2026-10-13', false)).toBe('2026-10-13')
+    }
+  })
+
+  it('steps back across the turn of a month and a year', () => {
+    expect(sunnahDateKey('witr', '2026-03-01', true)).toBe('2026-02-28')
+    expect(sunnahDateKey('qiyam', '2027-01-01', true)).toBe('2026-12-31')
   })
 })

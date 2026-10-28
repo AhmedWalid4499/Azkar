@@ -11,7 +11,7 @@ import type { CollectionId } from './data'
 import mood from './mood.module.css'
 import styles from './PickerPage.module.css'
 import { STATE_LABEL } from './stateLabel'
-import { useSession } from './useSession'
+import { useCompletedLabel, useSessionStanding } from './useSessionStanding'
 
 interface SessionCardProps {
   collection: CollectionId
@@ -21,10 +21,12 @@ interface SessionCardProps {
 
 function SessionCard({ collection, dateKey, recommended }: SessionCardProps) {
   const { t, tp, lang, dir } = useI18n()
-  const { summary } = useSession(collection, dateKey)
+  const standing = useSessionStanding(collection, dateKey)
+  const completedLabel = useCompletedLabel()
   const { arabicTitle, icon: Icon } = COLLECTION_META[collection]
   const Arrow = dir === 'rtl' ? ArrowLeft : ArrowRight
-  const progress = t('azkar.progress', { done: summary.done, total: summary.total })
+  const progress = t('azkar.progress', { done: standing.done, total: standing.total })
+  const complete = standing.status === 'complete'
 
   return (
     <article className={cx(styles.card, mood[collection])}>
@@ -41,19 +43,19 @@ function SessionCard({ collection, dateKey, recommended }: SessionCardProps) {
           {lang !== 'ar' && <span className={styles.title}>{t(`azkar.collection.${collection}`)}</span>}
         </Link>
       </h2>
-      <p className={styles.meta}>{tp('azkar.count', summary.total)}</p>
+      <p className={styles.meta}>{tp('azkar.count', standing.total)}</p>
 
       <div className={styles.progress}>
-        <ProgressBar value={summary.fraction} label={progress} />
+        <ProgressBar value={standing.fraction} label={progress} />
         <span className={cx(styles.progressText, 'tabular')} aria-hidden>
           {progress}
         </span>
       </div>
 
-      <p className={styles.state}>
-        {summary.status === 'complete' && <Check aria-hidden size={18} />}
-        {t(STATE_LABEL[summary.status])}
-        {summary.status !== 'complete' && <Arrow aria-hidden size={18} />}
+      <p className={cx(styles.state, complete && 'tabular')}>
+        {complete && <Check aria-hidden size={18} />}
+        {complete ? completedLabel(standing.completedAt) : t(STATE_LABEL[standing.status])}
+        {!complete && <Arrow aria-hidden size={18} />}
       </p>
     </article>
   )

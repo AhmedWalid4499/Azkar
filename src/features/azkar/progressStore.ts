@@ -1,34 +1,35 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { daysBetween, isValidDateKey } from '../../shared/date'
+import { isValidDateKey } from '../../shared/date'
 import { storageKey } from '../../shared/storage'
 import type { DateKey } from '../../shared/types'
 import { isCollectionId } from './collections'
-import { COLLECTION_IDS, getCollection } from './data'
+import { getCollection } from './data'
 import type { CollectionId } from './data'
-import { countOf, isDone, targetOf } from './session'
+import {
+  DETAIL_DAYS,
+  isRecord,
+  MAX_LIFETIME_RECITATIONS,
+  MAX_SESSION_RECITATIONS,
+  pruneOlderThan,
+  sanitizeProgress,
+  SESSION_DAYS,
+} from './progressData'
+import type { DayCounts, DaySessions, ProgressData, SessionRecord } from './progressData'
+import { migrateProgressV1, toVersion1History } from './progressV1'
+import type { ProgressDataV1 } from './progressV1'
+import { countOf, isDone, summarize, targetOf } from './session'
 import type { Counts } from './session'
 
+export { DETAIL_DAYS, pruneOlderThan, sanitizeProgress, SESSION_DAYS } from './progressData'
+export type { DayCounts, DaySessions, ProgressData, SessionRecord } from './progressData'
+
 export const AZKAR_PROGRESS_STORAGE_KEY = storageKey('azkar-progress')
-export const AZKAR_PROGRESS_VERSION = 1
+/** 2: session records with times, lifetime totals, counts kept for 30 days instead of 7. */
+export const AZKAR_PROGRESS_VERSION = 2
 
-/** Per-dhikr counts are only needed to resume a recent session. */
-export const DETAIL_DAYS = 7
-/** Completed sessions are kept for a little over a year. */
-export const HISTORY_DAYS = 400
-
-/** A stored count far beyond any real repeat count is not a count. */
-const MAX_STORED_COUNT = 10_000
-const MAX_ID_LENGTH = 100
-
-export type DayCounts = Partial<Record<CollectionId, Counts>>
-
-export interface ProgressData {
-  /** Counts per day, session and dhikr id. Recent days only. */
-  days: Record<DateKey, DayCounts>
-  /** Sessions completed on each day, kept long after the counts are pruned. */
-  history: Record<DateKey, CollectionId[]>
-}
+/** What is saved: the data, and its completions again in version 1's shape (see `toVersion1History`). */
+export type StoredProgress = ProgressData & Pick<ProgressDataV1, 'history'>
 
 export interface ProgressState extends ProgressData {
   /** Counts one repetition, up to the dhikr's target. */
@@ -38,85 +39,12 @@ export interface ProgressState extends ProgressData {
   /** Sets a dhikr straight to its target. */
   complete: (dateKey: DateKey, collection: CollectionId, dhikrId: string) => void
   /**
-   * Clears a session's counts for one day and leaves the history as it is. A completion
-   * recorded before the reset is not protected from then on, though: read the session to
-   * the end again, undo that final count, and the day's record goes (see `applyCount`).
+   * Clears a session's counts for one day. The day's record keeps its completion and its
+   * recitations, and its `done` goes back to 0 with the counts. A completion recorded before
+   * the reset is not protected from then on, though: read the session to the end again,
+   * undo that final count, and the completion goes (see `applyCount`).
    */
   resetSession: (dateKey: DateKey, collection: CollectionId) => void
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-function sanitizeCounts(value: unknown): Counts | null {
-  if (!isRecord(value)) return null
-  const entries = Object.entries(value).filter(
-    ([id, count]) =>
-      id.length > 0 &&
-      id.length <= MAX_ID_LENGTH &&
-      typeof count === 'number' &&
-      Number.isInteger(count) &&
-      count > 0 &&
-      count <= MAX_STORED_COUNT,
-  )
-  // fromEntries defines own properties, so an id such as "__proto__" stays inert.
-  return entries.length > 0 ? (Object.fromEntries(entries) as Counts) : null
-}
-
-function sanitizeDay(value: unknown): DayCounts | null {
-  if (!isRecord(value)) return null
-  const day: DayCounts = {}
-  for (const collection of COLLECTION_IDS) {
-    const counts = Object.hasOwn(value, collection) ? sanitizeCounts(value[collection]) : null
-    if (counts) day[collection] = counts
-  }
-  return Object.keys(day).length > 0 ? day : null
-}
-
-/**
- * Keeps only what is certainly progress: real calendar days, known sessions,
- * positive whole counts. Stored data can come from an imported or hand-edited
- * backup, so anything else is dropped rather than repaired.
- */
-export function sanitizeProgress(value: unknown): ProgressData {
-  const data: ProgressData = { days: {}, history: {} }
-  if (!isRecord(value)) return data
-
-  if (isRecord(value.days)) {
-    for (const key of Object.keys(value.days)) {
-      if (!isValidDateKey(key)) continue
-      const day = sanitizeDay(value.days[key])
-      if (day) data.days[key] = day
-    }
-  }
-
-  if (isRecord(value.history)) {
-    for (const key of Object.keys(value.history)) {
-      const list = value.history[key]
-      if (!isValidDateKey(key) || !Array.isArray(list)) continue
-      const sessions = COLLECTION_IDS.filter((id) => list.includes(id))
-      if (sessions.length > 0) data.history[key] = sessions
-    }
-  }
-
-  return data
-}
-
-/**
- * Drops entries more than `maxAgeDays` older than `reference`. Entries dated
- * after it are left alone: a device clock that was briefly wrong should not
- * cost anyone their history.
- */
-export function pruneOlderThan<T>(
-  entries: Record<DateKey, T>,
-  reference: DateKey,
-  maxAgeDays: number,
-): Record<DateKey, T> {
-  const keys = Object.keys(entries)
-  const keep = keys.filter((key) => daysBetween(key, reference) <= maxAgeDays)
-  if (keep.length === keys.length) return entries
-  return Object.fromEntries(keep.map((key) => [key, entries[key] as T]))
 }
 
 function withCounts(
@@ -135,34 +63,90 @@ function withCounts(
   return pruneOlderThan(next, dateKey, DETAIL_DAYS)
 }
 
-function withCompletion(
-  history: ProgressData['history'],
+function withRecord(
+  sessions: ProgressData['sessions'],
   dateKey: DateKey,
   collection: CollectionId,
-  completed: boolean,
-): ProgressData['history'] {
-  const current = history[dateKey] ?? []
-  if (current.includes(collection) === completed) return history
+  record: SessionRecord | null,
+): ProgressData['sessions'] {
+  const day: DaySessions = { ...sessions[dateKey] }
+  if (record) day[collection] = record
+  else delete day[collection]
 
-  const sessions = COLLECTION_IDS.filter((id) => (id === collection ? completed : current.includes(id)))
-  const next = { ...history }
-  if (sessions.length > 0) next[dateKey] = sessions
+  const next = { ...sessions }
+  if (Object.keys(day).length > 0) next[dateKey] = day
   else delete next[dateKey]
-  return pruneOlderThan(next, dateKey, HISTORY_DAYS)
+  return pruneOlderThan(next, dateKey, SESSION_DAYS)
+}
+
+function withRecitations(
+  state: ProgressData,
+  dhikrId: string,
+  change: number,
+): Pick<ProgressData, 'totals' | 'totalRecitations'> {
+  const before = Object.hasOwn(state.totals, dhikrId) ? (state.totals[dhikrId] ?? 0) : 0
+  const after = Math.min(MAX_LIFETIME_RECITATIONS, Math.max(0, before + change))
+  if (after === before) return { totals: state.totals, totalRecitations: state.totalRecitations }
+
+  const totals = { ...state.totals }
+  if (after === 0) delete totals[dhikrId]
+  else totals[dhikrId] = after
+  const totalRecitations = Math.min(
+    MAX_LIFETIME_RECITATIONS,
+    Math.max(0, state.totalRecitations + after - before),
+  )
+  return { totals, totalRecitations }
+}
+
+interface CountChange {
+  at: number
+  /** Repetitions added (positive) or taken back (negative). */
+  change: number
+  done: number
+  total: number
+  wasComplete: boolean
+  completed: boolean
+  /** Nothing is left counted for the session on that day. */
+  empty: boolean
 }
 
 /**
- * Applies `change` to one dhikr's count. The history follows the counting: the
- * session is recorded the moment its last dhikr reaches its target, and
- * withdrawn again when a count is taken back from a complete session. Counts
- * that leave the session as complete or as incomplete as it was do not touch
- * the history, so reading it a second time after "Start over" keeps the first
- * completion on record while that reading is under way.
+ * The day's record after one count changed. `completed` follows the counting the way
+ * version 1's history did: set the moment the last dhikr reaches its target, withdrawn
+ * when a count is taken back from a complete session, and otherwise left alone. So a
+ * second reading after "Start over" keeps the first completion, and its time, while it
+ * is under way. A record that has nothing left to tell (a tap taken straight back) goes.
+ */
+function countedRecord(previous: SessionRecord | undefined, count: CountChange): SessionRecord | null {
+  const { at, change, done, total, wasComplete, completed, empty } = count
+  const record: SessionRecord = previous
+    ? { ...previous }
+    : { startedAt: at, completed: false, done: 0, total, recitations: 0 }
+  record.lastAt = at
+  record.done = done
+  record.total = total
+  record.recitations = Math.min(MAX_SESSION_RECITATIONS, Math.max(0, record.recitations + change))
+
+  if (completed !== wasComplete) {
+    if (!completed) {
+      record.completed = false
+      delete record.completedAt
+    } else if (!record.completed) {
+      record.completed = true
+      record.completedAt = at
+    }
+  }
+  return !record.completed && record.recitations === 0 && empty ? null : record
+}
+
+/**
+ * Applies `change` to one dhikr's count, and keeps the day's session record and the
+ * lifetime totals in step with it.
  *
- * A day holds one record per session, with nothing to say which reading earned
- * it. So once a second reading has itself reached the end, undoing its final
- * count withdraws the record, the first reading's completion with it, and
- * counting that step again restores it.
+ * A day holds one record per session, with nothing to say which reading earned its
+ * completion. So once a second reading has itself reached the end, undoing its final
+ * count withdraws the completion, the first reading's with it, and counting that step
+ * again restores it, timed at that moment.
  */
 function applyCount(
   state: ProgressState,
@@ -170,7 +154,7 @@ function applyCount(
   collection: CollectionId,
   dhikrId: string,
   change: (count: number, target: number) => number,
-): ProgressState | ProgressData {
+): Partial<ProgressData> {
   if (!isValidDateKey(dateKey) || !isCollectionId(collection)) return state
   const items = getCollection(collection)
   const dhikr = items.find((item) => item.id === dhikrId)
@@ -186,42 +170,84 @@ function applyCount(
   if (after === 0) delete counts[dhikrId]
   else counts[dhikrId] = after
 
-  const wasComplete = items.every((item) => isDone(item, current))
-  const completed = items.every((item) => isDone(item, counts))
+  const record = countedRecord(state.sessions[dateKey]?.[collection], {
+    at: Date.now(),
+    change: after - before,
+    done: summarize(items, counts).done,
+    total: items.length,
+    wasComplete: items.every((item) => isDone(item, current)),
+    completed: items.every((item) => isDone(item, counts)),
+    empty: Object.keys(counts).length === 0,
+  })
   return {
     days: withCounts(state.days, dateKey, collection, counts),
-    history:
-      completed === wasComplete ? state.history : withCompletion(state.history, dateKey, collection, completed),
+    sessions: withRecord(state.sessions, dateKey, collection, record),
+    ...withRecitations(state, dhikrId, after - before),
   }
+}
+
+function applyReset(state: ProgressState, dateKey: DateKey, collection: CollectionId): Partial<ProgressData> {
+  if (!state.days[dateKey]?.[collection]) return state
+  const record = state.sessions[dateKey]?.[collection]
+  return {
+    days: withCounts(state.days, dateKey, collection, null),
+    sessions:
+      record && record.done !== 0
+        ? withRecord(state.sessions, dateKey, collection, { ...record, done: 0 })
+        : state.sessions,
+  }
+}
+
+/** Version 1's completions lived in `history`; version 2 has `sessions` instead. */
+function hasSessions(value: unknown): boolean {
+  return isRecord(value) && isRecord(value.sessions)
+}
+
+function hasVersion1Shape(value: unknown): boolean {
+  return isRecord(value) && isRecord(value.history) && !hasSessions(value)
+}
+
+/**
+ * The shape decides before the stamp, so that no stamp can cost a record: data with
+ * `sessions` is read as version 2 whatever its stamp, and data with `history` and no
+ * `sessions` as version 1 (a hand-edited backup with no version, say). Otherwise anything
+ * stamped older than version 2 is version 1, and data stamped with a newer version (a
+ * backup from a newer build) is read as far as it can be understood.
+ */
+function readProgress(persisted: unknown, version?: number): ProgressData {
+  if (hasSessions(persisted)) return sanitizeProgress(persisted)
+  if ((version !== undefined && version < 2) || hasVersion1Shape(persisted)) return migrateProgressV1(persisted)
+  return sanitizeProgress(persisted)
 }
 
 export const useAzkarProgress = create<ProgressState>()(
   persist(
     (set) => ({
       days: {},
-      history: {},
+      sessions: {},
+      totals: {},
+      totalRecitations: 0,
       increment: (dateKey, collection, dhikrId) =>
         set((state) => applyCount(state, dateKey, collection, dhikrId, (count) => count + 1)),
       decrement: (dateKey, collection, dhikrId) =>
         set((state) => applyCount(state, dateKey, collection, dhikrId, (count) => count - 1)),
       complete: (dateKey, collection, dhikrId) =>
         set((state) => applyCount(state, dateKey, collection, dhikrId, (_count, target) => target)),
-      resetSession: (dateKey, collection) =>
-        set((state) => {
-          if (!state.days[dateKey]?.[collection]) return state
-          return { days: withCounts(state.days, dateKey, collection, null) }
-        }),
+      resetSession: (dateKey, collection) => set((state) => applyReset(state, dateKey, collection)),
     }),
     {
       name: AZKAR_PROGRESS_STORAGE_KEY,
       version: AZKAR_PROGRESS_VERSION,
-      partialize: (state): ProgressData => ({ days: state.days, history: state.history }),
-      // Version 1 is the only shape so far. Data stamped with any other version
-      // (a backup from a newer build, say) is read as far as it can be understood.
-      migrate: (persisted) => sanitizeProgress(persisted),
+      partialize: (state): StoredProgress => ({
+        days: state.days,
+        sessions: state.sessions,
+        totals: state.totals,
+        totalRecitations: state.totalRecitations,
+        history: toVersion1History(state.sessions),
+      }),
+      migrate: readProgress,
       // Validated on every load, whatever version the data claims to be.
-      merge: (persisted, current) =>
-        persisted === undefined ? current : { ...current, ...sanitizeProgress(persisted) },
+      merge: (persisted, current) => (persisted === undefined ? current : { ...current, ...readProgress(persisted) }),
     },
   ),
 )
@@ -234,4 +260,9 @@ export function useSessionCounts(dateKey: DateKey, collection: CollectionId): Co
 /** Reads the latest counts outside React, e.g. right after writing one. */
 export function readSessionCounts(dateKey: DateKey, collection: CollectionId): Counts | undefined {
   return useAzkarProgress.getState().days[dateKey]?.[collection]
+}
+
+/** One session's record for a day, or `undefined` when it was not read that day. */
+export function useSessionRecord(dateKey: DateKey, collection: CollectionId): SessionRecord | undefined {
+  return useAzkarProgress((state) => state.sessions[dateKey]?.[collection])
 }

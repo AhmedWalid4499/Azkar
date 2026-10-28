@@ -11,7 +11,7 @@ import { DEFAULT_AZKAR_SETTINGS, useAzkarSettings } from '../settingsStore'
 
 /** Stores outlive a test, so each one starts from a known state: English, UTC, nothing counted. */
 export function resetStores(lang: Lang = 'en', timeZone = 'UTC') {
-  useAzkarProgress.setState({ days: {}, history: {} })
+  useAzkarProgress.setState({ days: {}, sessions: {}, totals: {}, totalRecitations: 0 })
   useAzkarSettings.setState({ ...DEFAULT_AZKAR_SETTINGS })
   useSettings.setState({ ...DEFAULT_SETTINGS, language: lang })
   useLocationStore.setState({

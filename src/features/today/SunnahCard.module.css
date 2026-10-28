@@ -1,0 +1,86 @@
+/* Folded, the card is about as tall as a row of the timetable above it. */
+.card {
+  padding-block: var(--space-2);
+}
+
+.heading {
+  font-size: var(--text-m);
+}
+
+.disclosure {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  text-align: start;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+}
+
+.count {
+  flex: none;
+  color: var(--ink-2);
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+
+/* Down when folded, up when open: the same in either reading direction. */
+.chevron {
+  flex: none;
+  color: var(--ink-2);
+  transition: transform 0.15s var(--ease);
+}
+
+.disclosure[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--space-1) var(--space-2);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.night {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line);
+}
+
+.nightLabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-2);
+  font-size: var(--text-s);
+}
+
+.nightIcon {
+  flex: none;
+  color: var(--ink-2);
+}
+
+.nightName {
+  font-weight: 600;
+}
+
+.nightDay {
+  color: var(--ink-2);
+}

@@ -1,0 +1,112 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  font-size: var(--text-l);
+  font-weight: 700;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.empty,
+.note {
+  color: var(--ink-2);
+  font-size: var(--text-s);
+}
+
+.note {
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+}
+
+.chart {
+  margin: 0;
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: var(--space-3);
+  margin-block-end: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-s);
+  font-weight: 700;
+}
+
+.max {
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+}
+
+/* Eight equal columns, oldest first in the reading direction. */
+.bars {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.week {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.value {
+  color: var(--ink);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  inline-size: 100%;
+  max-inline-size: 28px;
+  block-size: 64px;
+  border-radius: var(--radius-s) var(--radius-s) 2px 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+/* The week under way: an outline marks it as unfinished, whatever the colour vision. */
+.current {
+  outline: 2px dashed var(--ink-3);
+  outline-offset: 1px;
+}
+
+.fill {
+  inline-size: 100%;
+  block-size: calc(var(--share, 0) * 100%);
+  background: var(--primary);
+}
+
+/* A week with anything at all always shows a sliver, so it never reads as empty. */
+.some {
+  min-block-size: 3px;
+}
+
+.label {
+  max-inline-size: 100%;
+  color: var(--ink-2);
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
