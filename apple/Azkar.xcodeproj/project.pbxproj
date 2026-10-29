@@ -56,6 +56,25 @@
 			);
 			target = D4BB4A2A544057186427F016 /* Azkar */;
 		};
+		5A57E3A0C0FFEE0000000001 /* Exceptions for "Azkar" folder in "AzkarWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				System/Shared/SystemRouter.swift,
+				System/Shared/Intents/IntentChoices.swift,
+				System/Shared/Intents/OpenIntents.swift,
+				System/Shared/Intents/PrayerIntents.swift,
+				System/Shared/NextPrayerAttributes.swift,
+				System/Shared/SystemPrayerBoard.swift,
+				System/Shared/SharedRecords.swift,
+				System/Shared/SystemText.swift,
+				System/Shared/WidgetViews/LiveActivityViews.swift,
+				System/Shared/WidgetViews/PrayerTimesEntry.swift,
+				System/Shared/WidgetViews/PrayerWidgetViews.swift,
+				System/Shared/WidgetViews/WidgetParts.swift,
+				System/System.xcstrings,
+			);
+			target = CFE948418818881053D5936F /* AzkarWidgetsExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -63,6 +82,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				0890BC056F2D52D3EB07CEE2 /* Exceptions for "Azkar" folder in "Azkar" target */,
+				5A57E3A0C0FFEE0000000001 /* Exceptions for "Azkar" folder in "AzkarWidgetsExtension" target */,
 			);
 			path = Azkar;
 			sourceTree = "<group>";

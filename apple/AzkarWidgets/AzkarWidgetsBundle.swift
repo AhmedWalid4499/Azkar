@@ -4,6 +4,9 @@ import WidgetKit
 @main
 struct AzkarWidgetsBundle: WidgetBundle {
     var body: some Widget {
-        NextPrayerWidget()
+        PrayerTimesWidget()
+        NextPrayerLiveActivity()
+        LogPrayerControl()
+        OpenQiblaControl()
     }
 }
