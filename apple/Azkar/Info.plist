@@ -19,6 +19,17 @@
 		<string>Amiri-Regular.ttf</string>
 		<string>Amiri-Bold.ttf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>io.github.ahmedwalid4499.azkar</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>azkar</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>

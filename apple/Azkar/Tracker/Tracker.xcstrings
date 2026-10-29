@@ -79,7 +79,7 @@
               "zero": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld يوم"
+                  "value": "%lld أيام"
                 }
               },
               "one": {
@@ -144,7 +144,7 @@
               "zero": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld يوم دون صيام"
+                  "value": "%lld أيام دون صيام"
                 }
               },
               "one": {
@@ -209,7 +209,7 @@
               "zero": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld يوم صيام"
+                  "value": "%lld أيام صيام"
                 }
               },
               "one": {

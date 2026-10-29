@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct AzkarApp: App {
+    @UIApplicationDelegateAdaptor(SystemAppDelegate.self) private var systemDelegate
     @State private var startup = Startup()
 
     var body: some Scene {

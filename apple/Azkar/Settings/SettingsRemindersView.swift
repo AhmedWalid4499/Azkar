@@ -20,6 +20,8 @@ struct SettingsRemindersView: View {
         Form {
             permissionSection
 
+            Section { NextPrayerActivityToggle() }
+
             Section {
                 Toggle(isOn: binding(\.prayers)) {
                     Text("Notify me at prayer times", tableName: SettingsText.table)
