@@ -27,7 +27,7 @@ struct TrackerDayFastSection: View {
             if let fast {
                 Picker(selection: Binding(get: { fast.status }, set: { setStatus($0, kind: fast.kind) })) {
                     ForEach(FastStatus.allCases, id: \.self) { status in
-                        Label { format.text(status.trackerName) } icon: { Image(systemName: status.trackerSymbol) }
+                        format.text(status.trackerName)
                             .tag(status)
                     }
                 } label: {
@@ -50,7 +50,7 @@ struct TrackerDayFastSection: View {
                     changes += 1
                     Task { try? await app.records.clearFast(on: day) }
                 } label: {
-                    Label { Text("Clear the fast", tableName: "Tracker") } icon: { Image(systemName: "trash") }
+                    Label { Text("Clear the fast", tableName: "Tracker") } icon: { Image(systemName: "trash").foregroundStyle(.red) }
                 }
             }
         } header: {

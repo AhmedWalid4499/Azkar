@@ -42,7 +42,9 @@ struct TrackerScreen: View {
         #if DEBUG
         .task {
             await TrackerSeed.runIfRequested(app)
-            if let route = TrackerShowcase.route(today: TrackerClock(now: .now, settings: app.settings.settings).today) { path = [route] }
+            let today = TrackerClock(now: .now, settings: app.settings.settings).today
+            await TrackerShowcase.exerciseIfRequested(app, today: today)
+            if let route = TrackerShowcase.route(today: today) { path = [route] }
         }
         #endif
     }

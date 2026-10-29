@@ -25,5 +25,16 @@ enum TrackerShowcase {
     static var opensQada: Bool { value(of: "-AzkarTrackerOpen") == "qada" }
 
     static var scrollTarget: String? { value(of: "-AzkarTrackerScroll") }
+
+    /// `-AzkarTrackerExercise`: the edits the day view's controls make, on yesterday: Fajr made
+    /// up late, Duha ticked, a voluntary fast broken, then a make-up fast logged the day before.
+    static func exerciseIfRequested(_ app: AppEnvironment, today: DayKey) async {
+        guard ProcessInfo.processInfo.arguments.contains("-AzkarTrackerExercise") else { return }
+        let yesterday = today.adding(days: -1)
+        _ = try? await app.records.setPrayer(.fajr, .late, on: yesterday)
+        _ = try? await app.records.setSunnah(.duha, done: true, on: yesterday)
+        _ = try? await app.records.setFast(.voluntary, .broken, on: yesterday)
+        _ = try? await app.records.setFast(.qada, .fasted, on: yesterday.adding(days: -1))
+    }
 }
 #endif

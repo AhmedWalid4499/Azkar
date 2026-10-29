@@ -10,30 +10,39 @@ struct TrackerDayView: View {
 
     var body: some View {
         let records = data.day(day)
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 4) {
-                    if day == data.today {
-                        Text("Today", tableName: "Tracker")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Color.accentColor)
+        ScrollViewReader { reader in
+            List {
+                Section {
+                    VStack(alignment: .leading, spacing: 4) {
+                        if day == data.today {
+                            Text("Today", tableName: "Tracker")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(Color.accentColor)
+                        }
+                        Text(format.fullDay(day))
+                            .font(.title3.weight(.semibold))
+                        Text(format.hijri(day))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                     }
-                    Text(format.fullDay(day))
-                        .font(.title3.weight(.semibold))
-                    Text(format.hijri(day))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
                 }
-                .accessibilityElement(children: .combine)
-                .accessibilityAddTraits(.isHeader)
-            }
 
-            TrackerDayPrayersSection(data: data, day: day, record: records.prayer)
-            TrackerDaySunnahSection(data: data, day: day, record: records.prayer)
-            TrackerDayAzkarSection(data: data, day: day, sessions: records.sessions)
-            TrackerDayTasbihSection(data: data, records: records)
-            TrackerDayFastSection(data: data, day: day, fast: records.fast)
-            TrackerDayTimesSection(data: data, day: day)
+                TrackerDayPrayersSection(data: data, day: day, record: records.prayer)
+                TrackerDaySunnahSection(data: data, day: day, record: records.prayer)
+                TrackerDayAzkarSection(data: data, day: day, sessions: records.sessions).id("azkar")
+                TrackerDayTasbihSection(data: data, records: records)
+                TrackerDayFastSection(data: data, day: day, fast: records.fast).id("fast")
+                TrackerDayTimesSection(data: data, day: day)
+            }
+            #if DEBUG
+            .task {
+                guard let target = TrackerShowcase.scrollTarget, ["azkar", "fast"].contains(target) else { return }
+                try? await Task.sleep(for: .milliseconds(400))
+                reader.scrollTo(target, anchor: .top)
+            }
+            #endif
         }
         .navigationTitle(Text(format.shortDay(day)))
         .navigationBarTitleDisplayMode(.inline)
