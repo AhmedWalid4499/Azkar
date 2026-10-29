@@ -9,8 +9,13 @@ struct TextTests {
         var text: String?
         var word: String?
         var mark: String?
+        var sign: String?
 
-        var segment: RecitationSegment { text.map(RecitationSegment.text) ?? .pauseGroup(word: word!, mark: mark!) }
+        var segment: RecitationSegment {
+            if let text { return .text(text) }
+            if let sign { return .signGroup(word: word!, sign: sign) }
+            return .pauseGroup(word: word!, mark: mark!)
+        }
     }
 
     struct Recitation: Decodable {
@@ -55,6 +60,28 @@ struct TextTests {
             if case .pauseGroup = $0 { true } else { false }
         }
         #expect(!marks.isEmpty)
+    }
+
+    @Test("The sajdah sign stays with its word and the rub' al-hizb sign stays in the text, neither taken for a pause mark")
+    func bundledQuranSigns() throws {
+        let lines = try #require(AzkarDataset.bundled.items["surah-as-sajdah"]).arabic.components(separatedBy: "\n")
+        let prostration = RecitationText.segments(lines[15])
+        guard case let .signGroup(_, sign)? = prostration.last else {
+            Issue.record("32:15 does not end in a sign group: \(prostration)")
+            return
+        }
+        #expect(Self.scalars(sign) == [0x20, 0x06E9])
+        let quarter = RecitationText.segments(lines[11])
+        guard case let .text(opening)? = quarter.first else {
+            Issue.record("32:11 does not open with plain text: \(quarter)")
+            return
+        }
+        #expect(Array(Self.scalars(opening).prefix(2)) == [0x06DE, 0x20])
+        for segment in AzkarDataset.bundled.items.values.flatMap({ RecitationText.segments($0.arabic) }) {
+            if case let .pauseGroup(_, mark) = segment {
+                #expect(!mark.unicodeScalars.contains { $0.value == 0x06DE || $0.value == 0x06E9 })
+            }
+        }
     }
 
     @Test("Snippets and short passages match the website's")

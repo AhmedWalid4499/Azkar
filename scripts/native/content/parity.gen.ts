@@ -357,14 +357,19 @@ test('display text', () => {
   // The bundled dataset, and the web branch's larger one (bedtime, after-prayer and tasbih items).
   const wip = JSON.parse(execFileSync('git', ['show', 'wip/web-seven-features:src/features/azkar/data/azkar.json'], { cwd: repo, encoding: 'utf8', maxBuffer: 1 << 26 }))
   const items = new Map<string, { arabic: string; reference: { en: string; ar: string }; virtue?: { en: string; ar: string }; note?: { en: string; ar: string } }>()
-  for (const item of [...Object.values(azkarData.items), ...Object.values(wip.items as Record<string, typeof azkarData.items[string]>)]) items.set(item.id, item)
-  const extra = ['', '   ', 'one', 'a b c d e f', 'a b c d e f g', '  x　y\tz\n', 'word ۚ next', ' ۖ lead', 'aۚ b ۗ', 'x ۚ ۖ y', 'a ۚ b ۛ']
+  // The bundled dataset's items come last, so that its own text of an item shared with the web branch is the one kept.
+  for (const item of [...Object.values(wip.items as Record<string, typeof azkarData.items[string]>), ...Object.values(azkarData.items)]) items.set(item.id, item)
+  const [rub, sajdah] = ['\u06DE', '\u06E9']
+  const signs = [`word ${sajdah}`, `${rub} word \u06DA next`, `a ${sajdah} b`, `x \u06DA ${sajdah}`, ` ${sajdah} lead`, `a${sajdah} b ${sajdah}`, `x ${sajdah} \u06DA y`]
+  const extra = ['', '   ', 'one', 'a b c d e f', 'a b c d e f g', '  x　y\tz\n', 'word ۚ next', ' ۖ lead', 'aۚ b ۗ', 'x ۚ ۖ y', 'a ۚ b ۛ', ...signs]
   const segments = (text: string) => {
     const element = Recitation({ text }) as { props: { children: unknown[] } }
     return element.props.children.map((part) => {
       if (typeof part === 'string') return { text: part }
-      const span = part as { props: { children: [string, { props: { children: string } }] } }
-      return { word: span.props.children[0], mark: span.props.children[1].props.children }
+      const span = part as { props: { children: [string, string | { props: { children: string } }] } }
+      const [word, sign] = span.props.children
+      // A pause mark is wrapped in a span of its own; the sajdah sign is plain text after the word.
+      return typeof sign === 'string' ? { word, sign } : { word, mark: sign.props.children }
     })
   }
   const texts = [...[...items.values()].map((item) => item.arabic), ...extra]

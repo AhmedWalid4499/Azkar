@@ -1,34 +1,40 @@
 import Foundation
 
-/// A run of recitation text for display: either plain text, or a word with the Qur'anic pause
-/// mark that follows it, to be kept on one line.
+/// A run of recitation text for display: plain text, or a word with the Qur'anic pause mark or the
+/// sajdah sign that follows it, to be kept on one line.
 public enum RecitationSegment: Hashable, Sendable {
     case text(String)
     /// `mark` is the space and the combining pause sign (U+06D6–U+06DC) exactly as written.
     case pauseGroup(word: String, mark: String)
+    /// `sign` is the space and the sajdah sign (U+06E9) that Tanzil prints after the last word of an
+    /// ayah of prostration. It is a symbol of its own, not a pause mark: shown as it is, not lowered.
+    case signGroup(word: String, sign: String)
 
     /// The characters this segment stands for.
     public var source: String {
         switch self {
         case let .text(text): text
         case let .pauseGroup(word, mark): word + mark
+        case let .signGroup(word, sign): word + sign
         }
     }
 }
 
 /// Helpers for showing a dhikr's Arabic text. They never change the text itself.
 public enum RecitationText {
-    /// Splits recitation text so each Qur'anic pause mark stays with its word. The canonical text
-    /// writes each mark as a space plus a combining sign, which left alone can wrap onto the next
-    /// line. Joining the segments' `source` gives back the text, scalar for scalar.
-    /// As `Recitation.tsx`.
+    /// Splits recitation text so each Qur'anic pause mark, and the sajdah sign, stays with its word.
+    /// The canonical text writes each mark as a space plus a combining sign, and the sajdah sign as a
+    /// space plus a symbol, which left alone can wrap onto the next line. The rub' al-hizb sign
+    /// (U+06DE) that opens an ayah is left in the plain text. Joining the segments' `source` gives
+    /// back the text, scalar for scalar. As `Recitation.tsx`.
     public static func segments(_ text: String) -> [RecitationSegment] {
         let scalars = Array(text.unicodeScalars)
         var segments: [RecitationSegment] = []
         var cursor = 0
         var index = 0
         while index + 1 < scalars.count {
-            guard scalars[index] == " ", isPauseMark(scalars[index + 1]) else {
+            let sign = scalars[index + 1]
+            guard scalars[index] == " ", isPauseMark(sign) || isSajdahSign(sign) else {
                 index += 1
                 continue
             }
@@ -36,7 +42,9 @@ public enum RecitationText {
             while start > cursor, !isJavaScriptWhitespace(scalars[start - 1]) { start -= 1 }
             if start < index {
                 if start > cursor { segments.append(.text(string(scalars[cursor..<start]))) }
-                segments.append(.pauseGroup(word: string(scalars[start..<index]), mark: string(scalars[index...index + 1])))
+                let word = string(scalars[start..<index])
+                let mark = string(scalars[index...index + 1])
+                segments.append(isSajdahSign(sign) ? .signGroup(word: word, sign: mark) : .pauseGroup(word: word, mark: mark))
                 cursor = index + 2
             }
             index += 2
@@ -67,6 +75,11 @@ public enum RecitationText {
 
     static func isPauseMark(_ scalar: Unicode.Scalar) -> Bool {
         (0x06D6...0x06DC).contains(scalar.value)
+    }
+
+    /// The sign of a prostration of recitation, U+06E9.
+    static func isSajdahSign(_ scalar: Unicode.Scalar) -> Bool {
+        scalar.value == 0x06E9
     }
 
     static func isNonSpacing(_ scalar: Unicode.Scalar) -> Bool {
