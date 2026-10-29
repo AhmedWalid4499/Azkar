@@ -1,0 +1,728 @@
+{
+  "timeZone": "Asia/Tokyo",
+  "location": {
+    "latitude": 35.6762,
+    "longitude": 139.6503,
+    "timeZone": "Asia/Tokyo",
+    "label": "Tokyo, Japan",
+    "countryCode": "JP",
+    "source": "gps",
+    "updatedAt": 1788084000000
+  },
+  "steps": [
+    {
+      "at": "2026-08-31T20:10:00.000Z",
+      "op": "status",
+      "day": "2026-09-01",
+      "prayer": "fajr",
+      "status": "ontime"
+    },
+    {
+      "at": "2026-08-31T20:11:00.000Z",
+      "op": "status",
+      "day": "2026-09-01",
+      "prayer": "fajr",
+      "status": "ontime"
+    },
+    {
+      "at": "2026-09-01T03:30:00.000Z",
+      "op": "status",
+      "day": "2026-09-01",
+      "prayer": "dhuhr",
+      "status": "jamaah"
+    },
+    {
+      "at": "2026-09-01T03:31:00.000Z",
+      "op": "status",
+      "day": "2026-09-02",
+      "prayer": "dhuhr",
+      "status": "ontime"
+    },
+    {
+      "at": "2026-09-01T03:32:00.000Z",
+      "op": "status",
+      "day": "2026-09-02",
+      "prayer": "dhuhr",
+      "status": null
+    },
+    {
+      "at": "2026-09-01T11:00:00.000Z",
+      "op": "status",
+      "day": "2026-09-01",
+      "prayer": "isha",
+      "status": "late"
+    },
+    {
+      "at": "2026-09-01T11:01:00.000Z",
+      "op": "status",
+      "day": "2026-09-01",
+      "prayer": "isha",
+      "status": "missed"
+    },
+    {
+      "at": "2026-09-01T11:02:00.000Z",
+      "op": "status",
+      "day": "2026-08-31",
+      "prayer": "asr",
+      "status": "excused"
+    },
+    {
+      "at": "2026-09-01T11:03:00.000Z",
+      "op": "status",
+      "day": "2026-08-31",
+      "prayer": "asr",
+      "status": null
+    },
+    {
+      "at": "2026-09-01T11:04:00.000Z",
+      "op": "status",
+      "day": "2026-08-31",
+      "prayer": "maghrib",
+      "status": "late"
+    },
+    {
+      "at": "2026-09-01T14:59:00.000Z",
+      "op": "sunnah",
+      "day": "2026-09-01",
+      "sunnah": "witr",
+      "done": true
+    },
+    {
+      "at": "2026-09-01T15:30:00.000Z",
+      "op": "sunnah",
+      "day": "2026-09-01",
+      "sunnah": "qiyam",
+      "done": true
+    },
+    {
+      "at": "2026-09-01T15:31:00.000Z",
+      "op": "sunnah",
+      "day": "2026-09-01",
+      "sunnah": "qiyam",
+      "done": true
+    },
+    {
+      "at": "2026-09-01T15:32:00.000Z",
+      "op": "sunnah",
+      "day": "2026-09-03",
+      "sunnah": "duha",
+      "done": true
+    },
+    {
+      "at": "2026-09-01T15:33:00.000Z",
+      "op": "sunnah",
+      "day": "2026-09-01",
+      "sunnah": "witr",
+      "done": false
+    },
+    {
+      "at": "2026-09-01T15:34:00.000Z",
+      "op": "sunnah",
+      "day": "2026-08-30",
+      "sunnah": "beforeFajr",
+      "done": true
+    },
+    {
+      "at": "2026-09-01T15:35:00.000Z",
+      "op": "sunnah",
+      "day": "2026-08-30",
+      "sunnah": "beforeFajr",
+      "done": false
+    },
+    {
+      "at": "2026-09-01T21:00:00.000Z",
+      "op": "sunnah",
+      "day": "2026-09-02",
+      "sunnah": "beforeFajr",
+      "done": true
+    },
+    {
+      "at": "2026-08-31T21:00:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-08-31T21:01:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-08-31T21:02:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "no-such-dhikr"
+    },
+    {
+      "at": "2026-08-31T21:03:00.000Z",
+      "op": "decrement",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "sayyid-al-istighfar"
+    },
+    {
+      "at": "2026-08-31T21:04:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "al-ikhlas-al-falaq-an-nas"
+    },
+    {
+      "at": "2026-08-31T21:05:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "al-ikhlas-al-falaq-an-nas"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "al-ikhlas-al-falaq-an-nas"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahna-wa-asbaha-al-mulk"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-allahumma-bika-asbahna"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "sayyid-al-istighfar"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahtu-ushhiduka"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-ma-asbaha-bi-min-nimah"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-afini-fi-badani"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "hasbiyallahu-la-ilaha-illa-huwa"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-inni-asaluka-al-afwa-wal-afiyah"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-alim-al-ghayb-wash-shahadah"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "bismillah-alladhi-la-yadurru"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "raditu-billahi-rabban"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ya-hayyu-ya-qayyum"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahna-rabbil-alamin"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahna-ala-fitrat-al-islam"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "subhanallahi-wa-bihamdih"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "la-ilaha-illallah-wahdahu-ten-times"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "la-ilaha-illallah-wahdahu-hundred-times"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "subhanallahi-wa-bihamdih-adada-khalqih"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-inni-asaluka-ilman-nafian"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "astaghfirullah-wa-atubu-ilayh"
+    },
+    {
+      "at": "2026-08-31T21:20:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad"
+    },
+    {
+      "at": "2026-08-31T21:21:00.000Z",
+      "op": "decrement",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "astaghfirullah-wa-atubu-ilayh"
+    },
+    {
+      "at": "2026-08-31T21:22:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "astaghfirullah-wa-atubu-ilayh"
+    },
+    {
+      "at": "2026-08-31T21:30:00.000Z",
+      "op": "reset",
+      "day": "2026-09-01",
+      "session": "morning"
+    },
+    {
+      "at": "2026-08-31T21:31:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "al-ikhlas-al-falaq-an-nas"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahna-wa-asbaha-al-mulk"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-allahumma-bika-asbahna"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "sayyid-al-istighfar"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahtu-ushhiduka"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-ma-asbaha-bi-min-nimah"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-afini-fi-badani"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "hasbiyallahu-la-ilaha-illa-huwa"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-inni-asaluka-al-afwa-wal-afiyah"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-alim-al-ghayb-wash-shahadah"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "bismillah-alladhi-la-yadurru"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "raditu-billahi-rabban"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "ya-hayyu-ya-qayyum"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahna-rabbil-alamin"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "morning-asbahna-ala-fitrat-al-islam"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "subhanallahi-wa-bihamdih"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "la-ilaha-illallah-wahdahu-ten-times"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "la-ilaha-illallah-wahdahu-hundred-times"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "subhanallahi-wa-bihamdih-adada-khalqih"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-inni-asaluka-ilman-nafian"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "astaghfirullah-wa-atubu-ilayh"
+    },
+    {
+      "at": "2026-08-31T21:40:00.000Z",
+      "op": "complete",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad"
+    },
+    {
+      "at": "2026-08-31T21:41:00.000Z",
+      "op": "decrement",
+      "day": "2026-09-01",
+      "session": "morning",
+      "dhikr": "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad"
+    },
+    {
+      "at": "2026-09-01T09:00:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "evening",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-09-01T09:01:00.000Z",
+      "op": "decrement",
+      "day": "2026-09-01",
+      "session": "evening",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-09-01T12:00:00.000Z",
+      "op": "increment",
+      "day": "2026-09-01",
+      "session": "sleep",
+      "dhikr": "ayat-al-kursi"
+    },
+    {
+      "at": "2026-10-01T08:00:00.000Z",
+      "op": "increment",
+      "day": "2026-10-01",
+      "session": "evening",
+      "dhikr": "ya-hayyu-ya-qayyum"
+    },
+    {
+      "at": "2026-10-01T08:01:00.000Z",
+      "op": "increment",
+      "day": "2026-10-01",
+      "session": "evening",
+      "dhikr": "subhanallahi-wa-bihamdih"
+    },
+    {
+      "at": "2026-10-02T08:00:00.000Z",
+      "op": "increment",
+      "day": "2026-10-02",
+      "session": "evening",
+      "dhikr": "ya-hayyu-ya-qayyum"
+    },
+    {
+      "at": "2026-10-02T08:05:00.000Z",
+      "op": "reset",
+      "day": "2026-10-01",
+      "session": "evening"
+    },
+    {
+      "at": "2026-10-02T08:06:00.000Z",
+      "op": "reset",
+      "day": "2026-09-01",
+      "session": "morning"
+    },
+    {
+      "at": "2026-10-02T08:07:00.000Z",
+      "op": "reset",
+      "day": "2026-10-02",
+      "session": "morning"
+    },
+    {
+      "at": "2026-10-12T16:00:00.000Z",
+      "op": "status",
+      "day": "2026-10-13",
+      "prayer": "fajr",
+      "status": "ontime"
+    },
+    {
+      "at": "2026-10-12T16:00:01.000Z",
+      "op": "status",
+      "day": "2026-10-14",
+      "prayer": "fajr",
+      "status": "ontime"
+    },
+    {
+      "at": "2026-10-12T16:00:02.000Z",
+      "op": "sunnah",
+      "day": "2026-10-13",
+      "sunnah": "beforeFajr",
+      "done": true
+    }
+  ],
+  "expected": {
+    "prayer-log": {
+      "entries": {
+        "2026-09-01": {
+          "fajr": "ontime",
+          "dhuhr": "jamaah",
+          "isha": "missed"
+        },
+        "2026-08-31": {
+          "maghrib": "late"
+        },
+        "2026-10-13": {
+          "fajr": "ontime"
+        }
+      },
+      "loggedAt": {
+        "2026-09-01": {
+          "fajr": 1788207000000,
+          "dhuhr": 1788233400000,
+          "isha": 1788260460000
+        },
+        "2026-08-31": {
+          "maghrib": 1788260640000
+        },
+        "2026-10-13": {
+          "fajr": 1791820800000
+        }
+      },
+      "sunnah": {
+        "2026-09-01": {
+          "qiyam": 1788276600000
+        },
+        "2026-09-02": {
+          "beforeFajr": 1788296400000
+        },
+        "2026-10-13": {
+          "beforeFajr": 1791820802000
+        }
+      }
+    },
+    "azkar-progress": {
+      "days": {
+        "2026-10-02": {
+          "evening": {
+            "ya-hayyu-ya-qayyum": 1
+          }
+        }
+      },
+      "sessions": {
+        "2026-09-01": {
+          "morning": {
+            "startedAt": 1788210000000,
+            "completed": false,
+            "done": 22,
+            "total": 23,
+            "recitations": 713,
+            "lastAt": 1788212460000
+          }
+        },
+        "2026-10-01": {
+          "evening": {
+            "startedAt": 1790841600000,
+            "completed": false,
+            "done": 0,
+            "total": 20,
+            "recitations": 2,
+            "lastAt": 1790841660000
+          }
+        },
+        "2026-10-02": {
+          "evening": {
+            "startedAt": 1790928000000,
+            "completed": false,
+            "done": 1,
+            "total": 20,
+            "recitations": 1,
+            "lastAt": 1790928000000
+          }
+        }
+      },
+      "totals": {
+        "ayat-al-kursi": 2,
+        "al-ikhlas-al-falaq-an-nas": 6,
+        "morning-asbahna-wa-asbaha-al-mulk": 2,
+        "morning-allahumma-bika-asbahna": 2,
+        "sayyid-al-istighfar": 2,
+        "morning-asbahtu-ushhiduka": 8,
+        "morning-ma-asbaha-bi-min-nimah": 2,
+        "allahumma-afini-fi-badani": 6,
+        "hasbiyallahu-la-ilaha-illa-huwa": 14,
+        "allahumma-inni-asaluka-al-afwa-wal-afiyah": 2,
+        "allahumma-alim-al-ghayb-wash-shahadah": 2,
+        "bismillah-alladhi-la-yadurru": 6,
+        "raditu-billahi-rabban": 6,
+        "ya-hayyu-ya-qayyum": 4,
+        "morning-asbahna-rabbil-alamin": 2,
+        "morning-asbahna-ala-fitrat-al-islam": 2,
+        "subhanallahi-wa-bihamdih": 201,
+        "la-ilaha-illallah-wahdahu-ten-times": 20,
+        "la-ilaha-illallah-wahdahu-hundred-times": 200,
+        "subhanallahi-wa-bihamdih-adada-khalqih": 6,
+        "allahumma-inni-asaluka-ilman-nafian": 2,
+        "astaghfirullah-wa-atubu-ilayh": 200,
+        "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad": 19
+      },
+      "totalRecitations": 716,
+      "history": {}
+    }
+  }
+}

@@ -1,0 +1,1163 @@
+[
+  {
+    "name": "nothing stored",
+    "deviceTimeZone": "UTC",
+    "raw": {},
+    "expected": {
+      "location": {
+        "location": null
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {},
+        "loggedAt": {},
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {},
+        "sessions": {},
+        "totals": {},
+        "totalRecitations": 0,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "a realistic install",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:prayer-times": "{\"state\":{\"method\":\"Egyptian\",\"madhab\":\"hanafi\",\"highLatitudeRule\":\"auto\",\"polar\":\"unresolved\",\"adjustments\":{\"fajr\":-2,\"sunrise\":0,\"dhuhr\":0,\"asr\":0,\"maghrib\":0,\"isha\":3},\"notifications\":true,\"azkarReminders\":{\"morning\":true,\"evening\":false,\"morningAt\":\"sunrise\"}},\"version\":2}",
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":35.6762,\"longitude\":139.6503,\"timeZone\":\"Asia/Tokyo\",\"label\":\"Tokyo, Japan\",\"countryCode\":\"JP\",\"source\":\"gps\",\"updatedAt\":1788084000000}},\"version\":1}",
+      "azkar:prayer-log": "{\"state\":{\"entries\":{\"2026-09-01\":{\"fajr\":\"ontime\",\"dhuhr\":\"jamaah\",\"isha\":\"missed\"},\"2026-08-31\":{\"maghrib\":\"late\"},\"2026-10-13\":{\"fajr\":\"ontime\"}},\"loggedAt\":{\"2026-09-01\":{\"fajr\":1788207000000,\"dhuhr\":1788233400000,\"isha\":1788260460000},\"2026-08-31\":{\"maghrib\":1788260640000},\"2026-10-13\":{\"fajr\":1791820800000}},\"sunnah\":{\"2026-09-01\":{\"qiyam\":1788276600000},\"2026-09-02\":{\"beforeFajr\":1788296400000},\"2026-10-13\":{\"beforeFajr\":1791820802000}}},\"version\":2}",
+      "azkar:azkar-progress": "{\"state\":{\"days\":{\"2026-10-02\":{\"evening\":{\"ya-hayyu-ya-qayyum\":1}}},\"sessions\":{\"2026-09-01\":{\"morning\":{\"startedAt\":1788210000000,\"completed\":false,\"done\":22,\"total\":23,\"recitations\":713,\"lastAt\":1788212460000}},\"2026-10-01\":{\"evening\":{\"startedAt\":1790841600000,\"completed\":false,\"done\":0,\"total\":20,\"recitations\":2,\"lastAt\":1790841660000}},\"2026-10-02\":{\"evening\":{\"startedAt\":1790928000000,\"completed\":false,\"done\":1,\"total\":20,\"recitations\":1,\"lastAt\":1790928000000}}},\"totals\":{\"ayat-al-kursi\":2,\"al-ikhlas-al-falaq-an-nas\":6,\"morning-asbahna-wa-asbaha-al-mulk\":2,\"morning-allahumma-bika-asbahna\":2,\"sayyid-al-istighfar\":2,\"morning-asbahtu-ushhiduka\":8,\"morning-ma-asbaha-bi-min-nimah\":2,\"allahumma-afini-fi-badani\":6,\"hasbiyallahu-la-ilaha-illa-huwa\":14,\"allahumma-inni-asaluka-al-afwa-wal-afiyah\":2,\"allahumma-alim-al-ghayb-wash-shahadah\":2,\"bismillah-alladhi-la-yadurru\":6,\"raditu-billahi-rabban\":6,\"ya-hayyu-ya-qayyum\":4,\"morning-asbahna-rabbil-alamin\":2,\"morning-asbahna-ala-fitrat-al-islam\":2,\"subhanallahi-wa-bihamdih\":201,\"la-ilaha-illallah-wahdahu-ten-times\":20,\"la-ilaha-illallah-wahdahu-hundred-times\":200,\"subhanallahi-wa-bihamdih-adada-khalqih\":6,\"allahumma-inni-asaluka-ilman-nafian\":2,\"astaghfirullah-wa-atubu-ilayh\":200,\"allahumma-salli-wa-sallim-ala-nabiyyina-muhammad\":19},\"totalRecitations\":716,\"history\":{}},\"version\":2}",
+      "azkar:settings": "{\"state\":{\"language\":\"ar\",\"theme\":\"dark\",\"timeFormat\":\"24h\",\"arabicDigits\":false,\"hijriOffset\":1,\"name\":\"Ahmed Walid\"},\"version\":1}",
+      "azkar:azkar-settings": "{\"state\":{\"arabicScale\":4,\"showTransliteration\":null,\"showTranslation\":false,\"haptics\":true,\"keepAwake\":true,\"autoAdvance\":true},\"version\":1}"
+    },
+    "expected": {
+      "location": {
+        "location": {
+          "latitude": 35.6762,
+          "longitude": 139.6503,
+          "timeZone": "Asia/Tokyo",
+          "label": "Tokyo, Japan",
+          "countryCode": "JP",
+          "source": "gps",
+          "updatedAt": 1788084000000
+        }
+      },
+      "settings": {
+        "language": "ar",
+        "theme": "dark",
+        "timeFormat": "24h",
+        "arabicDigits": false,
+        "hijriOffset": 1,
+        "name": "Ahmed Walid"
+      },
+      "prayer-times": {
+        "method": "Egyptian",
+        "madhab": "hanafi",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": -2,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 3
+        },
+        "notifications": true,
+        "azkarReminders": {
+          "morning": true,
+          "evening": false,
+          "morningAt": "sunrise"
+        }
+      },
+      "prayer-log": {
+        "entries": {
+          "2026-09-01": {
+            "fajr": "ontime",
+            "dhuhr": "jamaah",
+            "isha": "missed"
+          },
+          "2026-08-31": {
+            "maghrib": "late"
+          },
+          "2026-10-13": {
+            "fajr": "ontime"
+          }
+        },
+        "loggedAt": {
+          "2026-09-01": {
+            "fajr": 1788207000000,
+            "dhuhr": 1788233400000,
+            "isha": 1788260460000
+          },
+          "2026-08-31": {
+            "maghrib": 1788260640000
+          },
+          "2026-10-13": {
+            "fajr": 1791820800000
+          }
+        },
+        "sunnah": {
+          "2026-09-01": {
+            "qiyam": 1788276600000
+          },
+          "2026-09-02": {
+            "beforeFajr": 1788296400000
+          },
+          "2026-10-13": {
+            "beforeFajr": 1791820802000
+          }
+        }
+      },
+      "azkar-progress": {
+        "days": {
+          "2026-10-02": {
+            "evening": {
+              "ya-hayyu-ya-qayyum": 1
+            }
+          }
+        },
+        "sessions": {
+          "2026-09-01": {
+            "morning": {
+              "completed": false,
+              "done": 22,
+              "total": 23,
+              "recitations": 713,
+              "startedAt": 1788210000000,
+              "lastAt": 1788212460000
+            }
+          },
+          "2026-10-01": {
+            "evening": {
+              "completed": false,
+              "done": 0,
+              "total": 20,
+              "recitations": 2,
+              "startedAt": 1790841600000,
+              "lastAt": 1790841660000
+            }
+          },
+          "2026-10-02": {
+            "evening": {
+              "completed": false,
+              "done": 1,
+              "total": 20,
+              "recitations": 1,
+              "startedAt": 1790928000000,
+              "lastAt": 1790928000000
+            }
+          }
+        },
+        "totals": {
+          "ayat-al-kursi": 2,
+          "al-ikhlas-al-falaq-an-nas": 6,
+          "morning-asbahna-wa-asbaha-al-mulk": 2,
+          "morning-allahumma-bika-asbahna": 2,
+          "sayyid-al-istighfar": 2,
+          "morning-asbahtu-ushhiduka": 8,
+          "morning-ma-asbaha-bi-min-nimah": 2,
+          "allahumma-afini-fi-badani": 6,
+          "hasbiyallahu-la-ilaha-illa-huwa": 14,
+          "allahumma-inni-asaluka-al-afwa-wal-afiyah": 2,
+          "allahumma-alim-al-ghayb-wash-shahadah": 2,
+          "bismillah-alladhi-la-yadurru": 6,
+          "raditu-billahi-rabban": 6,
+          "ya-hayyu-ya-qayyum": 4,
+          "morning-asbahna-rabbil-alamin": 2,
+          "morning-asbahna-ala-fitrat-al-islam": 2,
+          "subhanallahi-wa-bihamdih": 201,
+          "la-ilaha-illallah-wahdahu-ten-times": 20,
+          "la-ilaha-illallah-wahdahu-hundred-times": 200,
+          "subhanallahi-wa-bihamdih-adada-khalqih": 6,
+          "allahumma-inni-asaluka-ilman-nafian": 2,
+          "astaghfirullah-wa-atubu-ilayh": 200,
+          "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad": 19
+        },
+        "totalRecitations": 716,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 4,
+        "showTransliteration": null,
+        "showTranslation": false,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "a location but no calculation settings, from before the Asr school followed the country",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":35.6762,\"longitude\":139.6503,\"timeZone\":\"Asia/Tokyo\",\"label\":\"Tokyo, Japan\",\"countryCode\":\"JP\",\"source\":\"gps\",\"updatedAt\":1788084000000}},\"version\":1}"
+    },
+    "expected": {
+      "location": {
+        "location": {
+          "latitude": 35.6762,
+          "longitude": 139.6503,
+          "timeZone": "Asia/Tokyo",
+          "label": "Tokyo, Japan",
+          "countryCode": "JP",
+          "source": "gps",
+          "updatedAt": 1788084000000
+        }
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "shafi",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {},
+        "loggedAt": {},
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {},
+        "sessions": {},
+        "totals": {},
+        "totalRecitations": 0,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "a version 1 install",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":35.6762,\"longitude\":139.6503,\"timeZone\":\"Africa/Cairo\",\"label\":\"Cairo\",\"countryCode\":\"eg\",\"source\":\"gps\",\"updatedAt\":1788084000000}},\"version\":1}",
+      "azkar:settings": "{\"state\":{\"language\":\"en\",\"theme\":\"light\",\"timeFormat\":\"12h\",\"arabicDigits\":true,\"hijriOffset\":-1,\"name\":\"Ali\"},\"version\":1}",
+      "azkar:prayer-times": "{\"state\":{\"method\":\"Egyptian\",\"madhab\":\"shafi\",\"highLatitudeRule\":\"auto\",\"polar\":\"unresolved\",\"adjustments\":{\"fajr\":0,\"sunrise\":0,\"dhuhr\":1,\"asr\":0,\"maghrib\":2,\"isha\":0},\"notifications\":true},\"version\":1}",
+      "azkar:prayer-log": "{\"state\":{\"entries\":{\"2025-01-05\":{\"fajr\":\"ontime\",\"dhuhr\":\"jamaah\",\"asr\":\"late\",\"maghrib\":\"missed\",\"isha\":\"excused\"},\"2025-01-06\":{\"fajr\":\"ontime\"},\"2031-01-01\":{\"fajr\":\"ontime\"}}},\"version\":1}",
+      "azkar:azkar-progress": "{\"state\":{\"days\":{\"2025-01-05\":{\"morning\":{\"ayat-al-kursi\":1,\"al-ikhlas-al-falaq-an-nas\":3,\"subhanallahi-wa-bihamdih\":100},\"evening\":{\"ayat-al-kursi\":1}},\"2025-01-06\":{\"evening\":{\"audhu-bi-kalimatillah-at-tammat\":2,\"retired-dhikr\":4}}},\"history\":{\"2025-01-05\":[\"morning\"],\"2024-12-01\":[\"morning\",\"evening\",\"sleep\"],\"2024-12-02\":[]}},\"version\":1}",
+      "azkar:azkar-settings": "{\"state\":{\"arabicScale\":2,\"showTransliteration\":true,\"showTranslation\":null,\"haptics\":false,\"keepAwake\":true,\"autoAdvance\":false},\"version\":1}"
+    },
+    "expected": {
+      "location": {
+        "location": {
+          "latitude": 35.6762,
+          "longitude": 139.6503,
+          "timeZone": "Africa/Cairo",
+          "label": "Cairo",
+          "countryCode": "EG",
+          "source": "gps",
+          "updatedAt": 1788084000000
+        }
+      },
+      "settings": {
+        "language": "en",
+        "theme": "light",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": -1,
+        "name": "Ali"
+      },
+      "prayer-times": {
+        "method": "Egyptian",
+        "madhab": "shafi",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 1,
+          "asr": 0,
+          "maghrib": 2,
+          "isha": 0
+        },
+        "notifications": true,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {
+          "2025-01-05": {
+            "fajr": "ontime",
+            "dhuhr": "jamaah",
+            "asr": "late",
+            "maghrib": "missed",
+            "isha": "excused"
+          },
+          "2025-01-06": {
+            "fajr": "ontime"
+          },
+          "2031-01-01": {
+            "fajr": "ontime"
+          }
+        },
+        "loggedAt": {},
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {
+          "2025-01-05": {
+            "morning": {
+              "ayat-al-kursi": 1,
+              "al-ikhlas-al-falaq-an-nas": 3,
+              "subhanallahi-wa-bihamdih": 100
+            },
+            "evening": {
+              "ayat-al-kursi": 1
+            }
+          },
+          "2025-01-06": {
+            "evening": {
+              "audhu-bi-kalimatillah-at-tammat": 2,
+              "retired-dhikr": 4
+            }
+          }
+        },
+        "sessions": {
+          "2024-12-01": {
+            "morning": {
+              "completed": true,
+              "done": 23,
+              "total": 23,
+              "recitations": 0
+            },
+            "evening": {
+              "completed": true,
+              "done": 20,
+              "total": 20,
+              "recitations": 0
+            },
+            "sleep": {
+              "completed": true,
+              "done": 16,
+              "total": 16,
+              "recitations": 0
+            }
+          },
+          "2025-01-05": {
+            "morning": {
+              "completed": true,
+              "done": 3,
+              "total": 23,
+              "recitations": 104
+            },
+            "evening": {
+              "completed": false,
+              "done": 1,
+              "total": 20,
+              "recitations": 1
+            }
+          },
+          "2025-01-06": {
+            "evening": {
+              "completed": false,
+              "done": 0,
+              "total": 20,
+              "recitations": 6
+            }
+          }
+        },
+        "totals": {
+          "ayat-al-kursi": 2,
+          "al-ikhlas-al-falaq-an-nas": 3,
+          "subhanallahi-wa-bihamdih": 100,
+          "audhu-bi-kalimatillah-at-tammat": 2,
+          "retired-dhikr": 4
+        },
+        "totalRecitations": 111,
+        "history": {
+          "2024-12-01": [
+            "morning",
+            "evening",
+            "sleep"
+          ],
+          "2025-01-05": [
+            "morning"
+          ]
+        }
+      },
+      "azkar-settings": {
+        "arabicScale": 2,
+        "showTransliteration": true,
+        "showTranslation": null,
+        "haptics": false,
+        "keepAwake": true,
+        "autoAdvance": false
+      }
+    }
+  },
+  {
+    "name": "bad values everywhere",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":21.4225,\"longitude\":39.8262,\"timeZone\":\"Mars/Olympus\",\"label\":7,\"countryCode\":\"SAU\",\"source\":\"satellite\",\"updatedAt\":-5}},\"version\":1}",
+      "azkar:settings": "{\"state\":{\"language\":\"fr\",\"theme\":\"blue\",\"timeFormat\":24,\"arabicDigits\":\"yes\",\"hijriOffset\":7,\"name\":\"‮Fatima\\u0000 \\t  Zahra xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},\"version\":1}",
+      "azkar:prayer-times": "{\"state\":{\"method\":\"Moon\",\"madhab\":\"maliki\",\"highLatitudeRule\":\"TwilightAngle\",\"polar\":\"nearest\",\"adjustments\":{\"fajr\":45,\"sunrise\":-31.5,\"dhuhr\":\"5\",\"asr\":2.5,\"maghrib\":-2.5,\"isha\":-0.4},\"notifications\":\"true\",\"azkarReminders\":{\"morning\":1,\"evening\":true,\"morningAt\":\"noon\"}},\"version\":2}",
+      "azkar:prayer-log": "{\"state\":{\"entries\":{\"2026-02-30\":{\"fajr\":\"ontime\"},\"2026-1-5\":{\"fajr\":\"ontime\"},\"2026-01-05\":{\"fajr\":\"prayed\",\"dhuhr\":\"late\",\"duha\":\"ontime\",\"asr\":null},\"2026-01-06\":{\"fajr\":\"nope\"},\"2099-12-31\":{\"isha\":\"jamaah\"},\"2026-01-07\":\"ontime\"},\"loggedAt\":{\"2026-01-05\":{\"dhuhr\":1767600000000.5,\"fajr\":1767600000000},\"2099-12-31\":{\"isha\":4102444800000,\"fajr\":4102444800000},\"2026-01-08\":{\"fajr\":1767800000000}},\"sunnah\":{\"2026-01-05\":{\"witr\":1767600000000,\"qiyam\":\"1767600000000\",\"duha\":-1,\"beforeFajr\":9000000000000000,\"tarawih\":1767600000000},\"2026-13-01\":{\"witr\":1767600000000},\"2026-01-09\":{}}},\"version\":2}",
+      "azkar:azkar-progress": "{\"state\":{\"days\":{\"2026-01-05\":{\"morning\":{\"ayat-al-kursi\":1,\"zero\":0,\"negative\":-2,\"half\":1.5,\"huge\":10001,\"\":3,\"lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll\":1,\"ok-100\":10000},\"noon\":{\"ayat-al-kursi\":1}},\"2026-02-29\":{\"morning\":{\"ayat-al-kursi\":1}},\"2099-01-01\":{\"evening\":{\"ayat-al-kursi\":1}}},\"sessions\":{\"2026-01-05\":{\"morning\":{\"completed\":true,\"done\":23,\"total\":23,\"recitations\":330,\"startedAt\":1767560000000,\"lastAt\":1767561000000,\"completedAt\":1767561000000},\"evening\":{\"completed\":false,\"done\":3,\"total\":2,\"recitations\":4},\"sleep\":{\"completed\":\"no\",\"done\":0,\"total\":0,\"recitations\":0},\"noon\":{\"completed\":true,\"done\":1,\"total\":1,\"recitations\":1}},\"2026-01-06\":{\"morning\":{\"completed\":false,\"done\":0,\"total\":23,\"recitations\":1000001},\"evening\":{\"completed\":false,\"done\":2,\"total\":20,\"recitations\":5,\"startedAt\":900000000000,\"lastAt\":1767561000000.5,\"completedAt\":1767561000000},\"sleep\":{\"completed\":true,\"done\":0,\"total\":0,\"recitations\":0,\"completedAt\":7258118400000}},\"2099-01-01\":{\"evening\":{\"completed\":false,\"done\":1,\"total\":20,\"recitations\":1}}},\"totals\":{\"ayat-al-kursi\":12,\"bad\":-1,\"float\":2.5,\"big\":1000000000001,\"astaghfirullah-wa-atubu-ilayh\":300},\"totalRecitations\":100,\"history\":{\"2026-01-05\":[\"morning\"]}},\"version\":2}",
+      "azkar:azkar-settings": "{\"state\":{\"arabicScale\":6,\"showTransliteration\":\"yes\",\"showTranslation\":false,\"haptics\":1,\"keepAwake\":null,\"autoAdvance\":false},\"version\":1}"
+    },
+    "expected": {
+      "location": {
+        "location": {
+          "latitude": 21.4225,
+          "longitude": 39.8262,
+          "timeZone": "UTC",
+          "label": "",
+          "countryCode": null,
+          "source": "manual",
+          "updatedAt": 0
+        }
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 2,
+        "name": "Fatima Zahraxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 30,
+          "sunrise": -30,
+          "dhuhr": 0,
+          "asr": 3,
+          "maghrib": -2,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": true,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {
+          "2026-01-05": {
+            "dhuhr": "late"
+          },
+          "2099-12-31": {
+            "isha": "jamaah"
+          }
+        },
+        "loggedAt": {
+          "2099-12-31": {
+            "isha": 4102444800000
+          }
+        },
+        "sunnah": {
+          "2026-01-05": {
+            "witr": 1767600000000
+          }
+        }
+      },
+      "azkar-progress": {
+        "days": {
+          "2026-01-05": {
+            "morning": {
+              "ayat-al-kursi": 1,
+              "ok-100": 10000
+            }
+          },
+          "2099-01-01": {
+            "evening": {
+              "ayat-al-kursi": 1
+            }
+          }
+        },
+        "sessions": {
+          "2026-01-05": {
+            "morning": {
+              "completed": true,
+              "done": 23,
+              "total": 23,
+              "recitations": 330,
+              "startedAt": 1767560000000,
+              "lastAt": 1767561000000,
+              "completedAt": 1767561000000
+            }
+          },
+          "2026-01-06": {
+            "evening": {
+              "completed": false,
+              "done": 2,
+              "total": 20,
+              "recitations": 5
+            },
+            "sleep": {
+              "completed": true,
+              "done": 0,
+              "total": 0,
+              "recitations": 0
+            }
+          },
+          "2099-01-01": {
+            "evening": {
+              "completed": false,
+              "done": 1,
+              "total": 20,
+              "recitations": 1
+            }
+          }
+        },
+        "totals": {
+          "ayat-al-kursi": 12,
+          "astaghfirullah-wa-atubu-ilayh": 300
+        },
+        "totalRecitations": 312,
+        "history": {
+          "2026-01-05": [
+            "morning"
+          ],
+          "2026-01-06": [
+            "sleep"
+          ]
+        }
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": false,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": false
+      }
+    }
+  },
+  {
+    "name": "data no store can read",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:location": "{not json",
+      "azkar:settings": "null",
+      "azkar:prayer-times": "{\"state\": 5, \"version\": 2}",
+      "azkar:prayer-log": "5",
+      "azkar:azkar-progress": "[]",
+      "azkar:azkar-settings": "{\"foo\": 1}"
+    },
+    "expected": {
+      "location": {
+        "location": null
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {},
+        "loggedAt": {},
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {},
+        "sessions": {},
+        "totals": {},
+        "totalRecitations": 0,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "unreadable calculation settings beside a location",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":35.6762,\"longitude\":139.6503,\"timeZone\":\"Asia/Tokyo\",\"label\":\"Tokyo, Japan\",\"countryCode\":\"JP\",\"source\":\"gps\",\"updatedAt\":1788084000000}},\"version\":1}",
+      "azkar:prayer-times": "{\"state\": {\"madhab\": \"hanafi\""
+    },
+    "expected": {
+      "location": {
+        "location": {
+          "latitude": 35.6762,
+          "longitude": 139.6503,
+          "timeZone": "Asia/Tokyo",
+          "label": "Tokyo, Japan",
+          "countryCode": "JP",
+          "source": "gps",
+          "updatedAt": 1788084000000
+        }
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {},
+        "loggedAt": {},
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {},
+        "sessions": {},
+        "totals": {},
+        "totalRecitations": 0,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "stamps the stores do not expect",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":35.6762,\"longitude\":139.6503,\"timeZone\":\"Asia/Tokyo\",\"label\":\"Tokyo, Japan\",\"countryCode\":\"JP\",\"source\":\"gps\",\"updatedAt\":1788084000000}},\"version\":2}",
+      "azkar:settings": "{\"state\":{\"theme\":\"dark\",\"hijriOffset\":-2},\"version\":0}",
+      "azkar:prayer-times": "{\"state\":{\"method\":\"Karachi\",\"madhab\":\"hanafi\"},\"version\":9}",
+      "azkar:prayer-log": "{\"state\":{\"entries\":{\"2026-03-01\":{\"asr\":\"late\"}},\"loggedAt\":{\"2026-03-01\":{\"asr\":1772360000000}}},\"version\":7}",
+      "azkar:azkar-progress": "{\"state\":{\"days\":{\"2026-03-01\":{\"morning\":{\"ayat-al-kursi\":1}}},\"history\":{\"2026-03-01\":[\"morning\"]}},\"version\":3}",
+      "azkar:azkar-settings": "{\"state\":{\"arabicScale\":5},\"version\":\"1\"}"
+    },
+    "expected": {
+      "location": {
+        "location": null
+      },
+      "settings": {
+        "language": "system",
+        "theme": "dark",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": -2,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "Karachi",
+        "madhab": "hanafi",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {
+          "2026-03-01": {
+            "asr": "late"
+          }
+        },
+        "loggedAt": {
+          "2026-03-01": {
+            "asr": 1772360000000
+          }
+        },
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {
+          "2026-03-01": {
+            "morning": {
+              "ayat-al-kursi": 1
+            }
+          }
+        },
+        "sessions": {
+          "2026-03-01": {
+            "morning": {
+              "completed": true,
+              "done": 1,
+              "total": 23,
+              "recitations": 1
+            }
+          }
+        },
+        "totals": {
+          "ayat-al-kursi": 1
+        },
+        "totalRecitations": 1,
+        "history": {
+          "2026-03-01": [
+            "morning"
+          ]
+        }
+      },
+      "azkar-settings": {
+        "arabicScale": 5,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "version 1 stamp on version 2 data, and version 2 data with no stamp",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:azkar-progress": "{\"state\":{\"days\":{\"2026-03-01\":{\"evening\":{\"ayat-al-kursi\":1}}},\"sessions\":{\"2026-03-01\":{\"evening\":{\"completed\":false,\"done\":1,\"total\":20,\"recitations\":1,\"startedAt\":1772360000000,\"lastAt\":1772360000000}}},\"totals\":{\"ayat-al-kursi\":1},\"totalRecitations\":1,\"history\":{\"2026-02-01\":[\"morning\"]}},\"version\":1}",
+      "azkar:prayer-log": "{\"state\":{\"entries\":{\"2026-03-01\":{\"fajr\":\"jamaah\"}},\"loggedAt\":{\"2026-03-01\":{\"fajr\":1772330000000}},\"sunnah\":{\"2026-03-01\":{\"beforeFajr\":1772329000000}}}}"
+    },
+    "expected": {
+      "location": {
+        "location": null
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {
+          "2026-03-01": {
+            "fajr": "jamaah"
+          }
+        },
+        "loggedAt": {
+          "2026-03-01": {
+            "fajr": 1772330000000
+          }
+        },
+        "sunnah": {
+          "2026-03-01": {
+            "beforeFajr": 1772329000000
+          }
+        }
+      },
+      "azkar-progress": {
+        "days": {
+          "2026-03-01": {
+            "evening": {
+              "ayat-al-kursi": 1
+            }
+          }
+        },
+        "sessions": {
+          "2026-03-01": {
+            "evening": {
+              "completed": false,
+              "done": 1,
+              "total": 20,
+              "recitations": 1,
+              "startedAt": 1772360000000,
+              "lastAt": 1772360000000
+            }
+          }
+        },
+        "totals": {
+          "ayat-al-kursi": 1
+        },
+        "totalRecitations": 1,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "version 1 progress with no stamp at all",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:azkar-progress": "{\"state\":{\"days\":{},\"history\":{\"2026-02-01\":[\"evening\"]}}}"
+    },
+    "expected": {
+      "location": {
+        "location": null
+      },
+      "settings": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      },
+      "prayer-times": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      },
+      "prayer-log": {
+        "entries": {},
+        "loggedAt": {},
+        "sunnah": {}
+      },
+      "azkar-progress": {
+        "days": {},
+        "sessions": {
+          "2026-02-01": {
+            "evening": {
+              "completed": true,
+              "done": 20,
+              "total": 20,
+              "recitations": 0
+            }
+          }
+        },
+        "totals": {},
+        "totalRecitations": 0,
+        "history": {
+          "2026-02-01": [
+            "evening"
+          ]
+        }
+      },
+      "azkar-settings": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  },
+  {
+    "name": "after importing a backup",
+    "deviceTimeZone": "UTC",
+    "raw": {
+      "azkar:prayer-times": "{\"state\":{\"method\":\"Egyptian\",\"madhab\":\"hanafi\",\"highLatitudeRule\":\"auto\",\"polar\":\"unresolved\",\"adjustments\":{\"fajr\":-2,\"sunrise\":0,\"dhuhr\":0,\"asr\":0,\"maghrib\":0,\"isha\":3},\"notifications\":true,\"azkarReminders\":{\"morning\":true,\"evening\":false,\"morningAt\":\"sunrise\"}},\"version\":2}",
+      "azkar:location": "{\"state\":{\"location\":{\"latitude\":35.6762,\"longitude\":139.6503,\"timeZone\":\"Asia/Tokyo\",\"label\":\"Tokyo, Japan\",\"countryCode\":\"JP\",\"source\":\"gps\",\"updatedAt\":1788084000000}},\"version\":1}",
+      "azkar:prayer-log": "{\"state\":{\"entries\":{\"2026-09-01\":{\"fajr\":\"ontime\",\"dhuhr\":\"jamaah\",\"isha\":\"missed\"},\"2026-08-31\":{\"maghrib\":\"late\"},\"2026-10-13\":{\"fajr\":\"ontime\"}},\"loggedAt\":{\"2026-09-01\":{\"fajr\":1788207000000,\"dhuhr\":1788233400000,\"isha\":1788260460000},\"2026-08-31\":{\"maghrib\":1788260640000},\"2026-10-13\":{\"fajr\":1791820800000}},\"sunnah\":{\"2026-09-01\":{\"qiyam\":1788276600000},\"2026-09-02\":{\"beforeFajr\":1788296400000},\"2026-10-13\":{\"beforeFajr\":1791820802000}}},\"version\":2}",
+      "azkar:azkar-progress": "{\"state\":{\"days\":{\"2026-10-02\":{\"evening\":{\"ya-hayyu-ya-qayyum\":1}}},\"sessions\":{\"2026-09-01\":{\"morning\":{\"startedAt\":1788210000000,\"completed\":false,\"done\":22,\"total\":23,\"recitations\":713,\"lastAt\":1788212460000}},\"2026-10-01\":{\"evening\":{\"startedAt\":1790841600000,\"completed\":false,\"done\":0,\"total\":20,\"recitations\":2,\"lastAt\":1790841660000}},\"2026-10-02\":{\"evening\":{\"startedAt\":1790928000000,\"completed\":false,\"done\":1,\"total\":20,\"recitations\":1,\"lastAt\":1790928000000}}},\"totals\":{\"ayat-al-kursi\":2,\"al-ikhlas-al-falaq-an-nas\":6,\"morning-asbahna-wa-asbaha-al-mulk\":2,\"morning-allahumma-bika-asbahna\":2,\"sayyid-al-istighfar\":2,\"morning-asbahtu-ushhiduka\":8,\"morning-ma-asbaha-bi-min-nimah\":2,\"allahumma-afini-fi-badani\":6,\"hasbiyallahu-la-ilaha-illa-huwa\":14,\"allahumma-inni-asaluka-al-afwa-wal-afiyah\":2,\"allahumma-alim-al-ghayb-wash-shahadah\":2,\"bismillah-alladhi-la-yadurru\":6,\"raditu-billahi-rabban\":6,\"ya-hayyu-ya-qayyum\":4,\"morning-asbahna-rabbil-alamin\":2,\"morning-asbahna-ala-fitrat-al-islam\":2,\"subhanallahi-wa-bihamdih\":201,\"la-ilaha-illallah-wahdahu-ten-times\":20,\"la-ilaha-illallah-wahdahu-hundred-times\":200,\"subhanallahi-wa-bihamdih-adada-khalqih\":6,\"allahumma-inni-asaluka-ilman-nafian\":2,\"astaghfirullah-wa-atubu-ilayh\":200,\"allahumma-salli-wa-sallim-ala-nabiyyina-muhammad\":19},\"totalRecitations\":716,\"history\":{}},\"version\":2}",
+      "azkar:settings": "{\"state\":{\"language\":\"ar\",\"theme\":\"dark\",\"timeFormat\":\"24h\",\"arabicDigits\":false,\"hijriOffset\":1,\"name\":\"Ahmed Walid\"},\"version\":1}",
+      "azkar:azkar-settings": "{\"state\":{\"arabicScale\":4,\"showTransliteration\":null,\"showTranslation\":false,\"haptics\":true,\"keepAwake\":true,\"autoAdvance\":true},\"version\":1}"
+    },
+    "expected": {
+      "location": {
+        "location": {
+          "latitude": 35.6762,
+          "longitude": 139.6503,
+          "timeZone": "Asia/Tokyo",
+          "label": "Tokyo, Japan",
+          "countryCode": "JP",
+          "source": "gps",
+          "updatedAt": 1788084000000
+        }
+      },
+      "settings": {
+        "language": "ar",
+        "theme": "dark",
+        "timeFormat": "24h",
+        "arabicDigits": false,
+        "hijriOffset": 1,
+        "name": "Ahmed Walid"
+      },
+      "prayer-times": {
+        "method": "Egyptian",
+        "madhab": "hanafi",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": -2,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 3
+        },
+        "notifications": true,
+        "azkarReminders": {
+          "morning": true,
+          "evening": false,
+          "morningAt": "sunrise"
+        }
+      },
+      "prayer-log": {
+        "entries": {
+          "2026-09-01": {
+            "fajr": "ontime",
+            "dhuhr": "jamaah",
+            "isha": "missed"
+          },
+          "2026-08-31": {
+            "maghrib": "late"
+          },
+          "2026-10-13": {
+            "fajr": "ontime"
+          }
+        },
+        "loggedAt": {
+          "2026-09-01": {
+            "fajr": 1788207000000,
+            "dhuhr": 1788233400000,
+            "isha": 1788260460000
+          },
+          "2026-08-31": {
+            "maghrib": 1788260640000
+          },
+          "2026-10-13": {
+            "fajr": 1791820800000
+          }
+        },
+        "sunnah": {
+          "2026-09-01": {
+            "qiyam": 1788276600000
+          },
+          "2026-09-02": {
+            "beforeFajr": 1788296400000
+          },
+          "2026-10-13": {
+            "beforeFajr": 1791820802000
+          }
+        }
+      },
+      "azkar-progress": {
+        "days": {
+          "2026-10-02": {
+            "evening": {
+              "ya-hayyu-ya-qayyum": 1
+            }
+          }
+        },
+        "sessions": {
+          "2026-09-01": {
+            "morning": {
+              "completed": false,
+              "done": 22,
+              "total": 23,
+              "recitations": 713,
+              "startedAt": 1788210000000,
+              "lastAt": 1788212460000
+            }
+          },
+          "2026-10-01": {
+            "evening": {
+              "completed": false,
+              "done": 0,
+              "total": 20,
+              "recitations": 2,
+              "startedAt": 1790841600000,
+              "lastAt": 1790841660000
+            }
+          },
+          "2026-10-02": {
+            "evening": {
+              "completed": false,
+              "done": 1,
+              "total": 20,
+              "recitations": 1,
+              "startedAt": 1790928000000,
+              "lastAt": 1790928000000
+            }
+          }
+        },
+        "totals": {
+          "ayat-al-kursi": 2,
+          "al-ikhlas-al-falaq-an-nas": 6,
+          "morning-asbahna-wa-asbaha-al-mulk": 2,
+          "morning-allahumma-bika-asbahna": 2,
+          "sayyid-al-istighfar": 2,
+          "morning-asbahtu-ushhiduka": 8,
+          "morning-ma-asbaha-bi-min-nimah": 2,
+          "allahumma-afini-fi-badani": 6,
+          "hasbiyallahu-la-ilaha-illa-huwa": 14,
+          "allahumma-inni-asaluka-al-afwa-wal-afiyah": 2,
+          "allahumma-alim-al-ghayb-wash-shahadah": 2,
+          "bismillah-alladhi-la-yadurru": 6,
+          "raditu-billahi-rabban": 6,
+          "ya-hayyu-ya-qayyum": 4,
+          "morning-asbahna-rabbil-alamin": 2,
+          "morning-asbahna-ala-fitrat-al-islam": 2,
+          "subhanallahi-wa-bihamdih": 201,
+          "la-ilaha-illallah-wahdahu-ten-times": 20,
+          "la-ilaha-illallah-wahdahu-hundred-times": 200,
+          "subhanallahi-wa-bihamdih-adada-khalqih": 6,
+          "allahumma-inni-asaluka-ilman-nafian": 2,
+          "astaghfirullah-wa-atubu-ilayh": 200,
+          "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad": 19
+        },
+        "totalRecitations": 716,
+        "history": {}
+      },
+      "azkar-settings": {
+        "arabicScale": 4,
+        "showTransliteration": null,
+        "showTranslation": false,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  }
+]

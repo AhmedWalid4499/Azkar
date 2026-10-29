@@ -1,0 +1,282 @@
+{
+  "app" : "azkar",
+  "data" : {
+    "azkar:azkar-progress" : {
+      "state" : {
+        "afterPrayer" : {
+          "days" : {
+            "2026-10-21" : {
+              "fajr" : {
+                "al-ikhlas-al-falaq-an-nas" : 3,
+                "ayat-al-kursi" : 1
+              },
+              "isha" : {
+                "ayat-al-kursi" : 1
+              }
+            }
+          },
+          "sessions" : {
+            "2026-10-21" : {
+              "fajr" : {
+                "completed" : true,
+                "completedAt" : 1792530030125,
+                "done" : 2,
+                "lastAt" : 1792530030125,
+                "recitations" : 4,
+                "startedAt" : 1792530000125,
+                "total" : 2
+              },
+              "isha" : {
+                "completed" : true,
+                "completedAt" : 1792530060125,
+                "done" : 1,
+                "lastAt" : 1792530060125,
+                "recitations" : 1,
+                "startedAt" : 1792530060125,
+                "total" : 1
+              }
+            }
+          },
+          "totals" : {
+            "al-ikhlas-al-falaq-an-nas" : 3,
+            "ayat-al-kursi" : 2
+          }
+        },
+        "days" : {
+          "2026-10-02" : {
+            "evening" : {
+              "ya-hayyu-ya-qayyum" : 1
+            }
+          }
+        },
+        "history" : {
+
+        },
+        "sessions" : {
+          "2026-09-01" : {
+            "morning" : {
+              "completed" : false,
+              "done" : 22,
+              "lastAt" : 1788212460000,
+              "recitations" : 713,
+              "startedAt" : 1788210000000,
+              "total" : 23
+            }
+          },
+          "2026-10-01" : {
+            "evening" : {
+              "completed" : false,
+              "done" : 0,
+              "lastAt" : 1790841660000,
+              "recitations" : 2,
+              "startedAt" : 1790841600000,
+              "total" : 20
+            }
+          },
+          "2026-10-02" : {
+            "evening" : {
+              "completed" : false,
+              "done" : 1,
+              "lastAt" : 1790928000000,
+              "recitations" : 1,
+              "startedAt" : 1790928000000,
+              "total" : 20
+            }
+          }
+        },
+        "tasbih" : {
+          "days" : {
+            "2026-10-21" : {
+              "presets" : {
+                "subhanallah" : {
+                  "count" : 34,
+                  "current" : 1,
+                  "lastAt" : 1792530200125,
+                  "startedAt" : 1792530100125
+                }
+              }
+            },
+            "2026-10-22" : {
+              "free" : {
+                "count" : 1,
+                "current" : 1,
+                "lastAt" : 1792616400125,
+                "startedAt" : 1792616400125
+              },
+              "presets" : {
+
+              }
+            }
+          },
+          "free" : 1,
+          "totals" : {
+            "subhanallah" : 34
+          }
+        },
+        "totalRecitations" : 721,
+        "totals" : {
+          "al-ikhlas-al-falaq-an-nas" : 9,
+          "allahumma-afini-fi-badani" : 6,
+          "allahumma-alim-al-ghayb-wash-shahadah" : 2,
+          "allahumma-inni-asaluka-al-afwa-wal-afiyah" : 2,
+          "allahumma-inni-asaluka-ilman-nafian" : 2,
+          "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad" : 19,
+          "astaghfirullah-wa-atubu-ilayh" : 200,
+          "ayat-al-kursi" : 4,
+          "bismillah-alladhi-la-yadurru" : 6,
+          "hasbiyallahu-la-ilaha-illa-huwa" : 14,
+          "la-ilaha-illallah-wahdahu-hundred-times" : 200,
+          "la-ilaha-illallah-wahdahu-ten-times" : 20,
+          "morning-allahumma-bika-asbahna" : 2,
+          "morning-asbahna-ala-fitrat-al-islam" : 2,
+          "morning-asbahna-rabbil-alamin" : 2,
+          "morning-asbahna-wa-asbaha-al-mulk" : 2,
+          "morning-asbahtu-ushhiduka" : 8,
+          "morning-ma-asbaha-bi-min-nimah" : 2,
+          "raditu-billahi-rabban" : 6,
+          "sayyid-al-istighfar" : 2,
+          "subhanallahi-wa-bihamdih" : 201,
+          "subhanallahi-wa-bihamdih-adada-khalqih" : 6,
+          "ya-hayyu-ya-qayyum" : 4
+        }
+      },
+      "version" : 3
+    },
+    "azkar:azkar-settings" : {
+      "state" : {
+        "arabicScale" : 4,
+        "autoAdvance" : true,
+        "haptics" : true,
+        "keepAwake" : true,
+        "showTranslation" : false,
+        "showTransliteration" : null,
+        "tasbihFree" : false,
+        "tasbihPreset" : "subhanallah",
+        "tasbihTarget" : 99
+      },
+      "version" : 1
+    },
+    "azkar:fasting" : {
+      "state" : {
+        "days" : {
+          "2026-10-19" : {
+            "at" : 1792530000125,
+            "kind" : "voluntary",
+            "status" : "fasted"
+          },
+          "2026-10-20" : {
+            "at" : 1792530000125,
+            "kind" : "qada",
+            "status" : "broken"
+          }
+        },
+        "owedBefore" : 6
+      },
+      "version" : 1
+    },
+    "azkar:location" : {
+      "state" : {
+        "location" : {
+          "countryCode" : "JP",
+          "label" : "Tokyo, Japan",
+          "latitude" : 35.6762,
+          "longitude" : 139.6503,
+          "source" : "gps",
+          "timeZone" : "Asia/Tokyo",
+          "updatedAt" : 1788084000000
+        }
+      },
+      "version" : 1
+    },
+    "azkar:prayer-log" : {
+      "state" : {
+        "entries" : {
+          "2026-08-31" : {
+            "maghrib" : "late"
+          },
+          "2026-09-01" : {
+            "dhuhr" : "jamaah",
+            "fajr" : "ontime",
+            "isha" : "missed"
+          },
+          "2026-10-13" : {
+            "fajr" : "ontime"
+          }
+        },
+        "loggedAt" : {
+          "2026-08-31" : {
+            "maghrib" : 1788260640000
+          },
+          "2026-09-01" : {
+            "dhuhr" : 1788233400000,
+            "fajr" : 1788207000000,
+            "isha" : 1788260460000
+          },
+          "2026-10-13" : {
+            "fajr" : 1791820800000
+          }
+        },
+        "sunnah" : {
+          "2026-09-01" : {
+            "qiyam" : 1788276600000
+          },
+          "2026-09-02" : {
+            "beforeFajr" : 1788296400000
+          },
+          "2026-10-13" : {
+            "beforeFajr" : 1791820802000
+          }
+        }
+      },
+      "version" : 2
+    },
+    "azkar:prayer-times" : {
+      "state" : {
+        "adhanAlarms" : {
+          "asr" : false,
+          "dhuhr" : false,
+          "fajr" : true,
+          "isha" : false,
+          "maghrib" : true
+        },
+        "adjustments" : {
+          "asr" : 0,
+          "dhuhr" : 0,
+          "fajr" : -2,
+          "isha" : 3,
+          "maghrib" : 0,
+          "sunrise" : 0
+        },
+        "azkarReminders" : {
+          "evening" : false,
+          "morning" : true,
+          "morningAt" : "sunrise"
+        },
+        "highLatitudeRule" : "auto",
+        "madhab" : "hanafi",
+        "method" : "Egyptian",
+        "notifications" : true,
+        "polar" : "nearestLatitude",
+        "unloggedReminders" : {
+          "enabled" : true,
+          "ishaEnds" : "middle",
+          "leadMinutes" : 30
+        }
+      },
+      "version" : 3
+    },
+    "azkar:settings" : {
+      "state" : {
+        "arabicDigits" : false,
+        "hijriOffset" : 1,
+        "language" : "ar",
+        "name" : "Ahmed Walid",
+        "theme" : "dark",
+        "timeFormat" : "24h"
+      },
+      "version" : 1
+    }
+  },
+  "exportedAt" : "2026-10-29T08:00:00.250Z",
+  "version" : 1
+}

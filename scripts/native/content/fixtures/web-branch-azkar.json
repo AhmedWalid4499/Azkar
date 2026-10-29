@@ -1,0 +1,919 @@
+{
+  "version": 3,
+  "sources": [
+    {
+      "name": "Hisn al-Muslim (Fortress of the Muslim) by Sa'id ibn Ali ibn Wahf al-Qahtani, published by Matba'at Safir, Riyadh — digital text with footnotes, read from abdorizak/Hisnul-Muslim",
+      "url": "https://github.com/abdorizak/Hisnul-Muslim/blob/a74ebb419e8572433d97011038a4eeeb8b42ceb3/Hisnul%20Muslim/Resources/hisnul_muslim.json",
+      "license": "The book and its footnotes belong to their author and publisher; no licence is stated for the text. The repository it was read from is MIT-licensed (Copyright (c) 2023 Abdorizak Abdalla), which covers that repository, not the book. Only short citations and one-sentence virtues from the footnotes of one chapter are quoted here",
+      "usedFor": "Selection and order of the azkar, repeat counts, and the Arabic references, virtues and notes (extracts of the chapter footnotes; hadith numbers that pointed at another hadith are corrected)"
+    },
+    {
+      "name": "asellam/HisnElMuslim",
+      "url": "https://github.com/asellam/HisnElMuslim/blob/872764ca013116c905f7fc9c3dc972c27cd37d4a/hisn.json",
+      "license": "MIT License — Copyright (c) 2021 Abdellah SELLAM",
+      "usedFor": "Vocalised Arabic text of every supplication, including the separate evening wordings, and the isti'adha before Ayat al-Kursi"
+    },
+    {
+      "name": "Seen-Arabic/Morning-And-Evening-Adhkar-DB",
+      "url": "https://github.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/blob/29d7623fede52eca835a789025dfda866e8cfe44/ar.json",
+      "license": "MIT License — Copyright (c) 2024 Seen Arabic",
+      "usedFor": "Three words whose vowel marks complete the text above, the closing part of one Arabic reference, and cross-checking of every supplication"
+    },
+    {
+      "name": "fawazahmed0/hadith-api — Sahih Muslim, Arabic",
+      "url": "https://github.com/fawazahmed0/hadith-api/blob/df57907be35291c91ad6a6691180e22ca9920784/editions/ara-muslim/6908.json",
+      "license": "The Unlicense (public domain)",
+      "usedFor": "Sahih Muslim no. 2723, the standard the evening supplication it narrates is checked against word by word, and checking the hadith numbers quoted in the references"
+    },
+    {
+      "name": "Tanzil Quran Text (Simple Plain, version 1.1), retrieved through the Al Quran Cloud API (edition quran-simple)",
+      "url": "https://tanzil.net/",
+      "license": "Creative Commons Attribution 3.0 — Copyright © Tanzil Project; the text is reproduced verbatim and may not be changed",
+      "usedFor": "Every Qur'anic passage: Ayat al-Kursi (2:255), surahs 112 to 114, and the basmala (1:1)"
+    }
+  ],
+  "items": {
+    "ayat-al-kursi": {
+      "id": "ayat-al-kursi",
+      "arabic": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+      "transliteration": "Aʿūdhu billāhi minash-shayṭānir-rajīm. Allāhu lā ilāha illā huwal-ḥayyul-qayyūm, lā taʾkhudhuhu sinatun wa lā nawm, lahu mā fis-samāwāti wa mā fil-arḍ, man dhal-ladhī yashfaʿu ʿindahu illā bi-idhnih, yaʿlamu mā bayna aydīhim wa mā khalfahum, wa lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ, wasiʿa kursiyyuhus-samāwāti wal-arḍ, wa lā yaʾūduhu ḥifẓuhumā, wa huwal-ʿaliyyul-ʿaẓīm.",
+      "translation": "I seek refuge in Allah from the accursed Satan. Allah: there is no god except Him, the Ever-Living, the Sustainer of all. Drowsiness does not come over Him, nor does sleep. All that is in the heavens and all that is on the earth is His. Who is there that can intercede before Him except by His leave? He knows what lies ahead of them and what lies behind them, while they grasp nothing of His knowledge beyond what He wills. His Kursi encompasses the heavens and the earth, and safeguarding them both is no burden to Him. He is the Most High, the Magnificent.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever says it in the morning is protected from the jinn until evening, and whoever says it in the evening is protected from them until morning.",
+        "ar": "من قالها حين يصبح أُجير من الجن حتى يمسي، ومن قالها حين يمسي أُجير منهم حتى يصبح"
+      },
+      "reference": {
+        "en": "Qur'an, Surah al-Baqarah, ayah 255. Al-Hakim 1/562; graded authentic by al-Albani in Sahih at-Targhib wat-Tarhib 1/273, who attributed it to an-Nasa'i and at-Tabarani and said that at-Tabarani's chain is good",
+        "ar": "سورة البقرة، الآية: 255. أخرجه الحاكم، 1/562، وصححه الألباني في صحيح الترغيب والترهيب، 1/273، وعزاه إلى النسائي، والطبراني، وقال: ((إسناد الطبراني جيد))"
+      },
+      "quran": [
+        {
+          "surah": 2,
+          "from": 255,
+          "to": 255
+        }
+      ],
+      "afterPrayer": {
+        "narration": {
+          "reference": {
+            "en": "An-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 100); Ibn as-Sunni (no. 121); graded authentic by al-Albani in Sahih al-Jami' 5/339 and as-Silsilah as-Sahihah 2/697 (no. 972). The ayah is no. 255 of Surah al-Baqarah",
+            "ar": "النسائي في عمل اليوم والليلة، برقم 100، وابن السني، برقم 121، وصححه الألباني في صحيح الجامع، 5/339، وسلسلة الأحاديث الصحيحة، 2/697، برقم 972، والآية رقم 255 من سورة البقرة"
+          },
+          "virtue": {
+            "en": "Whoever recites it after every prayer, nothing stands between them and entering Paradise but death.",
+            "ar": "من قرأها دبر كل صلاة لم يمنعه من دخول الجنة إلا أن يموت"
+          }
+        }
+      }
+    },
+    "al-ikhlas-al-falaq-an-nas": {
+      "id": "al-ikhlas-al-falaq-an-nas",
+      "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ\nبِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ الْفَلَقِ\nمِنْ شَرِّ مَا خَلَقَ\nوَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ\nوَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ\nوَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ\nبِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ النَّاسِ\nمَلِكِ النَّاسِ\nإِلَٰهِ النَّاسِ\nمِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ\nالَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ\nمِنَ الْجِنَّةِ وَالنَّاسِ",
+      "transliteration": "Bismillāhir-raḥmānir-raḥīm. Qul huwallāhu aḥad, Allāhuṣ-ṣamad, lam yalid wa lam yūlad, wa lam yakun lahu kufuwan aḥad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbil-falaq, min sharri mā khalaq, wa min sharri ghāsiqin idhā waqab, wa min sharrin-naffāthāti fil-ʿuqad, wa min sharri ḥāsidin idhā ḥasad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbin-nās, malikin-nās, ilāhin-nās, min sharril-waswāsil-khannās, alladhī yuwaswisu fī ṣudūrin-nās, minal-jinnati wan-nās.",
+      "translation": "In the name of Allah, the Most Gracious, the Most Merciful. Say: He is Allah, the One; Allah, the Self-Sufficient on whom all depend. He begot no one, nor was He begotten, and there is no one comparable to Him. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of the dawn from the evil of whatever He has created, from the evil of the night's darkness when it sets in, from the evil of those who blow upon knots, and from the evil of an envious one when he envies. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of humankind, the King of humankind, the God of humankind, from the evil of the retreating whisperer who whispers into the breasts of humankind, whether of the jinn or of humankind.",
+      "repeat": 3,
+      "virtue": {
+        "en": "For whoever says them three times in the morning and in the evening, they suffice against everything.",
+        "ar": "من قالها ثلاث مرات حين يصبح وحين يمسي كفته من كل شيء"
+      },
+      "reference": {
+        "en": "Qur'an, Surahs al-Ikhlas, al-Falaq and an-Nas. Abu Dawud 4/322 (no. 5082); at-Tirmidhi 5/567 (no. 3575); see also Sahih at-Tirmidhi 3/182",
+        "ar": "سورة الإخلاص، سورة الفلق، سورة الناس. أخرجه أبو داود، 4/322، برقم 5082، والترمذي، 5/567، برقم 3575، وانظر: صحيح الترمذي، 3/182"
+      },
+      "quran": [
+        {
+          "surah": 112,
+          "from": 1,
+          "to": 4
+        },
+        {
+          "surah": 113,
+          "from": 1,
+          "to": 5
+        },
+        {
+          "surah": 114,
+          "from": 1,
+          "to": 6
+        }
+      ],
+      "afterPrayer": {
+        "repeat": {
+          "fajr": 1,
+          "dhuhr": 1,
+          "asr": 1,
+          "maghrib": 1,
+          "isha": 1
+        },
+        "narration": {
+          "reference": {
+            "en": "Qur'an, Surahs al-Ikhlas, al-Falaq and an-Nas. Abu Dawud 2/86 (no. 1523); at-Tirmidhi (no. 2903); an-Nasa'i 3/68 (no. 1336); see also Sahih at-Tirmidhi 2/8. The three surahs are called al-Mu'awwidhat; see Fath al-Bari 9/62",
+            "ar": "سورة الإخلاص، سورة الفلق، سورة الناس. أبو داود، 2/86، برقم 1523، والترمذي، برقم 2903، والنسائي، 3/68، برقم 1336، وانظر: صحيح الترمذي، 2/8. والسور الثلاث يقال لها: المعوذات. انظر: فتح الباري، 9/62"
+          }
+        }
+      }
+    },
+    "morning-asbahna-wa-asbaha-al-mulk": {
+      "id": "morning-asbahna-wa-asbaha-al-mulk",
+      "arabic": "أَصْبَحْنَا وَأَصْبَحَ المُلْكُ لِلَّهِ، وَالحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا اليَوْمِ وَخَيْرَ مَا بَعْدَهُ وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا اليَوْمِ وَشَرِّ مَا بَعْدَهُ رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ وَسُوءِ الكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي القَبْرِ",
+      "transliteration": "Aṣbaḥnā wa aṣbaḥal-mulku lillāh, wal-ḥamdu lillāh, lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr. Rabbi asʾaluka khayra mā fī hādhal-yawmi wa khayra mā baʿdah, wa aʿūdhu bika min sharri mā fī hādhal-yawmi wa sharri mā baʿdah. Rabbi aʿūdhu bika minal-kasali wa sūʾil-kibar. Rabbi aʿūdhu bika min ʿadhābin fin-nāri wa ʿadhābin fil-qabr.",
+      "translation": "We have entered the morning, and the dominion this morning is Allah's, and all praise is due to Allah. There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things. My Lord, I ask You for the good of what is in this day and the good of what comes after it, and I seek refuge in You from the evil of what is in this day and the evil of what comes after it. My Lord, I seek refuge in You from laziness and from the ills of old age. My Lord, I seek refuge in You from torment in the Fire and torment in the grave.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 4/2088 (no. 2723)",
+        "ar": "مسلم، 4/2088، برقم 2723"
+      }
+    },
+    "evening-amsayna-wa-amsa-al-mulk": {
+      "id": "evening-amsayna-wa-amsa-al-mulk",
+      "arabic": "أَمْسَيْنَا وَأَمْسَى المُلْكُ لِلَّهِ، وَالحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ وَسُوءِ الكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي القَبْرِ",
+      "transliteration": "Amsaynā wa amsal-mulku lillāh, wal-ḥamdu lillāh, lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr. Rabbi asʾaluka khayra mā fī hādhihil-laylati wa khayra mā baʿdahā, wa aʿūdhu bika min sharri mā fī hādhihil-laylati wa sharri mā baʿdahā. Rabbi aʿūdhu bika minal-kasali wa sūʾil-kibar. Rabbi aʿūdhu bika min ʿadhābin fin-nāri wa ʿadhābin fil-qabr.",
+      "translation": "We have entered the evening, and the dominion this evening is Allah's, and all praise is due to Allah. There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things. My Lord, I ask You for the good of what is in this night and the good of what comes after it, and I seek refuge in You from the evil of what is in this night and the evil of what comes after it. My Lord, I seek refuge in You from laziness and from the ills of old age. My Lord, I seek refuge in You from torment in the Fire and torment in the grave.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 4/2088 (no. 2723)",
+        "ar": "مسلم، 4/2088، برقم 2723"
+      }
+    },
+    "morning-allahumma-bika-asbahna": {
+      "id": "morning-allahumma-bika-asbahna",
+      "arabic": "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ",
+      "transliteration": "Allāhumma bika aṣbaḥnā, wa bika amsaynā, wa bika naḥyā, wa bika namūtu, wa ilaykan-nushūr.",
+      "translation": "O Allah, it is through You that we have reached the morning and through You that we reach the evening; through You we live and through You we die, and to You is the resurrection.",
+      "repeat": 1,
+      "reference": {
+        "en": "At-Tirmidhi 5/466 (no. 3391), whose narration has the two endings the other way round; see also Sahih at-Tirmidhi 3/142. With the ending recited here: al-Bukhari in al-Adab al-Mufrad (no. 1199); Abu Dawud (no. 5068)",
+        "ar": "الترمذي، 5/466، برقم 3391، وانظر: صحيح الترمذي 3/142. والبخاري في الأدب المفرد، برقم 1199، وأبو داود، برقم 5068"
+      }
+    },
+    "evening-allahumma-bika-amsayna": {
+      "id": "evening-allahumma-bika-amsayna",
+      "arabic": "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا وَبِكَ نَحْيَا وَبِكَ نَمُوتُ وَإِلَيْكَ المَصِيرُ",
+      "transliteration": "Allāhumma bika amsaynā, wa bika aṣbaḥnā, wa bika naḥyā, wa bika namūtu, wa ilaykal-maṣīr.",
+      "translation": "O Allah, it is through You that we have reached the evening and through You that we reach the morning; through You we live and through You we die, and to You is the final return.",
+      "repeat": 1,
+      "reference": {
+        "en": "At-Tirmidhi 5/466 (no. 3391), whose narration has the two endings the other way round; see also Sahih at-Tirmidhi 3/142. With the ending recited here: al-Bukhari in al-Adab al-Mufrad (no. 1199); Ibn Majah (no. 3868)",
+        "ar": "الترمذي، 5/466، برقم 3391، وانظر: صحيح الترمذي 3/142. والبخاري في الأدب المفرد، برقم 1199، وابن ماجه، برقم 3868"
+      }
+    },
+    "sayyid-al-istighfar": {
+      "id": "sayyid-al-istighfar",
+      "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+      "transliteration": "Allāhumma anta rabbī lā ilāha illā ant, khalaqtanī wa anā ʿabduk, wa anā ʿalā ʿahdika wa waʿdika mastaṭaʿt, aʿūdhu bika min sharri mā ṣanaʿt, abūʾu laka bi-niʿmatika ʿalayy, wa abūʾu bi-dhanbī, faghfir lī fa-innahu lā yaghfirudh-dhunūba illā ant.",
+      "translation": "O Allah, You are my Lord; there is no god but You. You created me and I am Your servant, and I hold to Your covenant and Your promise as best I can. I seek refuge in You from the evil of whatever I have done. I confess to You Your favour upon me, and I confess my sin; so forgive me, for no one forgives sins except You.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever says it in the evening with firm conviction and dies that night enters Paradise, and likewise if it is said in the morning.",
+        "ar": "من قالها موقناً بها حين يمسي، فمات من ليلته دخل الجنة، وكذلك إذا أصبح"
+      },
+      "reference": {
+        "en": "Al-Bukhari 7/150 (no. 6306)",
+        "ar": "أخرجه البخاري، 7/150، برقم 6306"
+      }
+    },
+    "morning-asbahtu-ushhiduka": {
+      "id": "morning-asbahtu-ushhiduka",
+      "arabic": "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",
+      "transliteration": "Allāhumma innī aṣbaḥtu ushhiduka wa ushhidu ḥamalata ʿarshik, wa malāʾikataka wa jamīʿa khalqik, annaka antallāhu lā ilāha illā anta waḥdaka lā sharīka lak, wa anna Muḥammadan ʿabduka wa rasūluk.",
+      "translation": "O Allah, I have entered the morning calling You to witness, and calling to witness the bearers of Your Throne, Your angels and all Your creation, that You are Allah; there is no god but You, alone, without partner, and that Muhammad is Your servant and Your Messenger.",
+      "repeat": 4,
+      "virtue": {
+        "en": "Allah frees from the Fire whoever says it four times in the morning or in the evening.",
+        "ar": "من قالها حين يصبح، أو يمسي أربع مرات، أعتقه اللَّه من النار"
+      },
+      "reference": {
+        "en": "Abu Dawud 4/317 (no. 5069); al-Bukhari in al-Adab al-Mufrad (no. 1201); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 9); Ibn as-Sunni (no. 70). Ibn Baz graded the chains of an-Nasa'i and Abu Dawud good in Tuhfat al-Akhyar, p. 23",
+        "ar": "أخرجه أبو داود، 4/317، برقم 5069، والبخاري في الأدب المفرد، برقم 1201، والنسائي في عمل اليوم والليلة، برقم 9، وابن السني، برقم 70، وحسّن سماحة الشيخ ابن باز - رحمه الله - إسناد النسائي، وأبي داود، في تحفة الأخيار، ص23"
+      }
+    },
+    "evening-amsaytu-ushhiduka": {
+      "id": "evening-amsaytu-ushhiduka",
+      "arabic": "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ",
+      "transliteration": "Allāhumma innī amsaytu ushhiduka wa ushhidu ḥamalata ʿarshik, wa malāʾikataka wa jamīʿa khalqik, annaka antallāhu lā ilāha illā anta waḥdaka lā sharīka lak, wa anna Muḥammadan ʿabduka wa rasūluk.",
+      "translation": "O Allah, I have entered the evening calling You to witness, and calling to witness the bearers of Your Throne, Your angels and all Your creation, that You are Allah; there is no god but You, alone, without partner, and that Muhammad is Your servant and Your Messenger.",
+      "repeat": 4,
+      "virtue": {
+        "en": "Allah frees from the Fire whoever says it four times in the morning or in the evening.",
+        "ar": "من قالها حين يصبح، أو يمسي أربع مرات، أعتقه اللَّه من النار"
+      },
+      "reference": {
+        "en": "Abu Dawud 4/317 (no. 5069); al-Bukhari in al-Adab al-Mufrad (no. 1201); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 9); Ibn as-Sunni (no. 70). Ibn Baz graded the chains of an-Nasa'i and Abu Dawud good in Tuhfat al-Akhyar, p. 23",
+        "ar": "أخرجه أبو داود، 4/317، برقم 5069، والبخاري في الأدب المفرد، برقم 1201، والنسائي في عمل اليوم والليلة، برقم 9، وابن السني، برقم 70، وحسّن سماحة الشيخ ابن باز - رحمه الله - إسناد النسائي، وأبي داود، في تحفة الأخيار، ص23"
+      }
+    },
+    "morning-ma-asbaha-bi-min-nimah": {
+      "id": "morning-ma-asbaha-bi-min-nimah",
+      "arabic": "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الحَمْدُ وَلَكَ الشُّكْرُ",
+      "transliteration": "Allāhumma mā aṣbaḥa bī min niʿmatin aw bi-aḥadin min khalqika fa-minka waḥdaka lā sharīka lak, fa-lakal-ḥamdu wa lakash-shukr.",
+      "translation": "O Allah, whatever blessing has come this morning to me or to any of Your creation is from You alone, without partner; so to You belongs all praise and to You belongs all thanks.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever says it in the morning has given the thanks due for that day, and whoever says it in the evening has given the thanks due for that night.",
+        "ar": "من قالها حين يصبح فقد أدَّى شكر يومه، ومن قالها حين يمسي فقد أدَّى شكر ليلته"
+      },
+      "reference": {
+        "en": "Abu Dawud 4/318 (no. 5073); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 7); Ibn as-Sunni (no. 41); Ibn Hibban (Mawarid, no. 2361). Ibn Baz graded its chain good in Tuhfat al-Akhyar, p. 24",
+        "ar": "أخرجه أبو داود، 4/318، برقم 5073، والنسائي في عمل اليوم والليلة، برقم 7، وابن السني، برقم 41، وابن حبان، ((موارد)) برقم 2361، وحسّن ابن باز - رحمه الله - إسناده في تحفة الأخيار، ص24"
+      }
+    },
+    "evening-ma-amsa-bi-min-nimah": {
+      "id": "evening-ma-amsa-bi-min-nimah",
+      "arabic": "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الحَمْدُ وَلَكَ الشُّكْرُ",
+      "transliteration": "Allāhumma mā amsā bī min niʿmatin aw bi-aḥadin min khalqika fa-minka waḥdaka lā sharīka lak, fa-lakal-ḥamdu wa lakash-shukr.",
+      "translation": "O Allah, whatever blessing has come this evening to me or to any of Your creation is from You alone, without partner; so to You belongs all praise and to You belongs all thanks.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever says it in the morning has given the thanks due for that day, and whoever says it in the evening has given the thanks due for that night.",
+        "ar": "من قالها حين يصبح فقد أدَّى شكر يومه، ومن قالها حين يمسي فقد أدَّى شكر ليلته"
+      },
+      "reference": {
+        "en": "Abu Dawud 4/318 (no. 5073); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 7); Ibn as-Sunni (no. 41); Ibn Hibban (Mawarid, no. 2361). Ibn Baz graded its chain good in Tuhfat al-Akhyar, p. 24",
+        "ar": "أخرجه أبو داود، 4/318، برقم 5073، والنسائي في عمل اليوم والليلة، برقم 7، وابن السني، برقم 41، وابن حبان، ((موارد)) برقم 2361، وحسّن ابن باز - رحمه الله - إسناده في تحفة الأخيار، ص24"
+      }
+    },
+    "allahumma-afini-fi-badani": {
+      "id": "allahumma-afini-fi-badani",
+      "arabic": "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ، وَالفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ",
+      "transliteration": "Allāhumma ʿāfinī fī badanī, Allāhumma ʿāfinī fī samʿī, Allāhumma ʿāfinī fī baṣarī, lā ilāha illā ant. Allāhumma innī aʿūdhu bika minal-kufri wal-faqr, wa aʿūdhu bika min ʿadhābil-qabr, lā ilāha illā ant.",
+      "translation": "O Allah, grant me soundness in my body. O Allah, grant me soundness in my hearing. O Allah, grant me soundness in my sight. There is no god but You. O Allah, I seek refuge in You from disbelief and from poverty, and I seek refuge in You from the torment of the grave. There is no god but You.",
+      "repeat": 3,
+      "reference": {
+        "en": "Abu Dawud 4/324 (no. 5090); Ahmad 5/42 (no. 20430); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 22); Ibn as-Sunni (no. 69); al-Bukhari in al-Adab al-Mufrad (no. 701). Ibn Baz graded its chain good in Tuhfat al-Akhyar, p. 26",
+        "ar": "أبو داود، 4/324، برقم 5090، وأحمد، 5/42، برقم 20430، والنسائي في عمل اليوم والليلة، برقم 22، وابن السني، برقم 69، والبخاري في الأدب المفرد، برقم 701، وحسّن العلامة ابن باز - رحمه الله - إسناده في تحفة الأخيار، ص26"
+      }
+    },
+    "hasbiyallahu-la-ilaha-illa-huwa": {
+      "id": "hasbiyallahu-la-ilaha-illa-huwa",
+      "arabic": "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ العَرْشِ العَظِيمِ",
+      "transliteration": "Ḥasbiyallāhu lā ilāha illā huwa, ʿalayhi tawakkaltu wa huwa rabbul-ʿarshil-ʿaẓīm.",
+      "translation": "Allah is sufficient for me; there is no god but He. In Him I have put my trust, and He is the Lord of the mighty Throne.",
+      "repeat": 7,
+      "virtue": {
+        "en": "Whoever says it seven times in the morning and in the evening, Allah takes care of whatever worries them in the matters of this world and the Hereafter.",
+        "ar": "من قالها حين يصبح وحين يمسي سبع مرات كفاه اللَّه ما أهمّه من أمر الدنيا والآخرة"
+      },
+      "reference": {
+        "en": "Its words are the close of ayah 129 of Surah at-Tawbah in the Qur'an. Ibn as-Sunni (no. 71), as a saying of the Prophet; Abu Dawud 4/321 (no. 5081), as a saying of a Companion; its chain was graded authentic by Shu'ayb and Abd al-Qadir al-Arna'ut. See Zad al-Ma'ad 2/376",
+        "ar": "سورة التوبة، الآية: 129. أخرجه ابن السني، برقم 71 مرفوعاً، وأبو داود موقوفاً، 4/321، برقم 5081، وصحّح إسناده شعيب وعبد القادر الأرناؤوط. انظر: زاد المعاد 2/376"
+      }
+    },
+    "allahumma-inni-asaluka-al-afwa-wal-afiyah": {
+      "id": "allahumma-inni-asaluka-al-afwa-wal-afiyah",
+      "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَفْوَ وَالعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي",
+      "transliteration": "Allāhumma innī asʾalukal-ʿafwa wal-ʿāfiyata fid-dunyā wal-ākhirah. Allāhumma innī asʾalukal-ʿafwa wal-ʿāfiyata fī dīnī wa dunyāya wa ahlī wa mālī. Allāhummastur ʿawrātī wa āmin rawʿātī. Allāhummaḥfaẓnī min bayni yadayya wa min khalfī, wa ʿan yamīnī wa ʿan shimālī, wa min fawqī, wa aʿūdhu bi-ʿaẓamatika an ughtāla min taḥtī.",
+      "translation": "O Allah, I ask You for pardon and well-being in this world and the Hereafter. O Allah, I ask You for pardon and well-being in my religion and my worldly life, and in my family and my property. O Allah, cover my faults and calm my fears. O Allah, protect me from the front and from behind, on my right and on my left, and from above, and I seek refuge in Your greatness from being seized unawares from beneath me.",
+      "repeat": 1,
+      "reference": {
+        "en": "Abu Dawud (no. 5074); Ibn Majah (no. 3871); see also Sahih Ibn Majah 2/332",
+        "ar": "أبو داود، برقم 5074، وابن ماجه، برقم 3871، وانظر: صحيح ابن ماجه، 2/332"
+      }
+    },
+    "allahumma-alim-al-ghayb-wash-shahadah": {
+      "id": "allahumma-alim-al-ghayb-wash-shahadah",
+      "arabic": "اللَّهُمَّ عَالِمَ الغَيْبِ وَالشَّهَادَةِ، فَاطِرَ السَّمَاوَاتِ وَالأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ",
+      "transliteration": "Allāhumma ʿālimal-ghaybi wash-shahādah, fāṭiras-samāwāti wal-arḍ, rabba kulli shayʾin wa malīkah, ashhadu an lā ilāha illā ant, aʿūdhu bika min sharri nafsī, wa min sharrish-shayṭāni wa shirkih, wa an aqtarifa ʿalā nafsī sūʾan aw ajurrahu ilā muslim.",
+      "translation": "O Allah, Knower of the unseen and the witnessed, Originator of the heavens and the earth, Lord and Possessor of everything: I bear witness that there is no god but You. I seek refuge in You from the evil of my own self, from the evil of Satan and his call to associate partners with You, and from committing any wrong against myself or bringing it upon a Muslim.",
+      "repeat": 1,
+      "reference": {
+        "en": "At-Tirmidhi (nos. 3392 and 3529); Abu Dawud (no. 5067); see also Sahih at-Tirmidhi 3/142",
+        "ar": "الترمذي، برقم 3392، ورقم 3529، وأبو داود، برقم 5067، وانظر: صحيح الترمذي، 3/142"
+      }
+    },
+    "bismillah-alladhi-la-yadurru": {
+      "id": "bismillah-alladhi-la-yadurru",
+      "arabic": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ العَلِيمُ",
+      "transliteration": "Bismillāhil-ladhī lā yaḍurru maʿasmihi shayʾun fil-arḍi wa lā fis-samāʾi wa huwas-samīʿul-ʿalīm.",
+      "translation": "In the name of Allah, alongside whose name nothing in the earth or in the sky can do any harm; and He is the All-Hearing, the All-Knowing.",
+      "repeat": 3,
+      "virtue": {
+        "en": "Nothing harms whoever says it three times in the morning and three times in the evening.",
+        "ar": "من قالها ثلاثاً إذا أصبح، وثلاثاً إذا أمسى لم يضره شيء"
+      },
+      "reference": {
+        "en": "Abu Dawud 4/323 (no. 5088); at-Tirmidhi 5/465 (no. 3388); Ibn Majah (no. 3869); Ahmad (no. 446). See also Sahih Ibn Majah 2/332; Ibn Baz graded its chain good in Tuhfat al-Akhyar, p. 39",
+        "ar": "أخرجه أبو داود، 4/323، برقم 5088، والترمذي، 5/465، برقم 3388، وابن ماجه، برقم 3869، وأحمد، برقم 446. وانظر: صحيح ابن ماجه، 2/332، وحسّن إسناده العلامة ابن باز - رحمه الله - في تحفة الأخيار، ص39"
+      }
+    },
+    "raditu-billahi-rabban": {
+      "id": "raditu-billahi-rabban",
+      "arabic": "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالإِسْلَامِ دِينًا وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا",
+      "transliteration": "Raḍītu billāhi rabbā, wa bil-islāmi dīnā, wa bi-Muḥammadin ṣallallāhu ʿalayhi wa sallama nabiyyā.",
+      "translation": "I am content with Allah as Lord, with Islam as religion, and with Muhammad, may Allah's blessings and peace be upon him, as Prophet.",
+      "repeat": 3,
+      "virtue": {
+        "en": "Whoever says it three times in the morning and three times in the evening, Allah has taken it upon Himself to please them on the Day of Resurrection.",
+        "ar": "من قالها ثلاثاً حين يصبح وثلاثاً حين يمسي كان حقاً على اللَّه أن يرضيه يوم القيامة"
+      },
+      "reference": {
+        "en": "Ahmad 4/337 (no. 18967); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 4); Ibn as-Sunni (no. 68); Abu Dawud 4/318 (no. 5072); at-Tirmidhi 5/465 (no. 3389). Ibn Baz graded it good in Tuhfat al-Akhyar, p. 39",
+        "ar": "أحمد، 4/337، برقم 18967، والنسائي في عمل اليوم والليلة، برقم 4، وابن السني، برقم 68، وأبو داود، 4/318، برقم 5072، والترمذي، 5/465، برقم 3389، وحسّنه ابن باز - رحمه الله - في تحفة الأخيار ص39"
+      }
+    },
+    "ya-hayyu-ya-qayyum": {
+      "id": "ya-hayyu-ya-qayyum",
+      "arabic": "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ",
+      "transliteration": "Yā ḥayyu yā qayyūm, bi-raḥmatika astaghīth, aṣliḥ lī shaʾnī kullah, wa lā takilnī ilā nafsī ṭarfata ʿayn.",
+      "translation": "O Ever-Living, O Sustainer of all, in Your mercy I seek relief. Set right all my affairs for me, and do not leave me to my own self, even for the blink of an eye.",
+      "repeat": 1,
+      "reference": {
+        "en": "Al-Hakim 1/545, who graded it authentic, and adh-Dhahabi agreed; see also Sahih at-Targhib wat-Tarhib 1/273",
+        "ar": "الحاكم وصححه، ووافقه الذهبي، 1/545، وانظر: صحيح الترغيب والترهيب، 1/273"
+      }
+    },
+    "morning-asbahna-rabbil-alamin": {
+      "id": "morning-asbahna-rabbil-alamin",
+      "arabic": "أَصْبَحْنَا وَأَصْبَحَ المُلْكُ لِلَّهِ رَبِّ العَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا اليَوْمِ: فَتْحَهُ، وَنَصْرَهُ، وَنُورَهُ، وَبَرَكَتَهُ، وَهُدَاهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ",
+      "transliteration": "Aṣbaḥnā wa aṣbaḥal-mulku lillāhi rabbil-ʿālamīn. Allāhumma innī asʾaluka khayra hādhal-yawm: fatḥahu, wa naṣrahu, wa nūrahu, wa barakatahu, wa hudāh, wa aʿūdhu bika min sharri mā fīhi wa sharri mā baʿdah.",
+      "translation": "We have entered the morning, and the dominion this morning is Allah's, the Lord of the worlds. O Allah, I ask You for this day's good: its triumph, its help and its light, its blessing and its guidance; and I seek refuge in You from the evil that is in it and the evil that follows it.",
+      "repeat": 1,
+      "reference": {
+        "en": "Abu Dawud 4/322 (no. 5084); its chain was graded good by Shu'ayb and Abd al-Qadir al-Arna'ut in their edition of Zad al-Ma'ad 2/373",
+        "ar": "أبو داود، 4/322، برقم 5084، وحسن إسناده شعيب وعبد القادر الأرناؤوط في تحقيق زاد المعاد، 2/373"
+      }
+    },
+    "evening-amsayna-rabbil-alamin": {
+      "id": "evening-amsayna-rabbil-alamin",
+      "arabic": "أَمْسَيْنَا وَأَمْسَى المُلْكُ لِلَّهِ رَبِّ العَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ: فَتْحَهَا، وَنَصْرَهَا، وَنُورَهَا، وَبَرَكَتَهَا، وَهُدَاهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهَا وَشَرِّ مَا بَعْدَهَا",
+      "transliteration": "Amsaynā wa amsal-mulku lillāhi rabbil-ʿālamīn. Allāhumma innī asʾaluka khayra hādhihil-laylah: fatḥahā, wa naṣrahā, wa nūrahā, wa barakatahā, wa hudāhā, wa aʿūdhu bika min sharri mā fīhā wa sharri mā baʿdahā.",
+      "translation": "We have entered the evening, and the dominion this evening is Allah's, the Lord of the worlds. O Allah, I ask You for this night's good: its triumph, its help and its light, its blessing and its guidance; and I seek refuge in You from the evil that is in it and the evil that follows it.",
+      "repeat": 1,
+      "reference": {
+        "en": "Abu Dawud 4/322 (no. 5084); its chain was graded good by Shu'ayb and Abd al-Qadir al-Arna'ut in their edition of Zad al-Ma'ad 2/373",
+        "ar": "أبو داود، 4/322، برقم 5084، وحسن إسناده شعيب وعبد القادر الأرناؤوط في تحقيق زاد المعاد، 2/373"
+      }
+    },
+    "morning-asbahna-ala-fitrat-al-islam": {
+      "id": "morning-asbahna-ala-fitrat-al-islam",
+      "arabic": "أَصْبَحْنَا عَلَى فِطْرَةِ الإِسْلَامِ وَعَلَى كَلِمَةِ الإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا كَانَ مِنَ المُشْرِكِينَ",
+      "transliteration": "Aṣbaḥnā ʿalā fiṭratil-islām, wa ʿalā kalimatil-ikhlāṣ, wa ʿalā dīni nabiyyinā Muḥammadin ṣallallāhu ʿalayhi wa sallam, wa ʿalā millati abīnā Ibrāhīma ḥanīfan musliman wa mā kāna minal-mushrikīn.",
+      "translation": "We have entered the morning upon the natural way of Islam, upon the word of sincere devotion, upon the religion of our Prophet Muhammad, may Allah's blessings and peace be upon him, and upon the way of our father Ibrahim, who was upright in faith, a Muslim, and was not one of those who associate partners with Allah.",
+      "repeat": 1,
+      "reference": {
+        "en": "Ahmad 3/406 and 407 (nos. 15360 and 15363); Ibn as-Sunni in 'Amal al-Yawm wal-Laylah (no. 34); see also Sahih al-Jami' 4/209",
+        "ar": "أحمد، 3/406، و407، برقم 15360، ورقم 15363، وابن السني في عمل اليوم والليلة، برقم 34، وانظر: صحيح الجامع، 4/209"
+      }
+    },
+    "evening-amsayna-ala-fitrat-al-islam": {
+      "id": "evening-amsayna-ala-fitrat-al-islam",
+      "arabic": "أَمْسَيْنَا عَلَى فِطْرَةِ الإِسْلَامِ وَعَلَى كَلِمَةِ الإِخْلَاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا وَمَا كَانَ مِنَ المُشْرِكِينَ",
+      "transliteration": "Amsaynā ʿalā fiṭratil-islām, wa ʿalā kalimatil-ikhlāṣ, wa ʿalā dīni nabiyyinā Muḥammadin ṣallallāhu ʿalayhi wa sallam, wa ʿalā millati abīnā Ibrāhīma ḥanīfan musliman wa mā kāna minal-mushrikīn.",
+      "translation": "We have entered the evening upon the natural way of Islam, upon the word of sincere devotion, upon the religion of our Prophet Muhammad, may Allah's blessings and peace be upon him, and upon the way of our father Ibrahim, who was upright in faith, a Muslim, and was not one of those who associate partners with Allah.",
+      "repeat": 1,
+      "reference": {
+        "en": "Ahmad 3/406 and 407 (nos. 15360 and 15363); Ibn as-Sunni in 'Amal al-Yawm wal-Laylah (no. 34); see also Sahih al-Jami' 4/209",
+        "ar": "أحمد، 3/406، و407، برقم 15360، ورقم 15363، وابن السني في عمل اليوم والليلة، برقم 34، وانظر: صحيح الجامع، 4/209"
+      }
+    },
+    "subhanallahi-wa-bihamdih": {
+      "id": "subhanallahi-wa-bihamdih",
+      "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+      "transliteration": "Subḥānallāhi wa bi-ḥamdih.",
+      "translation": "Glory be to Allah, and praise be to Him.",
+      "repeat": 100,
+      "virtue": {
+        "en": "Whoever says it one hundred times in the morning and in the evening, no one will come on the Day of Resurrection with anything better than what they bring, except someone who said the same or more.",
+        "ar": "من قالها مائة مرة حين يصبح وحين يمسي لم يأت أحد يوم القيامة بأفضل مما جاء به إلا أحد قال مثل ما قال أو زاد عليه"
+      },
+      "reference": {
+        "en": "Muslim 4/2071 (no. 2692)",
+        "ar": "مسلم، 4/2071، برقم 2692"
+      }
+    },
+    "la-ilaha-illallah-wahdahu-ten-times": {
+      "id": "la-ilaha-illallah-wahdahu-ten-times",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "transliteration": "Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr.",
+      "translation": "There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things.",
+      "repeat": 10,
+      "note": {
+        "en": "Ten times, or once when overcome by laziness.",
+        "ar": "عشرَ مرَّات، أَوْ مرَّةً واحدةً عندَ الكَسَلِ"
+      },
+      "reference": {
+        "en": "Ten times: an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 24); Ahmad (no. 8719); see also Sahih at-Targhib wat-Tarhib 1/272 and Tuhfat al-Akhyar by Ibn Baz, p. 44. Once, when lazy: Abu Dawud (no. 5077); Ibn Majah (no. 3867); Ahmad (no. 16583); see also Sahih at-Targhib wat-Tarhib 1/270, Sahih Abi Dawud 3/957, Sahih Ibn Majah 2/331 and Zad al-Ma'ad 2/377",
+        "ar": "عشرَ مرَّات: النسائي في عمل اليوم والليلة، برقم 24، وأحمد، برقم 8719، وانظر: صحيح الترغيب والترهيب، 1/272، وتحفة الأخيار لابن باز - رحمه الله -، ص44. مرَّةً واحدةً عندَ الكَسَلِ: أبو داود، برقم 5077، وابن ماجه، برقم 3867، وأحمد، برقم 16583، وانظر: صحيح الترغيب والترهيب، 1/270، وصحيح أبي داود، 3/957، وصحيح ابن ماجه، 2/331، وزاد المعاد، 2/377"
+      }
+    },
+    "la-ilaha-illallah-wahdahu-hundred-times": {
+      "id": "la-ilaha-illallah-wahdahu-hundred-times",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "transliteration": "Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr.",
+      "translation": "There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things.",
+      "repeat": 100,
+      "virtue": {
+        "en": "Whoever says it one hundred times in a day, it equals for them the freeing of ten slaves; one hundred good deeds are written for them and one hundred bad deeds are erased from them; it is a protection for them from Satan throughout that day until evening; and no one brings anything better than what they bring, except someone who has done more than that.",
+        "ar": "من قالها مائة مرة في يوم كانت له عدل عشر رقاب، وكُتِبَ له مائة حسنة، ومُحيت عنه مائة سيئة، وكانت له حرزاً من الشيطان يومه ذلك حتى يمسي، ولم يأت أحد بأفضل مما جاء به إلا أحد عمل أكثر من ذلك"
+      },
+      "reference": {
+        "en": "Al-Bukhari 4/95 (no. 3293); Muslim 4/2071 (no. 2691)",
+        "ar": "البخاري، 4/95، برقم 3293، ومسلم، 4/2071، برقم 2691"
+      }
+    },
+    "subhanallahi-wa-bihamdih-adada-khalqih": {
+      "id": "subhanallahi-wa-bihamdih-adada-khalqih",
+      "arabic": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ عَدَدَ خَلْقِهِ وَرِضَا نَفْسِهِ وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ",
+      "transliteration": "Subḥānallāhi wa bi-ḥamdih, ʿadada khalqih, wa riḍā nafsih, wa zinata ʿarshih, wa midāda kalimātih.",
+      "translation": "Glory be to Allah, and praise be to Him, as many times as the number of His creatures, as much as pleases Him, as much as the weight of His Throne, and as much as the ink of His words.",
+      "repeat": 3,
+      "reference": {
+        "en": "Muslim 4/2090 (no. 2726)",
+        "ar": "مسلم، 4/2090، برقم 2726"
+      }
+    },
+    "allahumma-inni-asaluka-ilman-nafian": {
+      "id": "allahumma-inni-asaluka-ilman-nafian",
+      "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
+      "transliteration": "Allāhumma innī asʾaluka ʿilman nāfiʿā, wa rizqan ṭayyibā, wa ʿamalan mutaqabbalā.",
+      "translation": "O Allah, I ask You for knowledge that benefits, provision that is good, and deeds that are accepted.",
+      "repeat": 1,
+      "reference": {
+        "en": "Ibn as-Sunni in 'Amal al-Yawm wal-Laylah (no. 54); Ibn Majah (no. 925); its chain was graded good by Abd al-Qadir and Shu'ayb al-Arna'ut in their edition of Zad al-Ma'ad 2/375",
+        "ar": "أخرجه ابن السني في عمل اليوم والليلة، برقم 54، وابن ماجه، برقم 925، وحسّن إسناده عبد القادر وشعيب الأرناؤوط في تحقيق زاد المعاد، 2/375"
+      },
+      "afterPrayer": {
+        "prayers": [
+          "fajr"
+        ],
+        "narration": {
+          "reference": {
+            "en": "Ibn Majah (no. 925); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 102); see also Sahih Ibn Majah 1/152 and Majma' az-Zawa'id 10/111",
+            "ar": "ابن ماجه، برقم 925، والنسائي في عمل اليوم والليلة، برقم 102، وانظر: صحيح ابن ماجه، 1/152، ومجمع الزوائد 10/111"
+          }
+        }
+      }
+    },
+    "astaghfirullah-wa-atubu-ilayh": {
+      "id": "astaghfirullah-wa-atubu-ilayh",
+      "arabic": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+      "transliteration": "Astaghfirullāha wa atūbu ilayh.",
+      "translation": "I ask Allah for forgiveness and I turn to Him in repentance.",
+      "repeat": 100,
+      "note": {
+        "en": "One hundred times during the day.",
+        "ar": "مِائَةَ مَرَّةٍ فِي الْيَوْمِ"
+      },
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 11/101 (no. 6307); Muslim 4/2075 (no. 2702)",
+        "ar": "البخاري مع الفتح، 11/101، برقم 6307، ومسلم، 4/2075، برقم 2702"
+      }
+    },
+    "audhu-bi-kalimatillah-at-tammat": {
+      "id": "audhu-bi-kalimatillah-at-tammat",
+      "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+      "transliteration": "Aʿūdhu bi-kalimātillāhit-tāmmāti min sharri mā khalaq.",
+      "translation": "I seek refuge in Allah's perfect words from the evil of whatever He has created.",
+      "repeat": 3,
+      "virtue": {
+        "en": "Whoever says it three times in the evening will not be harmed by any venomous sting that night.",
+        "ar": "من قالها حين يمسي ثلاث مرات لم تضرّه حُمَة تلك الليلة"
+      },
+      "reference": {
+        "en": "Ahmad 2/290 (no. 7898); an-Nasa'i in 'Amal al-Yawm wal-Laylah (no. 590); see also Sahih at-Tirmidhi 3/187, Sahih Ibn Majah 2/266 and Tuhfat al-Akhyar by Ibn Baz, p. 45",
+        "ar": "أخرجه أحمد، 2/290، برقم 7898، والنسائي في عمل اليوم والليلة، برقم 590، وانظر: صحيح الترمذي، 3/187، وصحيح ابن ماجه، 2/266، وتحفة الأخيار لابن باز، ص45"
+      }
+    },
+    "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad": {
+      "id": "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad",
+      "arabic": "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ",
+      "transliteration": "Allāhumma ṣalli wa sallim ʿalā nabiyyinā Muḥammad.",
+      "translation": "O Allah, send blessings and peace upon our Prophet Muhammad.",
+      "repeat": 10,
+      "reference": {
+        "en": "At-Tabarani through two chains, one of them good; see Majma' az-Zawa'id 10/120 and Sahih at-Targhib wat-Tarhib 1/273; it is also in Da'if at-Targhib wat-Tarhib (no. 396) and in as-Silsilah ad-Da'ifah (no. 5788), al-Albani's collections of weak narrations",
+        "ar": "أخرجه الطبراني بإسنادين: أحدهما جيد، انظر: مجمع الزوائد، 10/120، وصحيح الترغيب والترهيب، 1/273، وضعيف الترغيب والترهيب برقم: 396. وفي السلسلة الضعيفة برقم: 5788"
+      }
+    },
+    "astaghfirullah": {
+      "id": "astaghfirullah",
+      "arabic": "أَسْتَغْفِرُ اللَّهَ",
+      "transliteration": "Astaghfirullāh.",
+      "translation": "I ask Allah for forgiveness.",
+      "repeat": 3,
+      "reference": {
+        "en": "Muslim 1/414 (no. 591)",
+        "ar": "مسلم، 1/414، رقم 591"
+      }
+    },
+    "allahumma-antas-salam": {
+      "id": "allahumma-antas-salam",
+      "arabic": "اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الجَلَالِ وَالإِكْرَامِ",
+      "transliteration": "Allāhumma antas-salāmu wa minkas-salām, tabārakta yā dhal-jalāli wal-ikrām.",
+      "translation": "O Allah, You are Peace, and from You comes peace. Blessed are You, Possessor of majesty and honour.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 1/414 (no. 591)",
+        "ar": "مسلم، 1/414، رقم 591"
+      }
+    },
+    "la-ilaha-illallah-wahdahu-three-times": {
+      "id": "la-ilaha-illallah-wahdahu-three-times",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "transliteration": "Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr.",
+      "translation": "There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things.",
+      "repeat": 3,
+      "reference": {
+        "en": "Al-Bukhari 1/255 (no. 844); Muslim 1/414 (no. 593). The three times are an addition from al-Bukhari (no. 6473), which the book prints between square brackets",
+        "ar": "البخاري، 1/255، برقم 844، ومسلم، 1/414، برقم 593، وما بين المعقوفين زيادة من البخاري، برقم 6473"
+      }
+    },
+    "allahumma-la-mania-lima-atayt": {
+      "id": "allahumma-la-mania-lima-atayt",
+      "arabic": "اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ وَلَا مُعْطِيَ لِمَا مَنَعْتَ وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+      "transliteration": "Allāhumma lā māniʿa limā aʿṭayt, wa lā muʿṭiya limā manaʿt, wa lā yanfaʿu dhal-jaddi minkal-jadd.",
+      "translation": "O Allah, none can withhold what You give, and none can give what You withhold, and no fortune avails its owner anything against You.",
+      "repeat": 1,
+      "reference": {
+        "en": "Al-Bukhari 1/255 (no. 844); Muslim 1/414 (no. 593)",
+        "ar": "البخاري، 1/255، برقم 844، ومسلم، 1/414، برقم 593"
+      }
+    },
+    "la-ilaha-illallah-wa-la-nabudu-illa-iyyah": {
+      "id": "la-ilaha-illallah-wa-la-nabudu-illa-iyyah",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، لَا إِلَهَ إِلَّا اللَّهُ، وَلَا نَعْبُدُ إِلَّا إِيَّاهُ، لَهُ النِّعْمَةُ وَلَهُ الفَضْلُ، وَلَهُ الثَّنَاءُ الحَسَنُ، لَا إِلَهَ إِلَّا اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الكَافِرُونَ",
+      "transliteration": "Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr, lā ḥawla wa lā quwwata illā billāh, lā ilāha illallāh, wa lā naʿbudu illā iyyāh, lahun-niʿmatu wa lahul-faḍl, wa lahuth-thanāʾul-ḥasan, lā ilāha illallāhu mukhliṣīna lahud-dīna wa law karihal-kāfirūn.",
+      "translation": "There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things. There is no might and no power except by Allah. There is no god but Allah, and we worship none but Him. His is all blessing and His is all bounty, and to Him belongs the most beautiful praise. There is no god but Allah; we devote our religion to Him alone, however much the disbelievers may hate it.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 1/415 (no. 594)",
+        "ar": "مسلم، 1/415، برقم 594"
+      }
+    },
+    "subhanallah": {
+      "id": "subhanallah",
+      "arabic": "سُبْحَانَ اللَّهِ",
+      "transliteration": "Subḥānallāh.",
+      "translation": "Glory be to Allah.",
+      "repeat": 33,
+      "reference": {
+        "en": "Muslim 1/418 (no. 597)",
+        "ar": "مسلم، 1/418، برقم 597"
+      }
+    },
+    "alhamdulillah": {
+      "id": "alhamdulillah",
+      "arabic": "الحَمْدُ لِلَّهِ",
+      "transliteration": "Al-ḥamdu lillāh.",
+      "translation": "All praise is due to Allah.",
+      "repeat": 33,
+      "reference": {
+        "en": "Muslim 1/418 (no. 597)",
+        "ar": "مسلم، 1/418، برقم 597"
+      }
+    },
+    "allahu-akbar": {
+      "id": "allahu-akbar",
+      "arabic": "اللَّهُ أَكْبَرُ",
+      "transliteration": "Allāhu akbar.",
+      "translation": "Allah is the Greatest.",
+      "repeat": 33,
+      "reference": {
+        "en": "Muslim 1/418 (no. 597)",
+        "ar": "مسلم، 1/418، برقم 597"
+      }
+    },
+    "la-ilaha-illallah-wahdahu-to-complete-a-hundred": {
+      "id": "la-ilaha-illallah-wahdahu-to-complete-a-hundred",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "transliteration": "Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr.",
+      "translation": "There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise, and He has power over all things.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever says this after every prayer has their sins forgiven, even if they are like the foam of the sea.",
+        "ar": "من قال ذلك دبر كل صلاة غفرت خطاياه وإن كانت مثل زبد البحر"
+      },
+      "reference": {
+        "en": "Muslim 1/418 (no. 597)",
+        "ar": "مسلم، 1/418، برقم 597"
+      }
+    },
+    "la-ilaha-illallah-yuhyi-wa-yumit-ten-times": {
+      "id": "la-ilaha-illallah-yuhyi-wa-yumit-ten-times",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ، يُحْيِي وَيُمِيتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+      "transliteration": "Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamd, yuḥyī wa yumītu wa huwa ʿalā kulli shayʾin qadīr.",
+      "translation": "There is no god but Allah, alone, without partner. To Him belongs the dominion and to Him belongs all praise. He gives life and causes death, and He has power over all things.",
+      "repeat": 10,
+      "reference": {
+        "en": "At-Tirmidhi 5/515 (no. 3474); Ahmad 4/227 (no. 17990); see its takhrij in Zad al-Ma'ad 1/300",
+        "ar": "رواه الترمذي، 5/515، برقم 3474، وأحمد، 4/227، برقم 17990، وانظر تخريجه في: زاد المعاد 1/300"
+      },
+      "afterPrayer": {
+        "prayers": [
+          "fajr",
+          "maghrib"
+        ]
+      }
+    },
+    "sleep-al-ikhlas-al-falaq-an-nas": {
+      "id": "sleep-al-ikhlas-al-falaq-an-nas",
+      "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ\nبِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ الْفَلَقِ\nمِنْ شَرِّ مَا خَلَقَ\nوَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ\nوَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ\nوَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ\nبِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ النَّاسِ\nمَلِكِ النَّاسِ\nإِلَٰهِ النَّاسِ\nمِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ\nالَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ\nمِنَ الْجِنَّةِ وَالنَّاسِ",
+      "transliteration": "Bismillāhir-raḥmānir-raḥīm. Qul huwallāhu aḥad, Allāhuṣ-ṣamad, lam yalid wa lam yūlad, wa lam yakun lahu kufuwan aḥad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbil-falaq, min sharri mā khalaq, wa min sharri ghāsiqin idhā waqab, wa min sharrin-naffāthāti fil-ʿuqad, wa min sharri ḥāsidin idhā ḥasad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbin-nās, malikin-nās, ilāhin-nās, min sharril-waswāsil-khannās, alladhī yuwaswisu fī ṣudūrin-nās, minal-jinnati wan-nās.",
+      "translation": "In the name of Allah, the Most Gracious, the Most Merciful. Say: He is Allah, the One; Allah, the Self-Sufficient on whom all depend. He begot no one, nor was He begotten, and there is no one comparable to Him. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of the dawn from the evil of whatever He has created, from the evil of the night's darkness when it sets in, from the evil of those who blow upon knots, and from the evil of an envious one when he envies. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of humankind, the King of humankind, the God of humankind, from the evil of the retreating whisperer who whispers into the breasts of humankind, whether of the jinn or of humankind.",
+      "repeat": 3,
+      "note": {
+        "en": "Put the palms together, blow lightly into them and recite into them. Then wipe with them as much of the body as you can, beginning with the head, the face and the front of the body. Do this three times.",
+        "ar": "يَجْمَعُ كَفَّيْهِ ثُمَّ يَنْفُثُ فِيهِمَا، فَيَقْرَأُ فِيهِمَا. ثُمَّ يَمْسَحُ بِهِمَا مَا اسْتَطَاعَ مِنْ جَسَدِهِ يَبْدَأُ بِهِمَا عَلَى رَأْسِهِ وَوَجْهِهِ وَمَا أَقْبَلَ مِنْ جَسَدِهِ. يفعلُ ذلك ثلاثَ مرَّاتٍ"
+      },
+      "reference": {
+        "en": "Qur'an, Surahs al-Ikhlas, al-Falaq and an-Nas. Al-Bukhari, with Fath al-Bari 9/62 (no. 5017); Muslim (no. 2192)",
+        "ar": "سورة الإخلاص، سورة الفلق، سورة الناس. البخاري مع الفتح، 9/62، برقم 5017، ومسلم، برقم 2192"
+      },
+      "quran": [
+        {
+          "surah": 112,
+          "from": 1,
+          "to": 4
+        },
+        {
+          "surah": 113,
+          "from": 1,
+          "to": 5
+        },
+        {
+          "surah": 114,
+          "from": 1,
+          "to": 6
+        }
+      ]
+    },
+    "sleep-ayat-al-kursi": {
+      "id": "sleep-ayat-al-kursi",
+      "arabic": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+      "transliteration": "Aʿūdhu billāhi minash-shayṭānir-rajīm. Allāhu lā ilāha illā huwal-ḥayyul-qayyūm, lā taʾkhudhuhu sinatun wa lā nawm, lahu mā fis-samāwāti wa mā fil-arḍ, man dhal-ladhī yashfaʿu ʿindahu illā bi-idhnih, yaʿlamu mā bayna aydīhim wa mā khalfahum, wa lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ, wasiʿa kursiyyuhus-samāwāti wal-arḍ, wa lā yaʾūduhu ḥifẓuhumā, wa huwal-ʿaliyyul-ʿaẓīm.",
+      "translation": "I seek refuge in Allah from the accursed Satan. Allah: there is no god except Him, the Ever-Living, the Sustainer of all. Drowsiness does not come over Him, nor does sleep. All that is in the heavens and all that is on the earth is His. Who is there that can intercede before Him except by His leave? He knows what lies ahead of them and what lies behind them, while they grasp nothing of His knowledge beyond what He wills. His Kursi encompasses the heavens and the earth, and safeguarding them both is no burden to Him. He is the Most High, the Magnificent.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever recites it on going to bed remains under the protection of a guardian from Allah, and no devil comes near them until morning.",
+        "ar": "من قرأها إذا أوى إلى فراشه فإنه لن يزال عليه من الله حافظ ولا يقربه شيطان حتى يصبح"
+      },
+      "reference": {
+        "en": "Qur'an, Surah al-Baqarah, ayah 255. Al-Bukhari, with Fath al-Bari 4/487 (no. 2311)",
+        "ar": "سورة البقرة، الآية: 255. البخاري مع الفتح، 4/487، برقم 2311"
+      },
+      "quran": [
+        {
+          "surah": 2,
+          "from": 255,
+          "to": 255
+        }
+      ]
+    },
+    "last-two-ayat-of-al-baqarah": {
+      "id": "last-two-ayat-of-al-baqarah",
+      "arabic": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nآمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنْتَ مَوْلَانَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+      "transliteration": "Aʿūdhu billāhi minash-shayṭānir-rajīm. Āmanar-rasūlu bi-mā unzila ilayhi min rabbihi wal-muʾminūn, kullun āmana billāhi wa malāʾikatihi wa kutubihi wa rusulih, lā nufarriqu bayna aḥadin min rusulih, wa qālū samiʿnā wa aṭaʿnā, ghufrānaka rabbanā wa ilaykal-maṣīr. Lā yukallifullāhu nafsan illā wusʿahā, lahā mā kasabat wa ʿalayhā maktasabat, rabbanā lā tuʾākhidhnā in nasīnā aw akhṭaʾnā, rabbanā wa lā taḥmil ʿalaynā iṣran kamā ḥamaltahu ʿalal-ladhīna min qablinā, rabbanā wa lā tuḥammilnā mā lā ṭāqata lanā bih, waʿfu ʿannā waghfir lanā warḥamnā, anta mawlānā fanṣurnā ʿalal-qawmil-kāfirīn.",
+      "translation": "I seek refuge in Allah from the accursed Satan. The Messenger believes in what has been sent down to him from his Lord, and so do the believers. Each of them believes in Allah, His angels, His Books and His messengers: we make no distinction between any of His messengers. And they say: We hear and we obey; we ask Your forgiveness, our Lord, and to You is the return. Allah lays on no soul a burden beyond what it can bear. In its favour is the good it has earned, and against it the evil it has brought upon itself. Our Lord, do not take us to task if we forget or fall into error. Our Lord, do not lay on us a burden like the one You laid on those before us. Our Lord, do not make us carry what we have no strength to bear. Pardon us, forgive us and have mercy on us. You are our Protector, so help us against the people who disbelieve.",
+      "repeat": 1,
+      "virtue": {
+        "en": "Whoever recites these two ayat at night, they suffice them.",
+        "ar": "من قرأهما في ليلة كفتاه"
+      },
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 9/94 (no. 4008); Muslim 1/554 (no. 807). The two ayat are 285 and 286 of Surah al-Baqarah",
+        "ar": "البخاري مع الفتح، 9/94، برقم 4008، ومسلم، 1/554، برقم 807، والآيتان من سورة البقرة، 285 - 286"
+      },
+      "quran": [
+        {
+          "surah": 2,
+          "from": 285,
+          "to": 286
+        }
+      ]
+    },
+    "bismika-rabbi-wadatu-janbi": {
+      "id": "bismika-rabbi-wadatu-janbi",
+      "arabic": "بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا، بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ",
+      "transliteration": "Bismika rabbī waḍaʿtu janbī, wa bika arfaʿuh, fa-in amsakta nafsī farḥamhā, wa in arsaltahā faḥfaẓhā, bi-mā taḥfaẓu bihi ʿibādakaṣ-ṣāliḥīn.",
+      "translation": "In Your name, my Lord, I lay down my side, and by You I raise it up. If You take my soul, have mercy on it, and if You send it back, protect it with that by which You protect Your righteous servants.",
+      "repeat": 1,
+      "note": {
+        "en": "When one of you gets up from his bed and then comes back to it, let him dust it off three times with the edge of his waist-wrap and say the name of Allah, for he does not know what may have come onto it after him; and when he lies down, let him say this.",
+        "ar": "إذا قام أحدكم من فراشه ثم رجع إليه فلينفضه بصَنِفَةِ إزاره ثلاث مرات، وليُسمِّ اللَّه؛ فإنه لا يدري ما خلفه عليه بعده، وإذا اضطجع فليقل"
+      },
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 11/126 (no. 6320); Muslim 4/2084 (no. 2714). With the wording recited here: at-Tirmidhi (no. 3401)",
+        "ar": "البخاري مع الفتح، 11/126، برقم 6320. ومسلم، 4/2084، برقم 2714، والترمذي، برقم 3401"
+      }
+    },
+    "allahumma-innaka-khalaqta-nafsi": {
+      "id": "allahumma-innaka-khalaqta-nafsi",
+      "arabic": "اللَّهُمَّ إِنَّكَ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا، اللَّهُمَّ إِنِّي أَسْأَلُكَ العَافِيَةَ",
+      "transliteration": "Allāhumma innaka khalaqta nafsī wa anta tawaffāhā, laka mamātuhā wa maḥyāhā, in aḥyaytahā faḥfaẓhā, wa in amattahā faghfir lahā, Allāhumma innī asʾalukal-ʿāfiyah.",
+      "translation": "O Allah, You created my soul and You take it in death. Its death and its life belong to You. If You keep it alive, protect it, and if You cause it to die, forgive it. O Allah, I ask You for well-being.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 4/2083 (no. 2712); Ahmad, with this wording, 2/79 (no. 5502)",
+        "ar": "أخرجه مسلم، 4/2083، برقم 2712، وأحمد بلفظه، 2/79، برقم 5502"
+      }
+    },
+    "allahumma-qini-adhabaka": {
+      "id": "allahumma-qini-adhabaka",
+      "arabic": "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
+      "transliteration": "Allāhumma qinī ʿadhābaka yawma tabʿathu ʿibādak.",
+      "translation": "O Allah, shield me from Your punishment on the Day You raise up Your servants.",
+      "repeat": 3,
+      "note": {
+        "en": "When he, may Allah's blessings and peace be upon him, wanted to sleep, he would put his right hand under his cheek and then say this.",
+        "ar": "كان - صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - إذا أراد أن يرقد وضع يده اليمنى تحت خدِّه، ثم يقول"
+      },
+      "reference": {
+        "en": "Abu Dawud, with this wording, which has it three times, 4/311 (no. 5045); at-Tirmidhi (no. 3398); see also Sahih at-Tirmidhi 3/143 and Sahih Abi Dawud 3/240",
+        "ar": "أبو داود بلفظه، 4/311، برقم 5045، والترمذي، برقم 3398، وانظر: صحيح الترمذي، 3/143، وصحيح أبي داود، 3/240"
+      }
+    },
+    "bismika-allahumma-amutu-wa-ahya": {
+      "id": "bismika-allahumma-amutu-wa-ahya",
+      "arabic": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+      "transliteration": "Bismika Allāhumma amūtu wa aḥyā.",
+      "translation": "In Your name, O Allah, I die and I live.",
+      "repeat": 1,
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 11/113 (no. 6324); Muslim 4/2083 (no. 2711)",
+        "ar": "البخاري مع الفتح، 11/113، برقم 6324، ومسلم، 4/2083، برقم 2711"
+      }
+    },
+    "sleep-subhanallah": {
+      "id": "sleep-subhanallah",
+      "arabic": "سُبْحَانَ اللَّهِ",
+      "transliteration": "Subḥānallāh.",
+      "translation": "Glory be to Allah.",
+      "repeat": 33,
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 7/71 (no. 3705); Muslim 4/2091 (no. 2727)",
+        "ar": "البخاري مع الفتح، 7/71، برقم 3705، ومسلم، 4/2091، برقم 2727"
+      }
+    },
+    "sleep-alhamdulillah": {
+      "id": "sleep-alhamdulillah",
+      "arabic": "الحَمْدُ لِلَّهِ",
+      "transliteration": "Al-ḥamdu lillāh.",
+      "translation": "All praise is due to Allah.",
+      "repeat": 33,
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 7/71 (no. 3705); Muslim 4/2091 (no. 2727)",
+        "ar": "البخاري مع الفتح، 7/71، برقم 3705، ومسلم، 4/2091، برقم 2727"
+      }
+    },
+    "sleep-allahu-akbar": {
+      "id": "sleep-allahu-akbar",
+      "arabic": "اللَّهُ أَكْبَرُ",
+      "transliteration": "Allāhu akbar.",
+      "translation": "Allah is the Greatest.",
+      "repeat": 34,
+      "virtue": {
+        "en": "Whoever says this on going to bed, it is better for them than a servant.",
+        "ar": "من قال ذلك عندما يأوي إلى فراشه كان خيراً له من خادم"
+      },
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 7/71 (no. 3705); Muslim 4/2091 (no. 2727)",
+        "ar": "البخاري مع الفتح، 7/71، برقم 3705، ومسلم، 4/2091، برقم 2727"
+      }
+    },
+    "allahumma-rabbas-samawatis-sab": {
+      "id": "allahumma-rabbas-samawatis-sab",
+      "arabic": "اللَّهُمَّ رَبَّ السَّمَاوَاتِ السَّبْعِ وَرَبَّ الأَرْضِ، وَرَبَّ الْعَرْشِ الْعَظِيمِ، رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ، فَالِقَ الْحَبِّ وَالنَّوَى، وَمُنْزِلَ التَّوْرَاةِ وَالْإِنْجِيلِ، وَالْفُرْقَانِ، أَعُوذُ بِكَ مِنْ شَرِّ كُلِّ شَيْءٍ أَنْتَ آخِذٌ بِنَاصِيَتِهِ. اللَّهُمَّ أَنْتَ الأَوَّلُ فَلَيْسَ قَبْلَكَ شَيْءٌ، وَأَنْتَ الآخِرُ فَلَيسَ بَعْدَكَ شَيْءٌ، وَأَنْتَ الظَّاهِرُ فَلَيْسَ فَوْقَكَ شَيْءٌ، وَأَنْتَ الْبَاطِنُ فَلَيْسَ دُونَكَ شَيْءٌ، اقْضِ عَنَّا الدَّيْنَ وَأَغْنِنَا مِنَ الْفَقْرِ",
+      "transliteration": "Allāhumma rabbas-samāwātis-sabʿi wa rabbal-arḍ, wa rabbal-ʿarshil-ʿaẓīm, rabbanā wa rabba kulli shayʾ, fāliqal-ḥabbi wan-nawā, wa munzilat-tawrāti wal-injīl, wal-furqān, aʿūdhu bika min sharri kulli shayʾin anta ākhidhun bi-nāṣiyatih. Allāhumma antal-awwalu fa-laysa qablaka shayʾ, wa antal-ākhiru fa-laysa baʿdaka shayʾ, wa antaẓ-ẓāhiru fa-laysa fawqaka shayʾ, wa antal-bāṭinu fa-laysa dūnaka shayʾ, iqḍi ʿannad-dayna wa aghninā minal-faqr.",
+      "translation": "O Allah, Lord of the seven heavens and Lord of the earth, Lord of the mighty Throne, our Lord and the Lord of all things, who splits open the grain and the date-stone, who sent down the Torah, the Gospel and the Criterion: I seek refuge in You from the evil of everything whose forelock You hold. O Allah, You are the First, and there is nothing before You; You are the Last, and there is nothing after You; You are the Manifest, and there is nothing above You; You are the Hidden, and there is nothing beyond You. Settle our debts for us and free us from poverty.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 4/2084 (no. 2713)",
+        "ar": "مسلم، 4/2084، برقم 2713"
+      }
+    },
+    "alhamdu-lillahil-ladhi-atamana": {
+      "id": "alhamdu-lillahil-ladhi-atamana",
+      "arabic": "الحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَكَفَانَا وَآوَانَا فَكَمْ مِمَّنْ لَا كَافِيَ لَهُ وَلَا مُؤْوِيَ",
+      "transliteration": "Al-ḥamdu lillāhil-ladhī aṭʿamanā wa saqānā wa kafānā wa āwānā fa-kam mimman lā kāfiya lahu wa lā muʾwī.",
+      "translation": "All praise is due to Allah, who has fed us and given us drink, who has sufficed us and sheltered us; for how many there are who have no one to suffice them and no one to shelter them.",
+      "repeat": 1,
+      "reference": {
+        "en": "Muslim 4/2085 (no. 2715)",
+        "ar": "مسلم، 4/2085، برقم 2715"
+      }
+    },
+    "allahumma-aslamtu-nafsi-ilayk": {
+      "id": "allahumma-aslamtu-nafsi-ilayk",
+      "arabic": "اللَّهُمَّ أَسْلَمْتُ نَفْسِي إِلَيْكَ، وَفَوَّضْتُ أَمْرِي إِلَيْكَ، وَوَجَّهْتُ وَجْهِي إِلَيْكَ، وَأَلْجَأْتُ ظَهْرِي إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لَا مَلْجَأَ وَلَا مَنْجَا مِنْكَ إِلَّا إِلَيْكَ، آمَنْتُ بِكِتَابِكَ الَّذِي أَنْزَلْتَ وَبِنَبِيِّكَ الَّذِي أَرْسَلْتَ",
+      "transliteration": "Allāhumma aslamtu nafsī ilayk, wa fawwaḍtu amrī ilayk, wa wajjahtu wajhī ilayk, wa aljaʾtu ẓahrī ilayk, raghbatan wa rahbatan ilayk, lā maljaʾa wa lā manjā minka illā ilayk, āmantu bi-kitābikal-ladhī anzalta wa bi-nabiyyikal-ladhī arsalt.",
+      "translation": "O Allah, I have surrendered myself to You, entrusted my affairs to You, turned my face to You and made You the support of my back, out of longing for You and fear of You. There is no refuge and no escape from You except to You. I believe in Your Book which You sent down and in Your Prophet whom You sent.",
+      "repeat": 1,
+      "note": {
+        "en": "When you go to your bed, perform ablution as you do for prayer, then lie down on your right side and say this.",
+        "ar": "إذا أخذت مضجعك فتوضأ وضوءك للصلاة، ثم اضطجع على شقك الأيمن، ثم قل"
+      },
+      "virtue": {
+        "en": "If you die, you die upon the fitrah, the natural way of Islam.",
+        "ar": "فإن مُتَّ مُتَّ على الفطرة"
+      },
+      "reference": {
+        "en": "Al-Bukhari, with Fath al-Bari 11/113 (no. 6313); Muslim 4/2081 (no. 2710)",
+        "ar": "البخاري مع الفتح، 11/113، برقم 6313، ومسلم، 4/2081، برقم 2710"
+      }
+    },
+    "la-ilaha-illallah": {
+      "id": "la-ilaha-illallah",
+      "arabic": "لَا إِلَهَ إِلَّا اللَّهُ",
+      "transliteration": "Lā ilāha illallāh.",
+      "translation": "There is no god but Allah.",
+      "repeat": 1,
+      "virtue": {
+        "en": "The best supplication is \"Al-hamdu lillah\", and the best remembrance is \"La ilaha illallah\".",
+        "ar": "إِنَّ أَفْضَلَ الدُّعَاءِ الْحَمْدُ لِلَّهِ، وَأَفْضَلَ الذِّكْرِ لاَ إِلَهَ إِلاَّ اللَّهُ"
+      },
+      "reference": {
+        "en": "At-Tirmidhi 5/462 (no. 3383); Ibn Majah 2/1249 (no. 3800); al-Hakim 1/503, who graded it authentic, and adh-Dhahabi agreed; see also Sahih al-Jami' 1/362",
+        "ar": "الترمذي، 5/462، برقم 3383، وابن ماجه، 2/1249، برقم 3800، والحاكم، 1/503، وصححه ووافقه الذهبي، وانظر: صحيح الجامع، 1/362"
+      }
+    }
+  },
+  "collections": {
+    "morning": [
+      "ayat-al-kursi",
+      "al-ikhlas-al-falaq-an-nas",
+      "morning-asbahna-wa-asbaha-al-mulk",
+      "morning-allahumma-bika-asbahna",
+      "sayyid-al-istighfar",
+      "morning-asbahtu-ushhiduka",
+      "morning-ma-asbaha-bi-min-nimah",
+      "allahumma-afini-fi-badani",
+      "hasbiyallahu-la-ilaha-illa-huwa",
+      "allahumma-inni-asaluka-al-afwa-wal-afiyah",
+      "allahumma-alim-al-ghayb-wash-shahadah",
+      "bismillah-alladhi-la-yadurru",
+      "raditu-billahi-rabban",
+      "ya-hayyu-ya-qayyum",
+      "morning-asbahna-rabbil-alamin",
+      "morning-asbahna-ala-fitrat-al-islam",
+      "subhanallahi-wa-bihamdih",
+      "la-ilaha-illallah-wahdahu-ten-times",
+      "la-ilaha-illallah-wahdahu-hundred-times",
+      "subhanallahi-wa-bihamdih-adada-khalqih",
+      "allahumma-inni-asaluka-ilman-nafian",
+      "astaghfirullah-wa-atubu-ilayh",
+      "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad"
+    ],
+    "evening": [
+      "ayat-al-kursi",
+      "al-ikhlas-al-falaq-an-nas",
+      "evening-amsayna-wa-amsa-al-mulk",
+      "evening-allahumma-bika-amsayna",
+      "sayyid-al-istighfar",
+      "evening-amsaytu-ushhiduka",
+      "evening-ma-amsa-bi-min-nimah",
+      "allahumma-afini-fi-badani",
+      "hasbiyallahu-la-ilaha-illa-huwa",
+      "allahumma-inni-asaluka-al-afwa-wal-afiyah",
+      "allahumma-alim-al-ghayb-wash-shahadah",
+      "bismillah-alladhi-la-yadurru",
+      "raditu-billahi-rabban",
+      "ya-hayyu-ya-qayyum",
+      "evening-amsayna-rabbil-alamin",
+      "evening-amsayna-ala-fitrat-al-islam",
+      "subhanallahi-wa-bihamdih",
+      "la-ilaha-illallah-wahdahu-ten-times",
+      "audhu-bi-kalimatillah-at-tammat",
+      "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad"
+    ],
+    "sleep": [
+      "sleep-al-ikhlas-al-falaq-an-nas",
+      "sleep-ayat-al-kursi",
+      "last-two-ayat-of-al-baqarah",
+      "bismika-rabbi-wadatu-janbi",
+      "allahumma-innaka-khalaqta-nafsi",
+      "allahumma-qini-adhabaka",
+      "bismika-allahumma-amutu-wa-ahya",
+      "sleep-subhanallah",
+      "sleep-alhamdulillah",
+      "sleep-allahu-akbar",
+      "allahumma-rabbas-samawatis-sab",
+      "alhamdu-lillahil-ladhi-atamana",
+      "allahumma-alim-al-ghayb-wash-shahadah",
+      "allahumma-aslamtu-nafsi-ilayk"
+    ]
+  },
+  "afterPrayer": [
+    "astaghfirullah",
+    "allahumma-antas-salam",
+    "la-ilaha-illallah-wahdahu-three-times",
+    "allahumma-la-mania-lima-atayt",
+    "la-ilaha-illallah-wa-la-nabudu-illa-iyyah",
+    "subhanallah",
+    "alhamdulillah",
+    "allahu-akbar",
+    "la-ilaha-illallah-wahdahu-to-complete-a-hundred",
+    "al-ikhlas-al-falaq-an-nas",
+    "ayat-al-kursi",
+    "la-ilaha-illallah-yuhyi-wa-yumit-ten-times",
+    "allahumma-inni-asaluka-ilman-nafian"
+  ],
+  "tasbih": [
+    "subhanallah",
+    "alhamdulillah",
+    "allahu-akbar",
+    "la-ilaha-illallah",
+    "astaghfirullah",
+    "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad",
+    "subhanallahi-wa-bihamdih"
+  ]
+}

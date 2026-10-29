@@ -1,0 +1,566 @@
+{
+  "names": [
+    {
+      "input": "Ahmed",
+      "output": "Ahmed"
+    },
+    {
+      "input": "  Ahmed   Walid  ",
+      "output": "Ahmed Walid"
+    },
+    {
+      "input": "Ahmed\nWalid",
+      "output": "AhmedWalid"
+    },
+    {
+      "input": "A\tB\r\nC",
+      "output": "ABC"
+    },
+    {
+      "input": "‏أحمد‎",
+      "output": "أحمد"
+    },
+    {
+      "input": "‮evil‬",
+      "output": "evil"
+    },
+    {
+      "input": "Zero​Width",
+      "output": "ZeroWidth"
+    },
+    {
+      "input": "Bom﻿here",
+      "output": "Bomhere"
+    },
+    {
+      "input": "No break",
+      "output": "No break"
+    },
+    {
+      "input": "Ideo　space",
+      "output": "Ideo space"
+    },
+    {
+      "input": "Line sep",
+      "output": "Linesep"
+    },
+    {
+      "input": "Para sep",
+      "output": "Parasep"
+    },
+    {
+      "input": "Ctl\u0001\u001f",
+      "output": "Ctl"
+    },
+    {
+      "input": "é",
+      "output": "é"
+    },
+    {
+      "input": "Café au lait",
+      "output": "Café au lait"
+    },
+    {
+      "input": "👨‍👩‍👧‍👦 family",
+      "output": "👨👩👧👦 family"
+    },
+    {
+      "input": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+      "output": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+    },
+    {
+      "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx y",
+      "output": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx́y",
+      "output": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx́"
+    },
+    {
+      "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+      "output": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "input": "     ",
+      "output": ""
+    },
+    {
+      "input": "",
+      "output": ""
+    },
+    {
+      "input": 42,
+      "output": ""
+    },
+    {
+      "input": null,
+      "output": ""
+    },
+    {
+      "input": "محمد بن عبد الله",
+      "output": "محمد بن عبد الله"
+    },
+    {
+      "input": "Ma᠎ongolian",
+      "output": "Maongolian"
+    },
+    {
+      "input": "­soft",
+      "output": "soft"
+    },
+    {
+      "input": "Tab\u000bvt\fff",
+      "output": "Tabvtff"
+    }
+  ],
+  "settings": [
+    {
+      "input": null,
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": null,
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": "x",
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": [],
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": {},
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": {
+        "language": "ar",
+        "theme": "dark",
+        "timeFormat": "24h",
+        "arabicDigits": false,
+        "hijriOffset": -2,
+        "name": "Ali"
+      },
+      "output": {
+        "language": "ar",
+        "theme": "dark",
+        "timeFormat": "24h",
+        "arabicDigits": false,
+        "hijriOffset": -2,
+        "name": "Ali"
+      }
+    },
+    {
+      "input": {
+        "hijriOffset": 1.5
+      },
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": {
+        "hijriOffset": -9
+      },
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": -2,
+        "name": ""
+      }
+    },
+    {
+      "input": {
+        "hijriOffset": "1"
+      },
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": {
+        "hijriOffset": null
+      },
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    },
+    {
+      "input": {
+        "arabicDigits": 0
+      },
+      "output": {
+        "language": "system",
+        "theme": "system",
+        "timeFormat": "12h",
+        "arabicDigits": true,
+        "hijriOffset": 0,
+        "name": ""
+      }
+    }
+  ],
+  "azkarSettings": [
+    {
+      "input": null,
+      "output": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    },
+    {
+      "input": {},
+      "output": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    },
+    {
+      "input": {
+        "arabicScale": 5,
+        "showTransliteration": false,
+        "showTranslation": true,
+        "haptics": false,
+        "keepAwake": false,
+        "autoAdvance": false
+      },
+      "output": {
+        "arabicScale": 5,
+        "showTransliteration": false,
+        "showTranslation": true,
+        "haptics": false,
+        "keepAwake": false,
+        "autoAdvance": false
+      }
+    },
+    {
+      "input": {
+        "arabicScale": 0
+      },
+      "output": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    },
+    {
+      "input": {
+        "arabicScale": 2.5
+      },
+      "output": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    },
+    {
+      "input": {
+        "arabicScale": "3"
+      },
+      "output": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    },
+    {
+      "input": {
+        "showTranslation": null,
+        "showTransliteration": 1
+      },
+      "output": {
+        "arabicScale": 3,
+        "showTransliteration": null,
+        "showTranslation": null,
+        "haptics": true,
+        "keepAwake": true,
+        "autoAdvance": true
+      }
+    }
+  ],
+  "prayerTimes": [
+    {
+      "input": null,
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    },
+    {
+      "input": {},
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    },
+    {
+      "input": {
+        "method": "Tehran",
+        "madhab": "shafi",
+        "highLatitudeRule": "seventhofthenight",
+        "polar": "nearestLatitude"
+      },
+      "output": {
+        "method": "Tehran",
+        "madhab": "shafi",
+        "highLatitudeRule": "seventhofthenight",
+        "polar": "nearestLatitude",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    },
+    {
+      "input": {
+        "adjustments": {
+          "fajr": 1000000000,
+          "sunrise": -1000000000,
+          "dhuhr": 0.5,
+          "asr": -0.5,
+          "maghrib": 1.4999,
+          "isha": null
+        }
+      },
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 30,
+          "sunrise": -30,
+          "dhuhr": 1,
+          "asr": 0,
+          "maghrib": 1,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    },
+    {
+      "input": {
+        "adjustments": []
+      },
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    },
+    {
+      "input": {
+        "azkarReminders": {
+          "morning": true,
+          "evening": true,
+          "morningAt": "sunrise"
+        },
+        "notifications": true
+      },
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": true,
+        "azkarReminders": {
+          "morning": true,
+          "evening": true,
+          "morningAt": "sunrise"
+        }
+      }
+    },
+    {
+      "input": {
+        "method": "muslimworldleague"
+      },
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    },
+    {
+      "input": {
+        "highLatitudeRule": "auto",
+        "madhab": "auto",
+        "method": "auto"
+      },
+      "output": {
+        "method": "auto",
+        "madhab": "auto",
+        "highLatitudeRule": "auto",
+        "polar": "unresolved",
+        "adjustments": {
+          "fajr": 0,
+          "sunrise": 0,
+          "dhuhr": 0,
+          "asr": 0,
+          "maghrib": 0,
+          "isha": 0
+        },
+        "notifications": false,
+        "azkarReminders": {
+          "morning": false,
+          "evening": false,
+          "morningAt": "fajr"
+        }
+      }
+    }
+  ]
+}

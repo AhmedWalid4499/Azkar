@@ -7,12 +7,12 @@ import Testing
 struct ScaffoldTests {
     @Test("The bundled dataset is byte-identical to the website's")
     func datasetMatchesWebSource() throws {
-        let repo = URL(fileURLWithPath: #filePath)
+        let repo = URL(fileURLWithPath: #filePath).resolvingSymlinksInPath()
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let web = try Data(contentsOf: repo.appending(path: "src/features/azkar/data/azkar.json"))
         let bundled = try Data(contentsOf: AzkarResources.datasetURL)
-        #expect(bundled == web, "Copy src/features/azkar/data/azkar.json to apple/AzkarKit/Sources/AzkarKit/Resources/")
+        #expect(bundled == web, "Copy src/features/azkar/data/azkar.json to apple/AzkarKit/Sources/AzkarContent/Resources/")
     }
 
     @Test("Adhan is wired in: Cairo's Dhuhr on 2026-10-12 is around 12:40 local time")

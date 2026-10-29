@@ -1,0 +1,246 @@
+{
+  "sessions": {
+    "morning": [
+      {
+        "id": "ayat-al-kursi",
+        "target": 1
+      },
+      {
+        "id": "al-ikhlas-al-falaq-an-nas",
+        "target": 3
+      },
+      {
+        "id": "morning-asbahna-wa-asbaha-al-mulk",
+        "target": 1
+      },
+      {
+        "id": "morning-allahumma-bika-asbahna",
+        "target": 1
+      },
+      {
+        "id": "sayyid-al-istighfar",
+        "target": 1
+      },
+      {
+        "id": "morning-asbahtu-ushhiduka",
+        "target": 4
+      },
+      {
+        "id": "morning-ma-asbaha-bi-min-nimah",
+        "target": 1
+      },
+      {
+        "id": "allahumma-afini-fi-badani",
+        "target": 3
+      },
+      {
+        "id": "hasbiyallahu-la-ilaha-illa-huwa",
+        "target": 7
+      },
+      {
+        "id": "allahumma-inni-asaluka-al-afwa-wal-afiyah",
+        "target": 1
+      },
+      {
+        "id": "allahumma-alim-al-ghayb-wash-shahadah",
+        "target": 1
+      },
+      {
+        "id": "bismillah-alladhi-la-yadurru",
+        "target": 3
+      },
+      {
+        "id": "raditu-billahi-rabban",
+        "target": 3
+      },
+      {
+        "id": "ya-hayyu-ya-qayyum",
+        "target": 1
+      },
+      {
+        "id": "morning-asbahna-rabbil-alamin",
+        "target": 1
+      },
+      {
+        "id": "morning-asbahna-ala-fitrat-al-islam",
+        "target": 1
+      },
+      {
+        "id": "subhanallahi-wa-bihamdih",
+        "target": 100
+      },
+      {
+        "id": "la-ilaha-illallah-wahdahu-ten-times",
+        "target": 10
+      },
+      {
+        "id": "la-ilaha-illallah-wahdahu-hundred-times",
+        "target": 100
+      },
+      {
+        "id": "subhanallahi-wa-bihamdih-adada-khalqih",
+        "target": 3
+      },
+      {
+        "id": "allahumma-inni-asaluka-ilman-nafian",
+        "target": 1
+      },
+      {
+        "id": "astaghfirullah-wa-atubu-ilayh",
+        "target": 100
+      },
+      {
+        "id": "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad",
+        "target": 10
+      }
+    ],
+    "evening": [
+      {
+        "id": "ayat-al-kursi",
+        "target": 1
+      },
+      {
+        "id": "al-ikhlas-al-falaq-an-nas",
+        "target": 3
+      },
+      {
+        "id": "evening-amsayna-wa-amsa-al-mulk",
+        "target": 1
+      },
+      {
+        "id": "evening-allahumma-bika-amsayna",
+        "target": 1
+      },
+      {
+        "id": "sayyid-al-istighfar",
+        "target": 1
+      },
+      {
+        "id": "evening-amsaytu-ushhiduka",
+        "target": 4
+      },
+      {
+        "id": "evening-ma-amsa-bi-min-nimah",
+        "target": 1
+      },
+      {
+        "id": "allahumma-afini-fi-badani",
+        "target": 3
+      },
+      {
+        "id": "hasbiyallahu-la-ilaha-illa-huwa",
+        "target": 7
+      },
+      {
+        "id": "allahumma-inni-asaluka-al-afwa-wal-afiyah",
+        "target": 1
+      },
+      {
+        "id": "allahumma-alim-al-ghayb-wash-shahadah",
+        "target": 1
+      },
+      {
+        "id": "bismillah-alladhi-la-yadurru",
+        "target": 3
+      },
+      {
+        "id": "raditu-billahi-rabban",
+        "target": 3
+      },
+      {
+        "id": "ya-hayyu-ya-qayyum",
+        "target": 1
+      },
+      {
+        "id": "evening-amsayna-rabbil-alamin",
+        "target": 1
+      },
+      {
+        "id": "evening-amsayna-ala-fitrat-al-islam",
+        "target": 1
+      },
+      {
+        "id": "subhanallahi-wa-bihamdih",
+        "target": 100
+      },
+      {
+        "id": "la-ilaha-illallah-wahdahu-ten-times",
+        "target": 10
+      },
+      {
+        "id": "audhu-bi-kalimatillah-at-tammat",
+        "target": 3
+      },
+      {
+        "id": "allahumma-salli-wa-sallim-ala-nabiyyina-muhammad",
+        "target": 10
+      }
+    ],
+    "sleep": [
+      {
+        "id": "sleep-al-ikhlas-al-falaq-an-nas",
+        "target": 3
+      },
+      {
+        "id": "sleep-ayat-al-kursi",
+        "target": 1
+      },
+      {
+        "id": "last-two-ayat-of-al-baqarah",
+        "target": 1
+      },
+      {
+        "id": "bismika-rabbi-wadatu-janbi",
+        "target": 1
+      },
+      {
+        "id": "allahumma-innaka-khalaqta-nafsi",
+        "target": 1
+      },
+      {
+        "id": "allahumma-qini-adhabaka",
+        "target": 3
+      },
+      {
+        "id": "bismika-allahumma-amutu-wa-ahya",
+        "target": 1
+      },
+      {
+        "id": "sleep-subhanallah",
+        "target": 33
+      },
+      {
+        "id": "sleep-alhamdulillah",
+        "target": 33
+      },
+      {
+        "id": "sleep-allahu-akbar",
+        "target": 34
+      },
+      {
+        "id": "allahumma-rabbas-samawatis-sab",
+        "target": 1
+      },
+      {
+        "id": "alhamdu-lillahil-ladhi-atamana",
+        "target": 1
+      },
+      {
+        "id": "allahumma-alim-al-ghayb-wash-shahadah",
+        "target": 1
+      },
+      {
+        "id": "surah-as-sajdah",
+        "target": 1
+      },
+      {
+        "id": "surah-al-mulk",
+        "target": 1
+      },
+      {
+        "id": "allahumma-aslamtu-nafsi-ilayk",
+        "target": 1
+      }
+    ]
+  }
+}

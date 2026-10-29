@@ -26,7 +26,7 @@ let package = Package(
         .target(name: "AzkarStore", dependencies: ["AzkarCore"]),
         .target(name: "AzkarKit", dependencies: ["AzkarCore", "PrayerEngine", "AzkarContent", "AzkarStore"]),
         .testTarget(name: "AzkarCoreTests", dependencies: ["AzkarCore"]),
-        .testTarget(name: "PrayerEngineTests", dependencies: ["PrayerEngine", .product(name: "Adhan", package: "adhan-swift")]),
+        .testTarget(name: "PrayerEngineTests", dependencies: ["PrayerEngine", .product(name: "Adhan", package: "adhan-swift")], exclude: ["Fixtures"]),
         .testTarget(name: "AzkarContentTests", dependencies: ["AzkarContent", .product(name: "Adhan", package: "adhan-swift")]),
         .testTarget(name: "AzkarStoreTests", dependencies: ["AzkarStore"]),
     ]
