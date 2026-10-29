@@ -1,0 +1,516 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Compass dial, with the Qibla at %@ from north": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قرص البوصلة، والقبلة فيه على %@ من الشمال"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compass dial, with the Qibla at %@ from north"
+          }
+        }
+      }
+    },
+    "Distance to the Kaaba": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المسافة إلى الكعبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance to the Kaaba"
+          }
+        }
+      }
+    },
+    "E": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E"
+          }
+        }
+      }
+    },
+    "From": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
+          }
+        }
+      }
+    },
+    "Hold your iPhone flat, away from metal and magnets.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أمسك هاتفك مستويًا، بعيدًا عن المعادن والمغناطيس."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold your iPhone flat, away from metal and magnets."
+          }
+        }
+      }
+    },
+    "Measured clockwise from true north.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاتجاه مقيس من الشمال الجغرافي مع اتجاه عقارب الساعة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured clockwise from true north."
+          }
+        }
+      }
+    },
+    "N": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ش"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "N"
+          }
+        }
+      }
+    },
+    "North is at the top of the dial. Point the top of your iPhone north, using a map or a landmark you know, and the Kaaba on the dial shows the Qibla.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الشمال في أعلى القرص. وجِّه أعلى هاتفك نحو الشمال مستعينًا بخريطة أو بمَعلم تعرفه، فتدلّك علامة الكعبة على القرص على القبلة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "North is at the top of the dial. Point the top of your iPhone north, using a map or a landmark you know, and the Kaaba on the dial shows the Qibla."
+          }
+        }
+      }
+    },
+    "Qibla": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القبلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qibla"
+          }
+        }
+      }
+    },
+    "Qibla direction": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اتجاه القبلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qibla direction"
+          }
+        }
+      }
+    },
+    "S": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S"
+          }
+        }
+      }
+    },
+    "Set your location": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حدّد موقعك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set your location"
+          }
+        }
+      }
+    },
+    "The Qibla direction is worked out from where you are. Use your location, or search for your city.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُحسب اتجاه القبلة من موقعك. استخدم موقعك الحالي، أو ابحث عن مدينتك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Qibla direction is worked out from where you are. Use your location, or search for your city."
+          }
+        }
+      }
+    },
+    "The compass is unsure of its direction. Move your iPhone in a figure-eight a few times, away from metal, to calibrate it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البوصلة غير متأكدة من الاتجاه. حرّك هاتفك في الهواء عدة مرات على شكل ∞، بعيدًا عن المعادن، لمعايرتها."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The compass is unsure of its direction. Move your iPhone in a figure-eight a few times, away from metal, to calibrate it."
+          }
+        }
+      }
+    },
+    "Toward the east": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الشرق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the east"
+          }
+        }
+      }
+    },
+    "Toward the north": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الشمال"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the north"
+          }
+        }
+      }
+    },
+    "Toward the northeast": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الشمال الشرقي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the northeast"
+          }
+        }
+      }
+    },
+    "Toward the northwest": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الشمال الغربي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the northwest"
+          }
+        }
+      }
+    },
+    "Toward the south": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الجنوب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the south"
+          }
+        }
+      }
+    },
+    "Toward the southeast": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الجنوب الشرقي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the southeast"
+          }
+        }
+      }
+    },
+    "Toward the southwest": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الجنوب الغربي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the southwest"
+          }
+        }
+      }
+    },
+    "Toward the west": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نحو الغرب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toward the west"
+          }
+        }
+      }
+    },
+    "Turn left %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استدر يسارًا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn left %@"
+          }
+        }
+      }
+    },
+    "Turn right %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استدر يمينًا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn right %@"
+          }
+        }
+      }
+    },
+    "W": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W"
+          }
+        }
+      }
+    },
+    "Waiting for the compass…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في انتظار البوصلة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the compass…"
+          }
+        }
+      }
+    },
+    "Your iPhone’s compass is using magnetic north here, while the direction is measured from true north. In most places the two are a few degrees apart, so the dial can be off by that much; compare it with a mosque’s mihrab or a landmark you know.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعتمد بوصلة هاتفك هنا على الشمال المغناطيسي، أما الاتجاه فمقيس من الشمال الجغرافي. ويفصل بينهما في معظم الأماكن بضع درجات، فقد يحيد القرص بهذا القدر؛ فقارنه بمحراب مسجد أو بمَعلم تعرف اتجاهه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your iPhone’s compass is using magnetic north here, while the direction is measured from true north. In most places the two are a few degrees apart, so the dial can be off by that much; compare it with a mosque’s mihrab or a landmark you know."
+          }
+        }
+      }
+    },
+    "Your saved location is less than a kilometre from the Kaaba. This close, the direction depends on exactly where you stand, so face the Kaaba itself. If you’re farther away, use your location to get a direction from where you are.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موقعك المحفوظ على بُعد أقل من كيلومتر من الكعبة. وعلى هذا القرب يتوقف الاتجاه على موضع وقوفك بالضبط، فتوجّه إلى الكعبة نفسها. وإن كنت أبعد من ذلك، فاستخدم موقعك الحالي لتحصل على الاتجاه من مكانك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved location is less than a kilometre from the Kaaba. This close, the direction depends on exactly where you stand, so face the Kaaba itself. If you’re farther away, use your location to get a direction from where you are."
+          }
+        }
+      }
+    },
+    "You’re close to the Kaaba": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت قريب من الكعبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You’re close to the Kaaba"
+          }
+        }
+      }
+    },
+    "You’re facing the Qibla": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت متّجه إلى القبلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You’re facing the Qibla"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -1,0 +1,346 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@° E": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° شرقًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° E"
+          }
+        }
+      }
+    },
+    "%@° N": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° شمالًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° N"
+          }
+        }
+      }
+    },
+    "%@° S": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° جنوبًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° S"
+          }
+        }
+      }
+    },
+    "%@° W": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° غربًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@° W"
+          }
+        }
+      }
+    },
+    "Apple Maps couldn’t be reached. Check your connection and try again. “Use my location” works without one.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الوصول إلى خرائط Apple. تحقّق من اتصالك وأعد المحاولة. أما «استخدام موقعي» فيعمل من دون اتصال."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Maps couldn’t be reached. Check your connection and try again. “Use my location” works without one."
+          }
+        }
+      }
+    },
+    "City name": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسم المدينة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "City name"
+          }
+        }
+      }
+    },
+    "Finding your location took too long. Try again, or search for your city.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استغرق تحديد موقعك وقتًا أطول من اللازم. أعد المحاولة، أو ابحث عن مدينتك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finding your location took too long. Try again, or search for your city."
+          }
+        }
+      }
+    },
+    "Finding your location…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ تحديد موقعك…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finding your location…"
+          }
+        }
+      }
+    },
+    "Location Services are turned off. Turn them on in Settings › Privacy & Security, or search for your city.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خدمات الموقع متوقفة. فعّلها من الإعدادات ‹ الخصوصية والأمن، أو ابحث عن مدينتك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location Services are turned off. Turn them on in Settings › Privacy & Security, or search for your city."
+          }
+        }
+      }
+    },
+    "Location access is off for Azkar. Allow it in Settings, or search for your city instead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوصول إلى الموقع متوقف لتطبيق أذكار. اسمح به من الإعدادات، أو ابحث عن مدينتك بدلًا من ذلك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location access is off for Azkar. Allow it in Settings, or search for your city instead."
+          }
+        }
+      }
+    },
+    "Location access is restricted on this iPhone, for example by Screen Time. Search for your city instead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوصول إلى الموقع مقيَّد على هذا الهاتف، بمدة استخدام الجهاز مثلًا. ابحث عن مدينتك بدلًا من ذلك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location access is restricted on this iPhone, for example by Screen Time. Search for your city instead."
+          }
+        }
+      }
+    },
+    "Location saved. Its name couldn’t be looked up, but the prayer times are accurate.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حُفظ الموقع. تعذّر جلب اسم المكان، لكن مواقيت الصلاة دقيقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location saved. Its name couldn’t be looked up, but the prayer times are accurate."
+          }
+        }
+      }
+    },
+    "Open Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح الإعدادات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        }
+      }
+    },
+    "Places from Apple Maps.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأماكن من خرائط Apple."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Places from Apple Maps."
+          }
+        }
+      }
+    },
+    "Search for a city": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البحث عن مدينة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for a city"
+          }
+        }
+      }
+    },
+    "Searching…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ البحث…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching…"
+          }
+        }
+      }
+    },
+    "Type at least two letters of a city’s name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اكتب حرفين على الأقل من اسم المدينة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type at least two letters of a city’s name."
+          }
+        }
+      }
+    },
+    "Use my location": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استخدام موقعي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use my location"
+          }
+        }
+      }
+    },
+    "Your iPhone couldn’t work out where it is. Try again in a moment, or search for your city.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر على هاتفك تحديد مكانه. أعد المحاولة بعد قليل، أو ابحث عن مدينتك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your iPhone couldn’t work out where it is. Try again in a moment, or search for your city."
+          }
+        }
+      }
+    },
+    "latitude %@ longitude %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@، %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
