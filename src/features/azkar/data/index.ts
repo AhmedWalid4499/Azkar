@@ -32,7 +32,7 @@ function itemsOf(ids: readonly string[], list: string): Dhikr[] {
 
 /**
  * The azkar said after one obligatory prayer, in order, each with `repeat` set
- * to its count after that prayer. Empty until the dataset has the list.
+ * to its count after that prayer. Empty for a dataset without the list.
  */
 export function getAfterPrayerAzkar(prayer: AfterPrayerName): Dhikr[] {
   return itemsOf(azkarData.afterPrayer ?? [], 'The after-prayer list')
@@ -43,7 +43,7 @@ export function getAfterPrayerAzkar(prayer: AfterPrayerName): Dhikr[] {
     })
 }
 
-/** Short formulas offered as presets in the tasbih counter, in order. Empty until the dataset has them. */
+/** Short formulas offered as presets in the tasbih counter, in order. Empty for a dataset without them. */
 export function getTasbihPresets(): Dhikr[] {
   return itemsOf(azkarData.tasbih ?? [], 'The tasbih list')
 }

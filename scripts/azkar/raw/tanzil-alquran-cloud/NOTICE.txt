@@ -1,5 +1,6 @@
 The JSON files in this directory hold verses of the Tanzil Quran Text (Simple Plain, with pause
-marks) as served by the Al Quran Cloud API (https://alquran.cloud/api, edition "quran-simple").
+marks, sajdah signs and rub el hizb signs) as served by the Al Quran Cloud API
+(https://alquran.cloud/api, edition "quran-simple").
 The copyright block below is reproduced from the Tanzil download (https://tanzil.net/download/).
 
 # PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK

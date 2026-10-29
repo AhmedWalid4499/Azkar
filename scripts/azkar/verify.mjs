@@ -6,7 +6,9 @@
 //
 // 1. Qur'an    every recited ayah equals the text downloaded from tanzil.net itself, and its hash
 //              is the one pinned in fixtures/quran-tanzil-sha256.json. The Tanzil download is
-//              required: without it the run fails instead of skipping the comparison.
+//              required: without it the run fails instead of skipping the comparison. It is the
+//              download with the sajdah and rub' al-hizb signs, as the API serves the text, and
+//              azkar.json must carry its copyright block verbatim.
 // 2. Words     each supplication has exactly the words of every witness that carries the same
 //              wording; a difference not declared in mapping.mjs fails the run.
 // 3. Vowels    each supplication is compared, mark by mark, with those witnesses. Two sources that
@@ -23,12 +25,12 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { AMENDMENTS, buildDataset, quranFixture, record } from './build.mjs'
-import { compareVocalised, incompleteVocalisation, looseSkeleton, tidy } from './lib/arabic.mjs'
-import { AZKAR_SCRIPTS, bookEntries, quranAyat, readCache } from './lib/raw.mjs'
-import { ITEMS } from './mapping.mjs'
+import { AMENDMENTS, ITEMS, LISTS, buildDataset, quranFixture, record, vocalisedLines } from './build.mjs'
+import { compareVocalised, incompleteVocalisation, looseSkeleton, stripMarks, tidy } from './lib/arabic.mjs'
+import { AZKAR_SCRIPTS, bookEntries, bookFootnote, quranAyat, quranSurahs, readCache } from './lib/raw.mjs'
+import { witnessKey } from './lib/selectors.mjs'
 import { sha256, tanzilAyat } from './pin-quran.mjs'
-import { hadithUrl } from './sources.mjs'
+import { TANZIL_NOTICE, hadithUrl } from './sources.mjs'
 
 const online = process.argv.includes('--online')
 const data = buildDataset()
@@ -54,6 +56,12 @@ heading("Qur'an text against tanzil.net (Simple Plain, with pause marks)")
     else console.log(`  ok    ${key}`)
   }
   for (const key of Object.keys(pins)) if (!(key in fixture)) problem(`${key} is pinned but no longer recited`)
+  // The copyright block azkar.json carries, as Tanzil's terms ask, must be the download's own.
+  const download = readFileSync(join(AZKAR_SCRIPTS, '.cache', 'tanzil-simple-plain-signs.txt'), 'utf8')
+  const tanzilSource = data.sources.find((source) => source.url.startsWith('https://tanzil.net'))
+  if (!download.includes(TANZIL_NOTICE) || tanzilSource?.notice !== TANZIL_NOTICE) {
+    problem("azkar.json's Tanzil notice is not the copyright block of the tanzil.net download")
+  } else console.log('  ok    the Tanzil copyright block, verbatim')
   // Ayat that are fetched for a cross-check only (a supplication made of Qur'anic words).
   for (const [key, text] of Object.entries(quranAyat())) {
     if (key in fixture) continue
@@ -63,11 +71,6 @@ heading("Qur'an text against tanzil.net (Simple Plain, with pause marks)")
 }
 
 // --- 2 to 4. Words and vowel marks against the other sources -----------------------------------
-
-const witnessKey = (selector) =>
-  [selector.from, selector.chapter, selector.index ?? selector.order ?? selector.entry]
-    .filter((part) => part !== undefined)
-    .join(':')
 
 /**
  * The lam of the article is left bare by some typesetters and given a sukun by others, so a bare
@@ -85,13 +88,34 @@ function isArticleLam({ skeleton, index }) {
 const otherSession = (spec, witness) =>
   spec.id.startsWith('evening-') && (witness.from === 'book' || (witness.from === 'asellam' && witness.chapter === 'morning'))
 
+/**
+ * The records each supplication is compared with: the item's own witnesses, and the records of
+ * another chapter that a list entry re-using the item names (`sameWordsAs`, whose words build.mjs
+ * has already compared), with the known differences declared on that entry.
+ */
+function comparisons() {
+  const result = ITEMS.filter((spec) => spec.arabic.from !== 'quran').map((spec) => ({
+    id: spec.id,
+    label: spec.id,
+    witnesses: spec.witnesses ?? [],
+    known: spec,
+    patches: spec.arabic.patches ?? [],
+  }))
+  for (const [list, entries] of Object.entries(LISTS)) {
+    for (const entry of entries) {
+      if (!entry.sameWordsAs || data.items[entry.id].quran) continue
+      result.push({ id: entry.id, label: `${entry.id} (${list})`, witnesses: entry.sameWordsAs, known: entry, patches: [] })
+    }
+  }
+  return result
+}
+
 heading('Words and vowel marks against the committed witnesses')
-for (const spec of ITEMS) {
-  if (spec.arabic.from === 'quran') continue
-  const arabic = data.items[spec.id].arabic
+for (const { id, label, witnesses, known: spec, patches } of comparisons()) {
+  const arabic = data.items[id].arabic
   const readings = new Set()
   const notes = []
-  for (const witness of spec.witnesses) {
+  for (const witness of witnesses) {
     const key = witnessKey(witness)
     const comparison = compareVocalised(arabic, tidy(record(witness).text))
 
@@ -99,9 +123,9 @@ for (const spec of ITEMS) {
     const expectedWords = spec.knownWordDifferences?.[key] ?? 0
     const words = `[${comparison.onlyInA.join(' ')}] here, [${comparison.onlyInB.join(' ')}] there`
     if (otherSession(spec, witness)) {
-      if (differentWords === 0) problem(`${spec.id} vs ${key}: expected the other session's wording to differ`)
+      if (differentWords === 0) problem(`${label} vs ${key}: expected the other session's wording to differ`)
     } else if (differentWords !== expectedWords) {
-      problem(`${spec.id} vs ${key}: ${differentWords} different words, ${expectedWords} expected (${words})`)
+      problem(`${label} vs ${key}: ${differentWords} different words, ${expectedWords} expected (${words})`)
     } else if (differentWords > 0) {
       notes.push(`${key}: ${differentWords} known word difference(s) (${words})`)
     }
@@ -109,14 +133,14 @@ for (const spec of ITEMS) {
     const expected = spec.knownWitnessConflicts?.[key] ?? 0
     const found = comparison.conflicts.length
     const detail = found > 0 ? ` (${comparison.conflicts.join(' ; ')})` : ''
-    if (found !== expected) problem(`${spec.id} vs ${key}: ${found} conflicts, ${expected} expected${detail}`)
+    if (found !== expected) problem(`${label} vs ${key}: ${found} conflicts, ${expected} expected${detail}`)
     else if (found > 0) notes.push(`${key}: ${found} known vowel disagreement(s)${detail}`)
     for (const letter of comparison.missingInA) if (!isArticleLam(letter)) readings.add(letter.word)
   }
   const gaps = incompleteVocalisation(arabic)
-  if (gaps.length > 0) problem(`${spec.id}: incomplete vocalisation ${JSON.stringify(gaps)}`)
-  console.log(`  ok    ${spec.id}  [${spec.witnesses.map(witnessKey).join(', ')}]`)
-  for (const patch of spec.arabic.patches ?? []) {
+  if (gaps.length > 0) problem(`${label}: incomplete vocalisation ${JSON.stringify(gaps)}`)
+  console.log(`  ok    ${label}  [${witnesses.map(witnessKey).join(', ')}]`)
+  for (const patch of patches) {
     console.log(`          word ${patch.word} taken from ${witnessKey(patch.from)} (${patch.kind})`)
   }
   for (const text of notes) console.log(`          ${text}`)
@@ -125,7 +149,8 @@ for (const spec of ITEMS) {
 
 heading('Completeness of the vocalisation, every recited text')
 for (const item of Object.values(data.items)) {
-  const gaps = incompleteVocalisation(item.arabic)
+  // The disconnected letters that open Surah as-Sajdah carry no vowel marks (build.mjs, OPENING_LETTERS).
+  const gaps = incompleteVocalisation(item.quran ? vocalisedLines(item.arabic) : item.arabic)
   if (gaps.length > 0) problem(`${item.id}: ${JSON.stringify(gaps)}`)
 }
 if (failures === 0) console.log(`  ok    ${Object.keys(data.items).length} texts, no letter left without its mark`)
@@ -137,9 +162,11 @@ function optionalWitnesses() {
   const add = (source, raw, texts) => {
     if (raw) witnesses.push(...texts(JSON.parse(raw)).map((text) => ({ source, text })))
   }
-  add('hisnmuslim.com', readCache('.cache/hisnmuslim-27.json'), (json) =>
-    Object.values(json)[0].map((row) => row.ARABIC_TEXT.replace(/\[[^\]]*\]/g, ' ')),
-  )
+  for (const chapter of [25, 27, 28]) {
+    add('hisnmuslim.com', readCache(`.cache/hisnmuslim-${chapter}.json`), (json) =>
+      Object.values(json)[0].map((row) => row.ARABIC_TEXT.replace(/\[[^\]]*\]/g, ' ')),
+    )
+  }
   add('wird', readCache('.cache/wird-data.json'), (json) => json.map((row) => row.arabic))
   add('fitrahive', readCache('.cache/fitrahive-morning.json'), (json) => json.map((row) => row.arabic))
   add('fitrahive', readCache('.cache/fitrahive-evening.json'), (json) => json.map((row) => row.arabic))
@@ -206,6 +233,45 @@ const HADITH_NUMBERS = [
   ['la-ilaha-illallah-wahdahu-hundred-times', 'bukhari', 3293, { with: HUNDRED }],
   ['allahumma-inni-asaluka-ilman-nafian', 'ibnmajah', 925],
   ['astaghfirullah-wa-atubu-ilayh', 'bukhari', 6307],
+  // After the prayer, before sleep and the tasbih presets.
+  ['la-ilaha-illallah-wahdahu-three-times', 'bukhari', 844],
+  ['la-ilaha-illallah-wahdahu-three-times', 'bukhari', 6473],
+  ['allahumma-la-mania-lima-atayt', 'bukhari', 844],
+  ['la-ilaha-illallah-yuhyi-wa-yumit-ten-times', 'tirmidhi', 3474],
+  ['la-ilaha-illallah-yuhyi-wa-yumit-ten-times', 'tirmidhi', 3534],
+  ['allahumma-rabbas-samawatis-sab', 'tirmidhi', 3481],
+  ['bismika-rabbi-wadatu-janbi', 'bukhari', 6320],
+  ['bismika-rabbi-wadatu-janbi', 'tirmidhi', 3401],
+  ['allahumma-qini-adhabaka', 'abudawud', 5045],
+  ['allahumma-qini-adhabaka', 'tirmidhi', 3398],
+  ['bismika-allahumma-amutu-wa-ahya', 'bukhari', 6324],
+  ['allahumma-aslamtu-nafsi-ilayk', 'bukhari', 6313],
+  ['la-ilaha-illallah', 'tirmidhi', 3383],
+  ['la-ilaha-illallah', 'ibnmajah', 3800],
+]
+
+/**
+ * Hadiths cited for a recitation they describe rather than quote (a surah, the thirty-three and
+ * thirty-four): [item, edition, number, words the hadith must contain]. The words are taken from
+ * pinned records, never typed: a surah's name or first words, or the book's own wording.
+ * At-Tirmidhi 2903 says "al-mu'awwidhatayn" (the dual) and is checked by hand.
+ */
+// The API spells some surah names with the small high signs of the Uthmani script; stripMarks drops them.
+const surahWord = (surah, index) => looseSkeleton(stripMarks(quranSurahs()[surah].name))[index]
+const firstWords = (key, count) => looseSkeleton(quranAyat()[key]).slice(0, count).join(' ')
+/** "Al-mu'awwidhat", the last word of the book's "the three surahs are called al-mu'awwidhat". */
+const MUAWWIDHAT = looseSkeleton(bookFootnote(1, 1, 'after-prayer').split('.')[1]).at(-1)
+/** The book's "(four and thirty)", the last two words of the sleep chapter's entry 8. */
+const THIRTY_FOUR = looseSkeleton(bookEntries('sleep')[8].text).slice(-2).join(' ')
+const HADITH_TOPICS = [
+  ['after-prayer-al-ikhlas-al-falaq-an-nas', 'abudawud', 1523, MUAWWIDHAT],
+  ['after-prayer-al-ikhlas-al-falaq-an-nas', 'nasai', 1336, MUAWWIDHAT],
+  ['sleep-al-ikhlas-al-falaq-an-nas', 'bukhari', 5017, firstWords('112:1', 4)],
+  ['sleep-ayat-al-kursi', 'bukhari', 2311, firstWords('2:255', 5)],
+  ['last-two-ayat-of-al-baqarah', 'bukhari', 4008, surahWord(2, 1)],
+  ['surah-as-sajdah', 'tirmidhi', 3404, surahWord(32, 1)],
+  ['surah-al-mulk', 'tirmidhi', 3404, firstWords('67:1', 1)],
+  ['sleep-allahu-akbar', 'bukhari', 3705, THIRTY_FOUR],
 ]
 
 async function hadithText(edition, number) {
@@ -242,6 +308,24 @@ for (const [id, edition, number, count = {}] of HADITH_NUMBERS) {
   else if (count.without && words.has(count.without)) problem(`${id}: ${edition} ${number} is the hundred-times narration`)
   else if (count.with && !words.has(count.with)) problem(`${id}: ${edition} ${number} does not mention a hundred times`)
   else console.log(`  ok    ${id}: ${edition} ${number} (${Math.round(share * 100)}% of its words)`)
+}
+for (const [id, edition, number, wanted] of HADITH_TOPICS) {
+  const item = data.items[id]
+  if (!quotes(item.reference.en, number) || !quotes(item.reference.ar, number)) {
+    problem(`${id}: the reference no longer quotes ${edition} ${number}`)
+    continue
+  }
+  const text = await hadithText(edition, number)
+  if (text === null) {
+    skipped += 1
+    continue
+  }
+  // Word by word, letters only: "bi-" or "wa-" in front of a word still counts as the word.
+  const words = looseSkeleton(text)
+  const sought = wanted.split(' ')
+  const found = words.some((_, i) => sought.every((word, k) => (words[i + k] ?? '').endsWith(word)))
+  if (found) console.log(`  ok    ${id}: ${edition} ${number} has "${wanted}"`)
+  else problem(`${id}: ${edition} ${number} does not have "${wanted}"`)
 }
 if (skipped > 0) problem(`${skipped} cited hadiths are not cached: run with --online to download and check them`)
 

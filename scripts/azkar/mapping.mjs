@@ -10,7 +10,7 @@
 // differs between morning and evening become two items, each taken from text that spells that
 // wording out in full.
 //
-// Selectors
+// Selectors (constructed by lib/selectors.mjs, which lists them all)
 //   A(chapter, index)   asellam/HisnElMuslim, entry `index` of its morning or evening chapter
 //   S(order)            Seen-Arabic adhkar DB, the row with that `order`
 //   B(entry)            the book's own text of that entry (used as a witness only)
@@ -40,37 +40,58 @@
 // U+02BF for ayn and U+02BE for hamza; th, dh, kh, sh, gh; the article assimilated and joined as
 // it is recited ("ash-shaytan", "wal-hamdu"); pausal endings at commas and full stops.
 
-const A = (chapter, index) => ({ from: 'asellam', chapter, index })
-const S = (order) => ({ from: 'seen', order })
-const B = (entry) => ({ from: 'book', entry })
-const MUSLIM_2723 = { from: 'muslim-2723', quotes: [0, 1] }
-
-const note = (page, number, options = {}) => ({ from: 'book-footnote', page, number, ...options })
-const seenSource = (order, options = {}) => ({ from: 'seen-source', order, ...options })
-const annotation = (entry, index) => ({ from: 'book-annotation', entry, index })
-const remark = (entry) => ({ from: 'book-remark', entry })
-const list = (...pieces) => ({ from: 'list', pieces })
-const surahName = (surah) => ({ from: 'surah-name', surah })
-
-const fill = (word, from, fromWord = word) => ({ kind: 'marks', word, from, fromWord })
-const revowel = (word, from, confirmedBy, fromWord = word) => ({ kind: 'vowel', word, from, fromWord, confirmedBy })
-const respell = (word, from, fromWord) => ({ kind: 'spelling', word, from, fromWord })
+import {
+  A,
+  B,
+  MUSLIM_2723,
+  S,
+  annotation,
+  fill,
+  list,
+  note,
+  remark,
+  respell,
+  revowel,
+  seenSource,
+  surahName,
+} from './lib/selectors.mjs'
 
 /** "and al-Bukhari in al-Adab al-Mufrad, no. 1199": the book's own phrase with another number. */
 const ADAB_1199 = note(3, 2, { sentence: 1, segments: [3, 4], citeAs: [['1201', '1199']] })
 
 const range = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => from + i)
 
-export const VERSION = 2
+/** 3: the after-prayer list, the sleep session and the tasbih presets were added. */
+export const VERSION = 3
 
-/** Sessions in display order. The optional `sleep` session is not provided. */
+/**
+ * Sessions whose order is given by the `in` field of the items below, in display order. The
+ * sleep session lists its own order in mapping-sleep.mjs, as it re-uses one item of this file.
+ */
 export const COLLECTIONS = ['morning', 'evening']
 
 const BOTH = ['morning', 'evening']
 const MORNING = ['morning']
 const EVENING = ['evening']
 
-const TAHLIL = {
+/** Ayat al-Kursi with the isti'adha before it, as the morning, evening and sleep azkar recite it. */
+export const AYAT_AL_KURSI = {
+  transliteration:
+    'Aʿūdhu billāhi minash-shayṭānir-rajīm. Allāhu lā ilāha illā huwal-ḥayyul-qayyūm, lā taʾkhudhuhu sinatun wa lā nawm, lahu mā fis-samāwāti wa mā fil-arḍ, man dhal-ladhī yashfaʿu ʿindahu illā bi-idhnih, yaʿlamu mā bayna aydīhim wa mā khalfahum, wa lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ, wasiʿa kursiyyuhus-samāwāti wal-arḍ, wa lā yaʾūduhu ḥifẓuhumā, wa huwal-ʿaliyyul-ʿaẓīm.',
+  translation:
+    'I seek refuge in Allah from the accursed Satan. Allah: there is no god except Him, the Ever-Living, the Sustainer of all. Drowsiness does not come over Him, nor does sleep. All that is in the heavens and all that is on the earth is His. Who is there that can intercede before Him except by His leave? He knows what lies ahead of them and what lies behind them, while they grasp nothing of His knowledge beyond what He wills. His Kursi encompasses the heavens and the earth, and safeguarding them both is no burden to Him. He is the Most High, the Magnificent.',
+}
+
+/** Surahs 112 to 114, each after the basmala, as the morning, evening and sleep azkar recite them. */
+export const QULS = {
+  transliteration:
+    'Bismillāhir-raḥmānir-raḥīm. Qul huwallāhu aḥad, Allāhuṣ-ṣamad, lam yalid wa lam yūlad, wa lam yakun lahu kufuwan aḥad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbil-falaq, min sharri mā khalaq, wa min sharri ghāsiqin idhā waqab, wa min sharrin-naffāthāti fil-ʿuqad, wa min sharri ḥāsidin idhā ḥasad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbin-nās, malikin-nās, ilāhin-nās, min sharril-waswāsil-khannās, alladhī yuwaswisu fī ṣudūrin-nās, minal-jinnati wan-nās.',
+  translation:
+    "In the name of Allah, the Most Gracious, the Most Merciful. Say: He is Allah, the One; Allah, the Self-Sufficient on whom all depend. He begot no one, nor was He begotten, and there is no one comparable to Him. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of the dawn from the evil of whatever He has created, from the evil of the night's darkness when it sets in, from the evil of those who blow upon knots, and from the evil of an envious one when he envies. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of humankind, the King of humankind, the God of humankind, from the evil of the retreating whisperer who whispers into the breasts of humankind, whether of the jinn or of humankind.",
+}
+
+/** The tahlil, as the morning, evening and after-prayer azkar recite it. */
+export const TAHLIL = {
   transliteration:
     'Lā ilāha illallāhu waḥdahu lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ʿalā kulli shayʾin qadīr.',
   translation:
@@ -93,10 +114,7 @@ export const ITEMS = [
     },
     witnesses: [],
     countWitnesses: [A('morning', 1), A('evening', 1), S(2)],
-    transliteration:
-      'Aʿūdhu billāhi minash-shayṭānir-rajīm. Allāhu lā ilāha illā huwal-ḥayyul-qayyūm, lā taʾkhudhuhu sinatun wa lā nawm, lahu mā fis-samāwāti wa mā fil-arḍ, man dhal-ladhī yashfaʿu ʿindahu illā bi-idhnih, yaʿlamu mā bayna aydīhim wa mā khalfahum, wa lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ, wasiʿa kursiyyuhus-samāwāti wal-arḍ, wa lā yaʾūduhu ḥifẓuhumā, wa huwal-ʿaliyyul-ʿaẓīm.',
-    translation:
-      'I seek refuge in Allah from the accursed Satan. Allah: there is no god except Him, the Ever-Living, the Sustainer of all. Drowsiness does not come over Him, nor does sleep. All that is in the heavens and all that is on the earth is His. Who is there that can intercede before Him except by His leave? He knows what lies ahead of them and what lies behind them, while they grasp nothing of His knowledge beyond what He wills. His Kursi encompasses the heavens and the earth, and safeguarding them both is no burden to Him. He is the Most High, the Magnificent.',
+    ...AYAT_AL_KURSI,
     reference: {
       en: "Qur'an, Surah al-Baqarah, ayah 255. Al-Hakim 1/562; graded authentic by al-Albani in Sahih at-Targhib wat-Tarhib 1/273, who attributed it to an-Nasa'i and at-Tabarani and said that at-Tabarani's chain is good",
       ar: [note(0, 2, { sentence: 0 }), note(0, 2, { sentence: 2 })],
@@ -123,10 +141,7 @@ export const ITEMS = [
     },
     witnesses: [],
     countWitnesses: [A('morning', 2), A('evening', 2), S(4), S(5), S(6)],
-    transliteration:
-      'Bismillāhir-raḥmānir-raḥīm. Qul huwallāhu aḥad, Allāhuṣ-ṣamad, lam yalid wa lam yūlad, wa lam yakun lahu kufuwan aḥad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbil-falaq, min sharri mā khalaq, wa min sharri ghāsiqin idhā waqab, wa min sharrin-naffāthāti fil-ʿuqad, wa min sharri ḥāsidin idhā ḥasad. Bismillāhir-raḥmānir-raḥīm. Qul aʿūdhu bi-rabbin-nās, malikin-nās, ilāhin-nās, min sharril-waswāsil-khannās, alladhī yuwaswisu fī ṣudūrin-nās, minal-jinnati wan-nās.',
-    translation:
-      "In the name of Allah, the Most Gracious, the Most Merciful. Say: He is Allah, the One; Allah, the Self-Sufficient on whom all depend. He begot no one, nor was He begotten, and there is no one comparable to Him. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of the dawn from the evil of whatever He has created, from the evil of the night's darkness when it sets in, from the evil of those who blow upon knots, and from the evil of an envious one when he envies. In the name of Allah, the Most Gracious, the Most Merciful. Say: I seek refuge with the Lord of humankind, the King of humankind, the God of humankind, from the evil of the retreating whisperer who whispers into the breasts of humankind, whether of the jinn or of humankind.",
+    ...QULS,
     // The reference opens with the names of the three surahs, as the Ayat al-Kursi reference
     // opens with its own citation; the reader shows no other label for them.
     reference: {

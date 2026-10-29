@@ -60,6 +60,8 @@ export interface AzkarSource {
   license: string
   /** What this source was used for, e.g. "Arabic text and counts". */
   usedFor: string
+  /** A notice the source's terms ask to be reproduced with its text, verbatim (Tanzil's copyright block). */
+  notice?: string
 }
 
 export interface AzkarData {

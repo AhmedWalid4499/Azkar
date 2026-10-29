@@ -20,6 +20,11 @@ const LETTERS = '\u0621-\u063A\u0641-\u064A'
 const VOWEL_MARKS = '\u064B-\u0652\u0670'
 /** Small high pause marks printed in the Qur'an text (sala, qala, jim, la, mim, three dots, sin). */
 const PAUSE_MARKS = '\u06D6-\u06DC'
+/**
+ * The rub' al-hizb sign and the sign of a prostration of recitation, which the Tanzil text prints
+ * at the start or the end of an ayah. They are not letters or marks: Qur'anic text only.
+ */
+const QURAN_SIGNS = '\u06DE\u06E9'
 /** Arabic comma, full stop and colon: the only punctuation the recited texts use. */
 const PUNCTUATION = '\u060C.:'
 
@@ -36,6 +41,14 @@ export function splitToken(token) {
   return { lead, core, trail }
 }
 
+/**
+ * `text` without whatever stands before its first letter or after its last letter or mark:
+ * punctuation, brackets, quotation marks. Used to cut an excerpt out of a longer record.
+ */
+export function trimEdges(text) {
+  return text.replace(/^[^\u0621-\u063A\u0641-\u064A\u0671]+/, '').replace(/[^\u0621-\u063A\u0641-\u064A\u0671\u064B-\u0652\u0670]+$/, '')
+}
+
 /** Remove every vowel, recitation and pause mark and the tatweel. For metadata, not for recited text. */
 export function stripMarks(text) {
   return text.replace(/[\u064B-\u0652\u0670\u06D6-\u06ED\u0640]/g, '')
@@ -44,9 +57,12 @@ export function stripMarks(text) {
 /** Everything a recited text may contain. Latin letters, digits, tatweel and ligatures are not in it. */
 export const RECITED_TEXT = new RegExp(`^[${ALLOWED}]+$`)
 
+/** Everything a Qur'anic item may contain: a recited text, and the two signs of the Tanzil text. */
+export const QURANIC_TEXT = new RegExp(`^[${ALLOWED}${QURAN_SIGNS}]+$`)
+
 /** The characters of `text` that a recited text may not contain, as U+XXXX code points. */
-export function foreignCharacters(text) {
-  const allowed = new RegExp(`[${ALLOWED}]`)
+export function foreignCharacters(text, quranic = false) {
+  const allowed = new RegExp(`[${ALLOWED}${quranic ? QURAN_SIGNS : ''}]`)
   const found = new Set()
   for (const character of text) {
     if (!allowed.test(character)) {
@@ -128,8 +144,11 @@ export const strictSkeleton = (text) => vocalisedWords(text).map(skeleton)
 const SHORT_VOWEL = /[\u064B-\u0650]/
 /** Letters that may stand without a mark: the long vowels and the alef forms that carry none. */
 const MAY_BE_BARE = /[\u0627\u0648\u064A\u0649\u0622]/
-/** The article, after any one-letter prefixes: its lam is silent or assimilated and often left bare. */
-const ARTICLE = /^[\u0648\u0641\u0628\u0643\u0644]{0,2}\u0627\u0644/
+/**
+ * The article, after any one-letter prefixes: its lam is silent or assimilated and often left bare.
+ * After the preposition "li" the article loses its alef ("lil-", "lish-"), as in 67:5.
+ */
+const ARTICLE = /^(?:[\u0648\u0641\u0628\u0643\u0644]{0,2}\u0627\u0644|[\u0648\u0641]?\u0644\u0644)/
 /** The letters the lam of the article is assimilated to; they are doubled after it. */
 const SUN_LETTER = /[\u062A\u062B\u062F-\u0638\u0644\u0646]/
 

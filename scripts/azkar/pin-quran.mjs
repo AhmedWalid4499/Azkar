@@ -16,7 +16,7 @@ import { join } from 'node:path'
 import { AZKAR_SCRIPTS } from './lib/raw.mjs'
 
 const DATA_DIR = join(AZKAR_SCRIPTS, '..', '..', 'src', 'features', 'azkar', 'data')
-const TANZIL = join(AZKAR_SCRIPTS, '.cache', 'tanzil-simple-plain.txt')
+const TANZIL = join(AZKAR_SCRIPTS, '.cache', 'tanzil-simple-plain-signs.txt')
 const EDITION = 'Tanzil Quran Text (Simple Plain, Version 1.1)'
 
 function fail(message) {

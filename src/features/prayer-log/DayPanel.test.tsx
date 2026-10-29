@@ -10,6 +10,17 @@ import { usePrayerLog } from './store'
 import { freezeToday, resetApp, seedLog, seedLoggedAt, seedSessions, seedSunnah, setLanguage } from './test-utils'
 
 vi.mock('../prayer-times', () => ({ usePrayerDay: () => null }))
+
+/** The sessions the app offers, when a test narrows them; `null` leaves the dataset's own. */
+const offered = vi.hoisted(() => ({ collections: null as string[] | null }))
+vi.mock('../azkar', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../azkar')>()
+  return {
+    ...actual,
+    availableCollections: () =>
+      actual.availableCollections().filter((id) => offered.collections === null || offered.collections.includes(id)),
+  }
+})
 vi.mock('../../native', async (importOriginal) => ({ ...(await importOriginal<object>()), haptic: vi.fn() }))
 
 const TODAY = '2026-10-11'
@@ -43,6 +54,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  offered.collections = null
   resetApp()
 })
 
@@ -193,7 +205,25 @@ describe('the azkar sessions', () => {
     expect(facts('Before sleep')).toEqual(['Started 10:30 PM', 'Finished 10:40 PM', 'Recitations 40'])
   })
 
+  it('lead back into today’s bedtime azkar once they were read, and offer them on no other day', () => {
+    const sleep = { ...morning, startedAt: AT(TODAY, '19:30'), completedAt: AT(TODAY, '19:40') }
+    const { unmount } = renderPanel(TODAY)
+    expect(screen.queryByRole('heading', { name: 'Before sleep' })).not.toBeInTheDocument()
+    unmount()
+
+    seedSessions({ [TODAY]: { sleep }, [PAST]: { sleep: { ...sleep, startedAt: AT(PAST, '19:30') } } })
+    const today = renderPanel(TODAY)
+    expect(session('Before sleep')).toHaveTextContent('Completed')
+    expect(screen.getByRole('link', { name: 'Read again: Before sleep' })).toHaveAttribute('href', '/azkar/sleep')
+    today.unmount()
+
+    renderPanel(PAST)
+    expect(session('Before sleep')).toHaveTextContent('Completed')
+    expect(screen.queryByRole('link', { name: /Before sleep/ })).not.toBeInTheDocument()
+  })
+
   it('list a session that was recorded even when the app no longer offers it, with no way into it', () => {
+    offered.collections = ['morning', 'evening']
     seedSessions({ [TODAY]: { sleep: { ...morning, startedAt: AT(TODAY, '19:30'), completedAt: AT(TODAY, '19:40') } } })
     renderPanel(TODAY)
     expect(session('Before sleep')).toHaveTextContent('Completed')
