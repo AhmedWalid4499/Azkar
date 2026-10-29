@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Azkar uses your location to calculate prayer times and the Qibla direction on your iPhone. To show the place's name, an approximate position is looked up with Apple.</string>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Azkar can sound an adhan alarm at prayer times you choose, even in silent mode.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>io.github.ahmedwalid4499.azkar.refresh</string>
+	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Amiri-Regular.ttf</string>
+		<string>Amiri-Bold.ttf</string>
+	</array>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ar</string>
+	</array>
+</dict>
+</plist>

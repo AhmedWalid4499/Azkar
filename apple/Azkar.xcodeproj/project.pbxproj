@@ -49,11 +49,21 @@
 			);
 			target = CFE948418818881053D5936F /* AzkarWidgetsExtension */;
 		};
+		0890BC056F2D52D3EB07CEE2 /* Exceptions for "Azkar" folder in "Azkar" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D4BB4A2A544057186427F016 /* Azkar */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E41F83E4937DD96804F00DF4 /* Azkar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0890BC056F2D52D3EB07CEE2 /* Exceptions for "Azkar" folder in "Azkar" target */,
+			);
 			path = Azkar;
 			sourceTree = "<group>";
 		};
@@ -372,6 +382,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Azkar/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Azkar;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
@@ -407,6 +418,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Azkar/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Azkar;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
