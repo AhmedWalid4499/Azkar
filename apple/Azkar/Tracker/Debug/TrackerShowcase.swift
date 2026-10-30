@@ -22,6 +22,7 @@ enum TrackerShowcase {
         if open == "quran" { return .area(.quran) }
         if open == "fasting" { return .area(.fasting) }
         if open == "ramadan" { return .area(.ramadan) }
+        if open == "year" { return .yearReview }
         if open.hasPrefix("day:"), let back = Int(open.dropFirst(4)) { return .day(today.adding(days: -back)) }
         return nil
     }

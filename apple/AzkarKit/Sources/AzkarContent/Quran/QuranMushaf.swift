@@ -110,6 +110,56 @@ public struct QuranMushaf: Sendable {
     }
 }
 
+/// Which surah and juz a page is in, from the metadata alone: for the widgets, whose memory is too
+/// short to hold the whole text. Agrees with `QuranMushaf` on every page.
+public struct QuranPageIndex: Sendable {
+    private struct Name: Sendable {
+        var name: String
+        var transliteration: String
+    }
+
+    /// Each page's first ayah, as `sura * 1000 + ayah`.
+    private let pageStarts: [Int]
+    private let names: [Name]
+    /// The page each juz begins on.
+    private let juzPages: [Int]
+
+    public static let bundled: QuranPageIndex = {
+        do {
+            return try QuranPageIndex(metadata: Data(contentsOf: QuranResources.metadataURL))
+        } catch {
+            preconditionFailure("The bundled Qur'an metadata could not be read: \(error)")
+        }
+    }()
+
+    public init(metadata: Data) throws {
+        let reader = QuranMetadataReader()
+        let parser = XMLParser(data: metadata)
+        parser.delegate = reader
+        guard parser.parse() else { throw QuranMushaf.Malformed(description: "quran-data.xml cannot be read") }
+        guard reader.pages.count == QuranMushaf.pageCount else { throw QuranMushaf.Malformed(description: "\(reader.pages.count) pages") }
+        let starts = reader.pages.map { $0.sura * 1000 + $0.ayah }
+        pageStarts = starts
+        names = reader.suras.map { Name(name: $0.name, transliteration: $0.transliteration) }
+        juzPages = reader.juz.map { juz in
+            starts.lastIndex { $0 <= juz.sura * 1000 + juz.ayah }.map { $0 + 1 } ?? 1
+        }
+    }
+
+    /// The Arabic name of the surah whose text a page opens with.
+    public func suraName(ofPage page: Int) -> String { names[sura(ofPage: page) - 1].name }
+
+    /// Its name in Latin letters.
+    public func suraTransliteration(ofPage page: Int) -> String { names[sura(ofPage: page) - 1].transliteration }
+
+    /// The number of the juz a page is in.
+    public func juz(ofPage page: Int) -> Int {
+        (juzPages.lastIndex { $0 <= page } ?? 0) + 1
+    }
+
+    private func sura(ofPage page: Int) -> Int { pageStarts[page - 1] / 1000 }
+}
+
 public enum QuranResources {
     static var textURL: URL { url("quran-uthmani", "txt") }
     static var metadataURL: URL { url("quran-data", "xml") }

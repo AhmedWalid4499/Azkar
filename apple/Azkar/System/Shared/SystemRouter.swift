@@ -11,15 +11,18 @@ nonisolated enum SystemRoute: Hashable, Sendable {
     case azkar(AzkarSession)
     /// The Qibla tab.
     case qibla
+    /// The mushaf, open where reading goes on.
+    case quran
 
     static let scheme = "azkar"
 
-    /// `azkar://today`, `azkar://azkar/morning`, `azkar://azkar/afterPrayer:asr`, `azkar://qibla`.
+    /// `azkar://today`, `azkar://azkar/morning`, `azkar://azkar/afterPrayer:asr`, `azkar://qibla`, `azkar://quran`.
     var url: URL {
         switch self {
         case .today: URL(string: "\(Self.scheme)://today")!
         case let .azkar(session): URL(string: "\(Self.scheme)://azkar/\(session.description)")!
         case .qibla: URL(string: "\(Self.scheme)://qibla")!
+        case .quran: URL(string: "\(Self.scheme)://quran")!
         }
     }
 
@@ -28,6 +31,7 @@ nonisolated enum SystemRoute: Hashable, Sendable {
         switch url.host() {
         case "today": self = .today
         case "qibla": self = .qibla
+        case "quran": self = .quran
         case "azkar":
             guard let key = url.pathComponents.dropFirst().first, let session = AzkarSession(key) else { return nil }
             self = .azkar(session)
@@ -52,6 +56,8 @@ final class SystemRouter {
 
     /// The latest request not yet shown.
     private(set) var pending: SystemRoute?
+    /// The Quran tab should open the mushaf, which it can only do once its text has loaded.
+    var opensQuranReader = false
 
     func go(_ route: SystemRoute) { pending = route }
 

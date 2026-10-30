@@ -22,6 +22,9 @@ struct TrackerAreasSection: View {
                     }
                 }
             }
+            NavigationLink(value: TrackerRoute.yearReview) {
+                TrackerYearRow(data: data)
+            }
         }
     }
 

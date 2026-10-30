@@ -12,9 +12,11 @@ import PackageDescription
 let package = Package(
     name: "AzkarKit",
     defaultLocalization: "en",
-    platforms: [.iOS("27.0"), .macOS("27.0")],
+    platforms: [.iOS("27.0"), .macOS("27.0"), .watchOS("11.0")],
     products: [
         .library(name: "AzkarKit", targets: ["AzkarKit"]),
+        // The Watch app needs only the shared types: the records stay on the iPhone.
+        .library(name: "AzkarCore", targets: ["AzkarCore"]),
     ],
     dependencies: [
         .package(url: "https://github.com/batoulapps/adhan-swift", exact: "1.5.0"),

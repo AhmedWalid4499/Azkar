@@ -43,6 +43,7 @@ final class SystemServices {
         launched = true
         UNUserNotificationCenter.current().delegate = responder
         registerCategories(SystemLanguage(SharedRecords.settings.load().app))
+        WatchBridge.shared.activate()
     }
 
     /// Starts everything and keeps it in step with the user's records and settings for as long as the app runs.
@@ -122,6 +123,7 @@ final class SystemServices {
         let (_, board) = await currentBoard(settings: settings, now: now)
         let active = UIApplication.shared.applicationState == .active
         await liveActivity.update(settings: settings, board: board, canStart: active)
+        await WatchBridge.shared.push(settings: settings, board: board)
         scheduleNextChange(board)
     }
 

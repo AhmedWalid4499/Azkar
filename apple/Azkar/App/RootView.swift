@@ -34,6 +34,9 @@ struct RootView: View {
             switch route {
             case .today: tab = .today
             case .qibla: tab = .qibla
+            case .quran:
+                tab = .quran
+                systemRouter.opensQuranReader = true
             case let .azkar(session): openReading(session, day: nil)
             }
         }

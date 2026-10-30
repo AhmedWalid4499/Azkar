@@ -10,6 +10,7 @@ struct QuranScreen: View {
     @State private var list = QuranList.suras
     @State private var request: QuranReaderRequest?
     @State private var showsPaper = false
+    @State private var systemRouter = SystemRouter.shared
 
     private enum QuranList: Hashable { case suras, juz, bookmarks }
 
@@ -110,6 +111,11 @@ struct QuranScreen: View {
         }
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
+        .onChange(of: systemRouter.opensQuranReader, initial: true) { _, opens in
+            guard opens else { return }
+            systemRouter.opensQuranReader = false
+            if request == nil { request = QuranReaderRequest(page: next) }
+        }
     }
 
     @ViewBuilder private func bookmarks(_ mushaf: QuranMushaf, pages: [Int]) -> some View {

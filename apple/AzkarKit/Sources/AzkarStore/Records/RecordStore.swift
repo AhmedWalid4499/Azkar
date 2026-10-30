@@ -51,6 +51,11 @@ public actor RecordStore {
         try rows().day(day)
     }
 
+    /// The Quran log, in the order it happened.
+    public func quranLog() throws -> [QuranEntry] {
+        try rows().quranEntries()
+    }
+
     /// The days from `from` to `to` (both included) with any record, oldest first.
     public func days(from: DayKey, to: DayKey) throws -> [DayRecords] {
         guard from <= to else { return [] }

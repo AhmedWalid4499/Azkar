@@ -27,6 +27,29 @@ extension RecordStore {
         }
     }
 
+    /// `times` more on a counter at once, as `countTasbih(_:on:at:)` adds them one by one: counts
+    /// made away from the phone, on the Watch. Past the day's limit the rest is left out.
+    @discardableResult
+    public func countTasbih(_ preset: String?, times: Int, on day: DayKey, at now: Date = .now) throws -> RecordChange {
+        try tasbih(preset, on: day) { rows, row, key in
+            let at = now.wholeMilliseconds
+            let added = min(times, RecordLimits.maxSessionRecitations - (row?.count ?? 0))
+            guard added > 0 else { return .unchanged }
+            if let row {
+                row.count += added
+                row.current += added
+                row.lastAt = at
+            } else {
+                let row = TasbihRow(day: day.number, preset: key, count: added, current: added)
+                row.startedAt = at
+                row.lastAt = at
+                rows.context.insert(row)
+            }
+            try self.lifetime(rows, preset, change: added)
+            return .changed
+        }
+    }
+
     /// Takes the counter's last count back, while it shows one. A counter left with nothing
     /// counted that day goes.
     @discardableResult

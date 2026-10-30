@@ -55,7 +55,7 @@ struct TrackerLifetimeSection: View {
 }
 
 /// A lifetime total, with an optional line under its name.
-private struct TrackerTotalRow<Detail: View>: View {
+struct TrackerTotalRow<Detail: View>: View {
     let name: LocalizedStringResource
     let symbol: String
     let tint: Color
@@ -64,11 +64,7 @@ private struct TrackerTotalRow<Detail: View>: View {
     @Environment(\.trackerFormat) private var format
 
     var body: some View {
-        LabeledContent {
-            Text(format.number(value))
-                .font(.body.weight(.semibold).monospacedDigit())
-                .foregroundStyle(.primary)
-        } label: {
+        HStack(spacing: 12) {
             Label {
                 VStack(alignment: .leading, spacing: 2) {
                     format.text(name)
@@ -79,6 +75,10 @@ private struct TrackerTotalRow<Detail: View>: View {
             } icon: {
                 Image(systemName: symbol).foregroundStyle(tint)
             }
+            Spacer(minLength: 0)
+            Text(format.number(value))
+                .font(.body.weight(.semibold).monospacedDigit())
+                .foregroundStyle(.primary)
         }
         .accessibilityElement(children: .combine)
     }

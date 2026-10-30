@@ -69,6 +69,7 @@ enum TrackerRoute: Hashable {
     case missed
     case area(TrackerArea)
     case ramadanNights(Int)
+    case yearReview
 }
 
 /// The tracker's four areas, each with a page of its own.

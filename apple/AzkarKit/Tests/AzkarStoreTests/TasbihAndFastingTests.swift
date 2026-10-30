@@ -30,6 +30,29 @@ import Testing
         #expect(change.totals.tasbihCount == 2)
     }
 
+    @Test func countsFromTheWatchArriveTogether() async throws {
+        let store = try store()
+        try await store.countTasbih(nil, on: today, at: start)
+        let change = try await store.countTasbih(nil, times: 33, on: today, at: start.addingTimeInterval(1))
+        #expect(change.day.tasbih[TasbihRecord.freeCount]?.count == 34)
+        #expect(change.day.tasbih[TasbihRecord.freeCount]?.current == 34)
+        #expect(change.totals.tasbihFree == 34)
+    }
+
+    @Test func countsFromTheWatchOnANewCounterStartIt() async throws {
+        let change = try await store().countTasbih(nil, times: 5, on: today, at: start)
+        #expect(change.day.tasbih[TasbihRecord.freeCount] == TasbihCount(startedAt: start, lastAt: start, count: 5, current: 5))
+    }
+
+    @Test func countsFromTheWatchStopAtTheDaysLimit() async throws {
+        let store = try store()
+        try await store.countTasbih(nil, times: RecordLimits.maxSessionRecitations - 2, on: today, at: start)
+        let change = try await store.countTasbih(nil, times: 10, on: today, at: start)
+        #expect(change.day.tasbih[TasbihRecord.freeCount]?.count == RecordLimits.maxSessionRecitations)
+        #expect(change.totals.tasbihFree == RecordLimits.maxSessionRecitations)
+        #expect(try await store.countTasbih(nil, times: 1, on: today, at: start).result == .unchanged)
+    }
+
     @Test func aPresetNotInTheListCountsNothing() async throws {
         let store = try store()
         #expect(try await store.countTasbih("not-a-preset", on: today, at: start).result == .unchanged)

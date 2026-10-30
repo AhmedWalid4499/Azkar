@@ -235,6 +235,24 @@
         }
       }
     },
+    "%1$@: %2$@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: %2$@"
+          }
+        }
+      }
+    },
     "%1$@: %2$@ read": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -667,6 +685,24 @@
         }
       }
     },
+    "Goal met": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحقق الهدف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal met"
+          }
+        }
+      }
+    },
     "Isha": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -717,6 +753,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jamaah"
+          }
+        }
+      }
+    },
+    "Juz %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجزء %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juz %@"
+          }
+        }
+      }
+    },
+    "Khatmahs: %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الختمات: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khatmahs: %@"
           }
         }
       }
@@ -973,6 +1045,24 @@
         }
       }
     },
+    "Night %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الليلة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night %@"
+          }
+        }
+      }
+    },
     "Now": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1117,6 +1207,60 @@
         }
       }
     },
+    "Page %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صفحة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Page %@"
+          }
+        }
+      }
+    },
+    "Pages a day: %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصفحات يوميًا: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pages a day: %@"
+          }
+        }
+      }
+    },
+    "Pages today: %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صفحات اليوم: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pages today: %@"
+          }
+        }
+      }
+    },
     "Prayed ✓": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1185,6 +1329,60 @@
           "stringUnit": {
             "state": "translated",
             "value": "Qibla"
+          }
+        }
+      }
+    },
+    "Quran": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القرآن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quran"
+          }
+        }
+      }
+    },
+    "Ramadan begins tonight": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمضان يبدأ الليلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramadan begins tonight"
+          }
+        }
+      }
+    },
+    "Ramadan, day %@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمضان، اليوم %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramadan, day %@"
           }
         }
       }
@@ -1261,6 +1459,24 @@
         }
       }
     },
+    "Start reading": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ابدأ القراءة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start reading"
+          }
+        }
+      }
+    },
     "Status": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1275,6 +1491,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Status"
+          }
+        }
+      }
+    },
+    "Tarawih": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التراويح"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarawih"
           }
         }
       }
@@ -1459,6 +1693,60 @@
         }
       }
     },
+    "Your place in the Quran, with tarawih and your goal in Ramadan.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موضعك في القرآن، مع التراويح وهدفك في رمضان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your place in the Quran, with tarawih and your goal in Ramadan."
+          }
+        }
+      }
+    },
+    "at home": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في البيت"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at home"
+          }
+        }
+      }
+    },
+    "at the masjid": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في المسجد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at the masjid"
+          }
+        }
+      }
+    },
     "less than a minute": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1473,6 +1761,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "less than a minute"
+          }
+        }
+      }
+    },
+    "not logged yet": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تُسجَّل بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not logged yet"
           }
         }
       }

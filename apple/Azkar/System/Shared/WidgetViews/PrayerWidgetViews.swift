@@ -65,6 +65,7 @@ struct WidgetMediumView: View {
             WidgetPrayerRows(board: board, language: language, spacing: 3)
                 .frame(maxWidth: .infinity)
         }
+        .dynamicTypeSize(...DynamicTypeSize.large)
     }
 }
 
@@ -105,6 +106,7 @@ struct WidgetLargeView: View {
             }
             Spacer(minLength: 0)
         }
+        .dynamicTypeSize(...DynamicTypeSize.xLarge)
     }
 }
 

@@ -57,9 +57,11 @@ nonisolated enum SystemText {
     /// A template with `%@` (or `%1$@`, `%2$@`) placeholders, filled in.
     static func format(_ key: String, _ language: SystemLanguage, _ arguments: String...) -> String {
         // Foundation isolates the arguments itself in right-to-left locales: no isolate inside another.
-        String(format: string(key, language), locale: language.locale, arguments: arguments)
+        let text = String(format: string(key, language), locale: language.locale, arguments: arguments)
             .replacing("\u{2068}\u{2068}", with: "\u{2068}")
             .replacing("\u{2069}\u{2069}", with: "\u{2069}")
+        // A template that opens with an argument has no letter of its own to set the direction.
+        return language.isArabic ? "\u{200F}\(text)" : text
     }
 
     /// A name or place inside a sentence of the other script keeps its own direction.

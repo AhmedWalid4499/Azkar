@@ -39,6 +39,12 @@ enum SystemDebugRender {
             for (family, size) in families {
                 save(widget(entry, family), size: size, variant, to: folder.appending(path: "widget-\(family)-\(variant.name).png"))
             }
+            for (name, quran) in [("quran", QuranWidgetEntry.sample(language: language)), ("quran-ramadan", QuranWidgetEntry.sample(language: language, inRamadan: true))] {
+                save(home(QuranWidgetSmallView(entry: quran), CGSize(width: 170, height: 170)), size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "\(name)-small-\(variant.name).png"))
+                save(home(QuranWidgetMediumView(entry: quran), CGSize(width: 364, height: 170)), size: CGSize(width: 364, height: 170), variant, to: folder.appending(path: "\(name)-medium-\(variant.name).png"))
+                save(QuranWidgetRectangularView(entry: quran).frame(width: 172, height: 76).background(.gray.opacity(0.3), in: .rect(cornerRadius: 12)),
+                     size: CGSize(width: 172, height: 76), variant, to: folder.appending(path: "\(name)-rectangular-\(variant.name).png"))
+            }
             save(WidgetNoLocationView(language: language).padding(16).frame(width: 170, height: 170).background(WidgetBackdrop()).clipShape(.rect(cornerRadius: 22)),
                  size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "widget-empty-\(variant.name).png"))
             if let board, let state = NextPrayerAttributes.ContentState(board: board, language: language) {

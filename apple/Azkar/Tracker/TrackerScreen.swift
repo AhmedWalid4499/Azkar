@@ -26,6 +26,7 @@ struct TrackerScreen: View {
                     case .missed: TrackerMissedPrayersView(data: data)
                     case let .area(area): TrackerAreaView(data: data, area: area)
                     case let .ramadanNights(year): TrackerRamadanNightsView(data: data, year: year)
+                    case .yearReview: TrackerYearReviewView(data: data)
                     }
                 }
         }
