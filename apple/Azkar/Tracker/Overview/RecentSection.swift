@@ -1,10 +1,10 @@
 import AzkarKit
 import SwiftUI
 
-/// How the last 7 or 30 days went: prayers, sunnah, each azkar session, the azkar after the
-/// prayers, fasts and tasbih.
+/// How the last 7 or 30 days went in one area.
 struct TrackerRecentSection: View {
     let data: TrackerData
+    let area: TrackerArea
     @Environment(\.trackerFormat) private var format
     @State private var window = Window.week
 
@@ -32,32 +32,42 @@ struct TrackerRecentSection: View {
             .listRowSeparator(.hidden)
             .sensoryFeedback(.selection, trigger: window)
 
-            TrackerRateRow(
-                name: LocalizedStringResource("Obligatory prayers", table: "Tracker"), symbol: "building.columns.fill", tint: .green,
-                rate: PrayerStats.completionRate(history.prayers, today: statsDay, days: days), detail: .prayed
-            )
-            TrackerRateRow(
-                name: LocalizedStringResource("Sunnah prayers", table: "Tracker"), symbol: "sparkles", tint: .teal,
-                rate: SunnahStats.completion(history.prayers, today: statsDay, days: days).rate, detail: .done
-            )
-            ForEach(dailySessions, id: \.self) { session in
+            switch area {
+            case .prayers:
                 TrackerRateRow(
-                    name: session.trackerName, symbol: session.trackerSymbol, tint: session.trackerTint,
-                    rate: AzkarStats.completionRate(of: session, in: history.sessions, today: today, beforeDawn: beforeDawn, days: days),
-                    detail: .completed
+                    name: LocalizedStringResource("Obligatory prayers", table: "Tracker"), symbol: "building.columns.fill", tint: .green,
+                    rate: PrayerStats.completionRate(history.prayers, today: statsDay, days: days), detail: .prayed
                 )
-            }
-            if !data.afterPrayers.isEmpty {
                 TrackerRateRow(
-                    name: LocalizedStringResource("Azkar after the prayers", table: "Tracker"),
-                    symbol: AzkarSession.afterPrayer(.fajr).trackerSymbol, tint: AzkarSession.afterPrayer(.fajr).trackerTint,
-                    rate: AfterPrayerStats.completionRates(history.sessions, today: today, beforeDawn: beforeDawn, days: days, prayers: data.afterPrayers).all,
-                    detail: .completed
+                    name: LocalizedStringResource("Sunnah prayers", table: "Tracker"), symbol: "sparkles", tint: .teal,
+                    rate: SunnahStats.completion(history.prayers, today: statsDay, days: days).rate, detail: .done
                 )
+            case .azkar:
+                ForEach(dailySessions, id: \.self) { session in
+                    TrackerRateRow(
+                        name: session.trackerName, symbol: session.trackerSymbol, tint: session.trackerTint,
+                        rate: AzkarStats.completionRate(of: session, in: history.sessions, today: today, beforeDawn: beforeDawn, days: days),
+                        detail: .completed
+                    )
+                }
+                if !data.afterPrayers.isEmpty {
+                    TrackerRateRow(
+                        name: LocalizedStringResource("Azkar after the prayers", table: "Tracker"),
+                        symbol: AzkarSession.afterPrayer(.fajr).trackerSymbol, tint: AzkarSession.afterPrayer(.fajr).trackerTint,
+                        rate: AfterPrayerStats.completionRates(history.sessions, today: today, beforeDawn: beforeDawn, days: days, prayers: data.afterPrayers).all,
+                        detail: .completed
+                    )
+                }
+                TrackerCountRow(name: LocalizedStringResource("Tasbih", table: "Tracker"), symbol: "circle.hexagongrid.fill", tint: .brown,
+                                count: TasbihStats.count(history.tasbih, today: today, days: days))
+            case .quran:
+                TrackerCountRow(name: LocalizedStringResource("Pages read", table: "Tracker"), symbol: "book.pages.fill", tint: .green,
+                                count: (0..<days).reduce(0) { $0 + data.quran.pages(on: today.adding(days: -$1)) })
+            case .fasting:
+                TrackerCountRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange, count: data.fastsKept(days: days))
+            case .ramadan:
+                EmptyView()
             }
-            TrackerCountRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange, count: data.fastsKept(days: days))
-            TrackerCountRow(name: LocalizedStringResource("Tasbih", table: "Tracker"), symbol: "circle.hexagongrid.fill", tint: .brown,
-                     count: TasbihStats.count(history.tasbih, today: today, days: days))
         } header: {
             Text("Recent days", tableName: "Tracker")
         }

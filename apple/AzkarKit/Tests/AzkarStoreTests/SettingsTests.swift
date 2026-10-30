@@ -128,6 +128,64 @@ import Testing
         #expect(loaded.reader == ReaderSettings())
     }
 
+    @Test(arguments: [
+        (JSONValue.number(3), 3), (.number(0), 0), (.number(10), 10),
+        // Out of range is clamped, as `hijriOffset`.
+        (.number(11), 10), (.number(-1), 0), (.number(1e300), 10),
+        // Anything else is no goal, and costs only this field.
+        (.number(1.5), 0), (.string("2"), 0), (.bool(true), 0), (.null, 0), (.array([.number(2)]), 0),
+    ])
+    func theKhatmahGoalReadsLikeTheOffset(stored: JSONValue, goal: Int) {
+        let settings = AppSettings(web: ["hijriOffset": 1, "ramadanKhatmahGoal": stored])
+        #expect(settings.ramadanKhatmahGoal == goal)
+        #expect(settings.hijriOffset == 1)
+    }
+
+    @Test func aMissingKhatmahGoalIsNoGoal() {
+        #expect(AppSettings().ramadanKhatmahGoal == 0)
+        #expect(AppSettings(web: nil).ramadanKhatmahGoal == 0)
+        #expect(AppSettings(web: ["hijriOffset": 1]).ramadanKhatmahGoal == 0)
+    }
+
+    @Test func withoutAGoalTheSettingsAreExactlyWhatTheWebsiteWrites() {
+        #expect(AppSettings().web["ramadanKhatmahGoal"] == nil)
+        #expect(AppSettings(ramadanKhatmahGoal: 4).web["ramadanKhatmahGoal"] == 4)
+    }
+
+    @Test func savingKeepsTheKhatmahGoalInRange() {
+        let store = makeSettings()
+        #expect(store.update { $0.app.ramadanKhatmahGoal = 3 }.app.ramadanKhatmahGoal == 3)
+        #expect(store.load().app.ramadanKhatmahGoal == 3)
+        #expect(store.update { $0.app.ramadanKhatmahGoal = 11 }.app.ramadanKhatmahGoal == 10)
+        #expect(store.update { $0.app.ramadanKhatmahGoal = -4 }.app.ramadanKhatmahGoal == 0)
+        #expect(AppSettings(ramadanKhatmahGoal: 99).sanitized().ramadanKhatmahGoal == 10)
+    }
+
+    @Test func aDamagedKhatmahGoalCostsOnlyThatField() {
+        let store = makeSettings()
+        store.defaults.set(Data(#"{"theme":"dark","ramadanKhatmahGoal":"two"}"#.utf8), forKey: "settings.app")
+        let loaded = store.load()
+        #expect(loaded.app.theme == .dark && loaded.app.ramadanKhatmahGoal == 0)
+    }
+
+    @Test func theKhatmahGoalRoundTripsThroughABackup() async throws {
+        var settings = SettingsSnapshot()
+        settings.app.ramadanKhatmahGoal = 2
+        let data = Backup.export(records: RecordsSnapshot(), settings: settings, at: instant("2026-10-29T08:00:00Z"))
+        let read = try Backup.read(data, catalog: Fixtures.catalog, deviceTimeZone: "UTC")
+        #expect(read.snapshot.settings.app.ramadanKhatmahGoal == 2)
+
+        let store = makeSettings()
+        try await Backup.restore(read, into: try makeStore(), settings: store)
+        #expect(store.load().app.ramadanKhatmahGoal == 2)
+
+        // Merging never touches settings the user has.
+        let mine = makeSettings()
+        mine.update { $0.app.ramadanKhatmahGoal = 5 }
+        try await Backup.restore(read, into: try makeStore(), settings: mine, mode: .merge)
+        #expect(mine.load().app.ramadanKhatmahGoal == 5)
+    }
+
     @Test @MainActor func theModelShowsWhatWasSavedAndReadsInChangesMadeElsewhere() {
         let store = makeSettings()
         let model = SettingsModel(store: store)

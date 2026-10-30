@@ -9,6 +9,7 @@ public struct RecordChange: Hashable, Sendable {
     public var day: DayRecords
     public var totals: LifetimeTotals
     public var owedFastsBefore: Int
+    public var quranBookmarks: [Int: Date]
     /// Per-dhikr counts deleted because they were more than `RecordLimits.detailDays` older than
     /// the day counted (as the website prunes them), by day.
     public var prunedCounts: [DayKey: Set<AzkarSession>]
@@ -27,6 +28,8 @@ extension RecordsSnapshot {
         records.counts = counts[day] ?? [:]
         records.tasbih = tasbih[day] ?? [:]
         records.fast = fasts[day]
+        records.quran = quran.filter { $0.day == day }
+        records.seasons = seasons[day] ?? [:]
         return records
     }
 
@@ -43,6 +46,11 @@ extension RecordsSnapshot {
         counts[key] = records.counts.isEmpty ? nil : records.counts
         tasbih[key] = records.tasbih.isEmpty ? nil : records.tasbih
         fasts[key] = records.fast
+        seasons[key] = records.seasons.isEmpty ? nil : records.seasons
+        // Most changes are not about the Quran: the log is put in order again only when one is.
+        if quran.filter({ $0.day == key }) != records.quran {
+            quran = (quran.filter { $0.day != key } + records.quran).inLogOrder
+        }
     }
 
     /// The snapshot after `change`, as the store holds it.
@@ -50,6 +58,7 @@ extension RecordsSnapshot {
         set(change.day)
         totals = change.totals
         owedFastsBefore = change.owedFastsBefore
+        quranBookmarks = change.quranBookmarks
         for (day, pruned) in change.prunedCounts {
             guard var kept = counts[day] else { continue }
             for session in pruned { kept[session] = nil }

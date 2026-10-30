@@ -13,7 +13,9 @@ public enum Backup {
 
     /// How a restored backup meets the records already here.
     public enum Mode: Sendable {
-        /// Everything is replaced by the backup, settings included, as on the website.
+        /// Everything is replaced by the backup, settings included, as on the website. A file
+        /// without the Quran's or the seasons' store (the website's, say) holds none of that, so
+        /// none stays.
         case replace
         /// The backup's records are added to these (see `RecordStore.merge`); settings stay.
         case merge
@@ -100,8 +102,9 @@ public enum Backup {
 }
 
 extension WebStores {
-    /// A key the website's backup import writes back (`STORE_KEYS`, plus the WIP branch's stores).
+    /// A key a backup is read from: those the website's import writes back (`STORE_KEYS`, plus
+    /// the WIP branch's stores) and the native app's own.
     static func isStoreKey(_ key: String) -> Bool {
-        (names + [progressSpare]).contains { prefix + $0 == key }
+        stores.contains { prefix + $0 == key }
     }
 }

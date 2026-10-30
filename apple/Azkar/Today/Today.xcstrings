@@ -52,6 +52,23 @@
         }
       }
     },
+    "%lld of %lld done": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld من %2$lld مكتملة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld done"
+          }
+        }
+      }
+    },
     "2 after Dhuhr": {
       "extractionState": "manual",
       "localizations": {
@@ -239,6 +256,23 @@
         }
       }
     },
+    "All azkar": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل الأذكار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All azkar"
+          }
+        }
+      }
+    },
     "As-salamu alaykum": {
       "extractionState": "manual",
       "localizations": {
@@ -286,6 +320,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Asr"
+          }
+        }
+      }
+    },
+    "Back to the card": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة إلى البطاقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to the card"
           }
         }
       }
@@ -422,6 +473,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Completed"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متابعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
           }
         }
       }
@@ -1242,6 +1310,23 @@
         }
       }
     },
+    "Open": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open"
+          }
+        }
+      }
+    },
     "Open Settings": {
       "extractionState": "manual",
       "localizations": {
@@ -1255,6 +1340,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open Settings"
+          }
+        }
+      }
+    },
+    "Open the reading": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح الأذكار للقراءة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the reading"
           }
         }
       }
@@ -1344,6 +1446,40 @@
         }
       }
     },
+    "Repetitions left: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التكرارات المتبقية: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetitions left: %lld"
+          }
+        }
+      }
+    },
+    "Repetitions read: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التكرارات المقروءة: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetitions read: %lld"
+          }
+        }
+      }
+    },
     "Search for a city": {
       "extractionState": "manual",
       "localizations": {
@@ -1395,6 +1531,23 @@
         }
       }
     },
+    "See all": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض الكل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See all"
+          }
+        }
+      }
+    },
     "Set location": {
       "extractionState": "manual",
       "localizations": {
@@ -1429,6 +1582,40 @@
         }
       }
     },
+    "Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإعدادات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Shows the progress of this reading": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعرض تقدّم هذه الأذكار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows the progress of this reading"
+          }
+        }
+      }
+    },
     "Some times can’t be calculated here today because the sun doesn’t rise, doesn’t set, or stays too close to the horizon. Settings can borrow the times of the nearest latitude.": {
       "extractionState": "manual",
       "localizations": {
@@ -1459,6 +1646,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start"
+          }
+        }
+      }
+    },
+    "Started at %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدأت الساعة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Started at %@"
           }
         }
       }

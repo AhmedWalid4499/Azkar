@@ -1,10 +1,12 @@
 import AzkarKit
 import SwiftUI
 
-/// The Settings tab: a native form of everything the user can choose, their data and the credits.
+/// Settings, opened from Today: a native form of everything the user can choose, their data and
+/// the credits.
 struct SettingsScreen: View {
     @Environment(AppEnvironment.self) private var app
     @State private var path: [SettingsPage] = []
+    let onClose: () -> Void
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -44,6 +46,11 @@ struct SettingsScreen: View {
                 #endif
             }
             .navigationTitle(Text("Settings", tableName: SettingsText.table))
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(role: .close, action: onClose)
+                }
+            }
             .navigationDestination(for: SettingsPage.self) { page in
                 switch page {
                 case .calculation: SettingsCalculationView()
@@ -71,6 +78,6 @@ enum SettingsPage: Hashable {
 }
 
 #Preview {
-    SettingsScreen()
+    SettingsScreen {}
         .environment(try! AppEnvironment())
 }

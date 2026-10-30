@@ -38,6 +38,13 @@ public enum WebStores {
     public static let names = ["location", "settings", "prayer-times", "prayer-log", "azkar-progress", "azkar-settings", "fasting"]
     /// The WIP branch's second copy of the after-prayer and tasbih records (its `progressStorage.ts`).
     static let progressSpare = "azkar-progress-spare"
+    /// The native app's own store. The website has none and its import leaves the key out, so it
+    /// is written only when there is something to keep.
+    static let quran = "quran"
+    /// The native app's records of Ramadan and the Eids, kept the same way.
+    static let seasons = "seasons"
+    /// Every store read.
+    static var stores: [String] { names + [progressSpare, quran, seasons] }
 
     /// What `persist` hands to a store's `merge` while loading.
     enum Loaded {
@@ -88,10 +95,10 @@ public enum WebStores {
     /// storage key ("azkar:prayer-log"). `deviceTimeZone` replaces a zone that cannot be used.
     static func read(_ entries: [String: StoredEntry], catalog: any SessionCatalog, deviceTimeZone: String) -> WebSnapshot {
         var snapshot = WebSnapshot()
-        let known = Set((names + [progressSpare]).map { prefix + $0 })
+        let known = Set(stores.map { prefix + $0 })
         snapshot.ignored = Set(entries.keys.filter { !known.contains($0) && $0.hasPrefix(prefix) })
         func entry(_ name: String) -> StoredEntry { entries[prefix + name] ?? .missing }
-        for name in names {
+        for name in names + [quran, seasons] {
             if case let .json(value) = entry(name), value.isTruthy { snapshot.found.insert(name) }
         }
 
@@ -142,6 +149,17 @@ public enum WebStores {
         }).persisted)
         snapshot.records.fasts = fasting.fasts
         snapshot.records.owedFastsBefore = fasting.owedBefore
+
+        let reading = WebQuran.read(load(entry(quran), version: WebQuran.version, migrate: { state, _ in
+            let read = WebQuran.read(state)
+            return WebQuran.web(read.entries, bookmarks: read.bookmarks)
+        }).persisted)
+        snapshot.records.quran = reading.entries
+        snapshot.records.quranBookmarks = reading.bookmarks
+
+        snapshot.records.seasons = WebSeasons.read(load(entry(seasons), version: WebSeasons.version, migrate: { state, _ in
+            WebSeasons.web(WebSeasons.read(state))
+        }).persisted)
         return snapshot
     }
 
@@ -156,7 +174,7 @@ public enum WebStores {
         prayerTimes.merge(settings.reminders.web.object ?? [:]) { _, reminder in reminder }
 
         func stored(_ state: JSONValue, _ version: Int) -> JSONValue { ["state": state, "version": JSONValue(version)] }
-        return [
+        var stores: [String: JSONValue] = [
             prefix + "location": stored(["location": settings.location?.web ?? .null], 1),
             prefix + "settings": stored(settings.app.web, 1),
             // 3: the WIP branch's version, with `unloggedReminders`; the main branch migrates it field by field.
@@ -167,5 +185,12 @@ public enum WebStores {
             prefix + "azkar-settings": stored(settings.reader.web, 1),
             prefix + "fasting": stored(WebFasting.web(records.fasts, owedBefore: records.owedFastsBefore), WebFasting.version),
         ]
+        if !records.quran.isEmpty || !records.quranBookmarks.isEmpty {
+            stores[prefix + quran] = stored(WebQuran.web(records.quran, bookmarks: records.quranBookmarks), WebQuran.version)
+        }
+        if records.seasons.values.contains(where: { !$0.isEmpty }) {
+            stores[prefix + seasons] = stored(WebSeasons.web(records.seasons), WebSeasons.version)
+        }
+        return stores
     }
 }

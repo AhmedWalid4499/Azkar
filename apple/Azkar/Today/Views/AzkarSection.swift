@@ -3,7 +3,8 @@ import SwiftUI
 
 /// The azkar of the day as cards: morning and evening, the bedtime azkar at night, and the
 /// azkar after the most recent prayer, each with where today's reading stands. The session the
-/// clock recommends is set apart. A tap asks for that reading (see `TodayNavigation`).
+/// clock recommends is set apart. A tap turns the card over to its progress, and the back asks
+/// for that reading (see `TodayNavigation`).
 struct AzkarSection: View {
     @Environment(AppEnvironment.self) private var app
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -65,6 +66,11 @@ struct SessionStanding {
     let done: Int
     let total: Int
     let completedAt: Date?
+    let startedAt: Date?
+    /// Repetitions still to read in the current reading.
+    let repetitionsLeft: Int
+    /// Repetitions counted on the day, all readings together.
+    let repetitionsRead: Int
 
     var fraction: Double { total == 0 ? 0 : Double(done) / Double(total) }
 
@@ -76,14 +82,18 @@ struct SessionStanding {
         let record = records.sessions[day]?[session]
         let done = items.filter { (counts[$0.id] ?? 0) >= max(1, $0.repeat) }.count
         total = items.count
+        startedAt = record?.startedAt
+        repetitionsRead = record?.recitations ?? 0
         if record?.completed == true || (total > 0 && done == total) {
             state = .complete
             self.done = total
             completedAt = record?.completedAt
+            repetitionsLeft = 0
         } else {
             state = counts.values.contains { $0 > 0 } ? .active : .idle
             self.done = done
             completedAt = nil
+            repetitionsLeft = items.reduce(0) { $0 + ReadingProgress.target(of: $1) - ReadingProgress.count(of: $1, in: counts) }
         }
     }
 }
@@ -91,15 +101,56 @@ struct SessionStanding {
 private struct AzkarCard: View {
     @Environment(AppEnvironment.self) private var app
     @Environment(\.todayFormat) private var format
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
     let session: AzkarSession
     let day: DayKey
     let recommended: Bool
+    @State private var flipped = false
+    @State private var showsAll = false
+
+    init(session: AzkarSession, day: DayKey, recommended: Bool) {
+        self.session = session
+        self.day = day
+        self.recommended = recommended
+        #if DEBUG
+        _flipped = State(initialValue: TodayDebugLaunch.flip.contains(session.description))
+        _showsAll = State(initialValue: TodayDebugLaunch.progress == session.description)
+        #endif
+    }
 
     var body: some View {
         let standing = SessionStanding(session: session, day: day, dataset: app.dataset, records: app.records.records)
-        Button {
-            TodayNavigation.shared.open(session, on: day)
-        } label: {
+        let progress = flipped ? 1.0 : 0.0
+        let turn = layoutDirection == .rightToLeft ? -1.0 : 1.0
+        CardFaces {
+            front(standing)
+                .modifier(FlipFace(progress: progress, isBack: false, rotates: !reduceMotion, turn: turn))
+            AzkarCardBack(
+                session: session,
+                standing: standing,
+                recommended: recommended,
+                background: background,
+                onFlip: flip,
+                onOpen: { TodayNavigation.shared.open(session, on: day) },
+                onSeeAll: { showsAll = true }
+            )
+            .modifier(FlipFace(progress: progress, isBack: true, rotates: !reduceMotion, turn: turn))
+        }
+        .zIndex(flipped ? 1 : 0)
+        .sensoryFeedback(.selection, trigger: flipped)
+        .onChange(of: day) { flipped = false }
+        .sheet(isPresented: $showsAll) {
+            AzkarProgressSheet(session: session, day: day)
+        }
+    }
+
+    private func flip() {
+        withAnimation(.snappy(duration: 0.5)) { flipped.toggle() }
+    }
+
+    private func front(_ standing: SessionStanding) -> some View {
+        Button(action: flip) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(alignment: .top) {
                     ProgressRing(fraction: standing.fraction, tint: session.tint) {
@@ -124,17 +175,13 @@ private struct AzkarCard: View {
                     .foregroundStyle(.primary)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
-                HStack(spacing: 4) {
-                    stateText(standing)
-                        .monospacedDigit()
-                    if standing.state != .complete {
-                        Image(systemName: "chevron.forward").font(.caption.weight(.semibold))
-                    }
-                }
-                .font(.subheadline)
-                .foregroundStyle(standing.state == .complete ? AnyShapeStyle(session.tint) : AnyShapeStyle(.secondary))
+                Spacer(minLength: 0)
+                stateText(standing)
+                    .monospacedDigit()
+                    .font(.subheadline)
+                    .foregroundStyle(standing.state == .complete ? AnyShapeStyle(session.tint) : AnyShapeStyle(.secondary))
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(14)
             .background(background, in: .rect(cornerRadius: 22))
             .overlay {
@@ -148,10 +195,13 @@ private struct AzkarCard: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text(session.title))
         .accessibilityValue(accessibilityValue(standing))
-        .accessibilityHint(Text(L("Opens the reading")))
+        .accessibilityHint(Text(L("Shows the progress of this reading")))
+        .accessibilityAction(named: Text(L("Open the reading"))) {
+            TodayNavigation.shared.open(session, on: day)
+        }
     }
 
-    private var background: some ShapeStyle {
+    private var background: AnyShapeStyle {
         recommended ? AnyShapeStyle(session.tint.opacity(0.14)) : AnyShapeStyle(Color(.secondarySystemGroupedBackground))
     }
 

@@ -16,8 +16,9 @@ public struct OwedFasts: Hashable, Sendable {
     public var remaining: Int
 }
 
-/// The Ramadan of the current Hijri year once it has begun, else last year's.
-public struct RamadanSummary: Hashable, Sendable {
+/// The fasts of the Ramadan of the current Hijri year once it has begun, else last year's.
+/// `RamadanSummary` is the whole of one Ramadan, any year.
+public struct RamadanFasts: Hashable, Sendable {
     /// The Hijri year of this Ramadan.
     public var year: Int
     /// Its civil days, as the user's offset places them.
@@ -42,7 +43,7 @@ public struct VoluntaryFastCounts: Hashable, Sendable {
 
 public struct FastingStatistics: Hashable, Sendable {
     public var owed: OwedFasts
-    public var ramadan: RamadanSummary
+    public var ramadan: RamadanFasts
     public var voluntary: VoluntaryFastCounts
     /// Mondays and Thursdays fasted one after the other, counted in fasts.
     public var mondayThursday: Streak
@@ -74,7 +75,7 @@ public enum FastingStats {
 
     /// Fasts are counted by the Hijri year of their day, so a fast logged on the edge of the
     /// month before the user changed their offset still counts.
-    public static func ramadan(_ days: FastingHistory, today: DayKey, offset: Int = 0) -> RamadanSummary {
+    public static func ramadan(_ days: FastingHistory, today: DayKey, offset: Int = 0) -> RamadanFasts {
         let now = HijriCalendar.date(of: today, offset: offset)
         let year = now.month >= HijriDate.ramadan ? now.year : now.year - 1
         let civil = HijriCalendar.civilDays(ofYear: year, month: HijriDate.ramadan, offset: offset)
@@ -84,7 +85,7 @@ public enum FastingStats {
             if record.status == .fasted { fasted += 1 } else { notFasted += 1 }
         }
         let begun = civil.filter { $0 <= today }
-        return RamadanSummary(
+        return RamadanFasts(
             year: year, days: civil, elapsed: begun.count, fasted: fasted, notFasted: notFasted,
             unlogged: begun.filter { days[$0] == nil }.count, ongoing: now.month == HijriDate.ramadan
         )

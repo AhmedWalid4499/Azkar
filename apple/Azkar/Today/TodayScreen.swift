@@ -13,6 +13,8 @@ struct TodayScreen: View {
     @State private var clock = TodayClock()
     @State private var cache = ScheduleCache()
     @State private var showsLocation = false
+    @State private var showsCalendar = false
+    @State private var showsSettings = TodayScreen.opensSettings
 
     var body: some View {
         let settings = app.settings.settings
@@ -23,7 +25,7 @@ struct TodayScreen: View {
             ScrollViewReader { proxy in
                 sections(context)
                     #if DEBUG
-                    .task { await TodayDebugSeed.present(scroll: proxy, location: $showsLocation) }
+                    .task { await TodayDebugSeed.present(scroll: proxy, location: $showsLocation, calendar: $showsCalendar) }
                     #endif
             }
             .listStyle(.insetGrouped)
@@ -32,6 +34,8 @@ struct TodayScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showsLocation) { LocationSheet() }
+            .sheet(isPresented: $showsSettings) { SettingsScreen { showsSettings = false } }
+            .navigationDestination(isPresented: $showsCalendar) { IslamicCalendarScreen(today: context.today) }
         }
         .environment(\.locale, format.locale)
         .environment(\.todayFormat, format)
@@ -55,10 +59,10 @@ struct TodayScreen: View {
         #endif
     }
 
-    /// Header, next prayer (or the first-run card), fasting, prayers, azkar, sunnah.
+    /// Header, next prayer (or the first-run card), the season, tarawih, fasting, prayers, azkar, sunnah.
     private func sections(_ context: TodayContext) -> some View {
         List {
-            TodayHeader(context: context, showsLocation: $showsLocation)
+            TodayHeader(context: context, showsLocation: $showsLocation, showsCalendar: $showsCalendar, showsSettings: $showsSettings)
 
             if context.location == nil {
                 LocationPromptCard()
@@ -67,6 +71,10 @@ struct TodayScreen: View {
             } else if let schedule = context.schedule {
                 NextPrayerCard(schedule: schedule, context: context, clock: clock)
             }
+
+            SeasonSection(context: context, showsCalendar: $showsCalendar)
+
+            TarawihSection(context: context)
 
             FastingSection(context: context, clock: clock)
 
@@ -80,6 +88,17 @@ struct TodayScreen: View {
                 SunnahSection(context: context)
             }
         }
+    }
+}
+
+private extension TodayScreen {
+    /// DEBUG builds open Settings at launch with `-AzkarTab settings`, for screenshots.
+    static var opensSettings: Bool {
+        #if DEBUG
+        UserDefaults.standard.string(forKey: "AzkarTab") == "settings"
+        #else
+        false
+        #endif
     }
 }
 

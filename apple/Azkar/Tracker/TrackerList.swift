@@ -13,19 +13,11 @@ struct TrackerList: View {
             List {
                 if data.hasAnyRecord {
                     TrackerOverviewSection(data: data)
-                    TrackerMissedSummarySection(data: data)
-                    TrackerRecentSection(data: data).id(Part.recent)
                 } else {
                     TrackerEmptySection()
                 }
+                TrackerAreasSection(data: data)
                 TrackerCalendarSection(data: data, month: $month) { path.append(.day($0)) }.id(Part.calendar)
-                if data.hasAnyRecord {
-                    TrackerTrendsSummarySection(data: data).id(Part.trends)
-                }
-                TrackerFastingSection(data: data).id(Part.fasting)
-                if data.hasAnyRecord {
-                    TrackerLifetimeSection(data: data).id(Part.lifetime)
-                }
                 TrackerExportSection(data: data).id(Part.export)
             }
             .listStyle(.insetGrouped)
@@ -42,6 +34,6 @@ struct TrackerList: View {
 
     /// The page's parts, to scroll to.
     enum Part: String {
-        case recent, calendar, trends, fasting, lifetime, export
+        case calendar, export
     }
 }

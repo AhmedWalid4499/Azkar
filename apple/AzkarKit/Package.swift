@@ -22,7 +22,7 @@ let package = Package(
     targets: [
         .target(name: "AzkarCore"),
         .target(name: "PrayerEngine", dependencies: ["AzkarCore", .product(name: "Adhan", package: "adhan-swift")]),
-        .target(name: "AzkarContent", dependencies: ["AzkarCore"], resources: [.copy("Resources/azkar.json")]),
+        .target(name: "AzkarContent", dependencies: ["AzkarCore"], resources: [.copy("Resources/azkar.json"), .copy("Resources/quran-uthmani.txt"), .copy("Resources/quran-data.xml")]),
         .target(name: "AzkarStore", dependencies: ["AzkarCore"]),
         .target(name: "AzkarKit", dependencies: ["AzkarCore", "PrayerEngine", "AzkarContent", "AzkarStore"]),
         .testTarget(name: "AzkarCoreTests", dependencies: ["AzkarCore"]),

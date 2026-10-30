@@ -95,6 +95,8 @@ enum SettingsImportSummary {
         if report.prayers > 0 { parts.append(SettingsText.string("\(report.prayers) prayers", locale: locale)) }
         if report.sessions > 0 { parts.append(SettingsText.string("\(report.sessions) azkar sessions", locale: locale)) }
         if report.fasts > 0 { parts.append(SettingsText.string("\(report.fasts) fasts", locale: locale)) }
+        if let quran = report.quranEntries, quran > 0 { parts.append(SettingsText.string("\(quran) Quran readings", locale: locale)) }
+        if let seasons = report.seasonRecords, seasons > 0 { parts.append(SettingsText.string("\(seasons) Ramadan and Eid records", locale: locale)) }
         guard !parts.isEmpty else { return SettingsText.string("It holds settings but no records.", locale: locale) }
         return parts.formatted(.list(type: .and).locale(locale))
     }

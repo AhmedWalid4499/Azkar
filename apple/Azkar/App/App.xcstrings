@@ -3,27 +3,52 @@
   "strings" : {
     "Azkar" : {
       "localizations" : {
-        "ar" : { "stringUnit" : { "state" : "translated", "value" : "الأذكار" } }
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأذكار"
+          }
+        }
       }
     },
     "Qibla" : {
       "localizations" : {
-        "ar" : { "stringUnit" : { "state" : "translated", "value" : "القبلة" } }
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القبلة"
+          }
+        }
       }
     },
-    "Settings" : {
+    "Quran" : {
       "localizations" : {
-        "ar" : { "stringUnit" : { "state" : "translated", "value" : "الإعدادات" } }
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القرآن"
+          }
+        }
       }
     },
     "Today" : {
       "localizations" : {
-        "ar" : { "stringUnit" : { "state" : "translated", "value" : "اليوم" } }
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اليوم"
+          }
+        }
       }
     },
     "Tracker" : {
       "localizations" : {
-        "ar" : { "stringUnit" : { "state" : "translated", "value" : "السجل" } }
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السجل"
+          }
+        }
       }
     }
   },

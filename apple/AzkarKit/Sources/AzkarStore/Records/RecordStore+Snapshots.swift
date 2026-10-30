@@ -10,7 +10,8 @@ extension RecordStore {
     }
 
     /// Adds what `snapshot` holds that the store does not, in one save. Where both have a
-    /// prayer, a session, a counter or a fast on the same day, the store's own stays; lifetime
+    /// prayer, a session, a counter, a fast or a season record on the same day, the store's own
+    /// stays, as do a Quran entry with the same id and a bookmark on the same page; lifetime
     /// totals are added together.
     public func merge(_ snapshot: RecordsSnapshot) throws {
         try merge(snapshot, recording: nil)

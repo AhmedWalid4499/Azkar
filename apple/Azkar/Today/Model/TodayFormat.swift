@@ -48,6 +48,16 @@ struct TodayFormat {
         Self.formatter(template: "EEEEdMMMM", locale: locale, timeZone: .gmt).string(from: day.noonUTC)
     }
 
+    /// "Wed, 17 Mar 2027", or "8 Feb – 8 Mar 2027" for a run of days: calendar days, never moved by a zone.
+    func dayRange(_ first: DayKey, _ last: DayKey) -> String {
+        guard first != last else { return Self.formatter(template: "EEEdMMMy", locale: locale, timeZone: .gmt).string(from: first.noonUTC) }
+        let formatter = DateIntervalFormatter()
+        formatter.locale = locale
+        formatter.timeZone = .gmt
+        formatter.dateTemplate = "dMMMy"
+        return formatter.string(from: first.noonUTC, to: last.noonUTC)
+    }
+
     /// The Hijri date with the user's offset, as the website writes it.
     func hijri(_ day: DayKey, offset: Int) -> String {
         HijriFormat.full(day, offset: offset, locale: displayLocale)

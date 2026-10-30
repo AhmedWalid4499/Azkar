@@ -1,9 +1,10 @@
 import AzkarKit
 import SwiftUI
 
-/// Everything ever recorded: prayers, sunnah, azkar sessions, recitations, tasbih and fasts.
+/// Everything ever recorded in an area.
 struct TrackerLifetimeSection: View {
     let data: TrackerData
+    let area: TrackerArea
     @Environment(\.trackerFormat) private var format
 
     var body: some View {
@@ -14,19 +15,29 @@ struct TrackerLifetimeSection: View {
         let afterPrayer = data.afterPrayers.reduce(0) { $0 + (completed[.afterPrayer($1)] ?? 0) }
         let sessions = completed.values.reduce(0, +)
         Section {
-            TrackerTotalRow(name: LocalizedStringResource("Prayers prayed", table: "Tracker"), symbol: "building.columns.fill", tint: .green, value: prayers.prayed) {
-                Text("Logged in all: \(prayers.logged)", tableName: "Tracker")
+            switch area {
+            case .prayers:
+                TrackerTotalRow(name: LocalizedStringResource("Prayers prayed", table: "Tracker"), symbol: "building.columns.fill", tint: .green, value: prayers.prayed) {
+                    Text("Logged in all: \(prayers.logged)", tableName: "Tracker")
+                }
+                TrackerTotalRow(name: LocalizedStringResource("Sunnah prayers", table: "Tracker"), symbol: "sparkles", tint: .teal, value: prayers.sunnah)
+            case .azkar:
+                TrackerTotalRow(name: LocalizedStringResource("Azkar sessions completed", table: "Tracker"), symbol: "book.closed.fill", tint: .indigo, value: sessions) {
+                    Text(sessionBreakdown(completed, afterPrayer: afterPrayer))
+                }
+                TrackerTotalRow(name: LocalizedStringResource("Recitations", table: "Tracker"), symbol: "text.book.closed.fill", tint: .purple, value: totals.recitations) {
+                    Text("Every count in the reader", tableName: "Tracker")
+                }
+                TrackerTotalRow(name: LocalizedStringResource("Tasbih", table: "Tracker"), symbol: "circle.hexagongrid.fill", tint: .brown, value: totals.tasbihCount)
+            case .quran:
+                TrackerTotalRow(name: LocalizedStringResource("Pages read", table: "Tracker"), symbol: "book.pages.fill", tint: .green, value: data.quran.totalPages)
+                TrackerTotalRow(name: LocalizedStringResource("Khatmahs", table: "Tracker"), symbol: "checkmark.seal.fill", tint: .teal, value: data.quran.khatmahs)
+            case .fasting:
+                TrackerTotalRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange,
+                                value: data.history.fasts.values.filter { $0.status == .fasted }.count)
+            case .ramadan:
+                EmptyView()
             }
-            TrackerTotalRow(name: LocalizedStringResource("Sunnah prayers", table: "Tracker"), symbol: "sparkles", tint: .teal, value: prayers.sunnah)
-            TrackerTotalRow(name: LocalizedStringResource("Azkar sessions completed", table: "Tracker"), symbol: "book.closed.fill", tint: .indigo, value: sessions) {
-                Text(sessionBreakdown(completed, afterPrayer: afterPrayer))
-            }
-            TrackerTotalRow(name: LocalizedStringResource("Recitations", table: "Tracker"), symbol: "text.book.closed.fill", tint: .purple, value: totals.recitations) {
-                Text("Every count in the reader", tableName: "Tracker")
-            }
-            TrackerTotalRow(name: LocalizedStringResource("Tasbih", table: "Tracker"), symbol: "circle.hexagongrid.fill", tint: .brown, value: totals.tasbihCount)
-            TrackerTotalRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange,
-                     value: data.history.fasts.values.filter { $0.status == .fasted }.count)
         } header: {
             Text("All time", tableName: "Tracker")
         }

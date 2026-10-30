@@ -48,6 +48,18 @@ struct SettingsAboutView: View {
                     license: "SIL Open Font License 1.1",
                     url: URL(string: "https://github.com/aliftype/amiri")
                 )
+                CreditRow(
+                    name: "Amiri Quran",
+                    detail: SettingsText.string("The typeface of the mushaf, by Khaled Hosny.", locale: locale),
+                    license: "SIL Open Font License 1.1",
+                    url: URL(string: "https://github.com/aliftype/amiri")
+                )
+                CreditRow(
+                    name: "Tanzil Project",
+                    detail: SettingsText.string("The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1.", locale: locale),
+                    license: "Creative Commons Attribution 3.0",
+                    url: URL(string: "https://tanzil.net")
+                )
             } header: {
                 Text("Software and fonts", tableName: SettingsText.table)
             }

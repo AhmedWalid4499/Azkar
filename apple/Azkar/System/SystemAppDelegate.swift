@@ -13,4 +13,11 @@ final class SystemAppDelegate: NSObject, UIApplicationDelegate {
         BackgroundRefresh.register()
         return true
     }
+
+    /// Set while a screen that only works upright is open (the mushaf, on iPhone).
+    static var portraitOnly = false
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        Self.portraitOnly ? .portrait : .all
+    }
 }

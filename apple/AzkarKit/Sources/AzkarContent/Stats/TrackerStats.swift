@@ -8,12 +8,19 @@ public struct TrackerHistory: Hashable, Sendable {
     public var sessions: SessionHistory
     public var tasbih: TasbihHistory
     public var fasts: FastingHistory
+    /// The Quran log.
+    public var quran: [QuranEntry]
+    /// The deeds of Ramadan and the Eids, by the day each counts for.
+    public var seasons: [DayKey: [SeasonDeed: SeasonRecord]]
 
-    public init(prayers: PrayerHistory = [:], sessions: SessionHistory = [:], tasbih: TasbihHistory = [:], fasts: FastingHistory = [:]) {
+    public init(prayers: PrayerHistory = [:], sessions: SessionHistory = [:], tasbih: TasbihHistory = [:], fasts: FastingHistory = [:], quran: [QuranEntry] = [],
+                seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:]) {
         self.prayers = prayers
         self.sessions = sessions
         self.tasbih = tasbih
         self.fasts = fasts
+        self.quran = quran
+        self.seasons = seasons
     }
 }
 
@@ -76,6 +83,8 @@ public enum TrackerStats {
             || history.sessions.contains { $0.key <= today && !$0.value.isEmpty }
             || history.tasbih.contains { $0.key <= today && TasbihStats.count(of: $0.value) > 0 }
             || history.fasts.keys.contains { $0 <= today }
+            || history.quran.contains { $0.day <= today }
+            || history.seasons.contains { $0.key <= today && !$0.value.isEmpty }
     }
 
     public static func lifetimePrayers(_ history: PrayerHistory, today: DayKey) -> LifetimePrayers {
@@ -126,6 +135,8 @@ public enum TrackerStats {
         days.formUnion(history.sessions.keys)
         days.formUnion(history.tasbih.keys)
         days.formUnion(history.fasts.keys)
+        days.formUnion(history.quran.map(\.day))
+        days.formUnion(history.seasons.filter { !$0.value.isEmpty }.keys)
         return days.sorted()
     }
 }

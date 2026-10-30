@@ -7,7 +7,11 @@ import Foundation
 /// the same order: the date and its Hijri date, the time zone, each obligatory prayer's status
 /// and when it was logged, when each sunnah prayer was ticked, and the morning, evening and
 /// bedtime sessions. Then the native app's own: the azkar after each prayer (the same seven
-/// columns as a session), the tasbih counter by preset, and the day's fast. A cell is empty
+/// columns as a session), the tasbih counter by preset, and the day's fast. Last, once anything
+/// of the Quran is recorded (a history without any exports as it did before), the pages read,
+/// the khatmahs finished and when the day's reading was last logged. After those, once anything
+/// of Ramadan or the Eids is recorded (a history without any again exports as it did), the
+/// tarawih falling on that evening, by place and rakahs, and the day's Eid prayer. A cell is empty
 /// where nothing was recorded. Times are `YYYY-MM-DD HH:mm` on `timeZone`'s wall clock.
 public enum HistoryCSV {
     public struct Options: Sendable {
@@ -108,6 +112,31 @@ public enum HistoryCSV {
             Column(header: words.fastStatusHeader) { history.fasts[$0].map { words.fastStatus($0.status) } ?? "" },
             Column(header: words.fastLoggedAtHeader) { time(history.fasts[$0]?.loggedAt) },
         ]
+
+        if !history.quran.isEmpty {
+            let progress = QuranProgress(entries: history.quran)
+            let entries = Dictionary(grouping: history.quran, by: \.day)
+            let khatmahs = Dictionary(grouping: progress.khatmahDates, by: \.self)
+            columns += [
+                Column(header: words.quranPagesHeader) { key in number(entries[key].map { _ in progress.pages(on: key) }) },
+                Column(header: words.quranKhatmahsHeader) { key in number(entries[key].map { _ in khatmahs[key]?.count ?? 0 }) },
+                Column(header: words.quranLastReadHeader) { key in time(entries[key]?.filter { $0.kind == .read }.map(\.at).max()) },
+            ]
+        }
+
+        if history.seasons.values.contains(where: { !$0.isEmpty }) {
+            let record = { (key: DayKey, deed: SeasonDeed) in history.seasons[key]?[deed] }
+            columns += [
+                // A record with no place still shows: an empty cell says nothing was prayed.
+                Column(header: words.tarawihPlaceHeader) { key in
+                    record(key, .tarawih).map { $0.place.map(words.place) ?? words.placeNotStated } ?? ""
+                },
+                Column(header: words.tarawihRakahsHeader) { number(record($0, .tarawih)?.rakahs) },
+                Column(header: words.eidPrayerHeader) { key in
+                    record(key, .eidPrayer).map { $0.place.map(words.place) ?? words.prayed } ?? ""
+                },
+            ]
+        }
 
         let line = { (cells: [String]) in cells.map(field).joined(separator: ",") }
         let rows = TrackerStats.recordedDays(history).map { key in line(columns.map { $0.value(key) }) }

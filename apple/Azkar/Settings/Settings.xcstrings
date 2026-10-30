@@ -52,6 +52,136 @@
         }
       }
     },
+    "%lld Quran readings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld قراءة للقرآن"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "قراءة واحدة للقرآن"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "قراءتان للقرآن"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld قراءات للقرآن"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld قراءة للقرآن"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld قراءة للقرآن"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Quran reading"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Quran readings"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Ramadan and Eid records": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld سجل لرمضان والعيد"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "سجل واحد لرمضان والعيد"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "سجلان لرمضان والعيد"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld سجلات لرمضان والعيد"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld سجلًا لرمضان والعيد"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld سجل لرمضان والعيد"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Ramadan and Eid record"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Ramadan and Eid records"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld azkar sessions": {
       "extractionState": "manual",
       "localizations": {
@@ -2519,6 +2649,23 @@
         }
       }
     },
+    "The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نص القرآن وتقسيم صفحاته دون تغيير. النص العثماني، الإصدار ١٫١."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1."
+          }
+        }
+      }
+    },
     "The backup couldn’t be saved, so nothing was changed. This iPhone’s storage may be full.": {
       "extractionState": "manual",
       "localizations": {
@@ -2600,6 +2747,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The source details are given as their authors wrote them."
+          }
+        }
+      }
+    },
+    "The typeface of the mushaf, by Khaled Hosny.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خط المصحف، من تصميم خالد حسني."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The typeface of the mushaf, by Khaled Hosny."
           }
         }
       }

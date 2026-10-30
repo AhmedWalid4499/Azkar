@@ -73,6 +73,13 @@ private struct RamadanCard: View {
                 }
                 .accessibilityElement(children: .combine)
 
+                if let pages = RamadanGoal.pagesPerDay(goal: app.settings.settings.app.ramadanKhatmahGoal, today: context.today,
+                                                       offset: app.settings.settings.app.hijriOffset, quran: app.records.records.quran) {
+                    Text(pages == 0 ? SeasonL("Goal reached") : SeasonL("To reach your goal: \(pages) pages a day"))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
                 if context.todayTimes == nil {
                     Text(L("The times of suhoor and iftar appear once a location is set."))
                         .font(.subheadline)

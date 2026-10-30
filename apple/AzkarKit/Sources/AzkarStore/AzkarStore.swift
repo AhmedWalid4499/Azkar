@@ -2,7 +2,7 @@ import AzkarCore
 
 // AzkarStore: the user's records and settings on the device.
 //
-//   Records/   SwiftData rows (`AzkarSchemaV1` + `AzkarMigrationPlan`), the `RecordStore` actor that
+//   Records/   SwiftData rows (`AzkarSchemaV3` + `AzkarMigrationPlan`), the `RecordStore` actor that
 //              owns every read and write, and `RecordsModel`, its main-actor face for SwiftUI.
 //   Settings/  `SettingsStore` (App Group UserDefaults) and `SettingsModel` for SwiftUI.
 //   Web/       The website's stored formats: its validation rules, read and written exactly as

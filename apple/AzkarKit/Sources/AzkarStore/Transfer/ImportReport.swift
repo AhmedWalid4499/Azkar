@@ -26,6 +26,11 @@ public struct ImportReport: Codable, Hashable, Sendable {
     /// Lifetime repetitions in the reader, and on the tasbih counter.
     public var recitations: Int
     public var tasbih: Int
+    /// Entries of the Quran log. `nil` in a report saved before the Quran was tracked: reports
+    /// are kept as JSON with the records, so what is added here must read the older ones.
+    public var quranEntries: Int?
+    /// Records of Ramadan and the Eids. `nil` in a report saved before they were tracked.
+    public var seasonRecords: Int?
 
     public static let webApp = "web-app"
     public static let backup = "backup"
@@ -47,6 +52,8 @@ public struct ImportReport: Codable, Hashable, Sendable {
         fasts = records.fasts.count
         recitations = records.totals.recitations
         tasbih = records.totals.tasbihCount
+        quranEntries = records.quran.count
+        seasonRecords = records.seasons.values.reduce(0) { $0 + $1.count }
     }
 
     /// Nothing was found to import.

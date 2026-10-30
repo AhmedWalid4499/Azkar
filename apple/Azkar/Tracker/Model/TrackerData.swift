@@ -16,6 +16,7 @@ struct TrackerData {
     /// any read after before (a session with a record is always shown).
     let afterPrayers: [Prayer]
     let hasAnyRecord: Bool
+    let quran: QuranProgress
 
     init(records: RecordsSnapshot, clock: TrackerClock, format: TrackerFormat, settings: SettingsSnapshot, dataset: AzkarDataset) {
         self.records = records
@@ -27,7 +28,9 @@ struct TrackerData {
             prayers: records.prayers,
             sessions: records.sessions,
             tasbih: records.tasbih.mapValues { counts in counts.sorted { $0.key < $1.key }.map { $0.value.record(preset: $0.key) } },
-            fasts: records.fasts
+            fasts: records.fasts,
+            quran: records.quran,
+            seasons: records.seasons
         )
         self.history = history
         let sessionsRead = Set(records.sessions.values.flatMap(\.keys))
@@ -35,6 +38,7 @@ struct TrackerData {
         let available = Set(dataset.availableAfterPrayers)
         afterPrayers = Prayer.allCases.filter { available.contains($0) || sessionsRead.contains(.afterPrayer($0)) }
         hasAnyRecord = TrackerStats.hasAnyRecord(history, today: clock.today)
+        quran = QuranProgress(entries: records.quran)
     }
 
     var today: DayKey { clock.today }
@@ -63,5 +67,11 @@ struct TrackerData {
 enum TrackerRoute: Hashable {
     case day(DayKey)
     case missed
-    case trends
+    case area(TrackerArea)
+    case ramadanNights(Int)
+}
+
+/// The tracker's four areas, each with a page of its own.
+enum TrackerArea: Hashable {
+    case prayers, azkar, quran, fasting, ramadan
 }

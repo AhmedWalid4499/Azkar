@@ -16,6 +16,7 @@ public struct AppSettings: Hashable, Sendable {
     }
 
     public static let hijriOffsetRange = -2...2
+    public static let ramadanKhatmahGoalRange = 0...10
     /// Longest name kept, in Unicode scalars (the website's characters of `Array.from`).
     public static let nameMaxLength = 40
     public static let `default` = AppSettings()
@@ -29,22 +30,26 @@ public struct AppSettings: Hashable, Sendable {
     public var hijriOffset = 0
     /// What the app calls the user; empty when not given. Always stored through `sanitizeName`.
     public var name = ""
+    /// Khatmahs the user means to finish in Ramadan, 0 to 10; 0 is no goal. The native app's own.
+    public var ramadanKhatmahGoal = 0
 
     public init(language: Language = .system, theme: Theme = .system, timeFormat: TimeFormat = .twelveHour,
-                arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "") {
+                arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0) {
         self.language = language
         self.theme = theme
         self.timeFormat = timeFormat
         self.arabicDigits = arabicDigits
         self.hijriOffset = hijriOffset
         self.name = name
+        self.ramadanKhatmahGoal = ramadanKhatmahGoal
     }
 
-    /// The same settings made valid: the offset clamped, the name cleaned (as the website's `update`).
+    /// The same settings made valid: the offset and the goal clamped, the name cleaned (as the website's `update`).
     public func sanitized() -> AppSettings {
         var copy = self
         copy.hijriOffset = min(Self.hijriOffsetRange.upperBound, max(Self.hijriOffsetRange.lowerBound, hijriOffset))
         copy.name = Self.sanitizeName(name)
+        copy.ramadanKhatmahGoal = min(Self.ramadanKhatmahGoalRange.upperBound, max(Self.ramadanKhatmahGoalRange.lowerBound, ramadanKhatmahGoal))
         return copy
     }
 
@@ -92,11 +97,15 @@ extension AppSettings {
             self.hijriOffset = Int(min(Double(Self.hijriOffsetRange.upperBound), max(Double(Self.hijriOffsetRange.lowerBound), offset)))
         }
         self.name = stored["name"]?.string.map(Self.sanitizeName) ?? ""
+        if let goal = stored["ramadanKhatmahGoal"]?.number, WebRules.isInteger(goal) {
+            self.ramadanKhatmahGoal = Int(min(Double(Self.ramadanKhatmahGoalRange.upperBound), max(Double(Self.ramadanKhatmahGoalRange.lowerBound), goal)))
+        }
     }
 
-    /// What the website's settings store saves.
+    /// What the website's settings store saves, and the goal when there is one: the website has no
+    /// such field, so without one the settings stay exactly what it writes.
     public var web: JSONValue {
-        [
+        var fields: [String: JSONValue] = [
             "language": .string(language.rawValue),
             "theme": .string(theme.rawValue),
             "timeFormat": .string(timeFormat.rawValue),
@@ -104,6 +113,8 @@ extension AppSettings {
             "hijriOffset": JSONValue(hijriOffset),
             "name": .string(name),
         ]
+        if ramadanKhatmahGoal != 0 { fields["ramadanKhatmahGoal"] = JSONValue(ramadanKhatmahGoal) }
+        return .object(fields)
     }
 }
 

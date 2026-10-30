@@ -17,7 +17,11 @@ enum TrackerShowcase {
     static func route(today: DayKey) -> TrackerRoute? {
         guard let open = value(of: "-AzkarTrackerOpen") else { return nil }
         if open == "missed" { return .missed }
-        if open == "trends" { return .trends }
+        if open == "prayers" { return .area(.prayers) }
+        if open == "azkar" { return .area(.azkar) }
+        if open == "quran" { return .area(.quran) }
+        if open == "fasting" { return .area(.fasting) }
+        if open == "ramadan" { return .area(.ramadan) }
         if open.hasPrefix("day:"), let back = Int(open.dropFirst(4)) { return .day(today.adding(days: -back)) }
         return nil
     }

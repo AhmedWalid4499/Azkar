@@ -1,13 +1,12 @@
 import AzkarKit
 import SwiftUI
 
-/// The five prayers' current and best streak, then every other streak.
+/// The five prayers' current and best streak, at the top of the tracker.
 struct TrackerOverviewSection: View {
     let data: TrackerData
 
     var body: some View {
-        let statsDay = data.clock.statsDay
-        let prayers = PrayerStats.streaks(data.history.prayers, today: statsDay)
+        let prayers = PrayerStats.streaks(data.history.prayers, today: data.clock.statsDay)
         Section {
             TrackerAdaptiveStack {
                 TrackerStreakFigure(title: Text("Current streak", tableName: "Tracker"), days: prayers.current, symbol: "flame.fill", tint: .orange)
@@ -17,30 +16,46 @@ struct TrackerOverviewSection: View {
             .padding(.vertical, 4)
         } header: {
             Text("Five daily prayers", tableName: "Tracker")
-        } footer: {
-            Text("A day joins your streak when all five prayers are prayed, on time or made up later. Excused prayers never count against you.", tableName: "Tracker")
         }
+    }
+}
 
+/// The streaks of an area: witr and the rawatib for the prayers, each session for the azkar.
+struct TrackerStreaksSection: View {
+    let data: TrackerData
+    let area: TrackerArea
+
+    var body: some View {
         Section {
-            ForEach(streakRows) { row in
+            ForEach(area == .prayers ? prayerRows : azkarRows) { row in
                 TrackerStreakRow(row: row)
             }
         } header: {
-            Text("More streaks", tableName: "Tracker")
+            Text("Streaks", tableName: "Tracker")
+        } footer: {
+            if area == .prayers {
+                Text("A day joins your streak when all five prayers are prayed, on time or made up later. Excused prayers never count against you.", tableName: "Tracker")
+            }
         }
     }
 
-    private var streakRows: [TrackerStreakRow.Model] {
+    private var prayerRows: [TrackerStreakRow.Model] {
+        let prayers = data.history.prayers
+        let statsDay = data.clock.statsDay
+        return [
+            .init(id: "witr", name: SunnahPrayer.witr.trackerName, symbol: SunnahPrayer.witr.trackerSymbol, tint: .indigo,
+                  streak: SunnahStats.witrStreaks(prayers, today: statsDay)),
+            .init(id: "rawatib", name: LocalizedStringResource("Rawatib (12 rak’ahs)", table: "Tracker"), symbol: "square.stack.3d.up.fill", tint: .teal,
+                  streak: SunnahStats.rawatibStreaks(prayers, today: statsDay)),
+        ]
+    }
+
+    private var azkarRows: [TrackerStreakRow.Model] {
         let history = data.history
         let today = data.today
         let beforeDawn = data.clock.beforeDawn
-        let statsDay = data.clock.statsDay
         let azkar = AzkarStats.streaks(history.sessions, today: today, beforeDawn: beforeDawn)
         var rows: [TrackerStreakRow.Model] = [
-            .init(id: "witr", name: SunnahPrayer.witr.trackerName, symbol: SunnahPrayer.witr.trackerSymbol, tint: .indigo,
-                  streak: SunnahStats.witrStreaks(history.prayers, today: statsDay)),
-            .init(id: "rawatib", name: LocalizedStringResource("Rawatib (12 rak’ahs)", table: "Tracker"), symbol: "square.stack.3d.up.fill", tint: .teal,
-                  streak: SunnahStats.rawatibStreaks(history.prayers, today: statsDay)),
             .init(id: "morning", name: AzkarSession.morning.trackerName, symbol: AzkarSession.morning.trackerSymbol, tint: AzkarSession.morning.trackerTint, streak: azkar.morning),
             .init(id: "evening", name: AzkarSession.evening.trackerName, symbol: AzkarSession.evening.trackerSymbol, tint: AzkarSession.evening.trackerTint, streak: azkar.evening),
         ]

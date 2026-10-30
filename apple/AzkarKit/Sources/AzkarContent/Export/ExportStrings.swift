@@ -78,6 +78,23 @@ struct ExportStrings: Sendable {
     var fastStatusHeader: String { ar ? "الصيام: الحالة" : "Fast: status" }
     var fastLoggedAtHeader: String { ar ? "الصيام: وقت التسجيل" : "Fast: logged at" }
 
+    var quranPagesHeader: String { ar ? "القرآن: الصفحات المقروءة" : "Quran: pages read" }
+    var quranKhatmahsHeader: String { ar ? "القرآن: الختمات" : "Quran: khatmahs" }
+    var quranLastReadHeader: String { ar ? "القرآن: وقت آخر قراءة" : "Quran: last read at" }
+
+    var tarawihPlaceHeader: String { ar ? "التراويح: المكان" : "Tarawih: place" }
+    var tarawihRakahsHeader: String { ar ? "التراويح: الركعات" : "Tarawih: rakahs" }
+    var eidPrayerHeader: String { ar ? "صلاة العيد" : "Eid prayer" }
+    var placeNotStated: String { ar ? "غير محدد" : "Not stated" }
+    var prayed: String { ar ? "صُلّيت" : "Prayed" }
+
+    func place(_ place: WorshipPlace) -> String {
+        switch place {
+        case .masjid: ar ? "المسجد" : "Masjid"
+        case .home: ar ? "البيت" : "Home"
+        }
+    }
+
     func fastKind(_ kind: FastKind) -> String {
         switch kind {
         case .ramadan: ar ? "صيام رمضان" : "Ramadan fast"

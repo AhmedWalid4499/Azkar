@@ -11,15 +11,22 @@ import SwiftUI
 ///     -TodayLanguage en|ar          the in-app language
 ///     -TodayNow 2026-03-01T03:30:00+02:00   show the screen at another moment (the clock keeps running)
 ///     -TodayScroll azkar|sunnah     scroll there at launch
-///     -TodayShow location                   open the location sheet at launch
+///     -TodayShow location|calendar          open the location sheet or the calendar at launch
+///     -TodayFlip morning,evening            azkar cards turned over at launch
+///     -TodayRamadanSeed                     last Ramadan logged, and a khatmah goal of 2
+///     -TodayProgress morning                a card's list of azkar open at launch
 enum TodayDebugLaunch {
     static var seed: String? { UserDefaults.standard.string(forKey: "TodaySeed") }
     static var name: String? { UserDefaults.standard.string(forKey: "TodayName") }
     static var language: String? { UserDefaults.standard.string(forKey: "TodayLanguage") }
     /// `-TodayScroll azkar|sunnah`: scrolled there at launch.
     static var scroll: String? { UserDefaults.standard.string(forKey: "TodayScroll") }
-    /// `-TodayShow location`: the location sheet open at launch.
+    /// `-TodayShow location|calendar`: open at launch.
     static var show: String? { UserDefaults.standard.string(forKey: "TodayShow") }
+    /// `-TodayFlip morning,evening`: these azkar cards start turned over.
+    static var flip: [String] { UserDefaults.standard.string(forKey: "TodayFlip")?.components(separatedBy: ",") ?? [] }
+    /// `-TodayProgress morning`: this card's list of azkar open at launch.
+    static var progress: String? { UserDefaults.standard.string(forKey: "TodayProgress") }
 
     static let clockOffset: TimeInterval = {
         guard let text = UserDefaults.standard.string(forKey: "TodayNow"),
@@ -42,11 +49,32 @@ enum TodayDebugSeed {
         if let language = TodayDebugLaunch.language.flatMap(AppSettings.Language.init(rawValue:)) {
             app.settings.update { $0.app.language = language }
         }
+        if UserDefaults.standard.bool(forKey: "TodayRamadanSeed") { await seedRamadan(app) }
         switch TodayDebugLaunch.seed {
         case "cairo": await seed(app, at: cairo)
         case "polar": await seed(app, at: longyearbyen)
         case "none": app.settings.update { $0.location = nil }
         default: break
+        }
+    }
+
+    @MainActor
+    private static func seedRamadan(_ app: AppEnvironment) async {
+        app.settings.update { $0.app.ramadanKhatmahGoal = 2 }
+        let records = app.records
+        do {
+            for night in RamadanCalendar.nights(hijriYear: 1447) {
+                if night.number % 5 != 0 {
+                    try await records.setSeasonRecord(.tarawih, place: night.number.isMultiple(of: 3) ? .home : .masjid, rakahs: night.isOdd ? 8 : nil, on: night.evening, at: night.evening.noonUTC)
+                }
+                if night.isLastTen { try await records.setSunnah(.qiyam, done: true, on: night.evening) }
+                try await records.setFast(.ramadan, .fasted, on: night.evening.adding(days: 1))
+            }
+            for dates in IslamicOccasions.dates(hijriYear: 1447) where dates.occasion == .eidAlFitr {
+                try await records.setSeasonRecord(.eidPrayer, place: nil, rakahs: nil, on: dates.first, at: dates.first.noonUTC)
+            }
+        } catch {
+            print("Ramadan seed failed: \(error)")
         }
     }
 
@@ -83,7 +111,7 @@ enum TodayDebugSeed {
 
     /// Scrolls to, or opens, what `-TodayScroll` / `-TodayShow` ask for.
     @MainActor
-    static func present(scroll proxy: ScrollViewProxy, location: Binding<Bool>) async {
+    static func present(scroll proxy: ScrollViewProxy, location: Binding<Bool>, calendar: Binding<Bool>) async {
         try? await Task.sleep(for: .seconds(1.2))
         switch TodayDebugLaunch.scroll {
         case "azkar": withAnimation { proxy.scrollTo("today.azkar", anchor: .top) }
@@ -91,6 +119,7 @@ enum TodayDebugSeed {
         default: break
         }
         if TodayDebugLaunch.show == "location" { location.wrappedValue = true }
+        if TodayDebugLaunch.show == "calendar" { calendar.wrappedValue = true }
     }
 }
 

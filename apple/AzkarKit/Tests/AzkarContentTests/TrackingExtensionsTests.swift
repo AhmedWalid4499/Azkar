@@ -179,6 +179,11 @@ struct TrackingExtensionsTests {
         #expect(!TrackerStats.hasAnyRecord(TrackerHistory(tasbih: [day("2026-11-01"): [TasbihRecord(preset: "free", count: 1, lastAt: nil)]]), today: today))
         #expect(TrackerStats.hasAnyRecord(TrackerHistory(fasts: [today: FastRecord(kind: .qada, status: .fasted, loggedAt: nil)]), today: today))
         #expect(TrackerStats.hasAnyRecord(TrackerHistory(sessions: [today: [.afterPrayer(.asr): started()]]), today: today))
+        let reading = QuranEntry(day: today, at: .now, kind: .read, fromPage: 0, toPage: 1)
+        #expect(TrackerStats.hasAnyRecord(TrackerHistory(quran: [reading]), today: today))
+        let later = QuranEntry(day: day("2026-11-01"), at: .now, kind: .khatmah, fromPage: 0, toPage: 0)
+        #expect(!TrackerStats.hasAnyRecord(TrackerHistory(quran: [later]), today: today))
+        #expect(TrackerStats.recordedDays(TrackerHistory(quran: [later, reading])) == [today, day("2026-11-01")])
         let days = TrackerStats.recordedDays(TrackerHistory(
             tasbih: [day("2026-10-02"): []], fasts: [day("2026-10-01"): FastRecord(kind: .qada, status: .fasted, loggedAt: nil)]
         ))

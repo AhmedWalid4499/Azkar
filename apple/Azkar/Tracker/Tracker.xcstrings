@@ -182,6 +182,23 @@
         }
       }
     },
+    "%lld days to make up": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيام للقضاء: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld days to make up"
+          }
+        }
+      }
+    },
     "%lld fasts": {
       "extractionState": "manual",
       "localizations": {
@@ -462,6 +479,23 @@
         }
       }
     },
+    "%lld of %lld prayed this week": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld من %2$lld هذا الأسبوع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld prayed this week"
+          }
+        }
+      }
+    },
     "%lld this month": {
       "extractionState": "manual",
       "localizations": {
@@ -492,6 +526,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld هذا العام"
+          }
+        }
+      }
+    },
+    "%lld voluntary this month": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تطوع هذا الشهر: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld voluntary this month"
           }
         }
       }
@@ -1036,6 +1087,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "السلسلة الحالية %1$lld، والأطول %2$lld"
+          }
+        }
+      }
+    },
+    "Current page": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصفحة الحالية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current page"
           }
         }
       }
@@ -1703,6 +1771,57 @@
         }
       }
     },
+    "Khatmah %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الختمة %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khatmah %lld"
+          }
+        }
+      }
+    },
+    "Khatmah added": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُضيفت ختمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khatmah added"
+          }
+        }
+      }
+    },
+    "Khatmahs": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الختمات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khatmahs"
+          }
+        }
+      }
+    },
     "Last 8 weeks": {
       "extractionState": "manual",
       "localizations": {
@@ -1716,6 +1835,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "الأسابيع الثمانية الأخيرة"
+          }
+        }
+      }
+    },
+    "Last 8 weeks, out of %lld a week": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر ٨ أسابيع، من %lld في الأسبوع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 8 weeks, out of %lld a week"
           }
         }
       }
@@ -2213,6 +2349,23 @@
         }
       }
     },
+    "Not started yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تبدأ بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not started yet"
+          }
+        }
+      }
+    },
     "Nothing to measure yet": {
       "extractionState": "manual",
       "localizations": {
@@ -2349,6 +2502,40 @@
         }
       }
     },
+    "Page %lld, khatmahs: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصفحة %1$lld، الختمات: %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Page %1$lld, khatmahs: %2$lld"
+          }
+        }
+      }
+    },
+    "Pages read": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصفحات المقروءة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pages read"
+          }
+        }
+      }
+    },
     "Period": {
       "extractionState": "manual",
       "localizations": {
@@ -2417,6 +2604,23 @@
         }
       }
     },
+    "Prayers": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصلوات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayers"
+          }
+        }
+      }
+    },
     "Prayers prayed": {
       "extractionState": "manual",
       "localizations": {
@@ -2447,6 +2651,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "الشهر السابق"
+          }
+        }
+      }
+    },
+    "Quran": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القرآن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quran"
           }
         }
       }
@@ -2604,6 +2825,40 @@
         }
       }
     },
+    "Streaks": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المواظبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streaks"
+          }
+        }
+      }
+    },
+    "Streaks: morning %lld, evening %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المواظبة: الصباح %1$lld، المساء %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streaks: morning %1$lld, evening %2$lld"
+          }
+        }
+      }
+    },
     "Sunnah prayers": {
       "extractionState": "manual",
       "localizations": {
@@ -2672,6 +2927,23 @@
         }
       }
     },
+    "This khatmah began": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدأت هذه الختمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This khatmah began"
+          }
+        }
+      }
+    },
     "This replaces the %@ fast logged on that day.": {
       "extractionState": "manual",
       "localizations": {
@@ -2719,6 +2991,71 @@
           "stringUnit": {
             "state": "translated",
             "value": "لم يُسجَّل الوقت"
+          }
+        }
+      }
+    },
+    "To page %lld, %lld pages": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "إلى الصفحة %1$lld، %2$lld صفحة"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "إلى الصفحة %1$lld، صفحة واحدة"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "إلى الصفحة %1$lld، صفحتان"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "إلى الصفحة %1$lld، %2$lld صفحات"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "إلى الصفحة %1$lld، %2$lld صفحة"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "إلى الصفحة %1$lld، %2$lld صفحة"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "To page %1$lld, %2$lld page"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "To page %1$lld, %2$lld pages"
+                }
+              }
+            }
           }
         }
       }

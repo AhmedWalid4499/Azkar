@@ -63,6 +63,31 @@ struct RecordRows {
         try fetch(#Predicate<TallyRow> { $0.kind == kind && $0.key == key }).first
     }
 
+    func quranEntry(_ id: UUID) throws -> QuranEntryRow? {
+        try fetch(#Predicate<QuranEntryRow> { $0.id == id }).first
+    }
+
+    func quranBookmark(_ page: Int) throws -> QuranBookmarkRow? {
+        try fetch(#Predicate<QuranBookmarkRow> { $0.page == page }).first
+    }
+
+    func season(_ day: Int, _ deed: SeasonDeed) throws -> SeasonRow? {
+        let key = deed.rawValue
+        return try fetch(#Predicate<SeasonRow> { $0.day == day && $0.deed == key }).first
+    }
+
+    /// The Quran log on the days in `days` (all days when `nil`), in order.
+    func quranEntries(days: ClosedRange<Int>? = nil) throws -> [QuranEntry] {
+        let low = days?.lowerBound ?? Int.min
+        let high = days?.upperBound ?? Int.max
+        return try fetch(#Predicate<QuranEntryRow> { $0.day >= low && $0.day <= high }).compactMap(\.entry).inLogOrder
+    }
+
+    func quranBookmarks() throws -> [Int: Date] {
+        let rows: [QuranBookmarkRow] = try fetch()
+        return Dictionary(rows.map { ($0.page, $0.at.nearestMillisecond) }) { first, _ in first }
+    }
+
     // MARK: Tallies
 
     func value(_ kind: String, _ key: String) throws -> Int {
@@ -97,7 +122,8 @@ struct RecordRows {
 
     // MARK: Snapshots
 
-    /// Everything on the days in `days` (all days when `nil`), with the lifetime totals.
+    /// Everything on the days in `days` (all days when `nil`), with the lifetime totals and the
+    /// Quran bookmarks, which belong to no day.
     func snapshot(days: ClosedRange<Int>? = nil) throws -> RecordsSnapshot {
         var snapshot = RecordsSnapshot()
         let low = days?.lowerBound ?? Int.min
@@ -129,6 +155,12 @@ struct RecordRows {
                   let status = FastStatus(rawValue: row.status) else { continue }
             snapshot.fasts[day] = FastRecord(kind: kind, status: status, loggedAt: row.loggedAt?.nearestMillisecond)
         }
+        for row in try fetch(#Predicate<SeasonRow> { $0.day >= low && $0.day <= high }) {
+            guard let record = row.record else { continue }
+            snapshot.seasons[record.day, default: [:]][record.deed] = record
+        }
+        snapshot.quran = try quranEntries(days: days)
+        snapshot.quranBookmarks = try quranBookmarks()
         snapshot.totals = try totals()
         snapshot.owedFastsBefore = try value(TallyKind.counter, TallyKind.Counter.owedFastsBefore)
         return snapshot
@@ -169,14 +201,26 @@ struct RecordRows {
         try delete(DhikrCountRow.self)
         try delete(TasbihRow.self)
         try delete(FastRow.self)
+        try delete(QuranEntryRow.self)
+        try delete(QuranBookmarkRow.self)
+        try delete(SeasonRow.self)
         let revisionKey = TallyKind.Counter.revision
         let counter = TallyKind.counter
         for row in try fetch(#Predicate<TallyRow> { $0.kind != counter || $0.key != revisionKey }) { context.delete(row) }
     }
 
+    func insert(_ entry: QuranEntry) {
+        context.insert(QuranEntryRow(id: entry.id, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue, fromPage: entry.fromPage, toPage: entry.toPage))
+    }
+
+    func insert(_ record: SeasonRecord) {
+        context.insert(SeasonRow(day: record.day.number, deed: record.deed.rawValue, at: record.at, place: record.place?.rawValue, rakahs: record.rakahs))
+    }
+
     /// Inserts what `incoming` holds that `existing` does not. Per day, a prayer, a sunnah
-    /// prayer, a session's record, a session's counts, a tasbih counter and a fast are each
-    /// kept from `existing` when both have one. Lifetime totals are added together.
+    /// prayer, a session's record, a session's counts, a tasbih counter, a fast and a season
+    /// record of each deed are each kept from `existing` when both have one, as are a Quran
+    /// entry with the same id and a bookmark on the same page. Lifetime totals are added together.
     func insert(_ incoming: RecordsSnapshot, over existing: RecordsSnapshot = RecordsSnapshot()) throws {
         for (day, record) in incoming.prayers {
             let have = existing.prayers[day]
@@ -213,6 +257,14 @@ struct RecordRows {
         for (day, fast) in incoming.fasts where existing.fasts[day] == nil {
             context.insert(FastRow(day: day.number, kind: fast.kind.rawValue, status: fast.status.rawValue, loggedAt: fast.loggedAt))
         }
+        let entries = Set(existing.quran.map(\.id))
+        for entry in incoming.quran where !entries.contains(entry.id) { insert(entry) }
+        for (page, at) in incoming.quranBookmarks where existing.quranBookmarks[page] == nil {
+            context.insert(QuranBookmarkRow(page: page, at: at))
+        }
+        for (day, records) in incoming.seasons {
+            for (deed, record) in records where existing.seasons[day]?[deed] == nil { insert(record) }
+        }
 
         let limit = RecordLimits.maxLifetimeRecitations
         func added(_ old: Int, _ new: Int) -> Int { min(limit, old + new) }
@@ -231,6 +283,23 @@ struct RecordRows {
         if existing.owedFastsBefore == 0, incoming.owedFastsBefore > 0 {
             try setValue(TallyKind.counter, TallyKind.Counter.owedFastsBefore, min(RecordLimits.maxOwedFastsBefore, incoming.owedFastsBefore))
         }
+    }
+}
+
+extension QuranEntryRow {
+    var entry: QuranEntry? {
+        guard let day = DayKey(number: day), let kind = QuranEntry.Kind(rawValue: kind) else { return nil }
+        return QuranEntry(id: id, day: day, at: at.nearestMillisecond, kind: kind, fromPage: fromPage, toPage: toPage)
+    }
+}
+
+extension SeasonRow {
+    /// `nil` for what a later version wrote that this one cannot read.
+    var record: SeasonRecord? {
+        guard let day = DayKey(number: day), let deed = SeasonDeed(rawValue: deed) else { return nil }
+        let known = place.flatMap(WorshipPlace.init(rawValue:))
+        guard known != nil || place == nil else { return nil }
+        return SeasonRecord(deed: deed, day: day, at: at.nearestMillisecond, place: known, rakahs: rakahs)
     }
 }
 

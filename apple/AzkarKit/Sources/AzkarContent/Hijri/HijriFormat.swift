@@ -49,6 +49,13 @@ public enum HijriFormat {
         return locale.language == .ar ? "\(day) \(month)" : "\(month) \(day)"
     }
 
+    /// Days running through one month: "Ramadan 1–29" or "١–٢٩ رمضان".
+    public static func dayRange(_ first: HijriDate, _ last: HijriDate, locale: DisplayLocale) -> String {
+        let month = monthName(first.month, language: locale.language)
+        let days = "\(locale.number(first.day))–\(locale.number(last.day))"
+        return locale.language == .ar ? "\(days) \(month)" : "\(month) \(days)"
+    }
+
     /// A civil day's Hijri date with the user's offset, as the website's `formatHijri`.
     public static func full(_ day: DayKey, offset: Int, locale: DisplayLocale) -> String {
         full(HijriCalendar.date(of: day, offset: offset), locale: locale)

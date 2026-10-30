@@ -12,7 +12,23 @@ struct TrackerTrendSeries: Identifiable {
     let weeklyMaximum: Int?
     let value: (WeekTotals) -> Int
 
-    static func all(for data: TrackerData) -> [TrackerTrendSeries] {
+    /// The figures of an area.
+    static func all(for data: TrackerData, area: TrackerArea) -> [TrackerTrendSeries] {
+        let series = all(for: data)
+        switch area {
+        case .prayers: return series.filter { ["prayed", "sunnah"].contains($0.id) }
+        case .azkar: return series.filter { ["azkar", "sleep", "afterPrayer"].contains($0.id) }
+        case .fasting: return series.filter { $0.id == "fasted" }
+        case .ramadan: return []
+        case .quran:
+            let pages = data.quran.pagesByDay
+            return [TrackerTrendSeries(id: "pages", title: LocalizedStringResource("Pages read", table: "Tracker"), symbol: "book.pages.fill", tint: .green, weeklyMaximum: nil) { week in
+                (0..<7).reduce(0) { $0 + (pages[week.start.adding(days: $1)] ?? 0) }
+            }]
+        }
+    }
+
+    private static func all(for data: TrackerData) -> [TrackerTrendSeries] {
         var series: [TrackerTrendSeries] = [
             TrackerTrendSeries(id: "prayed", title: LocalizedStringResource("Obligatory prayers prayed", table: "Tracker"), symbol: "building.columns.fill",
                         tint: .green, weeklyMaximum: TrackerStats.DailyMaximum.prayed * 7, value: \.prayed),
@@ -42,35 +58,29 @@ extension TrackerData {
     }
 }
 
-/// The last eight weeks of each figure, one chart each.
-struct TrackerTrendsView: View {
+/// The last eight weeks of each of an area's figures, one chart each.
+struct TrackerTrendSections: View {
     let data: TrackerData
+    let area: TrackerArea
     @Environment(\.trackerFormat) private var format
 
     var body: some View {
         let weeks = data.weeks
-        List {
+        ForEach(TrackerTrendSeries.all(for: data, area: area)) { series in
             Section {
-                Text("Each bar is a week starting on \(format.weekdayName(format.firstWeekday)). The last, lighter bar is this week so far.", tableName: "Tracker")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            ForEach(TrackerTrendSeries.all(for: data)) { series in
-                Section {
-                    TrackerWeeklyChart(series: series, weeks: weeks)
-                        .frame(height: 180)
-                        .padding(.vertical, 8)
-                } header: {
-                    Label { format.text(series.title) } icon: { Image(systemName: series.symbol).foregroundStyle(series.tint) }
-                } footer: {
-                    if let maximum = series.weeklyMaximum {
-                        Text("Out of \(maximum) a week", tableName: "Tracker")
-                    }
+                TrackerWeeklyChart(series: series, weeks: weeks)
+                    .frame(height: 150)
+                    .padding(.vertical, 8)
+            } header: {
+                Label { format.text(series.title) } icon: { Image(systemName: series.symbol).foregroundStyle(series.tint) }
+            } footer: {
+                if let maximum = series.weeklyMaximum {
+                    Text("Last 8 weeks, out of \(maximum) a week", tableName: "Tracker")
+                } else {
+                    Text("Last 8 weeks", tableName: "Tracker")
                 }
             }
         }
-        .navigationTitle(Text("Last 8 weeks", tableName: "Tracker"))
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -130,30 +140,5 @@ struct TrackerWeeklyChartDescriptor: AXChartDescriptorRepresentable {
             xAxis: xAxis, yAxis: yAxis, additionalAxes: [],
             series: [AXDataSeriesDescriptor(name: format.string(series.title), isContinuous: false, dataPoints: points)]
         )
-    }
-}
-
-/// The trends' way in on the main page: the prayers' eight weeks at a glance.
-struct TrackerTrendsSummarySection: View {
-    let data: TrackerData
-    @Environment(\.trackerFormat) private var format
-
-    var body: some View {
-        let series = TrackerTrendSeries.all(for: data)[0]
-        Section {
-            NavigationLink(value: TrackerRoute.trends) {
-                VStack(alignment: .leading, spacing: 8) {
-                    format.text(series.title)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    TrackerWeeklyChart(series: series, weeks: data.weeks, compact: true)
-                        .frame(height: 70)
-                        .allowsHitTesting(false)
-                }
-                .padding(.vertical, 4)
-            }
-        } header: {
-            Text("Last 8 weeks", tableName: "Tracker")
-        }
     }
 }

@@ -116,6 +116,36 @@ public final class RecordsModel {
         try await apply(store.setOwedFastsBefore(days))
     }
 
+    @discardableResult
+    public func logQuranReading(toPage: Int, on day: DayKey, at: Date = .now) async throws -> QuranEntry {
+        let (entry, change) = try await store.addQuranReading(toPage: toPage, on: day, at: at)
+        _ = await apply(change)
+        return entry
+    }
+
+    @discardableResult
+    public func logKhatmah(on day: DayKey, at: Date = .now) async throws -> QuranEntry {
+        let (entry, change) = try await store.addKhatmah(on: day, at: at)
+        _ = await apply(change)
+        return entry
+    }
+
+    public func undoQuranEntry(_ id: UUID) async throws {
+        if let change = try await store.removeQuranEntry(id) { _ = await apply(change) }
+    }
+
+    public func setQuranBookmark(page: Int, on: Bool, at: Date = .now) async throws {
+        _ = try await apply(store.changeQuranBookmark(page: page, on: on, at: at))
+    }
+
+    public func setSeasonRecord(_ deed: SeasonDeed, place: WorshipPlace?, rakahs: Int?, on day: DayKey, at: Date = .now) async throws {
+        _ = try await apply(store.changeSeasonRecord(deed, place: place, rakahs: rakahs, on: day, at: at))
+    }
+
+    public func clearSeasonRecord(_ deed: SeasonDeed, on day: DayKey) async throws {
+        _ = try await apply(store.removeSeasonRecord(deed, on: day))
+    }
+
     /// Shows a change the store made. Its revision tells whether anything else was saved in
     /// between (by another process): then everything is read again as well.
     private func apply(_ change: RecordChange) async -> ChangeResult {

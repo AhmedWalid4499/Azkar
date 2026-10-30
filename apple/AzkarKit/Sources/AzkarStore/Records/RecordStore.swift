@@ -13,7 +13,9 @@ import SwiftData
 /// fasting, its `wip/web-seven-features` branch): the same checks, the same bookkeeping, and the
 /// same refusal of days that have not begun where the user is. Records of sessions, tasbih and
 /// fasts are kept for good (the website prunes them after ten years); per-dhikr counts are kept
-/// `RecordLimits.detailDays` days, as on the website, to resume a reading.
+/// `RecordLimits.detailDays` days, as on the website, to resume a reading. Quran reading and the
+/// records of Ramadan and the Eids are the native app's own (`RecordStore+Quran.swift`,
+/// `RecordStore+Seasons.swift`), kept for good as well.
 ///
 /// After every change it posts `StoreChange.records` so the app, its widgets and its other
 /// models read again.
@@ -96,6 +98,7 @@ public actor RecordStore {
         return RecordChange(
             result: result, day: try rows.day(day), totals: try rows.totals(),
             owedFastsBefore: try rows.value(TallyKind.counter, TallyKind.Counter.owedFastsBefore),
+            quranBookmarks: try rows.quranBookmarks(),
             prunedCounts: result == .changed ? pruned : [:], revision: try rows.revision()
         )
     }

@@ -98,13 +98,17 @@ public struct DayRecords: Hashable, Sendable, Identifiable {
     /// By preset id, or `TasbihRecord.freeCount` for the free count.
     public var tasbih: [String: TasbihCount] = [:]
     public var fast: FastRecord?
+    /// What was recorded about reading the Quran that day, in order.
+    public var quran: [QuranEntry] = []
+    /// The tarawih of the night falling on this evening, or the Eid prayer of this day.
+    public var seasons: [SeasonDeed: SeasonRecord] = [:]
 
     public init(day: DayKey) { self.day = day }
 
     public var id: DayKey { day }
 
     public var isEmpty: Bool {
-        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil
+        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && seasons.isEmpty
     }
 
     /// The day's tasbih in the shape the statistics read.
@@ -123,6 +127,12 @@ public struct RecordsSnapshot: Hashable, Sendable {
     public var fasts: [DayKey: FastRecord] = [:]
     /// Days of Ramadan owed from before the log began, as the user counts them.
     public var owedFastsBefore = 0
+    /// The Quran log, the only source of truth for `QuranProgress`, ordered by `at`.
+    public var quran: [QuranEntry] = []
+    /// Bookmarked pages of the mushaf, and when each was bookmarked.
+    public var quranBookmarks: [Int: Date] = [:]
+    /// The deeds of Ramadan and the Eids, by the day each counts for.
+    public var seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:]
 
     public init() {}
 
@@ -130,7 +140,14 @@ public struct RecordsSnapshot: Hashable, Sendable {
 
     /// Every day with any record, oldest first.
     public var days: [DayKey] {
-        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).sorted()
+        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).sorted()
+    }
+}
+
+extension [QuranEntry] {
+    /// By time; entries of the same instant by id, so that every read gives the same order.
+    var inLogOrder: [QuranEntry] {
+        sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
     }
 }
 

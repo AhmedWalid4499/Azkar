@@ -33,12 +33,14 @@ struct TrackerDayView: View {
                 TrackerDaySunnahSection(data: data, day: day, record: records.prayer)
                 TrackerDayAzkarSection(data: data, day: day, sessions: records.sessions).id("azkar")
                 TrackerDayTasbihSection(data: data, records: records)
+                TrackerDayQuranSection(data: data, day: day)
+                TrackerDaySeasonSection(data: data, day: day).id("season")
                 TrackerDayFastSection(data: data, day: day, fast: records.fast).id("fast")
                 TrackerDayTimesSection(data: data, day: day)
             }
             #if DEBUG
             .task {
-                guard let target = TrackerShowcase.scrollTarget, ["azkar", "fast"].contains(target) else { return }
+                guard let target = TrackerShowcase.scrollTarget, ["azkar", "season", "fast"].contains(target) else { return }
                 try? await Task.sleep(for: .milliseconds(400))
                 reader.scrollTo(target, anchor: .top)
             }

@@ -1,9 +1,9 @@
 import AzkarKit
 import SwiftUI
 
-/// The Tracker tab: everything recorded, in one place. Streaks, the last week and month, missed
-/// prayers still owed, a month calendar whose days open in full, the last eight weeks, fasting,
-/// all-time totals and the export of it all.
+/// The Tracker tab: everything recorded, in one place. The main page keeps to the prayer streak,
+/// a row for each area and the month calendar whose days open in full. Each area's page holds
+/// its recent days, streaks, last eight weeks and all-time totals.
 struct TrackerScreen: View {
     @Environment(AppEnvironment.self) private var app
     @Environment(\.locale) private var locale
@@ -24,7 +24,8 @@ struct TrackerScreen: View {
                     switch route {
                     case let .day(day): TrackerDayView(data: data, day: day)
                     case .missed: TrackerMissedPrayersView(data: data)
-                    case .trends: TrackerTrendsView(data: data)
+                    case let .area(area): TrackerAreaView(data: data, area: area)
+                    case let .ramadanNights(year): TrackerRamadanNightsView(data: data, year: year)
                     }
                 }
         }

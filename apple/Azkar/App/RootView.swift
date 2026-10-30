@@ -3,7 +3,7 @@ import SwiftUI
 
 /// The app's five sections. Each tab's screen lives in its own folder.
 enum AppTab: String, Hashable {
-    case today, azkar, qibla, tracker, settings
+    case today, azkar, quran, qibla, tracker
 }
 
 struct RootView: View {
@@ -19,9 +19,9 @@ struct RootView: View {
         TabView(selection: $tab) {
             Tab(value: AppTab.today) { TodayScreen() } label: { label("Today", systemImage: "sunrise") }
             Tab(value: AppTab.azkar) { ReadingScreen() } label: { label("Azkar", systemImage: "book.closed") }
+            Tab(value: AppTab.quran) { QuranScreen() } label: { label("Quran", systemImage: "book.pages") }
             Tab(value: AppTab.qibla) { QiblaScreen() } label: { label("Qibla", systemImage: "location.north.line") }
             Tab(value: AppTab.tracker) { TrackerScreen() } label: { label("Tracker", systemImage: "calendar") }
-            Tab(value: AppTab.settings) { SettingsScreen() } label: { label("Settings", systemImage: "gearshape") }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
         .preferredColorScheme(appSettings.theme.colorScheme)
@@ -63,7 +63,7 @@ struct RootView: View {
         ReadingRouter.shared.open(session, day: day)
     }
 
-    /// DEBUG builds open at `-AzkarTab <today|azkar|qibla|tracker|settings>`, for screenshots.
+    /// DEBUG builds open at `-AzkarTab <today|azkar|quran|qibla|tracker>`, for screenshots.
     private static var launchTab: AppTab {
         #if DEBUG
         if let raw = UserDefaults.standard.string(forKey: "AzkarTab"), let tab = AppTab(rawValue: raw) { return tab }
