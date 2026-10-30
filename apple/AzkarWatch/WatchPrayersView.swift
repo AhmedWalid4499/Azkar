@@ -4,7 +4,6 @@ import SwiftUI
 /// The next prayer with its countdown, then today's five: a tap ticks off one whose time has come.
 struct WatchPrayersView: View {
     let store: WatchStore
-    @Environment(\.locale) private var locale
 
     var body: some View {
         // Each minute is enough: the countdown runs by itself, this only moves the rows on.
@@ -50,27 +49,34 @@ private struct WatchPrayerRow: View {
     let board: WatchBoard
     let now: Date
     let store: WatchStore
-    @Environment(\.locale) private var locale
 
     var body: some View {
         let ticked = store.isTicked(row.prayer, on: day)
-        Button {
-            store.tick(row.prayer, on: day)
-        } label: {
-            HStack(spacing: 8) {
-                Image(systemName: symbol(ticked: ticked))
-                    .foregroundStyle(row.status != nil || ticked ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
-                Text(row.prayer.title)
-                Spacer(minLength: 4)
-                if let at = row.at {
-                    Text(at, format: Date.FormatStyle(date: .omitted, time: .shortened, locale: locale, timeZone: board.zone))
-                        .font(.footnote.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                }
+        // A row that cannot be ticked is still read: a disabled button would grey it out.
+        if !ticked, board.canTick(row, at: now) {
+            Button {
+                store.tick(row.prayer, on: day)
+            } label: {
+                label(ticked: false)
+            }
+        } else {
+            label(ticked: ticked)
+                .sensoryFeedback(.success, trigger: ticked) { _, ticked in ticked }
+        }
+    }
+
+    private func label(ticked: Bool) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: symbol(ticked: ticked))
+                .foregroundStyle(row.status != nil || ticked ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+            Text(row.prayer.title)
+            Spacer(minLength: 4)
+            if let at = row.at {
+                Text(at, format: Date.FormatStyle(date: .omitted, time: .shortened))
+                    .font(.footnote.monospacedDigit())
+                    .foregroundStyle(.secondary)
             }
         }
-        .disabled(ticked || !board.canTick(row, at: now))
-        .sensoryFeedback(.success, trigger: ticked) { _, ticked in ticked }
     }
 
     private func symbol(ticked: Bool) -> String {

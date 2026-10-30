@@ -17,6 +17,9 @@ struct AzkarWatchApp: App {
                         store.flushTasbih()
                     }
                 }
+                #if DEBUG
+                .task { await WatchDebug.run(store) }
+                #endif
         }
     }
 }

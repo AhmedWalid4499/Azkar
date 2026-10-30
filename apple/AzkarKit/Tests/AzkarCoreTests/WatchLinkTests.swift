@@ -19,11 +19,18 @@ import Testing
 
     @Test(arguments: [
         WatchAction.refresh,
-        .tick(.asr, DayKey(year: 2026, month: 10, day: 30)!),
+        .tick(id: UUID(), prayer: .asr, day: DayKey(year: 2026, month: 10, day: 30)!),
         .tasbih(id: UUID(), count: 100, day: DayKey(year: 2026, month: 10, day: 30)!),
     ])
     func actionsSurviveTheTrip(action: WatchAction) {
         #expect(WatchLink.decode(WatchAction.self, from: WatchLink.encode(action)) == action)
+    }
+
+    @Test func onlyWhatMustBeConfirmedHasAnID() {
+        let id = UUID()
+        #expect(WatchAction.refresh.id == nil)
+        #expect(WatchAction.tick(id: id, prayer: .asr, day: today).id == id)
+        #expect(WatchAction.tasbih(id: id, count: 1, day: today).id == id)
     }
 
     @Test func garbageIsNotABoard() {

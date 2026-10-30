@@ -4,15 +4,27 @@ import SwiftUI
 /// The two pages, in the language the iPhone's app is set to.
 struct WatchRootView: View {
     let store: WatchStore
+    @State private var page = WatchRootView.startPage
+
+    private enum Page { case prayers, tasbih }
 
     var body: some View {
-        TabView {
-            WatchPrayersView(store: store)
-            WatchTasbihView(store: store)
+        TabView(selection: $page) {
+            WatchPrayersView(store: store).tag(Page.prayers)
+            WatchTasbihView(store: store).tag(Page.tasbih)
         }
         .tabViewStyle(.verticalPage)
         .environment(\.locale, locale)
+        // Times are shown on the saved place's clock, as on the iPhone.
+        .environment(\.timeZone, store.board?.zone ?? .current)
         .environment(\.layoutDirection, store.board?.languageCode == "ar" ? .rightToLeft : .leftToRight)
+    }
+
+    private static var startPage: Page {
+        #if DEBUG
+        if WatchDebug.startsOnTasbih { return .tasbih }
+        #endif
+        return .prayers
     }
 
     private var locale: Locale {

@@ -10,9 +10,12 @@ final class WatchBridge: NSObject, WCSessionDelegate {
     static let shared = WatchBridge()
 
     private static let appliedKey = "watch.appliedActions"
-    /// How many counts are remembered, to know one delivered twice.
-    private static let appliedLimit = 100
+    /// How many actions are remembered, to know one delivered twice.
+    private static let appliedLimit = 500
+    /// How many the board lists, more than the Watch would ever have waiting between two boards.
+    private static let shownApplied = 50
     private var lastSent: Data?
+    private var working: Set<UUID> = []
 
     func activate() {
         guard WCSession.isSupported() else { return }
@@ -35,7 +38,7 @@ final class WatchBridge: NSObject, WCSessionDelegate {
                 })
             },
             tasbihDay: board.today, tasbihCount: today.tasbih.values.reduce(0) { $0 + $1.count },
-            appliedActions: applied.suffix(20)
+            appliedActions: applied.suffix(Self.shownApplied)
         )
         // The time it was made on is not a change worth sending.
         let unchanged = WatchLink.encode(shown)
@@ -63,28 +66,27 @@ final class WatchBridge: NSObject, WCSessionDelegate {
         set { UserDefaults.standard.set(newValue.suffix(Self.appliedLimit).map(\.uuidString), forKey: Self.appliedKey) }
     }
 
+    /// Carries out an action once, however many times it arrives. A delivery can overlap one still
+    /// being saved, so an action is held in `working` until it is done.
     private func handle(_ action: WatchAction) async {
-        switch action {
-        case .refresh:
-            await pushNow(force: true)
-        case let .tick(prayer, day):
+        if let id = action.id, !applied.contains(id), !working.contains(id) {
+            working.insert(id)
+            defer { working.remove(id) }
             do {
-                try await PrayerLogging.tick(prayer, on: day)
-            } catch {
-                print("Watch: logging \(prayer) on \(day) failed: \(error)")
-            }
-            await pushNow()
-        case let .tasbih(id, count, day):
-            if !applied.contains(id) {
-                do {
+                switch action {
+                case .refresh:
+                    break
+                case let .tick(_, prayer, day):
+                    try await PrayerLogging.tick(prayer, on: day)
+                case let .tasbih(_, count, day):
                     try await SharedRecords.store().countTasbih(nil, times: count, on: day)
-                    applied.append(id)
-                } catch {
-                    print("Watch: counting \(count) on \(day) failed: \(error)")
                 }
+                applied.append(id)
+            } catch {
+                print("Watch: carrying out \(action) failed: \(error)")
             }
-            await pushNow(force: true)
         }
+        await pushNow(force: true)
     }
 
     // MARK: WCSessionDelegate

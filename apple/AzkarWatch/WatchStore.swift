@@ -3,9 +3,11 @@ import Foundation
 import Observation
 import WatchConnectivity
 
-/// The Watch's copy of the board, and what was done here that the iPhone has not shown back yet.
-/// Everything goes to the iPhone at once when it is in reach and is queued by the system when it
-/// is not, so nothing done here is lost.
+/// The Watch's copy of the board, and what was done here that the iPhone has not confirmed.
+///
+/// Everything done here stays in `outbox`, across launches, until a board lists it as carried out.
+/// It is sent at once when the iPhone is in reach, handed to the system's queue when it is not, and
+/// sent again whenever the two meet, so nothing is lost; the iPhone carries out each action once.
 @MainActor
 @Observable
 final class WatchStore: NSObject, WCSessionDelegate {
@@ -13,36 +15,29 @@ final class WatchStore: NSObject, WCSessionDelegate {
 
     /// The latest board, kept for when the iPhone is out of reach.
     private(set) var board: WatchBoard?
-    /// Ticks the board does not show yet.
-    private(set) var pendingTicks: Set<PendingTick> = []
+    /// What the iPhone has not confirmed, oldest first.
+    private(set) var outbox: [WatchAction] = []
     /// Counts not sent yet, and the day they were made on.
     private(set) var unsentTasbih = 0
     private var unsentDay: DayKey?
-    /// Counts sent that the iPhone has not confirmed, by action.
-    private var sentTasbih: [UUID: Int] = [:]
     @ObservationIgnored private var flushTask: Task<Void, Never>?
-
-    struct PendingTick: Hashable, Codable, Sendable {
-        var prayer: Prayer
-        var day: DayKey
-    }
+    /// Actions already with the system's queue, which needs each only once.
+    @ObservationIgnored private var queued: Set<UUID> = []
 
     private enum Key {
         static let board = "board"
-        static let ticks = "pendingTicks"
+        static let outbox = "outbox"
         static let unsent = "unsentTasbih"
         static let unsentDay = "unsentTasbihDay"
-        static let sent = "sentTasbih"
     }
 
     override private init() {
         super.init()
         let defaults = UserDefaults.standard
         board = WatchLink.decode(WatchBoard.self, from: defaults.data(forKey: Key.board))
-        pendingTicks = WatchLink.decode(Set<PendingTick>.self, from: defaults.data(forKey: Key.ticks)) ?? []
+        outbox = WatchLink.decode([WatchAction].self, from: defaults.data(forKey: Key.outbox)) ?? []
         unsentTasbih = defaults.integer(forKey: Key.unsent)
         unsentDay = WatchLink.decode(DayKey.self, from: defaults.data(forKey: Key.unsentDay))
-        sentTasbih = WatchLink.decode([UUID: Int].self, from: defaults.data(forKey: Key.sent)) ?? [:]
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()
@@ -51,22 +46,26 @@ final class WatchStore: NSObject, WCSessionDelegate {
     // MARK: Prayers
 
     func tick(_ prayer: Prayer, on day: DayKey) {
-        pendingTicks.insert(PendingTick(prayer: prayer, day: day))
-        saveTicks()
-        send(.tick(prayer, day), queued: true)
+        add(.tick(id: UUID(), prayer: prayer, day: day))
     }
 
+    /// Ticked here and not confirmed yet.
     func isTicked(_ prayer: Prayer, on day: DayKey) -> Bool {
-        pendingTicks.contains(PendingTick(prayer: prayer, day: day))
+        outbox.contains {
+            if case .tick(_, prayer, day) = $0 { true } else { false }
+        }
     }
 
     // MARK: Tasbih
 
-    /// Today's count: the iPhone's, with what it has not shown back yet.
+    /// Today's count: the iPhone's, with what it has not confirmed.
     func tasbihToday(at now: Date) -> Int {
         guard let board else { return unsentTasbih }
-        let onBoard = board.tasbihDay == board.today(at: now) ? board.tasbihCount : 0
-        return onBoard + unsentTasbih + sentTasbih.values.reduce(0, +)
+        let today = board.today(at: now)
+        let waiting = outbox.reduce(0) { total, action in
+            if case .tasbih(_, let count, today) = action { total + count } else { total }
+        }
+        return (board.tasbihDay == today ? board.tasbihCount : 0) + waiting + (unsentDay == today ? unsentTasbih : 0)
     }
 
     /// One more; they are sent together once the counting pauses.
@@ -88,36 +87,50 @@ final class WatchStore: NSObject, WCSessionDelegate {
     func flushTasbih() {
         flushTask?.cancel()
         guard unsentTasbih > 0, let day = unsentDay else { return }
-        let id = UUID()
-        sentTasbih[id] = unsentTasbih
-        send(.tasbih(id: id, count: unsentTasbih, day: day), queued: true)
+        let count = unsentTasbih
         unsentTasbih = 0
         unsentDay = nil
         saveTasbih()
+        add(.tasbih(id: UUID(), count: count, day: day))
     }
 
     // MARK: Talking to the iPhone
 
+    /// Sends everything waiting, and asks for the board.
     func refresh() {
-        send(.refresh, queued: false)
         flushTasbih()
+        sendOutbox()
+        deliver(.refresh)
     }
 
-    /// Delivers `action` now if the iPhone is in reach. Otherwise, or if that fails, a `queued`
-    /// action waits with the system until the two meet again.
-    private func send(_ action: WatchAction, queued: Bool) {
-        guard let data = WatchLink.encode(action) else { return }
+    private func add(_ action: WatchAction) {
+        outbox.append(action)
+        saveOutbox()
+        deliver(action)
+    }
+
+    private func sendOutbox() {
+        for action in outbox { deliver(action) }
+    }
+
+    /// Nothing happens before the connection has started; activating sends the outbox.
+    private func deliver(_ action: WatchAction) {
         let session = WCSession.default
-        guard session.activationState == .activated else { return }
-        let message = [WatchLink.actionKey: data]
+        guard session.activationState == .activated, let data = WatchLink.encode(action) else { return }
         guard session.isReachable else {
-            if queued { session.transferUserInfo(message) }
+            enqueue(action, data)
             return
         }
-        session.sendMessage(message, replyHandler: nil) { [queued] _ in
-            guard queued else { return }
-            WCSession.default.transferUserInfo([WatchLink.actionKey: data])
+        // Called on a queue of the system's, so it must not belong to the main actor.
+        session.sendMessage([WatchLink.actionKey: data], replyHandler: nil) { @Sendable [weak self] _ in
+            Task { @MainActor in self?.enqueue(action, data) }
         }
+    }
+
+    /// Hands an action to the system to deliver when it can.
+    private func enqueue(_ action: WatchAction, _ data: Data) {
+        guard let id = action.id, queued.insert(id).inserted else { return }
+        WCSession.default.transferUserInfo([WatchLink.actionKey: data])
     }
 
     private func apply(_ data: Data?) {
@@ -125,24 +138,18 @@ final class WatchStore: NSObject, WCSessionDelegate {
         if let board, board.generatedAt > received.generatedAt { return }
         board = received
         UserDefaults.standard.set(data, forKey: Key.board)
-        for id in received.appliedActions { sentTasbih[id] = nil }
-        pendingTicks = pendingTicks.filter { tick in
-            guard let day = received.days.first(where: { $0.day == tick.day }) else { return false }
-            return day.rows.first { $0.prayer == tick.prayer }?.status == nil
-        }
-        saveTicks()
-        saveTasbih()
+        outbox.removeAll { action in action.id.map(received.appliedActions.contains) ?? true }
+        saveOutbox()
     }
 
-    private func saveTicks() {
-        UserDefaults.standard.set(WatchLink.encode(pendingTicks), forKey: Key.ticks)
+    private func saveOutbox() {
+        UserDefaults.standard.set(WatchLink.encode(outbox), forKey: Key.outbox)
     }
 
     private func saveTasbih() {
         let defaults = UserDefaults.standard
         defaults.set(unsentTasbih, forKey: Key.unsent)
         defaults.set(unsentDay.flatMap(WatchLink.encode), forKey: Key.unsentDay)
-        defaults.set(WatchLink.encode(sentTasbih), forKey: Key.sent)
     }
 
     // MARK: WCSessionDelegate
@@ -153,6 +160,11 @@ final class WatchStore: NSObject, WCSessionDelegate {
             self.apply(data)
             self.refresh()
         }
+    }
+
+    nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        guard session.isReachable else { return }
+        Task { @MainActor in self.refresh() }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {

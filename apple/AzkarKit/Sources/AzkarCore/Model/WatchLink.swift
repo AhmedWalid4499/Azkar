@@ -51,7 +51,7 @@ public struct WatchBoard: Codable, Hashable, Sendable {
     public var tasbihDay: DayKey
     /// All of that day's tasbih counters together.
     public var tasbihCount: Int
-    /// The latest tasbih counts received from the Watch, so it can stop adding them itself.
+    /// The latest actions carried out for the Watch, so it can stop sending them again.
     public var appliedActions: [UUID]
 
     public init(generatedAt: Date, languageCode: String, arabicDigits: Bool, uses24Hour: Bool, timeZone: String, placeName: String,
@@ -93,15 +93,23 @@ public struct WatchBoard: Codable, Hashable, Sendable {
     }
 }
 
-/// What the Watch asks of the iPhone. A tick that arrives twice changes nothing, and `id` keeps a
-/// count from being added twice when a message is delivered and also queued.
+/// What the Watch asks of the iPhone. The Watch sends an action again until a board lists its `id`,
+/// and the iPhone carries out each `id` once, so nothing is lost and nothing is counted twice.
 public enum WatchAction: Codable, Hashable, Sendable {
     /// Send the board again.
     case refresh
     /// A prayer prayed on time, if it is not logged yet.
-    case tick(Prayer, DayKey)
+    case tick(id: UUID, prayer: Prayer, day: DayKey)
     /// Counts on the free tasbih.
     case tasbih(id: UUID, count: Int, day: DayKey)
+
+    /// `nil` for what need not be confirmed.
+    public var id: UUID? {
+        switch self {
+        case .refresh: nil
+        case let .tick(id, _, _), let .tasbih(id, _, _): id
+        }
+    }
 }
 
 /// How the two sides wrap their messages.
