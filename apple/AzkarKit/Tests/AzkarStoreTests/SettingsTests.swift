@@ -41,6 +41,31 @@ import Testing
         expectSameJSON(JSONValue.object(written).only(WebHydrationParityTests.prayerTimesFields), sample.output, "prayer-times")
     }
 
+    @Test func seasonRemindersSurviveTheTripAndDefaultsWriteNothing() {
+        var reminders = ReminderSettings()
+        #expect(reminders.web["seasonReminders"] == nil)
+        reminders.season.mondayThursday = true
+        reminders.season.oddNights = true
+        reminders.season.suhoor = true
+        reminders.season.suhoorLeadMinutes = 60
+        #expect(ReminderSettings(web: reminders.web) == reminders)
+        #expect(reminders.sanitized() == reminders)
+    }
+
+    @Test func theQuranGoalSurvivesTheTripAndAbsentWritesNothing() {
+        var settings = AppSettings()
+        #expect(settings.web["quranGoal"] == nil)
+        settings.quranGoal = QuranGoal(start: day("2026-11-01"), end: day("2026-12-01"))
+        #expect(AppSettings(web: settings.web).quranGoal == settings.quranGoal)
+        #expect(AppSettings(web: ["quranGoal": ["start": "2026-12-01", "end": "2026-11-01"]]).quranGoal == nil)
+    }
+
+    @Test func aSuhoorLeadNotOnOfferGoesBackToTheDefault() {
+        let reminders = ReminderSettings(web: ["seasonReminders": ["suhoor": true, "suhoorLeadMinutes": 7]])
+        #expect(reminders.season.suhoor)
+        #expect(reminders.season.suhoorLeadMinutes == 45)
+    }
+
     @Test func remindersOfTheWIPBranchAndTheAdhanAlarmsAreRead() {
         let reminders = ReminderSettings(web: [
             "unloggedReminders": ["enabled": false, "leadMinutes": 45, "ishaEnds": "fajr"],

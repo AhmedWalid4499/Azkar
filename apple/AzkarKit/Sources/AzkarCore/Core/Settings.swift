@@ -170,6 +170,12 @@ public struct SavedLocation: Codable, Hashable, Sendable {
         case manual
     }
 
+    /// The place's clocks are not `other`'s at `now`: the user has most likely travelled.
+    public func keepsDifferentTime(from other: TimeZone, at now: Date) -> Bool {
+        guard let zone = TimeZone(identifier: timeZone) else { return false }
+        return zone.secondsFromGMT(for: now) != other.secondsFromGMT(for: now)
+    }
+
     public init(latitude: Double, longitude: Double, timeZone: String, label: String, countryCode: String?, source: Source, updatedAt: Double) {
         self.latitude = latitude
         self.longitude = longitude

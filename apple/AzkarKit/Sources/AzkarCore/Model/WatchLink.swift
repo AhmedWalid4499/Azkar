@@ -36,6 +36,7 @@ public struct WatchBoard: Codable, Hashable, Sendable {
     public struct Upcoming: Hashable, Sendable {
         public var prayer: Prayer
         public var at: Date
+        public var day: DayKey
     }
 
     public var generatedAt: Date
@@ -81,7 +82,7 @@ public struct WatchBoard: Codable, Hashable, Sendable {
     public func next(after now: Date) -> Upcoming? {
         for day in days {
             for row in day.rows {
-                if let at = row.at, at > now { return Upcoming(prayer: row.prayer, at: at) }
+                if let at = row.at, at > now { return Upcoming(prayer: row.prayer, at: at, day: day.day) }
             }
         }
         return nil

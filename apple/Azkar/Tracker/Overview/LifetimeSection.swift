@@ -32,6 +32,12 @@ struct TrackerLifetimeSection: View {
             case .quran:
                 TrackerTotalRow(name: LocalizedStringResource("Pages read", table: "Tracker"), symbol: "book.pages.fill", tint: .green, value: data.quran.totalPages)
                 TrackerTotalRow(name: LocalizedStringResource("Khatmahs", table: "Tracker"), symbol: "checkmark.seal.fill", tint: .teal, value: data.quran.khatmahs)
+                if !data.records.hifz.isEmpty {
+                    let hifz = HifzProgress(entries: data.records.hifz)
+                    TrackerTotalRow(name: LocalizedStringResource("Surahs memorised", table: "Tracker"), symbol: "brain.head.profile", tint: .purple, value: hifz.memorisedCount) {
+                        Text("Reviews: \(hifz.totalReviews)", tableName: "Tracker")
+                    }
+                }
             case .fasting:
                 TrackerTotalRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange,
                                 value: data.history.fasts.values.filter { $0.status == .fasted }.count)

@@ -137,3 +137,81 @@ import Testing
         #expect(entry.pages == 6)
     }
 }
+
+@Suite struct QuranGoalTests {
+    private let start = DayKey(year: 2026, month: 11, day: 1)!
+    private var end: DayKey { start.adding(days: 29) }
+    private var goal: QuranGoal { QuranGoal(start: start, end: end) }
+
+    private func read(_ from: Int, _ to: Int, on day: DayKey) -> QuranEntry {
+        QuranEntry(day: day, at: Date(timeIntervalSince1970: Double(to)), kind: .read, fromPage: from, toPage: to)
+    }
+
+    @Test func aWholeMushafOverThirtyDays() {
+        #expect(goal.standing(today: start, progress: QuranProgress(entries: [])) == .onTheWay(pagesPerDay: 21))
+    }
+
+    @Test func whatIsReadTodayCountsAndThePaceRoundsUp() {
+        let progress = QuranProgress(entries: [read(0, 104, on: start)])
+        #expect(goal.standing(today: start, progress: progress) == .onTheWay(pagesPerDay: 17))
+        #expect(goal.standing(today: end, progress: progress) == .onTheWay(pagesPerDay: 500))
+    }
+
+    @Test func aKhatmahInTheWindowMeetsIt() {
+        let progress = QuranProgress(entries: [read(0, 604, on: start.adding(days: 3))])
+        #expect(goal.standing(today: start.adding(days: 3), progress: progress) == .met)
+        #expect(goal.standing(today: end.adding(days: 40), progress: progress) == .met)
+    }
+
+    @Test func aKhatmahBeforeTheGoalDoesNotMeetIt() {
+        let progress = QuranProgress(entries: [read(0, 604, on: start.adding(days: -1))])
+        #expect(goal.standing(today: start, progress: progress) == .onTheWay(pagesPerDay: 21))
+    }
+
+    @Test func theDateCanGoBy() {
+        #expect(goal.standing(today: end.adding(days: 1), progress: QuranProgress(entries: [])) == .passed)
+    }
+
+    @Test func aDifferentClockMeansTravel() {
+        let cairo = SavedLocation(latitude: 30, longitude: 31, timeZone: "Africa/Cairo", label: "Cairo", countryCode: "EG", source: .gps, updatedAt: 0)
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        #expect(!cairo.keepsDifferentTime(from: TimeZone(identifier: "Africa/Cairo")!, at: now))
+        #expect(cairo.keepsDifferentTime(from: TimeZone(identifier: "Asia/Tokyo")!, at: now))
+        var nowhere = cairo
+        nowhere.timeZone = "Not/AZone"
+        #expect(!nowhere.keepsDifferentTime(from: TimeZone(identifier: "Asia/Tokyo")!, at: now))
+    }
+}
+
+@Suite struct HifzProgressTests {
+    private let day = DayKey(year: 2026, month: 11, day: 1)!
+
+    private func entry(_ kind: HifzEntry.Kind, _ sura: Int, _ offset: Int) -> HifzEntry {
+        HifzEntry(sura: sura, day: day.adding(days: offset), at: Date(timeIntervalSince1970: Double(offset)), kind: kind)
+    }
+
+    @Test func nothingLoggedHoldsNothing() {
+        #expect(HifzProgress(entries: []).memorisedCount == 0)
+    }
+
+    @Test func aReviewMovesTheDateAndCounts() throws {
+        let progress = HifzProgress(entries: [entry(.reviewed, 67, 3), entry(.memorised, 67, 0)])
+        let sura = try #require(progress.suras[67])
+        #expect(sura.memorisedOn == day)
+        #expect(sura.lastReviewedOn == day.adding(days: 3))
+        #expect(sura.reviews == 1)
+    }
+
+    @Test func forgettingTakesItOutAndRememberingStartsAgain() throws {
+        let log = [entry(.memorised, 2, 0), entry(.reviewed, 2, 1), entry(.forgotten, 2, 2)]
+        #expect(HifzProgress(entries: log).suras[2] == nil)
+        #expect(HifzProgress(entries: log).totalReviews == 1)
+        let again = HifzProgress(entries: log + [entry(.memorised, 2, 3)])
+        #expect(try #require(again.suras[2]).reviews == 0)
+    }
+
+    @Test func theLongestSinceReviewComesFirst() {
+        let progress = HifzProgress(entries: [entry(.memorised, 1, 0), entry(.memorised, 2, 1), entry(.reviewed, 1, 5)])
+        #expect(progress.byLastReview.map(\.number) == [2, 1])
+    }
+}

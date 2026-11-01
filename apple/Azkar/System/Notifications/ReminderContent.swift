@@ -20,7 +20,7 @@ enum ReminderContent {
         let named = context.name.isEmpty ? nil : SystemText.isolate(context.name)
         switch entry.kind {
         case let .prayer(prayer):
-            let name = SystemText.prayer(prayer, language)
+            let name = SystemText.prayer(prayer, language, on: entry.day)
             let time = SystemText.time(entry.at, in: context.timeZone, language)
             content.title = named.map { SystemText.format("%1$@, it’s time for %2$@", language, $0, name) }
                 ?? SystemText.format("It’s time for %@", language, name)
@@ -30,7 +30,7 @@ enum ReminderContent {
             content.threadIdentifier = "prayers"
             content.relevanceScore = 1
         case let .unlogged(prayer, deadline):
-            let name = SystemText.prayer(prayer, language)
+            let name = SystemText.prayer(prayer, language, on: entry.day)
             let time = SystemText.time(deadline.endsAt, in: context.timeZone, language)
             let duration = SystemText.duration(minutes: SystemText.minutes(from: entry.at, to: deadline.endsAt), language)
             content.title = named.map { SystemText.format("%1$@, you haven’t logged %2$@ yet", language, $0, name) }
@@ -60,10 +60,60 @@ enum ReminderContent {
             content.userInfo = ReminderInfo(kind: .azkar, day: entry.day, session: session).userInfo
             content.threadIdentifier = "azkar"
             content.relevanceScore = 0.6
+        case let .season(reminder):
+            season(reminder, entry, context, into: content)
         }
         content.sound = .default
         content.interruptionLevel = .active
         return content
+    }
+}
+
+extension ReminderContent {
+    /// A reminder of the fasting days, Ramadan or the sunnah; a tap opens Today, or the mushaf for Surah al-Kahf.
+    private static func season(_ reminder: SeasonReminder, _ entry: ReminderEntry, _ context: Context, into content: UNMutableNotificationContent) {
+        let language = context.language
+        // The time of the prayer the reminder comes before.
+        let time = SystemText.time(entry.at.addingTimeInterval(TimeInterval(-reminder.offsetMinutes * 60)), in: context.timeZone, language)
+        switch reminder.kind {
+        case let .fast(reason):
+            content.title = SystemText.string(fastTitle(reason), language)
+            content.body = SystemText.string("A good day to fast.", language)
+        case .suhoor:
+            content.title = SystemText.string("Time for suhoor", language)
+            content.body = SystemText.format("Fajr is at %@", language, time)
+        case .iftar:
+            content.title = SystemText.format("Iftar in %@", language, SystemText.duration(minutes: SeasonReminderChoices.iftarLeadMinutes, language))
+            content.body = SystemText.format("Maghrib is at %@", language, time)
+        case let .oddNight(night):
+            content.title = SystemText.format("Night %@ of Ramadan", language, SystemText.number(night, language))
+            content.body = SystemText.string("One of the odd nights of the last ten.", language)
+        case .kahf:
+            content.title = SystemText.string("Friday: Surah al-Kahf", language)
+            content.body = SystemText.string("Open it in the mushaf.", language)
+        case .witr:
+            content.title = SystemText.string("Time for Witr", language)
+            content.body = SystemText.string("Before you sleep.", language)
+        case .duha:
+            content.title = SystemText.string("Time for Duha", language)
+            content.body = SystemText.string("The time for Duha has begun.", language)
+        }
+        let page = reminder.kind == .kahf ? SeasonReminders.kahfPage : nil
+        content.userInfo = ReminderInfo(kind: .season, day: entry.day, quranPage: page).userInfo
+        content.threadIdentifier = "season"
+        content.relevanceScore = 0.7
+    }
+
+    private static func fastTitle(_ reason: FastingReason) -> String {
+        switch reason {
+        case .arafah: "Tomorrow is the day of Arafah"
+        case .ashura: "Tomorrow is Ashura"
+        case .tasua: "Tomorrow is the ninth of Muharram"
+        case .shawwal: "Tomorrow can be one of the six of Shawwal"
+        case .whiteDays: "Tomorrow is one of the White Days"
+        case .monday: "Tomorrow is Monday"
+        case .thursday: "Tomorrow is Thursday"
+        }
     }
 }
 

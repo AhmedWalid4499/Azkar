@@ -43,8 +43,10 @@ public enum WebStores {
     static let quran = "quran"
     /// The native app's records of Ramadan and the Eids, kept the same way.
     static let seasons = "seasons"
+    /// The native app's memorisation log, kept the same way.
+    static let hifz = "hifz"
     /// Every store read.
-    static var stores: [String] { names + [progressSpare, quran, seasons] }
+    static var stores: [String] { names + [progressSpare, quran, seasons, hifz] }
 
     /// What `persist` hands to a store's `merge` while loading.
     enum Loaded {
@@ -98,7 +100,7 @@ public enum WebStores {
         let known = Set(stores.map { prefix + $0 })
         snapshot.ignored = Set(entries.keys.filter { !known.contains($0) && $0.hasPrefix(prefix) })
         func entry(_ name: String) -> StoredEntry { entries[prefix + name] ?? .missing }
-        for name in names + [quran, seasons] {
+        for name in names + [quran, seasons, hifz] {
             if case let .json(value) = entry(name), value.isTruthy { snapshot.found.insert(name) }
         }
 
@@ -156,6 +158,9 @@ public enum WebStores {
         }).persisted)
         snapshot.records.quran = reading.entries
         snapshot.records.quranBookmarks = reading.bookmarks
+        snapshot.records.hifz = WebHifz.read(load(entry(hifz), version: WebHifz.version, migrate: { state, _ in
+            WebHifz.web(WebHifz.read(state))
+        }).persisted)
 
         snapshot.records.seasons = WebSeasons.read(load(entry(seasons), version: WebSeasons.version, migrate: { state, _ in
             WebSeasons.web(WebSeasons.read(state))
@@ -190,6 +195,9 @@ public enum WebStores {
         }
         if records.seasons.values.contains(where: { !$0.isEmpty }) {
             stores[prefix + seasons] = stored(WebSeasons.web(records.seasons), WebSeasons.version)
+        }
+        if !records.hifz.isEmpty {
+            stores[prefix + hifz] = stored(WebHifz.web(records.hifz), WebHifz.version)
         }
         return stores
     }

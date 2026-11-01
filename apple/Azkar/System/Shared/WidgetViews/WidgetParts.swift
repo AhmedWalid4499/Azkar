@@ -23,7 +23,7 @@ struct WidgetNextPrayerSummary: View {
     var compact = false
 
     var body: some View {
-        let name = SystemText.prayer(next.prayer, language)
+        let name = SystemText.prayer(next.prayer, language, on: next.day)
         let time = SystemText.time(next.at, in: board.place.timeZone, language)
         VStack(alignment: .leading, spacing: compact ? 2 : 4) {
             Label {
@@ -81,7 +81,7 @@ struct WidgetPrayerRow: View {
                 .foregroundStyle(row.isLogged ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
                 .widgetAccentable(row.isLogged)
                 .contentTransition(.symbolEffect(.replace))
-            Text(verbatim: SystemText.prayer(row.prayer, language))
+            Text(verbatim: SystemText.prayer(row.prayer, language, on: row.day))
                 .fontWeight(isNext ? .bold : .regular)
                 .lineLimit(1)
             Spacer(minLength: 4)
@@ -95,7 +95,7 @@ struct WidgetPrayerRow: View {
     }
 
     private var accessibilityText: String {
-        let name = SystemText.prayer(row.prayer, language)
+        let name = SystemText.prayer(row.prayer, language, on: row.day)
         let time = row.at.map { SystemText.time($0, in: board.place.timeZone, language) } ?? ""
         if let status = row.status {
             return SystemText.format("%1$@, %2$@: %3$@", language, name, time, SystemText.status(status, language))

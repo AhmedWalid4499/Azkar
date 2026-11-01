@@ -152,6 +152,12 @@ public struct QuranPageIndex: Sendable {
     /// Its name in Latin letters.
     public func suraTransliteration(ofPage page: Int) -> String { names[sura(ofPage: page) - 1].transliteration }
 
+    /// A surah's Arabic name by its number.
+    public func suraName(number: Int) -> String { names[number - 1].name }
+
+    /// A surah's name in Latin letters by its number.
+    public func suraTransliteration(number: Int) -> String { names[number - 1].transliteration }
+
     /// The number of the juz a page is in.
     public func juz(ofPage page: Int) -> Int {
         (juzPages.lastIndex { $0 <= page } ?? 0) + 1

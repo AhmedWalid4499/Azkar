@@ -50,10 +50,15 @@ struct TasbihView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .sheet(isPresented: $choosesPreset) {
-            TasbihPresetSheet(presets: context.dataset.tasbihPresets, chosen: model.preset?.id,
+            TasbihPresetSheet(presets: context.tasbihPresets, chosen: model.preset?.id,
                               showsTransliteration: ReaderSettings.resolve(settings.showTransliteration, languageCode: locale.languageCode)) { preset in
                 model.choose(preset)
                 choosesPreset = false
+            } onAdd: { text in
+                model.addCustom(text)
+                choosesPreset = false
+            } onRemove: { id in
+                model.removeCustom(id: id)
             }
             .presentationDetents([.medium, .large])
         }
@@ -80,7 +85,7 @@ struct TasbihView: View {
 
     @ViewBuilder
     private func chosen(_ settings: ReaderSettings) -> some View {
-        let presets = context.dataset.tasbihPresets
+        let presets = context.tasbihPresets
         VStack(spacing: 10) {
             if let preset = model.preset {
                 RecitationView(text: preset.arabic, scale: settings.arabicScale, alignment: .center)

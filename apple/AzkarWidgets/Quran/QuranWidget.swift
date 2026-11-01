@@ -59,7 +59,8 @@ nonisolated struct QuranWidgetProvider: TimelineProvider {
             let tarawih = try? await store?.day(evening).seasons[.tarawih]
             let ramadan = RamadanGlance(today: today, beforeDawn: beforeDawn, offset: settings.app.hijriOffset,
                                         goal: settings.app.ramadanKhatmahGoal, quran: log, tarawih: tarawih)
-            entries.append(QuranWidgetEntry(date: date, language: language, quran: QuranGlance(entries: log, today: today), ramadan: ramadan))
+            let goal = settings.app.quranGoal?.standing(today: today, progress: QuranProgress(entries: log)).pagesPerDay
+            entries.append(QuranWidgetEntry(date: date, language: language, quran: QuranGlance(entries: log, today: today), ramadan: ramadan, goalPages: goal))
         }
         return entries
     }

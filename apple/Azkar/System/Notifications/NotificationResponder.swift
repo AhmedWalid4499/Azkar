@@ -11,16 +11,28 @@ final class NotificationResponder: NSObject, UNUserNotificationCenterDelegate {
         var action: String
     }
 
+    // The completion-handler forms, not the `async` ones: the system's handler updates UIKit's
+    // snapshot, which must happen on the main thread, and an `async` delegate method returns
+    // on a thread of the pool, which crashes the app.
+
     nonisolated func userNotificationCenter(
-        _ center: UNUserNotificationCenter, willPresent notification: UNNotification
-    ) async -> UNNotificationPresentationOptions {
-        [.banner, .list, .sound]
+        _ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .list, .sound])
     }
 
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        guard let info = ReminderInfo(response.notification.request.content.userInfo) else { return }
-        let request = Response(info: info, action: response.actionIdentifier)
-        await SystemServices.shared.handle(request)
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let info = ReminderInfo(response.notification.request.content.userInfo)
+        let action = response.actionIdentifier
+        nonisolated(unsafe) let done = completionHandler
+        Task { @MainActor in
+            if let info { await SystemServices.shared.handle(Response(info: info, action: action)) }
+            done()
+        }
     }
 }
 
@@ -43,6 +55,8 @@ extension SystemServices {
             // The notification itself, or "Open".
             if info.kind == .azkar, let session = info.session {
                 SystemRouter.shared.go(.azkar(session))
+            } else if let page = info.quranPage {
+                SystemRouter.shared.go(.quranPage(page))
             } else {
                 SystemRouter.shared.go(.today)
             }

@@ -44,7 +44,8 @@ import Testing
             .init(prayer: .dhuhr, at: nil, status: nil),
             .init(prayer: .asr, at: start.addingTimeInterval(60), status: nil),
         ]
-        #expect(board(rows: rows).next(after: start) == WatchBoard.Upcoming(prayer: .asr, at: start.addingTimeInterval(60)))
+        let shown = board(rows: rows)
+        #expect(shown.next(after: start) == WatchBoard.Upcoming(prayer: .asr, at: start.addingTimeInterval(60), day: shown.days[0].day))
     }
 
     @Test func nothingNextOnceTheDaysRunOut() {

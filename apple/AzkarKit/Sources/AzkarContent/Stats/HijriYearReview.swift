@@ -49,6 +49,9 @@ public struct HijriYearReview: Hashable, Sendable {
     /// Days with any page read.
     public var quranDays = 0
     public var khatmahs = 0
+    /// Surahs memorised in the year, and reviews logged in it.
+    public var surasMemorised = 0
+    public var surasReviewed = 0
 
     /// Fasts kept to the end, by kind.
     public var fasts: [FastKind: Int] = [:]
@@ -71,6 +74,7 @@ public struct HijriYearReview: Hashable, Sendable {
         isFinished = days.last.map { $0.day < today } ?? true
         let quran = QuranProgress(entries: history.quran)
         let khatmahs = Dictionary(grouping: quran.khatmahDates) { $0 }
+        let hifz = Dictionary(grouping: history.hifz, by: \.day)
         var run = 0
         var counted = 0
         var active = 0
@@ -117,6 +121,15 @@ public struct HijriYearReview: Hashable, Sendable {
             self.khatmahs += finished
             isActive = isActive || read > 0 || finished > 0
 
+            for entry in hifz[day] ?? [] {
+                isActive = true
+                switch entry.kind {
+                case .memorised: surasMemorised += 1
+                case .reviewed: surasReviewed += 1
+                case .forgotten: break
+                }
+            }
+
             if let fast = history.fasts[day] {
                 isActive = true
                 if fast.status == .fasted {
@@ -145,6 +158,7 @@ public extension TrackerHistory {
         days.formUnion(fasts.keys)
         days.formUnion(seasons.keys)
         days.formUnion(quran.map(\.day))
+        days.formUnion(hifz.map(\.day))
         var years = Set(days.filter { $0 <= today }.map { HijriCalendar.date(of: $0, offset: offset).year })
         years.insert(current)
         return years.sorted(by: >)

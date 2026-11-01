@@ -82,7 +82,7 @@ struct PrayerTimeRow: View {
                     .foregroundStyle(slot.prayer == nil ? Color.secondary : Color.accentColor)
                     .frame(width: 26)
                     .accessibilityHidden(true)
-                Text(slot.title)
+                Text(slot.prayer?.title(on: day) ?? slot.title)
                     .font(badge == nil ? .body : .body.weight(.semibold))
                     .foregroundStyle(slot.prayer == nil ? .secondary : .primary)
                 if let badge {

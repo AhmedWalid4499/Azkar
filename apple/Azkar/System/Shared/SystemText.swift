@@ -74,8 +74,10 @@ nonisolated enum SystemText {
 
     // MARK: Names
 
-    static func prayer(_ prayer: Prayer, _ language: SystemLanguage) -> String {
-        switch prayer {
+    /// `on` names Friday's Dhuhr Jumu'ah. Records keep it as Dhuhr.
+    static func prayer(_ prayer: Prayer, _ language: SystemLanguage, on day: DayKey? = nil) -> String {
+        if prayer == .dhuhr, day?.isFriday == true { return string("Jumu’ah", language) }
+        return switch prayer {
         case .fajr: string("Fajr", language)
         case .dhuhr: string("Dhuhr", language)
         case .asr: string("Asr", language)

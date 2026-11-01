@@ -12,7 +12,7 @@ struct QuranScreen: View {
     @State private var showsPaper = false
     @State private var systemRouter = SystemRouter.shared
 
-    private enum QuranList: Hashable { case suras, juz, bookmarks }
+    private enum QuranList: Hashable { case suras, juz, bookmarks, hifz }
 
     var body: some View {
         let settings = app.settings.settings
@@ -62,7 +62,13 @@ struct QuranScreen: View {
                     _ = try? await app.records.logQuranReading(toPage: page, on: today.adding(days: -back), at: .now.addingTimeInterval(Double(-back) * 86_400))
                 }
                 _ = try? await app.records.setQuranBookmark(page: 50, on: true, at: .now)
+                for (back, sura) in [(30, 114), (20, 113), (12, 112), (5, 67)] {
+                    try? await app.records.logHifz(.memorised, sura: sura, on: today.adding(days: -back), at: .now.addingTimeInterval(Double(-back) * 86_400))
+                }
+                try? await app.records.logHifz(.reviewed, sura: 114, on: today, at: .now)
             }
+            // `-AzkarQuranList hifz`: the memorisation list.
+            if UserDefaults.standard.string(forKey: "AzkarQuranList") == "hifz" { list = .hifz }
             let page = UserDefaults.standard.integer(forKey: "AzkarQuranPage")
             if page > 0 { request = QuranReaderRequest(page: page) }
             #endif
@@ -78,7 +84,8 @@ struct QuranScreen: View {
             Section {
                 QuranProgressCard(mushaf: mushaf, progress: progress, today: today, page: next, hasStarted: !records.quran.isEmpty,
                                   goalPages: RamadanGoal.pagesPerDay(goal: app.settings.settings.app.ramadanKhatmahGoal, today: today,
-                                                                     offset: app.settings.settings.app.hijriOffset, quran: records.quran)) {
+                                                                     offset: app.settings.settings.app.hijriOffset, quran: records.quran)
+                                      ?? app.settings.settings.app.quranGoal?.standing(today: today, progress: progress).pagesPerDay) {
                     request = QuranReaderRequest(page: next)
                 }
             }
@@ -87,6 +94,7 @@ struct QuranScreen: View {
                     Text(QL("Surahs")).tag(QuranList.suras)
                     Text(QL("Juz")).tag(QuranList.juz)
                     Text(QL("Bookmarks")).tag(QuranList.bookmarks)
+                    Text(QL("Memorised")).tag(QuranList.hifz)
                 } label: {
                     Text(QL("Browse"))
                 }
@@ -106,15 +114,20 @@ struct QuranScreen: View {
                     }
                 case .bookmarks:
                     bookmarks(mushaf, pages: records.quranBookmarks.keys.sorted())
+                case .hifz:
+                    EmptyView()
                 }
+            }
+            if list == .hifz {
+                QuranHifzSections(mushaf: mushaf, entries: records.hifz, today: today) { request = QuranReaderRequest(page: $0) }
             }
         }
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
-        .onChange(of: systemRouter.opensQuranReader, initial: true) { _, opens in
-            guard opens else { return }
-            systemRouter.opensQuranReader = false
-            if request == nil { request = QuranReaderRequest(page: next) }
+        .onChange(of: systemRouter.quranReaderPage, initial: true) { _, page in
+            guard let page else { return }
+            systemRouter.quranReaderPage = nil
+            if request == nil { request = QuranReaderRequest(page: page > 0 ? page : next) }
         }
     }
 
@@ -165,7 +178,7 @@ private struct QuranProgressCard: View {
     let today: DayKey
     let page: Int
     let hasStarted: Bool
-    /// Pages a day for the Ramadan goal, while it runs.
+    /// Pages a day for the Ramadan goal while it runs, else for the goal of a date.
     let goalPages: Int?
     let onContinue: () -> Void
 

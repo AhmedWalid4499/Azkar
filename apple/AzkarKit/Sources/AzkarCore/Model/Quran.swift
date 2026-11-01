@@ -79,3 +79,42 @@ public struct QuranProgress: Hashable, Sendable {
 
     public func pages(on day: DayKey) -> Int { pagesByDay[day] ?? 0 }
 }
+
+/// A khatmah to finish by a date, at any time of the year.
+public struct QuranGoal: Hashable, Sendable {
+    /// The day it was set: a khatmah finished from then on meets it.
+    public var start: DayKey
+    /// The last day to finish.
+    public var end: DayKey
+
+    public init(start: DayKey, end: DayKey) {
+        self.start = start
+        self.end = end
+    }
+
+    /// Where a goal stands today.
+    public enum Standing: Hashable, Sendable {
+        /// Pages a day still needed, today included; what was read today already counts.
+        case onTheWay(pagesPerDay: Int)
+        case met
+        /// The date went by first.
+        case passed
+
+        /// Pages a day still needed: 0 once met, `nil` once the date has passed.
+        public var pagesPerDay: Int? {
+            switch self {
+            case let .onTheWay(pages): pages
+            case .met: 0
+            case .passed: nil
+            }
+        }
+    }
+
+    public func standing(today: DayKey, progress: QuranProgress) -> Standing {
+        if progress.khatmahDates.contains(where: { $0 >= start && $0 <= end }) { return .met }
+        guard today <= end else { return .passed }
+        let pages = QuranProgress.pageCount - progress.position
+        let daysLeft = today.days(to: end) + 1
+        return .onTheWay(pagesPerDay: (pages + daysLeft - 1) / daysLeft)
+    }
+}

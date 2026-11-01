@@ -67,6 +67,10 @@ struct RecordRows {
         try fetch(#Predicate<QuranEntryRow> { $0.id == id }).first
     }
 
+    func hifzEntry(_ id: UUID) throws -> HifzEntryRow? {
+        try fetch(#Predicate<HifzEntryRow> { $0.id == id }).first
+    }
+
     func quranBookmark(_ page: Int) throws -> QuranBookmarkRow? {
         try fetch(#Predicate<QuranBookmarkRow> { $0.page == page }).first
     }
@@ -81,6 +85,14 @@ struct RecordRows {
         let low = days?.lowerBound ?? Int.min
         let high = days?.upperBound ?? Int.max
         return try fetch(#Predicate<QuranEntryRow> { $0.day >= low && $0.day <= high }).compactMap(\.entry).inLogOrder
+    }
+
+    /// The memorisation log on the days in `days` (all days when `nil`), in order.
+    func hifzEntries(days: ClosedRange<Int>? = nil) throws -> [HifzEntry] {
+        let low = days?.lowerBound ?? Int.min
+        let high = days?.upperBound ?? Int.max
+        return try fetch(#Predicate<HifzEntryRow> { $0.day >= low && $0.day <= high }).compactMap(\.entry)
+            .sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
     }
 
     func quranBookmarks() throws -> [Int: Date] {
@@ -161,6 +173,7 @@ struct RecordRows {
         }
         snapshot.quran = try quranEntries(days: days)
         snapshot.quranBookmarks = try quranBookmarks()
+        snapshot.hifz = try hifzEntries(days: days)
         snapshot.totals = try totals()
         snapshot.owedFastsBefore = try value(TallyKind.counter, TallyKind.Counter.owedFastsBefore)
         return snapshot
@@ -204,6 +217,7 @@ struct RecordRows {
         try delete(QuranEntryRow.self)
         try delete(QuranBookmarkRow.self)
         try delete(SeasonRow.self)
+        try delete(HifzEntryRow.self)
         let revisionKey = TallyKind.Counter.revision
         let counter = TallyKind.counter
         for row in try fetch(#Predicate<TallyRow> { $0.kind != counter || $0.key != revisionKey }) { context.delete(row) }
@@ -211,6 +225,10 @@ struct RecordRows {
 
     func insert(_ entry: QuranEntry) {
         context.insert(QuranEntryRow(id: entry.id, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue, fromPage: entry.fromPage, toPage: entry.toPage))
+    }
+
+    func insert(_ entry: HifzEntry) {
+        context.insert(HifzEntryRow(id: entry.id, sura: entry.sura, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue))
     }
 
     func insert(_ record: SeasonRecord) {
@@ -265,6 +283,8 @@ struct RecordRows {
         for (day, records) in incoming.seasons {
             for (deed, record) in records where existing.seasons[day]?[deed] == nil { insert(record) }
         }
+        let hifz = Set(existing.hifz.map(\.id))
+        for entry in incoming.hifz where !hifz.contains(entry.id) { insert(entry) }
 
         let limit = RecordLimits.maxLifetimeRecitations
         func added(_ old: Int, _ new: Int) -> Int { min(limit, old + new) }
@@ -283,6 +303,13 @@ struct RecordRows {
         if existing.owedFastsBefore == 0, incoming.owedFastsBefore > 0 {
             try setValue(TallyKind.counter, TallyKind.Counter.owedFastsBefore, min(RecordLimits.maxOwedFastsBefore, incoming.owedFastsBefore))
         }
+    }
+}
+
+extension HifzEntryRow {
+    var entry: HifzEntry? {
+        guard let day = DayKey(number: day), let kind = HifzEntry.Kind(rawValue: kind) else { return nil }
+        return HifzEntry(id: id, sura: sura, day: day, at: at.nearestMillisecond, kind: kind)
     }
 }
 

@@ -18,6 +18,17 @@ import Testing
         static var stages: [MigrationStage] { [.lightweight(fromVersion: AzkarSchemaV1.self, toVersion: AzkarSchemaV2.self)] }
     }
 
+    /// The plan as it shipped with `AzkarSchemaV3` last: what the owner's phone has now.
+    enum ShippedV3Plan: SchemaMigrationPlan {
+        static var schemas: [any VersionedSchema.Type] { [AzkarSchemaV1.self, AzkarSchemaV2.self, AzkarSchemaV3.self] }
+        static var stages: [MigrationStage] {
+            [
+                .lightweight(fromVersion: AzkarSchemaV1.self, toVersion: AzkarSchemaV2.self),
+                .lightweight(fromVersion: AzkarSchemaV2.self, toVersion: AzkarSchemaV3.self),
+            ]
+        }
+    }
+
     let first = day("2026-09-01")
     let second = day("2026-09-02")
     let at = instant("2026-09-01T05:00:00.125Z")
@@ -139,6 +150,68 @@ import Testing
         records.fasts[first] = FastRecord(kind: .voluntary, status: .fasted, loggedAt: at)
         records.owedFastsBefore = 6
         return records
+    }
+
+    /// Writes a row of every table with the third version's own models, on disk, and closes it.
+    func writeV3Store(in directory: URL) throws {
+        typealias V3 = AzkarSchemaV3
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let schema = Schema(versionedSchema: V3.self)
+        let configuration = ModelConfiguration(schema: schema, url: directory.appending(path: StoreContainer.fileName), cloudKitDatabase: .none)
+        let container = try ModelContainer(for: schema, migrationPlan: ShippedV3Plan.self, configurations: configuration)
+        let context = ModelContext(container)
+        context.insert(V3.PrayerRow(day: first.number, prayer: "fajr", status: "jamaah", loggedAt: at))
+        context.insert(V3.SunnahRow(day: first.number, sunnah: "duha", at: at))
+        let session = V3.SessionRow(day: first.number, session: "morning")
+        session.startedAt = at
+        session.lastAt = later
+        session.completedAt = later
+        session.completed = true
+        session.done = 2
+        session.total = 2
+        session.recitations = 7
+        context.insert(session)
+        context.insert(V3.DhikrCountRow(day: first.number, session: "afterPrayer:fajr", dhikr: "kursi", count: 3))
+        context.insert(V3.TallyRow(kind: TallyKind.counter, key: TallyKind.Counter.revision, value: 41))
+        let tasbih = V3.TasbihRow(day: second.number, preset: "subhanallah", count: 33, current: 0)
+        tasbih.startedAt = at
+        tasbih.lastAt = later
+        context.insert(tasbih)
+        context.insert(V3.FastRow(day: first.number, kind: "voluntary", status: "fasted", loggedAt: at))
+        context.insert(V3.ImportRow(source: ImportReport.webApp, at: at, report: reportJSON))
+        context.insert(V3.QuranEntryRow(id: quranID, day: first.number, at: at, kind: "read", fromPage: 0, toPage: 42))
+        context.insert(V3.QuranBookmarkRow(page: 42, at: later))
+        context.insert(V3.SeasonRow(day: second.number, deed: "tarawih", at: later, place: "masjid", rakahs: 8))
+        try context.save()
+    }
+
+    @Test func aStoreWrittenByTheThirdVersionOpensWithEveryRowAndTakesTheMemorisationLog() async throws {
+        let directory = StorageTests.temporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        try writeV3Store(in: directory)
+
+        let store = try RecordStore.open(.directory(directory), catalog: AzkarRecordTests.catalog, timeZone: { StorageTests.utc })
+        let records = try await store.snapshot()
+        #expect(records.prayers[first]?.prayers[.fajr]?.status == .jamaah)
+        #expect(records.prayers[first]?.sunnah[.duha] != nil)
+        #expect(records.sessions[first]?[.morning]?.recitations == 7)
+        #expect(records.counts[first]?[.afterPrayer(.fajr)]?["kursi"] == 3)
+        #expect(records.tasbih[second]?["subhanallah"]?.count == 33)
+        #expect(records.fasts[first]?.status == .fasted)
+        #expect(records.quran.map(\.toPage) == [42])
+        #expect(records.quranBookmarks[42] != nil)
+        #expect(records.seasons[second]?[.tarawih]?.rakahs == 8)
+        #expect(records.hifz.isEmpty)
+        #expect(try await store.revision() == 41)
+        #expect(try await store.hasImported(ImportReport.webApp))
+
+        try await store.logHifz(.memorised, sura: 67, on: second, at: later)
+        #expect(try await store.snapshot().hifz.map(\.sura) == [67])
+
+        // Reopened, as the next launch does.
+        let again = try RecordStore.open(.directory(directory), catalog: AzkarRecordTests.catalog, timeZone: { StorageTests.utc })
+        #expect(try await again.snapshot().hifz.map(\.sura) == [67])
+        #expect(try await again.snapshot().seasons[second]?[.tarawih]?.rakahs == 8)
     }
 
     @Test func aStoreWrittenByTheFirstVersionOpensWithEveryRow() async throws {
@@ -273,9 +346,10 @@ import Testing
     @Test func theMigrationPlanGoesThroughEveryVersionInOrder() {
         #expect(AzkarSchemaV2.versionIdentifier == Schema.Version(2, 0, 0))
         #expect(AzkarSchemaV3.versionIdentifier == Schema.Version(3, 0, 0))
-        #expect(AzkarMigrationPlan.schemas.map { $0.versionIdentifier } == [Schema.Version(1, 0, 0), Schema.Version(2, 0, 0), Schema.Version(3, 0, 0)])
-        #expect(AzkarMigrationPlan.stages.count == 2)
+        #expect(AzkarMigrationPlan.schemas.map { $0.versionIdentifier } == [Schema.Version(1, 0, 0), Schema.Version(2, 0, 0), Schema.Version(3, 0, 0), Schema.Version(4, 0, 0)])
+        #expect(AzkarMigrationPlan.stages.count == 3)
         #expect(AzkarSchemaV2.models.count == AzkarSchemaV1.models.count + 2)
         #expect(AzkarSchemaV3.models.count == AzkarSchemaV2.models.count + 1)
+        #expect(AzkarSchemaV4.models.count == AzkarSchemaV3.models.count + 1)
     }
 }

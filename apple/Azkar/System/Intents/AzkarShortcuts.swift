@@ -44,6 +44,15 @@ nonisolated struct AzkarShortcuts: AppShortcutsProvider {
             systemImageName: "book"
         )
         AppShortcut(
+            intent: OpenQuranIntent(),
+            phrases: [
+                "Open the Quran in \(.applicationName)",
+                "Continue reading in \(.applicationName)",
+            ],
+            shortTitle: LocalizedStringResource("Open Quran", table: "System"),
+            systemImageName: "book.pages"
+        )
+        AppShortcut(
             intent: OpenQiblaIntent(),
             phrases: [
                 "Open Qibla in \(.applicationName)",

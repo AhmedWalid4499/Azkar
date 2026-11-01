@@ -66,6 +66,23 @@
         }
       }
     },
+    "%lld of 114 surahs": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld من ١١٤ سورة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of 114 surahs"
+          }
+        }
+      }
+    },
     "%lld pages": {
       "extractionState": "manual",
       "localizations": {
@@ -386,6 +403,159 @@
         }
       }
     },
+    "Last reviewed %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر مراجعة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last reviewed %@"
+          }
+        }
+      }
+    },
+    "Longest since review first": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأطول دون مراجعة أولًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest since review first"
+          }
+        }
+      }
+    },
+    "Mark as memorised": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحديد كمحفوظة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as memorised"
+          }
+        }
+      }
+    },
+    "Mark the surahs you know by heart, and when you review one. This is separate from your place in the khatmah.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حدّد السور التي تحفظها، وسجّل مراجعتك لها. وهذا منفصل عن موضعك في الختمة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark the surahs you know by heart, and when you review one. This is separate from your place in the khatmah."
+          }
+        }
+      }
+    },
+    "Memorised": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorised"
+          }
+        }
+      }
+    },
+    "Memorised %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حُفظت %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorised %@"
+          }
+        }
+      }
+    },
+    "No longer memorised": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تعد محفوظة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No longer memorised"
+          }
+        }
+      }
+    },
+    "Not memorised yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تُحفظ بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not memorised yet"
+          }
+        }
+      }
+    },
+    "Open in the mushaf": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح في المصحف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in the mushaf"
+          }
+        }
+      }
+    },
     "Page %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -501,6 +671,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove bookmark"
+          }
+        }
+      }
+    },
+    "Reviewed today": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "راجعتها اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviewed today"
           }
         }
       }

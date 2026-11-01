@@ -9,8 +9,12 @@ struct TasbihPresetSheet: View {
     /// `ReaderSettings.showTransliteration`, resolved for the interface language.
     var showsTransliteration = true
     let onChoose: (Dhikr?) -> Void
+    var onAdd: (String) -> Void = { _ in }
+    var onRemove: (String) -> Void = { _ in }
     @Environment(\.dismiss) private var dismiss
     @Environment(\.readingLocale) private var locale
+    @State private var adding = false
+    @State private var newDhikr = ""
 
     var body: some View {
         NavigationStack {
@@ -24,13 +28,13 @@ struct TasbihPresetSheet: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .environment(\.layoutDirection, .rightToLeft)
                                     .foregroundStyle(.primary)
-                                if showsTransliteration, let transliteration = preset.transliteration, !transliteration.isEmpty {
+                                if showsTransliteration, let transliteration = preset.transliteration, !transliteration.isEmpty, !CustomDhikr.isCustom(preset.id) {
                                     Text(verbatim: transliteration)
                                         .font(.subheadline.italic())
                                         .foregroundStyle(.secondary)
                                         .environment(\.layoutDirection, .leftToRight)
                                 }
-                                if !locale.isArabic {
+                                if !locale.isArabic, !preset.translation.isEmpty {
                                     Text(verbatim: preset.translation)
                                         .font(.footnote)
                                         .foregroundStyle(.secondary)
@@ -42,6 +46,25 @@ struct TasbihPresetSheet: View {
                     .buttonStyle(.plain)
                     .contentShape(.rect)
                     .accessibilityAddTraits(preset.id == chosen ? .isSelected : [])
+                    .swipeActions {
+                        if CustomDhikr.isCustom(preset.id) {
+                            Button(role: .destructive) {
+                                onRemove(preset.id)
+                            } label: {
+                                Label { Text("Remove", tableName: "Reading") } icon: { Image(systemName: "trash") }
+                            }
+                        }
+                    }
+                }
+                Section {
+                    Button {
+                        newDhikr = ""
+                        adding = true
+                    } label: {
+                        Label { Text("Add your own dhikr", tableName: "Reading") } icon: { Image(systemName: "plus") }
+                    }
+                } footer: {
+                    Text("Swipe your own dhikr to remove it. What you counted stays in your records.", tableName: "Reading")
                 }
                 Section {
                     Button { onChoose(nil) } label: {
@@ -62,6 +85,11 @@ struct TasbihPresetSheet: View {
                 }
             }
             .navigationTitle(Text("Choose a dhikr", tableName: "Reading"))
+            .alert(Text("Add your own dhikr", tableName: "Reading"), isPresented: $adding) {
+                TextField(text: $newDhikr) { Text("The words of the dhikr", tableName: "Reading") }
+                Button { onAdd(newDhikr) } label: { Text("Add", tableName: "Reading") }
+                Button(role: .cancel) {} label: { Text("Cancel", tableName: "Reading") }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

@@ -58,6 +58,7 @@ final class SystemServices {
             group.addTask { await self.follow(.records) }
             group.addTask { await self.follow(.settings) }
             group.addTask { await self.followForeground() }
+            group.addTask { await self.followBackground() }
             group.addTask { await self.followClock() }
             group.addTask { await self.liveActivity.follow() }
             group.addTask { await self.permissions.followAlarms() }
@@ -70,6 +71,7 @@ final class SystemServices {
         await permissions.refresh()
         askForMissingPermissions(app.settings.settings)
         await refresh(reason: "launch", reloadWidgets: true)
+        await AutoBackup.shared.backUp()
         #if DEBUG
         await SystemDebug.runLaunchArguments(app)
         #endif
@@ -112,8 +114,8 @@ final class SystemServices {
         let language = SystemLanguage(settings.app)
         if categoriesLanguage != language { registerCategories(language) }
 
-        let logged = await loggedPrayers(around: now, timeZone: settings.timeZone)
-        await ReminderScheduler.reschedule(settings: settings, logged: logged, now: now)
+        let (logged, sunnah) = await loggedPrayers(around: now, timeZone: settings.timeZone)
+        await ReminderScheduler.reschedule(settings: settings, logged: logged, sunnah: sunnah, now: now)
         if Self.alarmLanguage != language.code {
             AdhanAlarms.cancelAll()
             Self.alarmLanguage = language.code
@@ -134,11 +136,11 @@ final class SystemServices {
         return (settings, SystemPrayerBoard(settings: settings, prayers: prayers, now: now))
     }
 
-    /// The prayers logged from yesterday to the end of the reminder window, any status.
-    private func loggedPrayers(around now: Date, timeZone: TimeZone) async -> [DayKey: Set<Prayer>] {
+    /// The prayers logged from yesterday to the end of the reminder window, any status, and the sunnah ticked.
+    private func loggedPrayers(around now: Date, timeZone: TimeZone) async -> ([DayKey: Set<Prayer>], [DayKey: Set<SunnahPrayer>]) {
         guard let store = try? SharedRecords.store(),
-              let days = try? await store.prayersAround(now, in: timeZone, back: 2, ahead: ReminderPlan.windowDays + 2) else { return [:] }
-        return days.mapValues { Set($0.prayers.keys) }
+              let days = try? await store.prayersAround(now, in: timeZone, back: 2, ahead: ReminderPlan.windowDays + 2) else { return ([:], [:]) }
+        return (days.mapValues { Set($0.prayers.keys) }, days.mapValues { Set($0.sunnah.keys) })
     }
 
     /// While the app runs, moves the Live Activity on when the next prayer comes.
@@ -181,6 +183,7 @@ final class SystemServices {
         let was = before.reminders, now = settings.reminders
         let switchedOn = (!was.prayers && now.prayers) || (!was.unlogged && now.unlogged)
             || (!was.morningAzkar && now.morningAzkar) || (!was.eveningAzkar && now.eveningAzkar)
+            || (!was.season.isAnyOn && now.season.isAnyOn)
         let placeArrived = before.location == nil && settings.location != nil && ReminderScheduler.wantsNotifications(now)
         // The alerts wait for the user; following changes must not.
         if switchedOn || placeArrived {
@@ -215,6 +218,13 @@ final class SystemServices {
         for await _ in NotificationCenter.default.notifications(named: UIApplication.didBecomeActiveNotification).map({ _ in () }) {
             await permissions.refresh()
             await refresh(reason: "foreground", reloadWidgets: false)
+        }
+    }
+
+    /// Leaving the app is when there is most likely something new to back up.
+    private func followBackground() async {
+        for await _ in NotificationCenter.default.notifications(named: UIApplication.didEnterBackgroundNotification).map({ _ in () }) {
+            await AutoBackup.shared.backUp()
         }
     }
 

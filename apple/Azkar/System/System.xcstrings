@@ -361,6 +361,24 @@
         }
       }
     },
+    "A good day to fast.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يوم يُستحب صيامه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A good day to fast."
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "After %@": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -541,6 +559,24 @@
         }
       }
     },
+    "Before you sleep.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قبل أن تنام."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before you sleep."
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "Choose your location in Azkar first.": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -685,6 +721,42 @@
         }
       }
     },
+    "Fajr is at %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الفجر الساعة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fajr is at %@"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Friday: Surah al-Kahf": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجمعة: سورة الكهف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday: Surah al-Kahf"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "Goal met": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -702,6 +774,42 @@
           }
         }
       }
+    },
+    "Iftar": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإفطار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iftar"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Iftar in %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإفطار بعد %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iftar in %@"
+          }
+        }
+      },
+      "generatesSymbol": false
     },
     "Isha": {
       "extractionState": "manual",
@@ -756,6 +864,24 @@
           }
         }
       }
+    },
+    "Jumu’ah": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجمعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumu’ah"
+          }
+        }
+      },
+      "generatesSymbol": false
     },
     "Juz %@": {
       "extractionState": "manual",
@@ -919,6 +1045,24 @@
         }
       }
     },
+    "Maghrib is at %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المغرب الساعة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maghrib is at %@"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "Mark as Prayed": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1063,6 +1207,24 @@
         }
       }
     },
+    "Night %@ of Ramadan": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الليلة %@ من رمضان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night %@ of Ramadan"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "Now": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1098,6 +1260,24 @@
           }
         }
       }
+    },
+    "One of the odd nights of the last ten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إحدى الليالي الوترية من العشر الأواخر."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One of the odd nights of the last ten."
+          }
+        }
+      },
+      "generatesSymbol": false
     },
     "Open": {
       "extractionState": "manual",
@@ -1171,6 +1351,24 @@
         }
       }
     },
+    "Open Quran": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح القرآن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Quran"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "Open Today": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1188,6 +1386,42 @@
           }
         }
       }
+    },
+    "Open it in the mushaf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتحها في المصحف."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open it in the mushaf."
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Opens the mushaf where you stopped.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفتح المصحف حيث توقفت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the mushaf where you stopped."
+          }
+        }
+      },
+      "generatesSymbol": false
     },
     "Opens the reader at a session of azkar.": {
       "extractionState": "manual",
@@ -1603,6 +1837,78 @@
         }
       }
     },
+    "The time for Duha has begun.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دخل وقت صلاة الضحى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The time for Duha has begun."
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Time for Duha": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان وقت الضحى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for Duha"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Time for Witr": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان وقت الوتر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for Witr"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Time for suhoor": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان وقت السحور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for suhoor"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "Time for the evening azkar": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1674,6 +1980,132 @@
           }
         }
       }
+    },
+    "Tomorrow can be one of the six of Shawwal": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن أن يكون غدًا من ستة شوال"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow can be one of the six of Shawwal"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Tomorrow is Ashura": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غدًا عاشوراء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow is Ashura"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Tomorrow is Monday": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غدًا الاثنين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow is Monday"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Tomorrow is Thursday": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غدًا الخميس"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow is Thursday"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Tomorrow is one of the White Days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غدًا من الأيام البيض"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow is one of the White Days"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Tomorrow is the day of Arafah": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غدًا يوم عرفة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow is the day of Arafah"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
+    "Tomorrow is the ninth of Muharram": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غدًا التاسع من محرم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow is the ninth of Muharram"
+          }
+        }
+      },
+      "generatesSymbol": false
     },
     "You haven’t logged %@ yet": {
       "extractionState": "manual",

@@ -20,7 +20,7 @@ final class TasbihModel {
 
     /// The preset the counter counts: the one last chosen, else the first; `nil` for the free count.
     var preset: Dhikr? {
-        let presets = context.dataset.tasbihPresets
+        let presets = context.tasbihPresets
         let settings = context.reader
         guard !settings.tasbihFree else { return nil }
         return presets.first { $0.id == settings.tasbihPreset } ?? presets.first
@@ -71,6 +71,26 @@ final class TasbihModel {
             } else {
                 settings.tasbihFree = true
             }
+        }
+    }
+
+    /// Adds the user's own dhikr and counts on it from now on.
+    func addCustom(_ text: String) {
+        guard let text = CustomDhikr.cleaned(text) else { return }
+        let dhikr = CustomDhikr(text: text)
+        context.updateReader { settings in
+            settings.customDhikr.append(dhikr)
+            settings.tasbihFree = false
+            settings.tasbihPreset = dhikr.id
+        }
+    }
+
+    /// Hides the user's own dhikr. What was counted on it stays, under its name.
+    func removeCustom(id: String) {
+        context.updateReader { settings in
+            guard let index = settings.customDhikr.firstIndex(where: { $0.id == id }) else { return }
+            settings.customDhikr[index].isHidden = true
+            if settings.tasbihPreset == id { settings.tasbihPreset = nil }
         }
     }
 

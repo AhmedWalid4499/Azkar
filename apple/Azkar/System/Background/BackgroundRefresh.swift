@@ -1,8 +1,8 @@
 import BackgroundTasks
 import Foundation
 
-/// A background app refresh every few hours, so reminders, adhan alarms, the Live Activity and the
-/// widgets stay current even when the app is not opened for days. iOS decides when it really runs.
+/// A background app refresh every few hours, so reminders, adhan alarms, the Live Activity, the
+/// widgets and the automatic backup stay current even when the app is not opened for days. iOS decides when it really runs.
 enum BackgroundRefresh {
     static let identifier = "io.github.ahmedwalid4499.azkar.refresh"
     /// How long after one refresh the next may come.
@@ -10,7 +10,9 @@ enum BackgroundRefresh {
 
     /// Must run before the app finishes launching (`SystemAppDelegate`).
     static func register() {
-        let registered = BGTaskScheduler.shared.register(forTaskWithIdentifier: identifier, using: nil) { task in
+        // On the main queue: this closure belongs to the main actor, and on the scheduler's own
+        // queue checking that crashes the app the moment a refresh starts.
+        let registered = BGTaskScheduler.shared.register(forTaskWithIdentifier: identifier, using: .main) { task in
             guard let task = task as? BGAppRefreshTask else {
                 task.setTaskCompleted(success: false)
                 return
@@ -37,6 +39,7 @@ enum BackgroundRefresh {
         let work = Task { @MainActor in
             await schedule()
             await SystemServices.shared.refresh(reason: "background refresh")
+            await AutoBackup.shared.backUp()
             box.task.setTaskCompleted(success: true)
         }
         task.expirationHandler = {

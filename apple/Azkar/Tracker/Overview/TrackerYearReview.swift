@@ -137,6 +137,12 @@ private struct TrackerYearSections: View {
             if review.khatmahs > 0 {
                 TrackerTotalRow(name: LocalizedStringResource("Khatmahs", table: "Tracker"), symbol: "checkmark.seal.fill", tint: .teal, value: review.khatmahs)
             }
+            if review.surasMemorised > 0 {
+                TrackerTotalRow(name: LocalizedStringResource("Surahs memorised", table: "Tracker"), symbol: "brain.head.profile", tint: .purple, value: review.surasMemorised)
+            }
+            if review.surasReviewed > 0 {
+                TrackerTotalRow(name: LocalizedStringResource("Surahs reviewed", table: "Tracker"), symbol: "arrow.clockwise", tint: .purple, value: review.surasReviewed)
+            }
         } header: {
             format.text(TrackerArea.quran.title)
         }

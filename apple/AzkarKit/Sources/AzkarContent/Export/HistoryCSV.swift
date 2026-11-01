@@ -124,6 +124,15 @@ public enum HistoryCSV {
             ]
         }
 
+        if !history.hifz.isEmpty {
+            let entries = Dictionary(grouping: history.hifz, by: \.day)
+            func count(_ key: DayKey, _ kind: HifzEntry.Kind) -> Int? { entries[key].map { $0.filter { $0.kind == kind }.count } }
+            columns += [
+                Column(header: words.hifzMemorisedHeader) { key in number(count(key, .memorised)) },
+                Column(header: words.hifzReviewedHeader) { key in number(count(key, .reviewed)) },
+            ]
+        }
+
         if history.seasons.values.contains(where: { !$0.isEmpty }) {
             let record = { (key: DayKey, deed: SeasonDeed) in history.seasons[key]?[deed] }
             columns += [

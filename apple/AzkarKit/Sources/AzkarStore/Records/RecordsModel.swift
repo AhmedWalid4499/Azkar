@@ -130,6 +130,14 @@ public final class RecordsModel {
         return entry
     }
 
+    public func logHifz(_ kind: HifzEntry.Kind, sura: Int, on day: DayKey, at: Date = .now) async throws {
+        _ = try await apply(store.addHifz(kind, sura: sura, on: day, at: at))
+    }
+
+    public func undoHifzEntry(_ id: UUID) async throws {
+        if let change = try await store.removeHifzEntry(id) { _ = await apply(change) }
+    }
+
     public func undoQuranEntry(_ id: UUID) async throws {
         if let change = try await store.removeQuranEntry(id) { _ = await apply(change) }
     }

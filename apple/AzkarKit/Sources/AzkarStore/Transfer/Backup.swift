@@ -96,8 +96,22 @@ public enum Backup {
             let report = ImportReport(source: ImportReport.backup, at: now, snapshot: snapshot, settings: groups.map(\.rawValue).sorted())
             try await store.merge(snapshot.records, recording: report)
             if !groups.isEmpty { settings.save(snapshot.settings, groups: groups) }
+            keepCustomDhikr(of: snapshot.settings, in: settings)
             return report
         }
+    }
+}
+
+extension Backup {
+    /// Counts merged in can be under a dhikr only the backup knows: its name comes along even
+    /// when the settings stay as they are.
+    private static func keepCustomDhikr(of incoming: SettingsSnapshot, in settings: SettingsStore) {
+        var current = settings.load()
+        let known = Set(current.reader.customDhikr.map(\.id))
+        let added = incoming.reader.customDhikr.filter { !known.contains($0.id) }
+        guard !added.isEmpty else { return }
+        current.reader.customDhikr += added
+        settings.save(current, groups: [.reader])
     }
 }
 

@@ -23,6 +23,8 @@ public struct ReminderSettings: Hashable, Sendable {
     public var morningAt: MorningReminderTime = .fajr
     /// The prayers whose time sounds the adhan as an alarm.
     public var adhan: Set<Prayer> = []
+    /// The native app's reminders of the fasting days and of Ramadan.
+    public var season = SeasonReminderChoices()
 
     public init() {}
 
@@ -48,16 +50,43 @@ extension ReminderSettings {
         if let raw = unloggedStored["ishaEnds"]?.string, let deadline = IshaDeadline(rawValue: raw) { ishaDeadline = deadline }
         let alarms = stored["adhanAlarms"]?.object ?? [:]
         adhan = Set(Prayer.allCases.filter { alarms[$0.rawValue] == .bool(true) })
+        if let reminders = stored["seasonReminders"]?.object {
+            season.mondayThursday = reminders["mondayThursday"] == .bool(true)
+            season.whiteDays = reminders["whiteDays"] == .bool(true)
+            season.occasions = reminders["occasions"] == .bool(true)
+            season.suhoor = reminders["suhoor"] == .bool(true)
+            if let lead = reminders["suhoorLeadMinutes"]?.number, WebRules.isInteger(lead), SeasonReminderChoices.suhoorLeadChoices.contains(Int(lead)) {
+                season.suhoorLeadMinutes = Int(lead)
+            }
+            season.iftar = reminders["iftar"] == .bool(true)
+            season.oddNights = reminders["oddNights"] == .bool(true)
+            season.kahf = reminders["kahf"] == .bool(true)
+            season.witr = reminders["witr"] == .bool(true)
+            if let delay = reminders["witrDelayMinutes"]?.number, WebRules.isInteger(delay), SeasonReminderChoices.witrDelayChoices.contains(Int(delay)) {
+                season.witrDelayMinutes = Int(delay)
+            }
+            season.duha = reminders["duha"] == .bool(true)
+        }
     }
 
     /// The reminder fields of the website's prayer-times state.
     public var web: JSONValue {
-        [
+        var fields: [String: JSONValue] = [
             "notifications": .bool(prayers),
             "azkarReminders": ["morning": .bool(morningAzkar), "evening": .bool(eveningAzkar), "morningAt": .string(morningAt.rawValue)],
             "unloggedReminders": ["enabled": .bool(unlogged), "leadMinutes": JSONValue(unloggedLeadMinutes), "ishaEnds": .string(ishaDeadline.rawValue)],
             "adhanAlarms": .object(Dictionary(uniqueKeysWithValues: Prayer.allCases.map { ($0.rawValue, JSONValue.bool(adhan.contains($0))) })),
         ]
+        // The website has none of these, so a backup only carries them once they are used.
+        if season != SeasonReminderChoices() {
+            fields["seasonReminders"] = [
+                "mondayThursday": .bool(season.mondayThursday), "whiteDays": .bool(season.whiteDays), "occasions": .bool(season.occasions),
+                "suhoor": .bool(season.suhoor), "suhoorLeadMinutes": JSONValue(season.suhoorLeadMinutes),
+                "iftar": .bool(season.iftar), "oddNights": .bool(season.oddNights), "kahf": .bool(season.kahf),
+                "witr": .bool(season.witr), "witrDelayMinutes": JSONValue(season.witrDelayMinutes), "duha": .bool(season.duha),
+            ]
+        }
+        return .object(fields)
     }
 }
 

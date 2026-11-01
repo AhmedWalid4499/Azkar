@@ -111,7 +111,7 @@ nonisolated enum IntentReply {
     }
 
     static func next(_ next: UpcomingPrayer, board: SystemPrayerBoard, _ language: SystemLanguage) -> String {
-        let name = SystemText.prayer(next.prayer, language)
+        let name = SystemText.prayer(next.prayer, language, on: next.day)
         let time = SystemText.time(next.at, in: board.place.timeZone, language)
         let duration = SystemText.duration(minutes: SystemText.minutes(from: board.now, to: next.at), language)
         let key = board.nextIsTomorrow ? "%1$@ tomorrow at %2$@, in %3$@." : "%1$@ at %2$@, in %3$@."

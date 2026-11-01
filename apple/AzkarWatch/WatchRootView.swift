@@ -37,6 +37,12 @@ struct WatchRootView: View {
 }
 
 extension Prayer {
+    /// Friday's Dhuhr is Jumu'ah. Records keep it as Dhuhr.
+    func title(on day: DayKey) -> LocalizedStringResource {
+        if self == .dhuhr, day.isFriday { return LocalizedStringResource("Jumu’ah", table: "Watch") }
+        return title
+    }
+
     var title: LocalizedStringResource {
         switch self {
         case .fajr: LocalizedStringResource("Fajr", table: "Watch")

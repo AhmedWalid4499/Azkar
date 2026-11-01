@@ -116,4 +116,27 @@ import Testing
         #expect(history.reviewYears(current: 1448, today: today, offset: 0) == [1448, 1447])
         #expect(TrackerHistory().reviewYears(current: 1448, today: today, offset: 0) == [1448])
     }
+
+    @Test func memorisingCountsInItsYear() {
+        let history = TrackerHistory(hifz: [
+            HifzEntry(sura: 67, day: muharram[0], at: at, kind: .memorised),
+            HifzEntry(sura: 67, day: muharram[1], at: at, kind: .reviewed),
+            HifzEntry(sura: 112, day: muharram[1], at: at, kind: .forgotten),
+            HifzEntry(sura: 1, day: muharram[0].adding(days: -5), at: at, kind: .memorised),
+        ])
+        let result = review(history)
+        #expect(result.surasMemorised == 1)
+        #expect(result.surasReviewed == 1)
+        #expect(result.activeDays == 2)
+    }
+
+    @Test func customDhikrJoinThePresetsAndHiddenOnesKeepTheirNames() {
+        let shown = CustomDhikr(text: "mine")
+        let hidden = CustomDhikr(text: "old", isHidden: true)
+        let base = AzkarDataset.bundled
+        let dataset = base.adding(customDhikr: [shown, hidden])
+        #expect(dataset.tasbihIDs == base.tasbihIDs + [shown.id])
+        #expect(dataset.dhikr(id: hidden.id)?.arabic == "old")
+        #expect(base.adding(customDhikr: []) == base)
+    }
 }

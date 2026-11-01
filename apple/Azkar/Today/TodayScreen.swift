@@ -64,6 +64,8 @@ struct TodayScreen: View {
         List {
             TodayHeader(context: context, showsLocation: $showsLocation, showsCalendar: $showsCalendar, showsSettings: $showsSettings)
 
+            TravelNoticeSection(context: context, showsLocation: $showsLocation)
+
             if context.location == nil {
                 LocationPromptCard()
             } else if context.locationUnusable {

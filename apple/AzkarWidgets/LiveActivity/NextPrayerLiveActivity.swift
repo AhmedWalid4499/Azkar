@@ -20,7 +20,7 @@ struct NextPrayerLiveActivity: Widget {
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     Label {
-                        Text(verbatim: SystemText.prayer(state.prayer, language))
+                        Text(verbatim: state.title)
                             .font(.headline)
                     } icon: {
                         Image(systemName: state.prayer.symbolName)
@@ -43,7 +43,7 @@ struct NextPrayerLiveActivity: Widget {
             } compactLeading: {
                 Image(systemName: state.prayer.symbolName)
                     .foregroundStyle(.tint)
-                    .accessibilityLabel(Text(verbatim: SystemText.prayer(state.prayer, language)))
+                    .accessibilityLabel(Text(verbatim: state.title))
             } compactTrailing: {
                 LiveActivityCompactCountdown(state: state, isStale: context.isStale)
                     .systemLanguage(language)

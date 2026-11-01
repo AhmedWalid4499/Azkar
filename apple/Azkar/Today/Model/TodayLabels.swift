@@ -43,6 +43,11 @@ extension TimeSlot {
 
 extension Prayer {
     var title: LocalizedStringResource { TimeSlot(self).title }
+
+    /// Friday's Dhuhr is Jumu'ah. Records keep it as Dhuhr.
+    func title(on day: DayKey) -> LocalizedStringResource {
+        self == .dhuhr && day.isFriday ? L("Jumu’ah") : title
+    }
 }
 
 extension PrayerStatus {

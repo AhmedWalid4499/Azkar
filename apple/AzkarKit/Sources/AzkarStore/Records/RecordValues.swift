@@ -100,6 +100,8 @@ public struct DayRecords: Hashable, Sendable, Identifiable {
     public var fast: FastRecord?
     /// What was recorded about reading the Quran that day, in order.
     public var quran: [QuranEntry] = []
+    /// What was recorded about memorising that day, in order.
+    public var hifz: [HifzEntry] = []
     /// The tarawih of the night falling on this evening, or the Eid prayer of this day.
     public var seasons: [SeasonDeed: SeasonRecord] = [:]
 
@@ -108,7 +110,7 @@ public struct DayRecords: Hashable, Sendable, Identifiable {
     public var id: DayKey { day }
 
     public var isEmpty: Bool {
-        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && seasons.isEmpty
+        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && hifz.isEmpty && seasons.isEmpty
     }
 
     /// The day's tasbih in the shape the statistics read.
@@ -133,6 +135,8 @@ public struct RecordsSnapshot: Hashable, Sendable {
     public var quranBookmarks: [Int: Date] = [:]
     /// The deeds of Ramadan and the Eids, by the day each counts for.
     public var seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:]
+    /// The memorisation log, the only source of truth for `HifzProgress`, ordered by `at`.
+    public var hifz: [HifzEntry] = []
 
     public init() {}
 
@@ -140,7 +144,7 @@ public struct RecordsSnapshot: Hashable, Sendable {
 
     /// Every day with any record, oldest first.
     public var days: [DayKey] {
-        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).sorted()
+        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).union(hifz.map(\.day)).sorted()
     }
 }
 

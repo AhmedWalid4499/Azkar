@@ -13,13 +13,17 @@ public struct ReminderChoices: Sendable {
     public var morningAt: MorningReminderTime
     /// The "not logged yet" reminders; none when `nil`.
     public var unlogged: UnloggedChoices?
+    /// The reminders of the fasting days and of Ramadan that fall on a day.
+    public var season: @Sendable (DayKey) -> [SeasonReminder]
 
-    public init(prayers: Bool, morning: Bool, evening: Bool, morningAt: MorningReminderTime, unlogged: UnloggedChoices? = nil) {
+    public init(prayers: Bool, morning: Bool, evening: Bool, morningAt: MorningReminderTime, unlogged: UnloggedChoices? = nil,
+                season: @escaping @Sendable (DayKey) -> [SeasonReminder] = { _ in [] }) {
         self.prayers = prayers
         self.morning = morning
         self.evening = evening
         self.morningAt = morningAt
         self.unlogged = unlogged
+        self.season = season
     }
 }
 
@@ -55,6 +59,8 @@ public struct ReminderEntry: Hashable, Sendable {
         case azkar(AzkarSession, after: TimeSlot)
         /// The prayer is not logged yet and its time ends at `deadline`.
         case unlogged(Prayer, deadline: PrayerDeadline)
+        /// A reminder of the fasting days or of Ramadan.
+        case season(SeasonReminder)
     }
 
     public let kind: Kind
@@ -70,6 +76,7 @@ public struct ReminderEntry: Hashable, Sendable {
         case let .prayer(prayer): ReminderPlan.reminderID(day: day, digit: ReminderPlan.digit(prayer))
         case let .azkar(session, _): ReminderPlan.reminderID(day: day, digit: session == .morning ? 5 : 6)
         case let .unlogged(prayer, _): ReminderPlan.unloggedReminderID(day: day, prayer: prayer)
+        case let .season(reminder): ReminderPlan.seasonReminderID(day: day, kind: reminder.kind)
         }
     }
 
@@ -79,6 +86,7 @@ public struct ReminderEntry: Hashable, Sendable {
         case .prayer: 0
         case .unlogged: 1
         case .azkar: 2
+        case .season: 3
         }
     }
 }
@@ -91,6 +99,8 @@ public enum ReminderPlan {
     public static let reminderLimit = 50
     /// Added to the "not logged yet" reminders' ids, which otherwise follow the prayers' own.
     public static let unloggedIDBase = 1_000_000_000
+    /// Added to the ids of the reminders that have run out of digits of their own.
+    static let moreSeasonIDBase = 2_000_000_000
 
     private static let minuteMs = 60_000.0
 
@@ -112,6 +122,12 @@ public enum ReminderPlan {
             for (session, after) in azkar {
                 if let at = day[after] {
                     entries.append(ReminderEntry(kind: .azkar(session, after: after), day: day.day, at: at, key: "\(day.day)-\(session)"))
+                }
+            }
+            for reminder in choices.season(day.day) {
+                if let anchor = day[reminder.anchor] {
+                    let at = anchor.addingTimeInterval(TimeInterval(reminder.offsetMinutes * 60))
+                    entries.append(ReminderEntry(kind: .season(reminder), day: day.day, at: at, key: "\(day.day)-\(reminder.kind)"))
                 }
             }
         }
@@ -172,6 +188,18 @@ public enum ReminderPlan {
         case .asr: 2
         case .maghrib: 3
         case .isha: 4
+        }
+    }
+
+    /// A tomorrow's fast and an odd night share a digit: Ramadan's evenings have no fast to remind of.
+    static func seasonReminderID(day: DayKey, kind: SeasonReminder.Kind) -> Int {
+        switch kind {
+        case .fast, .oddNight: reminderID(day: day, digit: 7)
+        case .suhoor: reminderID(day: day, digit: 8)
+        case .iftar: reminderID(day: day, digit: 9)
+        case .kahf: moreSeasonIDBase + reminderID(day: day, digit: 0)
+        case .witr: moreSeasonIDBase + reminderID(day: day, digit: 1)
+        case .duha: moreSeasonIDBase + reminderID(day: day, digit: 2)
         }
     }
 

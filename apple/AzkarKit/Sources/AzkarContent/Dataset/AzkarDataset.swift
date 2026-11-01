@@ -121,6 +121,18 @@ public struct AzkarDataset: Hashable, Sendable {
     public var tasbihPresets: [Dhikr] { tasbihIDs.compactMap { items[$0] } }
 
     /// The opening words of a dhikr's Arabic text, or `nil` when the dataset no longer has it.
+    /// With the user's own dhikr: all of them known by id, so what was counted keeps its name, and
+    /// those not hidden offered as presets after the dataset's.
+    public func adding(customDhikr: [CustomDhikr]) -> AzkarDataset {
+        guard !customDhikr.isEmpty else { return self }
+        var copy = self
+        for dhikr in customDhikr {
+            copy.items[dhikr.id] = Dhikr(id: dhikr.id, arabic: dhikr.text, transliteration: dhikr.text, translation: "", repeat: 1, reference: BilingualText(en: "", ar: ""))
+        }
+        copy.tasbihIDs += customDhikr.filter { !$0.isHidden }.map(\.id)
+        return copy
+    }
+
     public func snippet(id: String) -> String? {
         items[id].map { RecitationText.snippet($0.arabic) }
     }

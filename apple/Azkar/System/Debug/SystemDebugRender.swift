@@ -47,9 +47,13 @@ enum SystemDebugRender {
             }
             save(WidgetNoLocationView(language: language).padding(16).frame(width: 170, height: 170).background(WidgetBackdrop()).clipShape(.rect(cornerRadius: 22)),
                  size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "widget-empty-\(variant.name).png"))
-            if let board, let state = NextPrayerAttributes.ContentState(board: board, language: language) {
+            if let board, let state = NextPrayerAttributes.ContentState(board: board, language: language, hijriOffset: settings.app.hijriOffset) {
                 save(lockScreen(state), size: CGSize(width: 374, height: 170), variant, to: folder.appending(path: "activity-lock-\(variant.name).png"))
                 save(island(state, language), size: CGSize(width: 374, height: 200), variant, to: folder.appending(path: "activity-island-\(variant.name).png"))
+                var iftar = state
+                iftar.prayer = .maghrib
+                iftar.isIftar = true
+                save(lockScreen(iftar), size: CGSize(width: 374, height: 170), variant, to: folder.appending(path: "activity-iftar-\(variant.name).png"))
                 var stale = state
                 stale.at = .now.addingTimeInterval(-60)
                 save(LiveActivityLockScreenView(state: stale, isStale: true).frame(width: 374).background(Color.azkarAccent.opacity(0.25)).clipShape(.rect(cornerRadius: 24)),

@@ -85,7 +85,7 @@ enum AdhanAlarms {
     }
 
     private nonisolated static func configuration(_ planned: Planned, _ language: SystemLanguage) -> AlarmManager.AlarmConfiguration<AdhanMetadata> {
-        let name = SystemText.prayer(planned.prayer, language)
+        let name = SystemText.prayer(planned.prayer, language, on: planned.day)
         let title = SystemText.format("It’s time for %@", language, name)
         let open = AlarmButton(text: verbatim(SystemText.string("Open", language)), textColor: .white, systemImageName: "arrow.up.forward.app")
         let presentation = AlarmPresentation(alert: AlarmPresentation.Alert(title: verbatim(title), secondaryButton: open, secondaryButtonBehavior: .custom))

@@ -67,7 +67,7 @@ struct ReminderPlanParityTests {
     static func encode(_ entry: ReminderEntry, from day: DayKey) -> [FixtureValue] {
         var row: [FixtureValue] = [.text(entry.key), FixtureValue(Fixtures.offset(entry.at, from: day)), .number(Double(entry.id))]
         switch entry.kind {
-        case .prayer: row += [.null, .null]
+        case .prayer, .season: row += [.null, .null]
         case let .azkar(_, after): row += [.text(after.rawValue), .null]
         case let .unlogged(_, deadline): row += [FixtureValue(Fixtures.offset(deadline.endsAt, from: day)), .number(deadline.preferred ? 1 : 0)]
         }

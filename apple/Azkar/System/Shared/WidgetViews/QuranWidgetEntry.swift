@@ -9,6 +9,8 @@ nonisolated struct QuranWidgetEntry: TimelineEntry {
     let quran: QuranGlance
     /// Set from the eve of Ramadan to its last day.
     let ramadan: RamadanGlance?
+    /// Pages a day for the goal of a date, while it runs: 0 once met.
+    var goalPages: Int? = nil
 }
 
 extension QuranWidgetEntry {

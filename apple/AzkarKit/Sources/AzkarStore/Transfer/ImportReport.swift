@@ -29,6 +29,8 @@ public struct ImportReport: Codable, Hashable, Sendable {
     /// Entries of the Quran log. `nil` in a report saved before the Quran was tracked: reports
     /// are kept as JSON with the records, so what is added here must read the older ones.
     public var quranEntries: Int?
+    /// Lines of the memorisation log; `nil` in a report saved before it was tracked.
+    public var hifzEntries: Int?
     /// Records of Ramadan and the Eids. `nil` in a report saved before they were tracked.
     public var seasonRecords: Int?
 
@@ -53,6 +55,7 @@ public struct ImportReport: Codable, Hashable, Sendable {
         recitations = records.totals.recitations
         tasbih = records.totals.tasbihCount
         quranEntries = records.quran.count
+        hifzEntries = records.hifz.count
         seasonRecords = records.seasons.values.reduce(0) { $0 + $1.count }
     }
 

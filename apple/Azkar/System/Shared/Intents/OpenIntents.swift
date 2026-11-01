@@ -41,6 +41,20 @@ struct OpenQiblaIntent: AppIntent {
     }
 }
 
+/// "Open the Quran in Azkar": the mushaf, where reading goes on.
+struct OpenQuranIntent: AppIntent {
+    static let title = LocalizedStringResource("Open Quran", table: "System")
+    static let description = IntentDescription(LocalizedStringResource("Opens the mushaf where you stopped.", table: "System"))
+    static let supportedModes: IntentModes = .foreground(.immediate)
+
+    init() {}
+
+    func perform() async throws -> some IntentResult {
+        await MainActor.run { SystemRouter.shared.go(.quran) }
+        return .result()
+    }
+}
+
 /// Opens Today, from the Live Activity and the adhan alarm.
 struct OpenTodayIntent: AppIntent {
     static let title = LocalizedStringResource("Open Today", table: "System")

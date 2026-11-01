@@ -21,6 +21,17 @@ extension RecordStore {
         try addKhatmah(on: day, at: now).entry
     }
 
+    /// Adds a line to the memorisation log. A surah that does not exist changes nothing.
+    @discardableResult
+    public func logHifz(_ kind: HifzEntry.Kind, sura: Int, on day: DayKey, at now: Date = .now) throws -> RecordChange {
+        try addHifz(kind, sura: sura, on: day, at: now)
+    }
+
+    /// Takes a line out of the memorisation log, as an undo.
+    public func undoHifzEntry(_ id: UUID) throws {
+        _ = try removeHifzEntry(id)
+    }
+
     /// Takes an entry out of the log, and with it whatever it added. An id not in the log changes nothing.
     public func undoQuranEntry(_ id: UUID) throws {
         _ = try removeQuranEntry(id)
@@ -33,6 +44,24 @@ extension RecordStore {
     }
 
     // The same, with the change `RecordsModel` shows.
+
+    func addHifz(_ kind: HifzEntry.Kind, sura: Int, on day: DayKey, at now: Date) throws -> RecordChange {
+        try change(day) { rows in
+            guard (1...HifzProgress.suraCount).contains(sura) else { return (.unchanged, [:]) }
+            rows.insert(HifzEntry(sura: sura, day: day, at: now.wholeMilliseconds, kind: kind))
+            return (.changed, [:])
+        }
+    }
+
+    /// `nil` when the entry is not in the log.
+    func removeHifzEntry(_ id: UUID) throws -> RecordChange? {
+        guard let day = try rows().hifzEntry(id).flatMap({ DayKey(number: $0.day) }) else { return nil }
+        return try change(day) { rows in
+            guard let row = try rows.hifzEntry(id) else { return (.unchanged, [:]) }
+            rows.context.delete(row)
+            return (.changed, [:])
+        }
+    }
 
     func addQuranReading(toPage: Int, on day: DayKey, at now: Date) throws -> (entry: QuranEntry, change: RecordChange) {
         let log = try rows().quranEntries()

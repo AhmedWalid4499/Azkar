@@ -29,6 +29,7 @@ extension RecordsSnapshot {
         records.tasbih = tasbih[day] ?? [:]
         records.fast = fasts[day]
         records.quran = quran.filter { $0.day == day }
+        records.hifz = hifz.filter { $0.day == day }
         records.seasons = seasons[day] ?? [:]
         return records
     }
@@ -50,6 +51,9 @@ extension RecordsSnapshot {
         // Most changes are not about the Quran: the log is put in order again only when one is.
         if quran.filter({ $0.day == key }) != records.quran {
             quran = (quran.filter { $0.day != key } + records.quran).inLogOrder
+        }
+        if hifz.filter({ $0.day == key }) != records.hifz {
+            hifz = (hifz.filter { $0.day != key } + records.hifz).sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
         }
     }
 

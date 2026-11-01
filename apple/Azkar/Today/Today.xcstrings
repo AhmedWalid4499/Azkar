@@ -732,6 +732,23 @@
         }
       }
     },
+    "Have you travelled?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هل سافرت؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Have you travelled?"
+          }
+        }
+      }
+    },
     "Iftar": {
       "extractionState": "manual",
       "localizations": {
@@ -830,6 +847,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "I’m fasting today"
+          }
+        }
+      }
+    },
+    "Jumu’ah": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجمعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumu’ah"
+          }
+        }
+      }
+    },
+    "Keep": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إبقاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep"
           }
         }
       }
@@ -1429,6 +1480,40 @@
         }
       }
     },
+    "Prayer times are still for %@, which keeps a different time from your iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مواقيت الصلاة ما زالت لـ%@، وتوقيتها يختلف عن توقيت الآيفون."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayer times are still for %@, which keeps a different time from your iPhone."
+          }
+        }
+      }
+    },
+    "Prayer times are still for your saved place, which keeps a different time from your iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مواقيت الصلاة ما زالت لمكانك المحفوظ، وتوقيته يختلف عن توقيت الآيفون."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayer times are still for your saved place, which keeps a different time from your iPhone."
+          }
+        }
+      }
+    },
     "Ramadan": {
       "extractionState": "manual",
       "localizations": {
@@ -1969,6 +2054,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Type at least two letters of your city’s name."
+          }
+        }
+      }
+    },
+    "Update location": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحديث الموقع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update location"
           }
         }
       }

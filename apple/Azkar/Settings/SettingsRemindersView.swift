@@ -76,6 +76,73 @@ struct SettingsRemindersView: View {
             }
 
             Section {
+                Toggle(isOn: binding(\.season.kahf)) {
+                    Text("Surah al-Kahf on Fridays", tableName: SettingsText.table)
+                    Text("In the morning; it opens the mushaf.", tableName: SettingsText.table)
+                }
+                Toggle(isOn: binding(\.season.duha)) {
+                    Text("Duha", tableName: SettingsText.table)
+                    Text("After sunrise, unless you’ve ticked it off.", tableName: SettingsText.table)
+                }
+                Toggle(isOn: binding(\.season.witr)) {
+                    Text("Witr", tableName: SettingsText.table)
+                    Text("After Isha, unless you’ve ticked it off.", tableName: SettingsText.table)
+                }
+                if reminders.season.witr {
+                    Picker(selection: binding(\.season.witrDelayMinutes)) {
+                        ForEach(SeasonReminderChoices.witrDelayChoices, id: \.self) { minutes in
+                            Text(SettingsText.minutes(minutes, locale: locale)).tag(minutes)
+                        }
+                    } label: {
+                        Text("How long after Isha", tableName: SettingsText.table)
+                    }
+                }
+            } header: {
+                Text("Friday and sunnah", tableName: SettingsText.table)
+            }
+
+            Section {
+                Toggle(isOn: binding(\.season.mondayThursday)) {
+                    Text("Mondays and Thursdays", tableName: SettingsText.table)
+                }
+                Toggle(isOn: binding(\.season.whiteDays)) {
+                    Text("The White Days", tableName: SettingsText.table)
+                }
+                Toggle(isOn: binding(\.season.occasions)) {
+                    Text("Arafah and Ashura", tableName: SettingsText.table)
+                }
+            } header: {
+                Text("Fasting days", tableName: SettingsText.table)
+            } footer: {
+                Text("A reminder at Isha the evening before.", tableName: SettingsText.table)
+            }
+
+            Section {
+                Toggle(isOn: binding(\.season.suhoor)) {
+                    Text("Suhoor", tableName: SettingsText.table)
+                }
+                if reminders.season.suhoor {
+                    Picker(selection: binding(\.season.suhoorLeadMinutes)) {
+                        ForEach(SeasonReminderChoices.suhoorLeadChoices, id: \.self) { minutes in
+                            Text(SettingsText.minutes(minutes, locale: locale)).tag(minutes)
+                        }
+                    } label: {
+                        Text("How long before Fajr", tableName: SettingsText.table)
+                    }
+                }
+                Toggle(isOn: binding(\.season.iftar)) {
+                    Text("Iftar", tableName: SettingsText.table)
+                    Text(SettingsText.string("\(SettingsText.minutes(SeasonReminderChoices.iftarLeadMinutes, locale: locale)) before Maghrib.", locale: locale))
+                }
+                Toggle(isOn: binding(\.season.oddNights)) {
+                    Text("Odd nights of the last ten", tableName: SettingsText.table)
+                    Text("At Isha on nights 21, 23, 25, 27 and 29.", tableName: SettingsText.table)
+                }
+            } header: {
+                Text("Ramadan", tableName: SettingsText.table)
+            }
+
+            Section {
                 ForEach(Prayer.allCases) { prayer in
                     Toggle(isOn: adhanBinding(prayer)) {
                         Text(SettingsText.prayer(prayer, locale: locale))
@@ -96,7 +163,7 @@ struct SettingsRemindersView: View {
     // MARK: Permissions
 
     @ViewBuilder private var permissionSection: some View {
-        let needsNotifications = reminders.prayers || reminders.unlogged || reminders.morningAzkar || reminders.eveningAzkar
+        let needsNotifications = ReminderScheduler.wantsNotifications(reminders)
         Section {
             LabeledContent {
                 Text(notificationsText)

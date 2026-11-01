@@ -45,7 +45,7 @@ struct NextPrayerCard: View {
                             .foregroundStyle(.tint)
                             .accessibilityHidden(true)
                     }
-                    Text(next.prayer.title)
+                    Text(next.prayer.title(on: next.day))
                         .font(.largeTitle.bold())
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
@@ -106,9 +106,9 @@ struct NextPrayerCard: View {
             let ishaEnds = app.settings.settings.reminders.ishaDeadline
             if let deadline = day?.deadline(for: current.prayer, nextDay: nextDay, ishaEnds: ishaEnds), deadline.endsAt > now {
                 let until = format.time(deadline.endsAt)
-                return Text(L("It is \(format.string(current.prayer.title)) time now, until \(until)"))
+                return Text(L("It is \(format.string(current.prayer.title(on: current.day))) time now, until \(until)"))
             }
-            return Text(L("It is \(format.string(current.prayer.title)) time now"))
+            return Text(L("It is \(format.string(current.prayer.title(on: current.day))) time now"))
         }
         let today = schedule.todayTimes
         if let sunrise = today[.sunrise], let dhuhr = today[.dhuhr], now >= sunrise, now < dhuhr {

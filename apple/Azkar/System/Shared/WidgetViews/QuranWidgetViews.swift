@@ -113,14 +113,18 @@ struct QuranWidgetMediumView: View {
                         QuranWidgetFigure(symbol: "moon.stars", text: SystemText.format("Night %@", entry.language, SystemText.number(night.number, entry.language)))
                         QuranWidgetFigure(symbol: ramadan.tarawih == nil ? "circle" : "checkmark.circle.fill", text: entry.tarawihLine(ramadan), isDone: ramadan.tarawih != nil)
                     }
-                    if let line = entry.goalLine(ramadan) {
-                        QuranWidgetFigure(symbol: "target", text: line, isDone: ramadan.pagesPerDay == 0)
+                    if let line = entry.goalLine(pages: ramadan.pagesPerDay ?? entry.goalPages) {
+                        QuranWidgetFigure(symbol: "target", text: line, isDone: (ramadan.pagesPerDay ?? entry.goalPages) == 0)
                     }
                     QuranWidgetFigure(symbol: "book", text: entry.todayLine)
                 } else {
                     QuranWidgetFigure(symbol: "square.stack", text: SystemText.format("Juz %@", entry.language, SystemText.number(entry.quran.juz, entry.language)))
                     QuranWidgetFigure(symbol: "book", text: entry.todayLine)
-                    QuranWidgetFigure(symbol: "checkmark.seal", text: SystemText.format("Khatmahs: %@", entry.language, SystemText.number(entry.quran.khatmahs, entry.language)))
+                    if let line = entry.goalLine(pages: entry.goalPages) {
+                        QuranWidgetFigure(symbol: "target", text: line, isDone: entry.goalPages == 0)
+                    } else {
+                        QuranWidgetFigure(symbol: "checkmark.seal", text: SystemText.format("Khatmahs: %@", entry.language, SystemText.number(entry.quran.khatmahs, entry.language)))
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -205,8 +209,8 @@ private extension QuranWidgetEntry {
         }
     }
 
-    func goalLine(_ ramadan: RamadanGlance) -> String? {
-        guard let pages = ramadan.pagesPerDay else { return nil }
+    func goalLine(pages: Int?) -> String? {
+        guard let pages else { return nil }
         return pages == 0 ? SystemText.string("Goal met", language) : SystemText.format("Pages a day: %@", language, SystemText.number(pages, language))
     }
 }

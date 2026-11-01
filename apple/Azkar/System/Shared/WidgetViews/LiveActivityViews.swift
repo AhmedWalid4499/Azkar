@@ -27,7 +27,7 @@ struct LiveActivityLockScreenView: View {
                 }
             }
             HStack(alignment: .firstTextBaseline) {
-                Text(verbatim: SystemText.prayer(state.prayer, language))
+                Text(verbatim: state.title)
                     .font(.title2.weight(.bold))
                 Spacer()
                 Text(verbatim: SystemText.time(state.at, in: state.timeZone, language))
@@ -48,7 +48,7 @@ struct LiveActivityCountdown: View {
         let language = state.language
         if isStale || state.at <= .now {
             Label {
-                Text(verbatim: SystemText.format("It’s time for %@", language, SystemText.prayer(state.prayer, language)))
+                Text(verbatim: SystemText.format("It’s time for %@", language, state.title))
             } icon: {
                 Image(systemName: "bell.badge")
             }

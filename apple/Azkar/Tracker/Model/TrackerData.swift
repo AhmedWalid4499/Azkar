@@ -23,14 +23,15 @@ struct TrackerData {
         self.clock = clock
         self.format = format
         self.settings = settings
-        self.dataset = dataset
+        self.dataset = dataset.adding(customDhikr: settings.reader.customDhikr)
         let history = TrackerHistory(
             prayers: records.prayers,
             sessions: records.sessions,
             tasbih: records.tasbih.mapValues { counts in counts.sorted { $0.key < $1.key }.map { $0.value.record(preset: $0.key) } },
             fasts: records.fasts,
             quran: records.quran,
-            seasons: records.seasons
+            seasons: records.seasons,
+            hifz: records.hifz
         )
         self.history = history
         let sessionsRead = Set(records.sessions.values.flatMap(\.keys))
@@ -42,6 +43,9 @@ struct TrackerData {
     }
 
     var today: DayKey { clock.today }
+
+    /// Surah names, without the text of the mushaf.
+    var quranIndex: QuranPageIndex { .bundled }
 
     /// The sessions shown for a day: the daily two, bedtime when tracked, then after each prayer.
     var trackedSessions: [AzkarSession] {

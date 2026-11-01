@@ -177,7 +177,7 @@ struct WidgetCircularView: View {
     var body: some View {
         let since = min(board.previous?.at ?? next.at.addingTimeInterval(-6 * 3600), board.now)
         ProgressView(timerInterval: since...max(since, next.at), countsDown: true) {
-            Text(verbatim: SystemText.prayer(next.prayer, language))
+            Text(verbatim: SystemText.prayer(next.prayer, language, on: next.day))
         } currentValueLabel: {
             VStack(spacing: 0) {
                 Image(systemName: next.prayer.symbolName)
@@ -189,7 +189,7 @@ struct WidgetCircularView: View {
         }
         .progressViewStyle(.circular)
         .widgetAccentable()
-        .accessibilityLabel(Text(verbatim: SystemText.format("%1$@ at %2$@", language, SystemText.prayer(next.prayer, language), SystemText.time(next.at, in: board.place.timeZone, language))))
+        .accessibilityLabel(Text(verbatim: SystemText.format("%1$@ at %2$@", language, SystemText.prayer(next.prayer, language, on: next.day), SystemText.time(next.at, in: board.place.timeZone, language))))
     }
 }
 
@@ -201,7 +201,7 @@ struct WidgetRectangularView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
             Label {
-                Text(verbatim: SystemText.prayer(next.prayer, language))
+                Text(verbatim: SystemText.prayer(next.prayer, language, on: next.day))
             } icon: {
                 Image(systemName: next.prayer.symbolName)
             }
@@ -225,7 +225,7 @@ struct WidgetInlineView: View {
 
     var body: some View {
         Label {
-            Text(verbatim: SystemText.format("%1$@ %2$@", language, SystemText.prayer(next.prayer, language), SystemText.time(next.at, in: board.place.timeZone, language)))
+            Text(verbatim: SystemText.format("%1$@ %2$@", language, SystemText.prayer(next.prayer, language, on: next.day), SystemText.time(next.at, in: board.place.timeZone, language)))
         } icon: {
             Image(systemName: next.prayer.symbolName)
         }

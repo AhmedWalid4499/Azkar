@@ -3,14 +3,14 @@ import Foundation
 import UserNotifications
 
 /// Hands the reminders of the week ahead to the system, as `ReminderPlan` lays them out: prayer
-/// times, "not logged yet" and the morning and evening azkar, at most `ReminderPlan.reminderLimit`
+/// times, "not logged yet", the morning and evening azkar, and the fasting days and Ramadan, at most `ReminderPlan.reminderLimit`
 /// of them (iOS keeps an app's 64 soonest). Each has the plan's stable id, so scheduling again
 /// changes only what moved. Notifications of other features are left alone.
 enum ReminderScheduler {
     /// Replaces the pending reminders with those the settings and records ask for now.
-    static func reschedule(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], now: Date = .now) async {
+    static func reschedule(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:], now: Date = .now) async {
         let center = UNUserNotificationCenter.current()
-        let wanted = plan(settings: settings, logged: logged, now: now)
+        let wanted = plan(settings: settings, logged: logged, sunnah: sunnah, now: now)
         let allowed = await center.notificationSettings().authorizationStatus
         let canDeliver = allowed == .authorized || allowed == .provisional || allowed == .ephemeral
 
@@ -44,14 +44,19 @@ enum ReminderScheduler {
     }
 
     /// The reminders due after `now` within the plan's window.
-    static func plan(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], now: Date) -> [ReminderEntry] {
+    static func plan(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:], now: Date) -> [ReminderEntry] {
         guard let location = settings.location, let place = PrayerPlace(location) else { return [] }
         let reminders = settings.reminders
+        let season = reminders.season
+        let offset = settings.app.hijriOffset
         let choices = ReminderChoices(
             prayers: reminders.prayers, morning: reminders.morningAzkar, evening: reminders.eveningAzkar, morningAt: reminders.morningAt,
             unlogged: reminders.unlogged
                 ? UnloggedChoices(leadMinutes: reminders.unloggedLeadMinutes, ishaEnds: reminders.ishaDeadline, logged: logged)
-                : nil
+                : nil,
+            season: { day in
+                SeasonReminders.plan(for: day, choices: season, offset: offset) { prayer, day in sunnah[day]?.contains(prayer) ?? false }
+            }
         )
         return ReminderPlan.upcoming(
             dayFor: { PrayerCalculator.day($0, at: place, config: settings.calculation) },
@@ -61,7 +66,7 @@ enum ReminderScheduler {
 
     /// Whether any reminder switch is on.
     static func wantsNotifications(_ reminders: ReminderSettings) -> Bool {
-        reminders.prayers || reminders.unlogged || reminders.morningAzkar || reminders.eveningAzkar
+        reminders.prayers || reminders.unlogged || reminders.morningAzkar || reminders.eveningAzkar || reminders.season.isAnyOn
     }
 
     private static func trigger(at date: Date, in zone: TimeZone) -> UNCalendarNotificationTrigger {

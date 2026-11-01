@@ -19,6 +19,10 @@ nonisolated struct NextPrayerAttributes: ActivityAttributes {
         var timeZoneID: String
         /// The saved place's name; empty when unknown.
         var placeName: String
+        /// The prayer is the Maghrib of a day of Ramadan. Optional so a running activity's older state still reads.
+        var isIftar: Bool?
+        /// The prayer is Friday's Dhuhr.
+        var isJumuah: Bool?
 
         var timeZone: TimeZone { TimeZone(identifier: timeZoneID) ?? .current }
     }
@@ -26,12 +30,20 @@ nonisolated struct NextPrayerAttributes: ActivityAttributes {
 
 extension NextPrayerAttributes.ContentState {
     /// The state for a board, or `nil` when no next prayer is known.
-    nonisolated init?(board: SystemPrayerBoard, language: SystemLanguage) {
+    nonisolated init?(board: SystemPrayerBoard, language: SystemLanguage, hijriOffset: Int) {
         guard let next = board.next else { return nil }
         let since = board.previous?.at ?? next.at.addingTimeInterval(-6 * 3600)
         self.init(
             prayer: next.prayer, at: next.at, since: min(since, next.at), isTomorrow: board.nextIsTomorrow,
-            language: language, timeZoneID: board.place.timeZone.identifier, placeName: board.placeName
+            language: language, timeZoneID: board.place.timeZone.identifier, placeName: board.placeName,
+            isIftar: next.prayer == .maghrib && HijriCalendar.isRamadan(next.day, offset: hijriOffset),
+            isJumuah: next.prayer == .dhuhr && next.day.isFriday
         )
+    }
+
+    /// What the countdown is to: "Iftar" for the Maghrib of a fast, Jumu'ah on Friday, else the prayer.
+    nonisolated var title: String {
+        if isIftar == true { return SystemText.string("Iftar", language) }
+        return isJumuah == true ? SystemText.string("Jumu’ah", language) : SystemText.prayer(prayer, language)
     }
 }

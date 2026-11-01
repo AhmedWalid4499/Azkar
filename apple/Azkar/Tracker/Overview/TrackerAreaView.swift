@@ -82,6 +82,7 @@ struct TrackerAreaView: View {
                 TrackerLifetimeSection(data: data, area: area)
             case .quran:
                 TrackerQuranSection(data: data)
+                TrackerQuranGoalSection(data: data)
                 TrackerRecentSection(data: data, area: area)
                 TrackerTrendSections(data: data, area: area)
                 TrackerLifetimeSection(data: data, area: area)
@@ -98,6 +99,55 @@ struct TrackerAreaView: View {
         .listSectionSpacing(.compact)
         .navigationTitle(format.text(area.title))
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// A khatmah to finish by a date, and what that takes each day.
+struct TrackerQuranGoalSection: View {
+    let data: TrackerData
+    @Environment(AppEnvironment.self) private var app
+
+    var body: some View {
+        let goal = data.settings.app.quranGoal
+        Section {
+            Toggle(isOn: Binding(
+                get: { goal != nil },
+                set: { on in
+                    app.settings.update { $0.app.quranGoal = on ? QuranGoal(start: data.today, end: data.today.adding(days: 30)) : nil }
+                }
+            )) {
+                Text("Finish a khatmah by a date", tableName: "Tracker")
+            }
+            if let goal {
+                DatePicker(selection: Binding(
+                    get: { date(of: goal.end) },
+                    set: { value in
+                        let day = DayKey(value, in: data.clock.timeZone)
+                        app.settings.update { $0.app.quranGoal = QuranGoal(start: goal.start, end: max(day, goal.start)) }
+                    }
+                ), in: date(of: data.today)..., displayedComponents: .date) {
+                    Text("Finish by", tableName: "Tracker")
+                }
+                Text(standing(goal))
+                    .font(.subheadline)
+                    .foregroundStyle(.indigo)
+            }
+        }
+    }
+
+    private func standing(_ goal: QuranGoal) -> LocalizedStringResource {
+        switch goal.standing(today: data.today, progress: data.quran) {
+        case let .onTheWay(pages): SeasonL("To reach your goal: \(pages) pages a day")
+        case .met: SeasonL("Goal reached")
+        case .passed: LocalizedStringResource("The date has passed", table: "Tracker")
+        }
+    }
+
+    /// Noon of a day at the place, so the picker shows that day whatever the zone.
+    private func date(of day: DayKey) -> Date {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = data.clock.timeZone
+        return calendar.date(from: DateComponents(year: day.year, month: day.month, day: day.day, hour: 12)) ?? .now
     }
 }
 
@@ -166,6 +216,33 @@ struct TrackerDayQuranSection: View {
             } header: {
                 Text("Quran", tableName: "Tracker")
             }
+        }
+        let hifz = data.records.hifz.filter { $0.day == day }
+        if !hifz.isEmpty {
+            Section {
+                ForEach(hifz) { entry in
+                    LabeledContent {
+                        Text(format.time(entry.at)).monospacedDigit()
+                    } label: {
+                        Label {
+                            Text(verbatim: format.string(hifzLine(entry)))
+                        } icon: {
+                            Image(systemName: entry.kind == .forgotten ? "arrow.uturn.backward" : "brain.head.profile").foregroundStyle(.purple)
+                        }
+                    }
+                }
+            } header: {
+                Text("Memorisation", tableName: "Tracker")
+            }
+        }
+    }
+
+    private func hifzLine(_ entry: HifzEntry) -> LocalizedStringResource {
+        let name = format.isArabic ? data.quranIndex.suraName(number: entry.sura) : data.quranIndex.suraTransliteration(number: entry.sura)
+        return switch entry.kind {
+        case .memorised: LocalizedStringResource("Memorised \(name)", table: "Tracker")
+        case .reviewed: LocalizedStringResource("Reviewed \(name)", table: "Tracker")
+        case .forgotten: LocalizedStringResource("Took \(name) off the memorised list", table: "Tracker")
         }
     }
 }

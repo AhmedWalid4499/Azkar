@@ -1703,6 +1703,40 @@
         }
       }
     },
+    "Finish a khatmah by a date": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إتمام ختمة بحلول تاريخ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish a khatmah by a date"
+          }
+        }
+      }
+    },
+    "Finish by": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإتمام بحلول"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish by"
+          }
+        }
+      }
+    },
     "Finished": {
       "extractionState": "manual",
       "localizations": {
@@ -2175,6 +2209,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "صيام القضاء"
+          }
+        }
+      }
+    },
+    "Memorisation": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorisation"
+          }
+        }
+      }
+    },
+    "Memorised %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorised %@"
           }
         }
       }
@@ -3046,6 +3114,40 @@
         }
       }
     },
+    "Reviewed %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "راجع %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviewed %@"
+          }
+        }
+      }
+    },
+    "Reviews: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المراجعات: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviews: %lld"
+          }
+        }
+      }
+    },
     "Started": {
       "extractionState": "manual",
       "localizations": {
@@ -3148,6 +3250,40 @@
         }
       }
     },
+    "Surahs memorised": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السور المحفوظة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surahs memorised"
+          }
+        }
+      }
+    },
+    "Surahs reviewed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مراجعات السور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surahs reviewed"
+          }
+        }
+      }
+    },
     "Tarawih nights": {
       "extractionState": "manual",
       "localizations": {
@@ -3195,6 +3331,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "تاسوعاء، اليوم الذي قبل عاشوراء"
+          }
+        }
+      }
+    },
+    "The date has passed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مضى التاريخ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The date has passed"
           }
         }
       }
@@ -3362,6 +3515,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "اليوم، %1$@، %2$@"
+          }
+        }
+      }
+    },
+    "Took %@ off the memorised list": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أزال %@ من المحفوظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Took %@ off the memorised list"
           }
         }
       }

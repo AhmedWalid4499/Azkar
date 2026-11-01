@@ -97,7 +97,7 @@ nonisolated enum PrayerLogging {
 /// What a reminder notification carries, so a tap or an action knows what it is about.
 nonisolated struct ReminderInfo: Equatable, Sendable {
     enum Kind: String, Sendable {
-        case prayer, unlogged, azkar
+        case prayer, unlogged, azkar, season
     }
 
     static let marker = "azkar.reminder"
@@ -106,12 +106,15 @@ nonisolated struct ReminderInfo: Equatable, Sendable {
     var day: DayKey
     var prayer: Prayer?
     var session: AzkarSession?
+    /// The mushaf page a tap opens.
+    var quranPage: Int?
 
-    init(kind: Kind, day: DayKey, prayer: Prayer? = nil, session: AzkarSession? = nil) {
+    init(kind: Kind, day: DayKey, prayer: Prayer? = nil, session: AzkarSession? = nil, quranPage: Int? = nil) {
         self.kind = kind
         self.day = day
         self.prayer = prayer
         self.session = session
+        self.quranPage = quranPage
     }
 
     init?(_ userInfo: [AnyHashable: Any]) {
@@ -121,12 +124,14 @@ nonisolated struct ReminderInfo: Equatable, Sendable {
         self.day = day
         prayer = (userInfo["prayer"] as? String).flatMap(Prayer.init(rawValue:))
         session = (userInfo["session"] as? String).flatMap(AzkarSession.init)
+        quranPage = (userInfo["page"] as? String).flatMap(Int.init)
     }
 
     var userInfo: [String: String] {
         var info = [Self.marker: kind.rawValue, "day": day.description]
         if let prayer { info["prayer"] = prayer.rawValue }
         if let session { info["session"] = session.description }
+        if let quranPage { info["page"] = String(quranPage) }
         return info
     }
 }

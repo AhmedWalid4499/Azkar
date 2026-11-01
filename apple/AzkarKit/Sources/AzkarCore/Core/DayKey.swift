@@ -61,6 +61,9 @@ public struct DayKey: Hashable, Comparable, Codable, Sendable, CustomStringConve
     /// 1 = Sunday … 7 = Saturday, as `Calendar` numbers weekdays.
     public var weekday: Int { DayKey.gregorian.component(.weekday, from: noonUTC) }
 
+    /// The day of Jumu'ah.
+    public var isFriday: Bool { weekday == 6 }
+
     public static func < (lhs: DayKey, rhs: DayKey) -> Bool {
         (lhs.year, lhs.month, lhs.day) < (rhs.year, rhs.month, rhs.day)
     }

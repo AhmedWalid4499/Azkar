@@ -16,6 +16,9 @@ import UserNotifications
 /// - `-SystemDebugAnswerPrayed` waits for that reminder to be delivered and answers it with "Prayed ✓".
 /// - `-SystemDebugLiveActivity` starts the Live Activity.
 /// - `-SystemDebugIntent log-current|next|log:asr:jamaah|tick:asr|open-qibla|open:morning` runs an intent's `perform()`.
+/// - `-SystemDebugSeason` turns on every reminder of the fasting days and of Ramadan.
+/// - `-SystemDebugTapKahf` builds next Friday's Surah al-Kahf reminder and answers it as a tap does.
+/// - `-SystemDebugBackup` backs up automatically to Documents/BackupTest, with no folder picker.
 /// - `-SystemDebugDump` prints the pending reminders, the adhan alarms and the Live Activity (also after each of the above).
 enum SystemDebug {
     static func runLaunchArguments(_ app: AppEnvironment) async {
@@ -54,6 +57,27 @@ enum SystemDebug {
             await run(intent: intent)
             acted = true
         }
+        if defaults.bool(forKey: "SystemDebugSeason") {
+            app.settings.update { settings in
+                settings.reminders.season.mondayThursday = true
+                settings.reminders.season.whiteDays = true
+                settings.reminders.season.occasions = true
+                settings.reminders.season.suhoor = true
+                settings.reminders.season.iftar = true
+                settings.reminders.season.oddNights = true
+            }
+            printRamadanReminders(app)
+            acted = true
+        }
+        if defaults.bool(forKey: "SystemDebugTapKahf") {
+            await tapKahfReminder(app)
+            acted = true
+        }
+        if defaults.bool(forKey: "SystemDebugBackup") {
+            let folder = URL.documentsDirectory.appending(path: "BackupTest", directoryHint: .isDirectory)
+            try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            await AutoBackup.shared.choose(folder)
+        }
         if defaults.bool(forKey: "SystemDebugRender") {
             await SystemDebugRender.run()
         }
@@ -61,6 +85,39 @@ enum SystemDebug {
             await SystemServices.shared.refresh(reason: "debug", reloadWidgets: true)
             await dump()
         }
+    }
+
+    /// What would be scheduled a week into the last ten of Ramadan 1448, in the app's language.
+    private static func printRamadanReminders(_ app: AppEnvironment) {
+        let settings = app.settings.settings
+        guard let location = settings.location, let at = Calendar(identifier: .gregorian).date(from: DateComponents(timeZone: location.zone, year: 2027, month: 2, day: 27, hour: 12)) else { return }
+        var season = settings.reminders
+        season.prayers = false
+        season.unlogged = false
+        var snapshot = settings
+        snapshot.reminders = season
+        let context = ReminderContent.Context(language: SystemLanguage(settings.app), timeZone: location.zone, place: location.label, name: settings.app.name)
+        for entry in ReminderScheduler.plan(settings: snapshot, logged: [:], now: at).prefix(8) {
+            let content = ReminderContent.make(entry, context)
+            print("SystemDebug: Ramadan \(entry.id) \(entry.at.formatted(.dateTime.day().month().hour().minute())) — \(content.title) — \(content.body)")
+        }
+    }
+
+    /// The real reminder, through the words the system would carry, to the tap's handler.
+    private static func tapKahfReminder(_ app: AppEnvironment) async {
+        var settings = app.settings.settings
+        settings.reminders.season.kahf = true
+        settings.reminders.prayers = false
+        settings.reminders.unlogged = false
+        guard let location = settings.location,
+              let entry = ReminderScheduler.plan(settings: settings, logged: [:], now: .now).first(where: {
+                  if case let .season(reminder) = $0.kind { reminder.kind == .kahf } else { false }
+              }) else { return print("SystemDebug: no Kahf reminder planned") }
+        let context = ReminderContent.Context(language: SystemLanguage(settings.app), timeZone: location.zone, place: location.label, name: settings.app.name)
+        let content = ReminderContent.make(entry, context)
+        print("SystemDebug: Kahf \(entry.id) on \(entry.day) at \(entry.at.formatted(date: .abbreviated, time: .shortened)) — \(content.title) — \(content.body) — \(content.userInfo)")
+        guard let info = ReminderInfo(content.userInfo) else { return print("SystemDebug: the reminder's details don't read back") }
+        await SystemServices.shared.handle(.init(info: info, action: UNNotificationDefaultActionIdentifier))
     }
 
     static func seed(_ app: AppEnvironment) async {

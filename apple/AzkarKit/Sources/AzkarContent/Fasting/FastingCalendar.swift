@@ -11,23 +11,6 @@ public enum ForbiddenFastDay: String, CaseIterable, Codable, Sendable {
     case tashriq
 }
 
-/// Why a day is recommended for a voluntary fast, from the most to the least particular.
-/// Raw values match the website's `FASTING_REASONS`.
-public enum FastingReason: String, CaseIterable, Codable, Sendable {
-    /// 9 Dhu al-Hijjah.
-    case arafah
-    /// 10 Muharram.
-    case ashura
-    /// 9 Muharram, fasted with Ashura.
-    case tasua
-    /// Shawwal after the Eid: six of its days.
-    case shawwal
-    /// The 13th, 14th and 15th of a Hijri month.
-    case whiteDays
-    case monday
-    case thursday
-}
-
 /// What the calendar says about fasting on one civil day.
 public struct FastingDayInfo: Hashable, Sendable {
     public var day: DayKey

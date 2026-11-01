@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ before Maghrib.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قبل المغرب بـ%@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ before Maghrib."
+          }
+        }
+      }
+    },
     "%@ before a prayer’s time ends, if it isn’t logged yet.": {
       "extractionState": "manual",
       "localizations": {
@@ -541,6 +558,23 @@
         }
       }
     },
+    "A reminder at Isha the evening before.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكير عند العشاء في الليلة السابقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A reminder at Isha the evening before."
+          }
+        }
+      }
+    },
     "About Azkar": {
       "extractionState": "manual",
       "localizations": {
@@ -592,6 +626,23 @@
         }
       }
     },
+    "After Isha, unless you’ve ticked it off.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد العشاء، ما لم تكن قد سجّلته."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After Isha, unless you’ve ticked it off."
+          }
+        }
+      }
+    },
     "After sunrise": {
       "extractionState": "manual",
       "localizations": {
@@ -605,6 +656,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "After sunrise"
+          }
+        }
+      }
+    },
+    "After sunrise, unless you’ve ticked it off.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد الشروق، ما لم تكن قد سجّلتها."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After sunrise, unless you’ve ticked it off."
           }
         }
       }
@@ -728,6 +796,23 @@
         }
       }
     },
+    "Arafah and Ashura": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرفة وعاشوراء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arafah and Ashura"
+          }
+        }
+      }
+    },
     "Are you sure?": {
       "extractionState": "manual",
       "localizations": {
@@ -779,6 +864,23 @@
         }
       }
     },
+    "At Isha on nights 21, 23, 25, 27 and 29.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عند العشاء في الليالي ٢١ و٢٣ و٢٥ و٢٧ و٢٩."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At Isha on nights 21, 23, 25, 27 and 29."
+          }
+        }
+      }
+    },
     "Auto-advance": {
       "extractionState": "manual",
       "localizations": {
@@ -809,6 +911,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatic"
+          }
+        }
+      }
+    },
+    "Automatic backup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النسخ الاحتياطي التلقائي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic backup"
           }
         }
       }
@@ -915,6 +1034,23 @@
         }
       }
     },
+    "Azkar saves a copy of everything to this folder whenever it changes: one file a day, the latest 30. Choose a folder in iCloud Drive so your records survive losing this iPhone. Restore one with “Restore a backup”.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحفظ أذكار نسخة من كل شيء في هذا المجلد كلما تغيّر: ملف لكل يوم، وآخر ٣٠ ملفًا. اختر مجلدًا في iCloud Drive لتبقى سجلاتك إذا فقدت هذا الآيفون. ويمكنك استعادة أي نسخة من «استعادة نسخة احتياطية»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azkar saves a copy of everything to this folder whenever it changes: one file a day, the latest 30. Choose a folder in iCloud Drive so your records survive losing this iPhone. Restore one with “Restore a backup”."
+          }
+        }
+      }
+    },
     "Azkar sessions": {
       "extractionState": "manual",
       "localizations": {
@@ -928,6 +1064,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Azkar sessions"
+          }
+        }
+      }
+    },
+    "Back up now": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انسخ الآن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back up now"
           }
         }
       }
@@ -996,6 +1149,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caps Fajr and Isha at high latitudes around midsummer, when twilight lasts most or all of the night."
+          }
+        }
+      }
+    },
+    "Change folder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تغيير المجلد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change folder"
+          }
+        }
+      }
+    },
+    "Choose a folder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختر مجلدًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a folder"
           }
         }
       }
@@ -1153,6 +1340,23 @@
         }
       }
     },
+    "Duha": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الضحى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duha"
+          }
+        }
+      }
+    },
     "Egyptian General Authority of Survey": {
       "extractionState": "manual",
       "localizations": {
@@ -1306,6 +1510,23 @@
         }
       }
     },
+    "Fasting days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيام الصيام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fasting days"
+          }
+        }
+      }
+    },
     "Fasts": {
       "extractionState": "manual",
       "localizations": {
@@ -1336,6 +1557,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fine-tune times"
+          }
+        }
+      }
+    },
+    "Folder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المجلد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folder"
+          }
+        }
+      }
+    },
+    "Friday and sunnah": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجمعة والسنن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday and sunnah"
           }
         }
       }
@@ -1476,6 +1731,40 @@
         }
       }
     },
+    "How long after Isha": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كم بعد العشاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How long after Isha"
+          }
+        }
+      }
+    },
+    "How long before Fajr": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كم قبل الفجر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How long before Fajr"
+          }
+        }
+      }
+    },
     "How long before the time ends": {
       "extractionState": "manual",
       "localizations": {
@@ -1510,6 +1799,23 @@
         }
       }
     },
+    "Iftar": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإفطار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iftar"
+          }
+        }
+      }
+    },
     "Imported data": {
       "extractionState": "manual",
       "localizations": {
@@ -1540,6 +1846,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Imported on"
+          }
+        }
+      }
+    },
+    "In the morning; it opens the mushaf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في الصباح، ويفتح المصحف."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the morning; it opens the mushaf."
           }
         }
       }
@@ -1663,6 +1986,23 @@
         }
       }
     },
+    "Last backup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر نسخة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last backup"
+          }
+        }
+      }
+    },
     "Light": {
       "extractionState": "manual",
       "localizations": {
@@ -1727,6 +2067,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Middle of the night"
+          }
+        }
+      }
+    },
+    "Mondays and Thursdays": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاثنين والخميس"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mondays and Thursdays"
           }
         }
       }
@@ -1901,6 +2258,23 @@
         }
       }
     },
+    "Not yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تتم بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not yet"
+          }
+        }
+      }
+    },
     "Nothing imported": {
       "extractionState": "manual",
       "localizations": {
@@ -1982,6 +2356,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notify me at prayer times"
+          }
+        }
+      }
+    },
+    "Odd nights of the last ten": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الليالي الوترية من العشر الأواخر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odd nights of the last ten"
           }
         }
       }
@@ -2169,6 +2560,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Qatar"
+          }
+        }
+      }
+    },
+    "Ramadan": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمضان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramadan"
           }
         }
       }
@@ -2547,6 +2955,23 @@
         }
       }
     },
+    "Suhoor": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السحور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suhoor"
+          }
+        }
+      }
+    },
     "Sunnah prayers": {
       "extractionState": "manual",
       "localizations": {
@@ -2577,6 +3002,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sunrise"
+          }
+        }
+      }
+    },
+    "Surah al-Kahf on Fridays": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سورة الكهف يوم الجمعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surah al-Kahf on Fridays"
           }
         }
       }
@@ -2666,6 +3108,23 @@
         }
       }
     },
+    "The White Days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأيام البيض"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The White Days"
+          }
+        }
+      }
+    },
     "The backup couldn’t be saved, so nothing was changed. This iPhone’s storage may be full.": {
       "extractionState": "manual",
       "localizations": {
@@ -2696,6 +3155,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file couldn’t be read."
+          }
+        }
+      }
+    },
+    "The last backup couldn’t be saved. If this keeps happening, choose the folder again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر حفظ آخر نسخة. إذا تكرر ذلك فاختر المجلد من جديد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last backup couldn’t be saved. If this keeps happening, choose the folder again."
           }
         }
       }
@@ -2815,6 +3291,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Time zone: %@"
+          }
+        }
+      }
+    },
+    "Turn off automatic backup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إيقاف النسخ التلقائي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn off automatic backup"
           }
         }
       }
@@ -2968,6 +3461,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "When the sun doesn’t rise, doesn’t set, or stays too close to the horizon, use the times of the nearest latitude where every time can be calculated."
+          }
+        }
+      }
+    },
+    "Witr": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوتر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Witr"
           }
         }
       }

@@ -23,6 +23,9 @@ final class ReadingContext {
 
     var reader: ReaderSettings { settings.settings.reader }
 
+    /// What the tasbih offers: the dataset's presets, then the user's own.
+    var tasbihPresets: [Dhikr] { dataset.adding(customDhikr: reader.customDhikr).tasbihPresets }
+
     func updateReader(_ change: (inout ReaderSettings) -> Void) {
         settings.update { change(&$0.reader) }
     }

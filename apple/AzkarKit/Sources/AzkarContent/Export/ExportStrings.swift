@@ -81,6 +81,8 @@ struct ExportStrings: Sendable {
     var quranPagesHeader: String { ar ? "القرآن: الصفحات المقروءة" : "Quran: pages read" }
     var quranKhatmahsHeader: String { ar ? "القرآن: الختمات" : "Quran: khatmahs" }
     var quranLastReadHeader: String { ar ? "القرآن: وقت آخر قراءة" : "Quran: last read at" }
+    var hifzMemorisedHeader: String { ar ? "الحفظ: سور حُفظت" : "Memorisation: surahs memorised" }
+    var hifzReviewedHeader: String { ar ? "الحفظ: سور رُوجعت" : "Memorisation: surahs reviewed" }
 
     var tarawihPlaceHeader: String { ar ? "التراويح: المكان" : "Tarawih: place" }
     var tarawihRakahsHeader: String { ar ? "التراويح: الركعات" : "Tarawih: rakahs" }

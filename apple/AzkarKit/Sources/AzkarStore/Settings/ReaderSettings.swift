@@ -1,3 +1,4 @@
+import AzkarCore
 import Foundation
 
 /// How the azkar reader and the tasbih counter behave, as the website's
@@ -25,6 +26,8 @@ public struct ReaderSettings: Hashable, Sendable {
     public var tasbihFree = false
     /// Where the tasbih counter signals a round, or `nil` for no target.
     public var tasbihTarget: Int? = 33
+    /// The user's own dhikr in the tasbih, hidden ones included. The native app's own.
+    public var customDhikr: [CustomDhikr] = []
 
     public init() {}
 
@@ -55,6 +58,11 @@ extension ReaderSettings {
         for (key, path) in [("haptics", \ReaderSettings.haptics), ("keepAwake", \.keepAwake), ("autoAdvance", \.autoAdvance), ("tasbihFree", \.tasbihFree)] {
             if let flag = stored[key]?.bool { self[keyPath: path] = flag }
         }
+        customDhikr = (stored["customDhikr"]?.array ?? []).compactMap { value in
+            guard let id = value["id"]?.string, CustomDhikr.isCustom(id), WebRules.isDhikrID(id),
+                  let text = value["text"]?.string.flatMap(CustomDhikr.cleaned) else { return nil }
+            return CustomDhikr(id: id, text: text, isHidden: value["hidden"] == .bool(true))
+        }
         switch stored["tasbihPreset"] {
         case .null: tasbihPreset = nil
         case let .string(id) where WebRules.isDhikrID(id): tasbihPreset = id
@@ -70,7 +78,7 @@ extension ReaderSettings {
 
     /// What the website's azkar settings store saves.
     public var web: JSONValue {
-        [
+        var fields: [String: JSONValue] = [
             "arabicScale": JSONValue(arabicScale),
             "showTransliteration": JSONValue(showTransliteration),
             "showTranslation": JSONValue(showTranslation),
@@ -81,6 +89,11 @@ extension ReaderSettings {
             "tasbihFree": .bool(tasbihFree),
             "tasbihTarget": tasbihTarget.map { JSONValue($0) } ?? .null,
         ]
+        // The website has none, so its settings stay exactly what it writes.
+        if !customDhikr.isEmpty {
+            fields["customDhikr"] = .array(customDhikr.map { ["id": .string($0.id), "text": .string($0.text), "hidden": .bool($0.isHidden)] })
+        }
+        return .object(fields)
     }
 
     /// The fields the website's main branch saves (its tests compare exactly these).

@@ -45,7 +45,7 @@ final class NextPrayerActivity {
     /// Brings it up to date; with `canStart`, (re)starts it when the user wants one and none is showing.
     func update(settings: SettingsSnapshot, board: SystemPrayerBoard?, canStart: Bool) async {
         let activities = Activity<NextPrayerAttributes>.activities
-        guard isOn, let board, let state = NextPrayerAttributes.ContentState(board: board, language: SystemLanguage(settings.app)) else {
+        guard isOn, let board, let state = NextPrayerAttributes.ContentState(board: board, language: SystemLanguage(settings.app), hijriOffset: settings.app.hijriOffset) else {
             for activity in activities { await activity.end(nil, dismissalPolicy: .immediate) }
             isRunning = false
             return

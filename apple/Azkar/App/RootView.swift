@@ -36,7 +36,10 @@ struct RootView: View {
             case .qibla: tab = .qibla
             case .quran:
                 tab = .quran
-                systemRouter.opensQuranReader = true
+                systemRouter.quranReaderPage = 0
+            case let .quranPage(page):
+                tab = .quran
+                systemRouter.quranReaderPage = page
             case let .azkar(session): openReading(session, day: nil)
             }
         }

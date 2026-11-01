@@ -1,3 +1,4 @@
+import AzkarCore
 import Foundation
 
 /// The app-wide settings, as the website's `src/shared/settings.ts` keeps them.
@@ -32,9 +33,11 @@ public struct AppSettings: Hashable, Sendable {
     public var name = ""
     /// Khatmahs the user means to finish in Ramadan, 0 to 10; 0 is no goal. The native app's own.
     public var ramadanKhatmahGoal = 0
+    /// The khatmah the user means to finish by a date, from the day it was set. The native app's own.
+    public var quranGoal: QuranGoal?
 
     public init(language: Language = .system, theme: Theme = .system, timeFormat: TimeFormat = .twelveHour,
-                arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0) {
+                arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0, quranGoal: QuranGoal? = nil) {
         self.language = language
         self.theme = theme
         self.timeFormat = timeFormat
@@ -42,6 +45,7 @@ public struct AppSettings: Hashable, Sendable {
         self.hijriOffset = hijriOffset
         self.name = name
         self.ramadanKhatmahGoal = ramadanKhatmahGoal
+        self.quranGoal = quranGoal
     }
 
     /// The same settings made valid: the offset and the goal clamped, the name cleaned (as the website's `update`).
@@ -100,6 +104,9 @@ extension AppSettings {
         if let goal = stored["ramadanKhatmahGoal"]?.number, WebRules.isInteger(goal) {
             self.ramadanKhatmahGoal = Int(min(Double(Self.ramadanKhatmahGoalRange.upperBound), max(Double(Self.ramadanKhatmahGoalRange.lowerBound), goal)))
         }
+        if let goal = stored["quranGoal"]?.object, let start = goal["start"]?.string.flatMap(DayKey.init), let end = goal["end"]?.string.flatMap(DayKey.init), start <= end {
+            self.quranGoal = QuranGoal(start: start, end: end)
+        }
     }
 
     /// What the website's settings store saves, and the goal when there is one: the website has no
@@ -114,6 +121,7 @@ extension AppSettings {
             "name": .string(name),
         ]
         if ramadanKhatmahGoal != 0 { fields["ramadanKhatmahGoal"] = JSONValue(ramadanKhatmahGoal) }
+        if let quranGoal { fields["quranGoal"] = ["start": .string(quranGoal.start.description), "end": .string(quranGoal.end.description)] }
         return .object(fields)
     }
 }

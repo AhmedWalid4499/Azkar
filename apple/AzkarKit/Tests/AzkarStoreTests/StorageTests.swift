@@ -114,7 +114,7 @@ import Testing
 
     @Test func theSchemaHasAVersionAndAMigrationPlan() {
         #expect(AzkarSchemaV1.versionIdentifier == Schema.Version(1, 0, 0))
-        #expect(AzkarMigrationPlan.schemas.count == 3)
+        #expect(AzkarMigrationPlan.schemas.count == 4)
         #expect(AzkarSchemaV1.models.count == 8)
     }
 

@@ -1,6 +1,24 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "Continue reading in ${applicationName}": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أكمل القراءة في ${applicationName}"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue reading in ${applicationName}"
+          }
+        }
+      },
+      "generatesSymbol": false
+    },
     "I prayed ${prayer} in ${applicationName}": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -144,6 +162,24 @@
           }
         }
       }
+    },
+    "Open the Quran in ${applicationName}": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح القرآن في ${applicationName}"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Quran in ${applicationName}"
+          }
+        }
+      },
+      "generatesSymbol": false
     },
     "Read ${session} in ${applicationName}": {
       "extractionState": "manual",

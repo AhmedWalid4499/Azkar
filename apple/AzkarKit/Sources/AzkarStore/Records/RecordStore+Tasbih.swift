@@ -77,7 +77,7 @@ extension RecordStore {
 
     private func tasbih(_ preset: String?, on day: DayKey, _ body: (RecordRows, TasbihRow?, String) throws -> ChangeResult) throws -> RecordChange {
         // `isTasbihSlot`: a preset of the dataset's list, or the free count.
-        let known = preset.map { catalog.tasbihPresets.contains($0) } ?? true
+        let known = preset.map { catalog.tasbihPresets.contains($0) || CustomDhikr.isCustom($0) } ?? true
         let key = preset ?? TasbihRecord.freeCount
         return try change(day) { rows in
             guard known else { return (.unchanged, [:]) }

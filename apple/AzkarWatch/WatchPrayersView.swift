@@ -32,7 +32,7 @@ struct WatchPrayersView: View {
 
     private func nextPrayer(_ next: WatchBoard.Upcoming) -> some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(next.prayer.title)
+            Text(next.prayer.title(on: next.day))
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(.tint)
             Text(timerInterval: .now...max(.now, next.at), countsDown: true)
@@ -69,7 +69,7 @@ private struct WatchPrayerRow: View {
         HStack(spacing: 8) {
             Image(systemName: symbol(ticked: ticked))
                 .foregroundStyle(row.status != nil || ticked ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
-            Text(row.prayer.title)
+            Text(row.prayer.title(on: day))
             Spacer(minLength: 4)
             if let at = row.at {
                 Text(at, format: Date.FormatStyle(date: .omitted, time: .shortened))
