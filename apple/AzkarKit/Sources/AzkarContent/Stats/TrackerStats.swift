@@ -14,9 +14,14 @@ public struct TrackerHistory: Hashable, Sendable {
     public var seasons: [DayKey: [SeasonDeed: SeasonRecord]]
     /// The memorisation log.
     public var hifz: [HifzEntry]
+    /// Prayers made up from before the log began.
+    public var makeups: [PrayerMakeup]
+    public var giving: [GivingEntry]
+    public var duaEntries: [DuaEntry]
 
     public init(prayers: PrayerHistory = [:], sessions: SessionHistory = [:], tasbih: TasbihHistory = [:], fasts: FastingHistory = [:], quran: [QuranEntry] = [],
-                seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:], hifz: [HifzEntry] = []) {
+                seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:], hifz: [HifzEntry] = [],
+                makeups: [PrayerMakeup] = [], giving: [GivingEntry] = [], duaEntries: [DuaEntry] = []) {
         self.prayers = prayers
         self.sessions = sessions
         self.tasbih = tasbih
@@ -24,6 +29,9 @@ public struct TrackerHistory: Hashable, Sendable {
         self.quran = quran
         self.seasons = seasons
         self.hifz = hifz
+        self.makeups = makeups
+        self.giving = giving
+        self.duaEntries = duaEntries
     }
 }
 
@@ -89,6 +97,9 @@ public enum TrackerStats {
             || history.quran.contains { $0.day <= today }
             || history.seasons.contains { $0.key <= today && !$0.value.isEmpty }
             || history.hifz.contains { $0.day <= today }
+            || history.makeups.contains { $0.day <= today }
+            || history.giving.contains { $0.day <= today }
+            || history.duaEntries.contains { $0.day <= today }
     }
 
     public static func lifetimePrayers(_ history: PrayerHistory, today: DayKey) -> LifetimePrayers {
@@ -141,6 +152,9 @@ public enum TrackerStats {
         days.formUnion(history.fasts.keys)
         days.formUnion(history.quran.map(\.day))
         days.formUnion(history.hifz.map(\.day))
+        days.formUnion(history.makeups.map(\.day))
+        days.formUnion(history.giving.map(\.day))
+        days.formUnion(history.duaEntries.map(\.day))
         days.formUnion(history.seasons.filter { !$0.value.isEmpty }.keys)
         return days.sorted()
     }

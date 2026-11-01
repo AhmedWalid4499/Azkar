@@ -19,7 +19,7 @@ struct TrackerTrendSeries: Identifiable {
         case .prayers: return series.filter { ["prayed", "sunnah"].contains($0.id) }
         case .azkar: return series.filter { ["azkar", "sleep", "afterPrayer"].contains($0.id) }
         case .fasting: return series.filter { $0.id == "fasted" }
-        case .ramadan: return []
+        case .ramadan, .giving, .duas: return []
         case .quran:
             let pages = data.quran.pagesByDay
             return [TrackerTrendSeries(id: "pages", title: LocalizedStringResource("Pages read", table: "Tracker"), symbol: "book.pages.fill", tint: .green, weeklyMaximum: nil) { week in

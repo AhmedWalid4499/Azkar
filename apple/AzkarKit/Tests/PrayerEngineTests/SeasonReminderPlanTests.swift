@@ -46,7 +46,7 @@ import Testing
     }
 
     @Test func everyKindOfSeasonReminderHasAnIDOfItsOwn() {
-        let kinds: [SeasonReminder.Kind] = [.fast(.monday), .suhoor, .iftar, .kahf, .witr, .duha]
+        let kinds: [SeasonReminder.Kind] = [.fast(.monday), .suhoor, .iftar, .kahf, .witr, .duha, .zakat, .zakatFitr]
         let ids = kinds.map { ReminderPlan.seasonReminderID(day: day, kind: $0) }
         #expect(Set(ids).count == kinds.count)
         let prayers = Prayer.allCases.map { ReminderPlan.unloggedReminderID(day: day, prayer: $0) }

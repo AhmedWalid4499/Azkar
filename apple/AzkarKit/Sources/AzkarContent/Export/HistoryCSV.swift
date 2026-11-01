@@ -133,6 +133,38 @@ public enum HistoryCSV {
             ]
         }
 
+        if !history.makeups.isEmpty {
+            let made = Dictionary(grouping: history.makeups, by: \.day)
+            columns.append(Column(header: words.makeupsHeader) { key in number(made[key]?.count) })
+        }
+
+        if !history.giving.isEmpty {
+            let given = Dictionary(grouping: history.giving, by: \.day)
+            // Each kind in a column of its own: every amount with its currency, or how many were
+            // logged without one.
+            for kind in GivingEntry.Kind.allCases where history.giving.contains(where: { $0.kind == kind }) {
+                columns.append(Column(header: words.giving(kind)) { key in
+                    let entries = (given[key] ?? []).filter { $0.kind == kind }
+                    return entries.map { entry in
+                        guard let amount = entry.amount, let currency = entry.currency else { return "1×" }
+                        return "\(amount) \(currency)"
+                    }.joined(separator: "; ")
+                })
+            }
+            columns.append(Column(header: words.givingNoteHeader) { key in
+                (given[key] ?? []).compactMap(\.note).joined(separator: "; ")
+            })
+        }
+
+        if !history.duaEntries.isEmpty {
+            let entries = Dictionary(grouping: history.duaEntries, by: \.day)
+            func count(_ key: DayKey, _ kind: DuaEntry.Kind) -> Int? { entries[key].map { $0.filter { $0.kind == kind }.count } }
+            columns += [
+                Column(header: words.duasSaidHeader) { key in number(count(key, .said)) },
+                Column(header: words.duasAnsweredHeader) { key in number(count(key, .answered)) },
+            ]
+        }
+
         if history.seasons.values.contains(where: { !$0.isEmpty }) {
             let record = { (key: DayKey, deed: SeasonDeed) in history.seasons[key]?[deed] }
             columns += [

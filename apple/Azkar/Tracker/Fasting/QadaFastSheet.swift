@@ -64,6 +64,7 @@ struct TrackerQadaFastSheet: View {
             }
             .sensoryFeedback(.success, trigger: saved)
         }
+        .appDirection()
         .presentationDetents([.medium, .large])
     }
 

@@ -113,6 +113,9 @@ private struct TrackerYearSections: View {
             if review.prayers.missed > 0 {
                 TrackerTotalRow(name: LocalizedStringResource("Missed", table: "Tracker"), symbol: PrayerStatus.missed.symbolName, tint: .red, value: review.prayers.missed)
             }
+            if review.madeUp > 0 {
+                TrackerTotalRow(name: LocalizedStringResource("Made up from before", table: "Tracker"), symbol: "arrow.uturn.backward.circle.fill", tint: .orange, value: review.madeUp)
+            }
         } header: {
             format.text(TrackerArea.prayers.title)
         }
@@ -159,6 +162,33 @@ private struct TrackerYearSections: View {
                 }
             } header: {
                 format.text(TrackerArea.fasting.title)
+            }
+        }
+        if review.giving.entries > 0 {
+            Section {
+                ForEach(GivingEntry.Kind.allCases, id: \.self) { kind in
+                    if let count = review.giving.counts[kind] {
+                        TrackerTotalRow(name: kind.trackerName, symbol: kind.trackerSymbol, tint: kind.trackerTint, value: count) {
+                            if let totals = review.giving.totals[kind] {
+                                Text(verbatim: totals.map { format.money($0.amount, $0.currency) }.joined(separator: " · "))
+                            }
+                        }
+                    }
+                }
+            } header: {
+                format.text(TrackerArea.giving.title)
+            }
+        }
+        if review.duasSaid > 0 || review.duasAnswered > 0 {
+            Section {
+                if review.duasSaid > 0 {
+                    TrackerTotalRow(name: LocalizedStringResource("Duas made", table: "Tracker"), symbol: TrackerArea.duas.symbol, tint: .indigo, value: review.duasSaid)
+                }
+                if review.duasAnswered > 0 {
+                    TrackerTotalRow(name: LocalizedStringResource("Answered", table: "Tracker"), symbol: "checkmark.seal.fill", tint: .green, value: review.duasAnswered)
+                }
+            } header: {
+                format.text(TrackerArea.duas.title)
             }
         }
         TrackerYearMonthsSection(review: review)

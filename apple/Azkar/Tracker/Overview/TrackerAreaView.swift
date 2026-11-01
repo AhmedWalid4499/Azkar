@@ -28,13 +28,13 @@ struct TrackerAreasSection: View {
         }
     }
 
-    private static let areas: [TrackerArea] = [.prayers, .azkar, .quran, .fasting, .ramadan]
+    private static let areas: [TrackerArea] = [.prayers, .azkar, .quran, .fasting, .ramadan, .giving, .duas]
 
     private func summary(_ area: TrackerArea) -> Text {
         let history = data.history
         switch area {
         case .prayers:
-            let missed = PrayerStats.outstandingMissed(history.prayers, today: data.today).count
+            let missed = PrayerStats.outstandingMissed(history.prayers, today: data.today).count + data.prayerBacklog.remaining
             let rate = PrayerStats.completionRate(history.prayers, today: data.clock.statsDay, days: 7)
             if missed > 0 { return Text("\(missed) missed prayers to make up", tableName: "Tracker") }
             return Text("\(rate.done) of \(rate.due) prayed this week", tableName: "Tracker")
@@ -56,6 +56,16 @@ struct TrackerAreasSection: View {
                 return Text(seasonCountdown(from: data.today, to: first.evening.adding(days: 1)))
             }
             return Text(SeasonL("\(summary.fasted) fasts, \(summary.tarawih) tarawih, \(summary.khatmahs) khatmahs"))
+        case .giving:
+            if data.records.giving.isEmpty { return Text("Not started yet", tableName: "Tracker") }
+            let offset = data.settings.app.hijriOffset
+            let year = HijriCalendar.date(of: data.today, offset: offset).year
+            let review = HijriYearReview(hijriYear: year, offset: offset, today: data.today, history: history)
+            return Text("\(review.giving.entries) this year", tableName: "Tracker")
+        case .duas:
+            let duas = data.duas
+            if duas.open.isEmpty, duas.answered.isEmpty { return Text("Not started yet", tableName: "Tracker") }
+            return Text("\(duas.open.count) on your list, \(duas.answered.count) answered", tableName: "Tracker")
         }
     }
 }
@@ -71,6 +81,7 @@ struct TrackerAreaView: View {
             switch area {
             case .prayers:
                 TrackerMissedSummarySection(data: data)
+                TrackerPrayerBacklogSection(data: data)
                 TrackerRecentSection(data: data, area: area)
                 TrackerStreaksSection(data: data, area: area)
                 TrackerTrendSections(data: data, area: area)
@@ -93,6 +104,10 @@ struct TrackerAreaView: View {
                 TrackerLifetimeSection(data: data, area: area)
             case .ramadan:
                 TrackerRamadanSections(data: data)
+            case .giving:
+                TrackerGivingSections(data: data)
+            case .duas:
+                TrackerDuaSections(data: data)
             }
         }
         .listStyle(.insetGrouped)
@@ -255,6 +270,8 @@ extension TrackerArea {
         case .quran: LocalizedStringResource("Quran", table: "Tracker")
         case .fasting: LocalizedStringResource("Fasting", table: "Tracker")
         case .ramadan: SeasonL("Ramadan and Eid")
+        case .giving: LocalizedStringResource("Charity and zakat", table: "Tracker")
+        case .duas: LocalizedStringResource("My duas", table: "Tracker")
         }
     }
 
@@ -265,6 +282,8 @@ extension TrackerArea {
         case .quran: "book.pages.fill"
         case .fasting: TrackerMark.fast
         case .ramadan: "moon.stars.fill"
+        case .giving: "heart.circle.fill"
+        case .duas: "hands.sparkles.fill"
         }
     }
 
@@ -275,6 +294,8 @@ extension TrackerArea {
         case .quran: .teal
         case .fasting: .orange
         case .ramadan: .indigo
+        case .giving: .pink
+        case .duas: .indigo
         }
     }
 }

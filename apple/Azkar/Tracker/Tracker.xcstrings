@@ -496,6 +496,23 @@
         }
       }
     },
+    "%lld on your list, %lld answered": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في قائمتك: %1$lld، استُجيب: %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld on your list, %lld answered"
+          }
+        }
+      }
+    },
     "%lld this month": {
       "extractionState": "manual",
       "localizations": {
@@ -666,6 +683,40 @@
         }
       }
     },
+    "Add a dua": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة دعاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a dua"
+          }
+        }
+      }
+    },
+    "Add prayers you owe": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة صلوات عليك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add prayers you owe"
+          }
+        }
+      }
+    },
     "After Asr": {
       "extractionState": "manual",
       "localizations": {
@@ -781,6 +832,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "منذ البداية"
+          }
+        }
+      }
+    },
+    "Amount": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المبلغ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "Answered": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستجابة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Answered"
+          }
+        }
+      }
+    },
+    "Answered %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استُجيب في %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Answered %@"
           }
         }
       }
@@ -1040,6 +1142,40 @@
         }
       }
     },
+    "Change what you owed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل ما عليك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change what you owed"
+          }
+        }
+      }
+    },
+    "Charity and zakat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصدقة والزكاة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charity and zakat"
+          }
+        }
+      }
+    },
     "Choose a year": {
       "extractionState": "manual",
       "localizations": {
@@ -1104,6 +1240,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "مكتملة"
+          }
+        }
+      }
+    },
+    "Count by years": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحساب بالسنوات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Count by years"
+          }
+        }
+      }
+    },
+    "Currency": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العملة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Currency"
           }
         }
       }
@@ -1295,6 +1465,40 @@
         }
       }
     },
+    "Delete": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Delete this dua?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أتريد حذف هذا الدعاء؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this dua?"
+          }
+        }
+      }
+    },
     "Dhuhr": {
       "extractionState": "manual",
       "localizations": {
@@ -1346,6 +1550,23 @@
         }
       }
     },
+    "Duas made": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مرات الدعاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duas made"
+          }
+        }
+      }
+    },
     "Duha": {
       "extractionState": "manual",
       "localizations": {
@@ -1363,6 +1584,23 @@
         }
       }
     },
+    "Each Hijri year counts as %@ of each prayer. Adjust any of them below.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُحسب كل سنة هجرية %@ من كل صلاة. يمكنك تعديل أي منها أدناه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each Hijri year counts as %@ of each prayer. Adjust any of them below."
+          }
+        }
+      }
+    },
     "Each bar is a week starting on %@. The last, lighter bar is this week so far.": {
       "extractionState": "manual",
       "localizations": {
@@ -1376,6 +1614,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "كل عمود أسبوعٌ يبدأ يوم %@، والعمود الأخير الأفتح لونًا هو هذا الأسبوع حتى الآن."
+          }
+        }
+      }
+    },
+    "Edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
           }
         }
       }
@@ -1703,6 +1958,23 @@
         }
       }
     },
+    "Fill in all five": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعبئة الصلوات الخمس"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill in all five"
+          }
+        }
+      }
+    },
     "Finish a khatmah by a date": {
       "extractionState": "manual",
       "localizations": {
@@ -1805,6 +2077,40 @@
         }
       }
     },
+    "From before you began logging": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من قبل أن تبدأ التسجيل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From before you began logging"
+          }
+        }
+      }
+    },
+    "History": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السجل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        }
+      }
+    },
     "How it went": {
       "extractionState": "manual",
       "localizations": {
@@ -1818,6 +2124,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "الحالة"
+          }
+        }
+      }
+    },
+    "I have a yearly zakat date": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لدي موعد سنوي للزكاة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have a yearly zakat date"
+          }
+        }
+      }
+    },
+    "I made this dua": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعوت بهذا الدعاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I made this dua"
+          }
+        }
+      }
+    },
+    "If you owe prayers from before you used this app, set how many here and take them off as you make them up.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إن كانت عليك صلوات من قبل استخدام هذا التطبيق، فحدّد عددها هنا واخصمها كلما قضيتها."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you owe prayers from before you used this app, set how many here and take them off as you make them up."
           }
         }
       }
@@ -1890,6 +2247,23 @@
         }
       }
     },
+    "Its words are removed. The times you made it stay counted.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُحذف نص الدعاء، وتبقى مرات الدعاء محسوبة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Its words are removed. The times you made it stay counted."
+          }
+        }
+      }
+    },
     "Key": {
       "extractionState": "manual",
       "localizations": {
@@ -1954,6 +2328,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Khatmahs"
+          }
+        }
+      }
+    },
+    "Kind": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النوع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kind"
           }
         }
       }
@@ -2026,6 +2417,23 @@
         }
       }
     },
+    "Last made up: %@, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر ما قُضي: %1$@، %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last made up: %@, %@"
+          }
+        }
+      }
+    },
     "Late %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -2077,6 +2485,23 @@
         }
       }
     },
+    "Log something given": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل ما أعطيت"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log something given"
+          }
+        }
+      }
+    },
     "Logged %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2107,6 +2532,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "المسجَّل إجمالًا: %lld"
+          }
+        }
+      }
+    },
+    "Logged: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عدد المرات: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged: %lld"
           }
         }
       }
@@ -2145,6 +2587,57 @@
         }
       }
     },
+    "Made up from before": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلوات قضيتها من قبل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made up from before"
+          }
+        }
+      }
+    },
+    "Made up one %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قضيت صلاة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made up one %@"
+          }
+        }
+      }
+    },
+    "Made up so far: %lld. Tap + each time you make one up.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المقضي حتى الآن: %lld. اضغط + كلما قضيت صلاة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made up so far: %lld. Tap + each time you make one up."
+          }
+        }
+      }
+    },
     "Made up: %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -2158,6 +2651,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ما قُضي: %lld"
+          }
+        }
+      }
+    },
+    "Made: %lld, last on %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مرات الدعاء: %1$lld، آخرها %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made: %1$lld, last on %2$@"
           }
         }
       }
@@ -2209,6 +2719,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "صيام القضاء"
+          }
+        }
+      }
+    },
+    "Mark as answered": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحديد كمستجاب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as answered"
           }
         }
       }
@@ -2417,6 +2944,40 @@
         }
       }
     },
+    "My duas": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدعيتي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My duas"
+          }
+        }
+      }
+    },
+    "Next": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الموعد القادم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
     "Next month": {
       "extractionState": "manual",
       "localizations": {
@@ -2481,6 +3042,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "لا صلوات فائتة عليك قضاؤها"
+          }
+        }
+      }
+    },
+    "Not answered yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يُستجب بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not answered yet"
           }
         }
       }
@@ -2587,6 +3165,23 @@
         }
       }
     },
+    "Note (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملاحظة (اختيارية)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note (optional)"
+          }
+        }
+      }
+    },
     "Nothing recorded in this year.": {
       "extractionState": "manual",
       "localizations": {
@@ -2651,6 +3246,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "الصلوات المفروضة المؤدّاة"
+          }
+        }
+      }
+    },
+    "On the 28th of Ramadan.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في ٢٨ رمضان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the 28th of Ramadan."
           }
         }
       }
@@ -2740,6 +3352,23 @@
         }
       }
     },
+    "Optional. Leave it empty if you’d rather not say, or gave something else.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختياري. اتركه فارغًا إن فضّلت ألا تذكره، أو إن أعطيت شيئًا آخر."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Leave it empty if you’d rather not say, or gave something else."
+          }
+        }
+      }
+    },
     "Out of %lld a week": {
       "extractionState": "manual",
       "localizations": {
@@ -2753,6 +3382,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "من أصل %lld في الأسبوع"
+          }
+        }
+      }
+    },
+    "Owed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المتبقي عليك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owed"
           }
         }
       }
@@ -2944,6 +3590,40 @@
         }
       }
     },
+    "Prayers you log as missed here in the app are counted separately.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصلوات التي تسجلها فائتة هنا في التطبيق تُحسب على حدة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayers you log as missed here in the app are counted separately."
+          }
+        }
+      }
+    },
+    "Prayers you owe": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصلوات التي عليك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayers you owe"
+          }
+        }
+      }
+    },
     "Previous month": {
       "extractionState": "manual",
       "localizations": {
@@ -3114,6 +3794,40 @@
         }
       }
     },
+    "Remind me of zakat al-fitr": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ذكّرني بزكاة الفطر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me of zakat al-fitr"
+          }
+        }
+      }
+    },
+    "Remind me on the day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ذكّرني في يومها"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me on the day"
+          }
+        }
+      }
+    },
     "Reviewed %@": {
       "extractionState": "manual",
       "localizations": {
@@ -3144,6 +3858,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reviews: %lld"
+          }
+        }
+      }
+    },
+    "Sadaqah": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صدقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sadaqah"
           }
         }
       }
@@ -3335,6 +4066,23 @@
         }
       }
     },
+    "That doesn’t look like an amount.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا لا يبدو مبلغًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That doesn’t look like an amount."
+          }
+        }
+      }
+    },
     "The date has passed": {
       "extractionState": "manual",
       "localizations": {
@@ -3348,6 +4096,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "The date has passed"
+          }
+        }
+      }
+    },
+    "They come up on Today on the day of Arafah, in the last ten nights of Ramadan and on Fridays between Asr and Maghrib.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تظهر في صفحة اليوم يوم عرفة، وفي العشر الأواخر من رمضان، ويوم الجمعة بين العصر والمغرب."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "They come up on Today on the day of Arafah, in the last ten nights of Ramadan and on Fridays between Asr and Maghrib."
+          }
+        }
+      }
+    },
+    "This keeps a record of what you give. It doesn’t work out what you owe.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا سجل لما تعطيه، ولا يحسب ما يجب عليك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This keeps a record of what you give. It doesn’t work out what you owe."
           }
         }
       }
@@ -3618,6 +4400,23 @@
         }
       }
     },
+    "Undo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تراجع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        }
+      }
+    },
     "Voluntary": {
       "extractionState": "manual",
       "localizations": {
@@ -3737,6 +4536,40 @@
         }
       }
     },
+    "Years": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السنوات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Years"
+          }
+        }
+      }
+    },
+    "Your dua": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعاؤك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your dua"
+          }
+        }
+      }
+    },
     "Your history": {
       "extractionState": "manual",
       "localizations": {
@@ -3767,6 +4600,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "من هنا يبدأ سجلّك"
+          }
+        }
+      }
+    },
+    "Zakat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "زكاة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zakat"
+          }
+        }
+      }
+    },
+    "Zakat al-fitr": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "زكاة الفطر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zakat al-fitr"
+          }
+        }
+      }
+    },
+    "Zakat date": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعد الزكاة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zakat date"
           }
         }
       }

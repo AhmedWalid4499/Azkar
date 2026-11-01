@@ -171,6 +171,23 @@
         }
       }
     },
+    "A time to make your duas": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وقت لأدعيتك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A time to make your duas"
+          }
+        }
+      }
+    },
     "After Asr": {
       "extractionState": "manual",
       "localizations": {
@@ -749,6 +766,23 @@
         }
       }
     },
+    "I made these duas": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعوت بهذه الأدعية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I made these duas"
+          }
+        }
+      }
+    },
     "Iftar": {
       "extractionState": "manual",
       "localizations": {
@@ -1170,6 +1204,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Next prayer"
+          }
+        }
+      }
+    },
+    "Night %lld of Ramadan": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الليلة %lld من رمضان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night %lld of Ramadan"
           }
         }
       }
@@ -1850,6 +1901,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The day of Ashura"
+          }
+        }
+      }
+    },
+    "The last hours of Friday": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر ساعات الجمعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last hours of Friday"
           }
         }
       }

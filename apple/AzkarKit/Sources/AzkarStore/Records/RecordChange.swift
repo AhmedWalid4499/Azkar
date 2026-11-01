@@ -9,6 +9,8 @@ public struct RecordChange: Hashable, Sendable {
     public var day: DayRecords
     public var totals: LifetimeTotals
     public var owedFastsBefore: Int
+    public var owedPrayersBefore: [Prayer: Int]
+    public var duas: [DuaItem]
     public var quranBookmarks: [Int: Date]
     /// Per-dhikr counts deleted because they were more than `RecordLimits.detailDays` older than
     /// the day counted (as the website prunes them), by day.
@@ -30,6 +32,9 @@ extension RecordsSnapshot {
         records.fast = fasts[day]
         records.quran = quran.filter { $0.day == day }
         records.hifz = hifz.filter { $0.day == day }
+        records.makeups = makeups.filter { $0.day == day }
+        records.giving = giving.filter { $0.day == day }
+        records.duaEntries = duaEntries.filter { $0.day == day }
         records.seasons = seasons[day] ?? [:]
         return records
     }
@@ -55,6 +60,15 @@ extension RecordsSnapshot {
         if hifz.filter({ $0.day == key }) != records.hifz {
             hifz = (hifz.filter { $0.day != key } + records.hifz).sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
         }
+        if makeups.filter({ $0.day == key }) != records.makeups {
+            makeups = (makeups.filter { $0.day != key } + records.makeups).sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+        }
+        if giving.filter({ $0.day == key }) != records.giving {
+            giving = (giving.filter { $0.day != key } + records.giving).sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+        }
+        if duaEntries.filter({ $0.day == key }) != records.duaEntries {
+            duaEntries = (duaEntries.filter { $0.day != key } + records.duaEntries).sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+        }
     }
 
     /// The snapshot after `change`, as the store holds it.
@@ -62,6 +76,8 @@ extension RecordsSnapshot {
         set(change.day)
         totals = change.totals
         owedFastsBefore = change.owedFastsBefore
+        owedPrayersBefore = change.owedPrayersBefore
+        duas = change.duas
         quranBookmarks = change.quranBookmarks
         for (day, pruned) in change.prunedCounts {
             guard var kept = counts[day] else { continue }

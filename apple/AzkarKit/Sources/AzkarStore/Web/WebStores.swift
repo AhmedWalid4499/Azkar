@@ -45,8 +45,14 @@ public enum WebStores {
     static let seasons = "seasons"
     /// The native app's memorisation log, kept the same way.
     static let hifz = "hifz"
+    /// The native app's prayers made up from before the log, kept the same way.
+    static let makeups = "prayer-makeups"
+    /// The native app's giving log, kept the same way.
+    static let giving = "giving"
+    /// The native app's own duas and their log, kept the same way.
+    static let duas = "duas"
     /// Every store read.
-    static var stores: [String] { names + [progressSpare, quran, seasons, hifz] }
+    static var stores: [String] { names + [progressSpare, quran, seasons, hifz, makeups, giving, duas] }
 
     /// What `persist` hands to a store's `merge` while loading.
     enum Loaded {
@@ -100,7 +106,7 @@ public enum WebStores {
         let known = Set(stores.map { prefix + $0 })
         snapshot.ignored = Set(entries.keys.filter { !known.contains($0) && $0.hasPrefix(prefix) })
         func entry(_ name: String) -> StoredEntry { entries[prefix + name] ?? .missing }
-        for name in names + [quran, seasons, hifz] {
+        for name in names + [quran, seasons, hifz, makeups, giving, duas] {
             if case let .json(value) = entry(name), value.isTruthy { snapshot.found.insert(name) }
         }
 
@@ -162,6 +168,22 @@ public enum WebStores {
             WebHifz.web(WebHifz.read(state))
         }).persisted)
 
+        let made = WebMakeups.read(load(entry(makeups), version: WebMakeups.version, migrate: { state, _ in
+            let read = WebMakeups.read(state)
+            return WebMakeups.web(read.makeups, owedBefore: read.owedBefore)
+        }).persisted)
+        snapshot.records.makeups = made.makeups
+        snapshot.records.owedPrayersBefore = made.owedBefore
+        snapshot.records.giving = WebGiving.read(load(entry(giving), version: WebGiving.version, migrate: { state, _ in
+            WebGiving.web(WebGiving.read(state))
+        }).persisted)
+        let asked = WebDuas.read(load(entry(duas), version: WebDuas.version, migrate: { state, _ in
+            let read = WebDuas.read(state)
+            return WebDuas.web(read.items, entries: read.entries)
+        }).persisted)
+        snapshot.records.duas = asked.items
+        snapshot.records.duaEntries = asked.entries
+
         snapshot.records.seasons = WebSeasons.read(load(entry(seasons), version: WebSeasons.version, migrate: { state, _ in
             WebSeasons.web(WebSeasons.read(state))
         }).persisted)
@@ -198,6 +220,15 @@ public enum WebStores {
         }
         if !records.hifz.isEmpty {
             stores[prefix + hifz] = stored(WebHifz.web(records.hifz), WebHifz.version)
+        }
+        if !records.makeups.isEmpty || !records.owedPrayersBefore.isEmpty {
+            stores[prefix + makeups] = stored(WebMakeups.web(records.makeups, owedBefore: records.owedPrayersBefore), WebMakeups.version)
+        }
+        if !records.giving.isEmpty {
+            stores[prefix + giving] = stored(WebGiving.web(records.giving), WebGiving.version)
+        }
+        if !records.duas.isEmpty || !records.duaEntries.isEmpty {
+            stores[prefix + duas] = stored(WebDuas.web(records.duas, entries: records.duaEntries), WebDuas.version)
         }
         return stores
     }

@@ -757,6 +757,24 @@
       },
       "generatesSymbol": false
     },
+    "Give it before the Eid prayer.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أخرجها قبل صلاة العيد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Give it before the Eid prayer."
+          }
+        }
+      }
+    },
     "Goal met": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1963,6 +1981,24 @@
         }
       }
     },
+    "Today is the day you set for your zakat.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم هو الموعد الذي حددته لزكاتك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is the day you set for your zakat."
+          }
+        }
+      }
+    },
     "Tomorrow": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -2139,6 +2175,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your place in the Quran, with tarawih and your goal in Ramadan."
+          }
+        }
+      }
+    },
+    "Your zakat date": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعد زكاتك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your zakat date"
+          }
+        }
+      }
+    },
+    "Zakat al-fitr": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "زكاة الفطر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zakat al-fitr"
           }
         }
       }

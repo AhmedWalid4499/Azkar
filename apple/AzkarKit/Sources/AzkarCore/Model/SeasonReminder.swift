@@ -17,8 +17,21 @@ public enum FastingReason: String, CaseIterable, Codable, Sendable {
     case thursday
 }
 
+/// A day of the Hijri year, such as the one the user's zakat falls due.
+public struct HijriMonthDay: Codable, Hashable, Sendable {
+    public var month: Int
+    public var day: Int
+
+    /// `nil` for what is no day of a Hijri year.
+    public init?(month: Int, day: Int) {
+        guard (1...12).contains(month), (1...30).contains(day) else { return nil }
+        self.month = month
+        self.day = day
+    }
+}
+
 /// Which reminders beyond the prayers and the azkar the user asked for: the fasting days, Ramadan,
-/// Friday's Surah al-Kahf and the sunnah prayers. All off to begin with.
+/// Friday's Surah al-Kahf, the sunnah prayers and zakat. All off to begin with.
 public struct SeasonReminderChoices: Hashable, Sendable {
     /// How long before Fajr the suhoor reminder can come, in minutes.
     public static let suhoorLeadChoices = [30, 45, 60, 90]
@@ -30,6 +43,9 @@ public struct SeasonReminderChoices: Hashable, Sendable {
     public static let duhaDelayMinutes = 45
     /// How long after sunrise on Friday the Surah al-Kahf reminder comes.
     public static let kahfDelayMinutes = 60
+    /// The day of Ramadan the zakat al-fitr reminder comes: in time to give it before the Eid prayer
+    /// whether the month has 29 days or 30.
+    public static let zakatFitrDay = 28
 
     public var mondayThursday = false
     public var whiteDays = false
@@ -44,10 +60,14 @@ public struct SeasonReminderChoices: Hashable, Sendable {
     public var witr = false
     public var witrDelayMinutes = 120
     public var duha = false
+    /// The day the user's zakat falls due each year; kept whether the reminder is on or not.
+    public var zakatDue: HijriMonthDay?
+    public var zakat = false
+    public var zakatFitr = false
 
     public init() {}
 
-    public var isAnyOn: Bool { mondayThursday || whiteDays || occasions || suhoor || iftar || oddNights || kahf || witr || duha }
+    public var isAnyOn: Bool { mondayThursday || whiteDays || occasions || suhoor || iftar || oddNights || kahf || witr || duha || (zakat && zakatDue != nil) || zakatFitr }
 }
 
 /// One such reminder on one day, at a time of that day's prayers.
@@ -63,6 +83,9 @@ public struct SeasonReminder: Hashable, Sendable {
         case kahf
         case witr
         case duha
+        /// The user's zakat falls due today.
+        case zakat
+        case zakatFitr
     }
 
     public var kind: Kind

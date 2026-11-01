@@ -143,6 +143,24 @@ struct SettingsRemindersView: View {
             }
 
             Section {
+                if reminders.season.zakatDue != nil {
+                    Toggle(isOn: binding(\.season.zakat)) {
+                        Text("Your zakat date", tableName: SettingsText.table)
+                    }
+                }
+                Toggle(isOn: binding(\.season.zakatFitr)) {
+                    Text("Zakat al-fitr", tableName: SettingsText.table)
+                    Text("On the 28th of Ramadan.", tableName: SettingsText.table)
+                }
+            } header: {
+                Text("Zakat", tableName: SettingsText.table)
+            } footer: {
+                if reminders.season.zakatDue == nil {
+                    Text("To be reminded of your yearly zakat, set its date in Tracker › Charity and zakat.", tableName: SettingsText.table)
+                }
+            }
+
+            Section {
                 ForEach(Prayer.allCases) { prayer in
                     Toggle(isOn: adhanBinding(prayer)) {
                         Text(SettingsText.prayer(prayer, locale: locale))

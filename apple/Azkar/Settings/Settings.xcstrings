@@ -2394,6 +2394,23 @@
         }
       }
     },
+    "On the 28th of Ramadan.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في ٢٨ رمضان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the 28th of Ramadan."
+          }
+        }
+      }
+    },
     "One-seventh of the night": {
       "extractionState": "manual",
       "localizations": {
@@ -3295,6 +3312,23 @@
         }
       }
     },
+    "To be reminded of your yearly zakat, set its date in Tracker › Charity and zakat.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لتذكيرك بزكاتك السنوية، حدّد موعدها في السجل › الصدقة والزكاة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To be reminded of your yearly zakat, set its date in Tracker › Charity and zakat."
+          }
+        }
+      }
+    },
     "Turn off automatic backup": {
       "extractionState": "manual",
       "localizations": {
@@ -3563,6 +3597,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your prayer log, progress and settings are kept only on this iPhone, inside the app; removing the app removes them. Export a backup before you do, or before changing phones. A backup also opens in the Azkar website."
+          }
+        }
+      }
+    },
+    "Your zakat date": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعد زكاتك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your zakat date"
+          }
+        }
+      }
+    },
+    "Zakat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الزكاة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zakat"
+          }
+        }
+      }
+    },
+    "Zakat al-fitr": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "زكاة الفطر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zakat al-fitr"
           }
         }
       }

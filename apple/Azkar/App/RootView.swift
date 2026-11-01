@@ -96,3 +96,18 @@ private extension AppSettings.Language {
         }
     }
 }
+
+/// The app's language can differ from the iPhone's, and a sheet takes its direction from the
+/// iPhone's, so each sheet sets the app's again.
+private struct AppDirection: ViewModifier {
+    @Environment(AppEnvironment.self) private var app
+    @Environment(\.layoutDirection) private var direction
+
+    func body(content: Content) -> some View {
+        content.environment(\.layoutDirection, app.settings.settings.app.language.layoutDirection ?? direction)
+    }
+}
+
+extension View {
+    func appDirection() -> some View { modifier(AppDirection()) }
+}

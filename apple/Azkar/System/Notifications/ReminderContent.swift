@@ -97,6 +97,12 @@ extension ReminderContent {
         case .duha:
             content.title = SystemText.string("Time for Duha", language)
             content.body = SystemText.string("The time for Duha has begun.", language)
+        case .zakat:
+            content.title = SystemText.string("Your zakat date", language)
+            content.body = SystemText.string("Today is the day you set for your zakat.", language)
+        case .zakatFitr:
+            content.title = SystemText.string("Zakat al-fitr", language)
+            content.body = SystemText.string("Give it before the Eid prayer.", language)
         }
         let page = reminder.kind == .kahf ? SeasonReminders.kahfPage : nil
         content.userInfo = ReminderInfo(kind: .season, day: entry.day, quranPage: page).userInfo

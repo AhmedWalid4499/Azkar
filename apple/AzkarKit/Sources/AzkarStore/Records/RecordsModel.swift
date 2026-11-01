@@ -138,6 +138,50 @@ public final class RecordsModel {
         if let change = try await store.removeHifzEntry(id) { _ = await apply(change) }
     }
 
+    public func logMakeup(_ prayer: Prayer, on day: DayKey, at: Date = .now) async throws {
+        _ = try await apply(store.logMakeup(prayer, on: day, at: at))
+    }
+
+    public func undoMakeup(_ id: UUID) async throws {
+        if let change = try await store.undoMakeup(id) { _ = await apply(change) }
+    }
+
+    public func setOwedPrayersBefore(_ owed: [Prayer: Int]) async throws {
+        _ = try await apply(store.setOwedPrayersBefore(owed))
+    }
+
+    public func logGiving(_ entry: GivingEntry) async throws {
+        _ = try await apply(store.logGiving(entry))
+    }
+
+    public func removeGiving(_ id: UUID) async throws {
+        if let change = try await store.removeGiving(id) { _ = await apply(change) }
+    }
+
+    public func addDua(_ text: String, at: Date = .now) async throws {
+        _ = try await apply(store.addDua(text, at: at))
+    }
+
+    public func editDua(_ id: UUID, text: String) async throws {
+        _ = try await apply(store.editDua(id, text: text))
+    }
+
+    public func removeDua(_ id: UUID) async throws {
+        _ = try await apply(store.removeDua(id))
+    }
+
+    public func logDua(_ kind: DuaEntry.Kind, dua: UUID, on day: DayKey, at: Date = .now) async throws {
+        _ = try await apply(store.logDua(kind, dua: dua, on: day, at: at))
+    }
+
+    public func logDuasSaid(_ duas: [UUID], on day: DayKey, at: Date = .now) async throws {
+        _ = try await apply(store.logDuasSaid(duas, on: day, at: at))
+    }
+
+    public func undoDuaEntry(_ id: UUID) async throws {
+        if let change = try await store.undoDuaEntry(id) { _ = await apply(change) }
+    }
+
     public func undoQuranEntry(_ id: UUID) async throws {
         if let change = try await store.removeQuranEntry(id) { _ = await apply(change) }
     }

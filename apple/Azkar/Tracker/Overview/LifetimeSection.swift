@@ -21,6 +21,9 @@ struct TrackerLifetimeSection: View {
                     Text("Logged in all: \(prayers.logged)", tableName: "Tracker")
                 }
                 TrackerTotalRow(name: LocalizedStringResource("Sunnah prayers", table: "Tracker"), symbol: "sparkles", tint: .teal, value: prayers.sunnah)
+                if !data.records.makeups.isEmpty {
+                    TrackerTotalRow(name: LocalizedStringResource("Made up from before", table: "Tracker"), symbol: "arrow.uturn.backward.circle.fill", tint: .orange, value: data.records.makeups.count)
+                }
             case .azkar:
                 TrackerTotalRow(name: LocalizedStringResource("Azkar sessions completed", table: "Tracker"), symbol: "book.closed.fill", tint: .indigo, value: sessions) {
                     Text(sessionBreakdown(completed, afterPrayer: afterPrayer))
@@ -41,7 +44,7 @@ struct TrackerLifetimeSection: View {
             case .fasting:
                 TrackerTotalRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange,
                                 value: data.history.fasts.values.filter { $0.status == .fasted }.count)
-            case .ramadan:
+            case .ramadan, .giving, .duas:
                 EmptyView()
             }
         } header: {

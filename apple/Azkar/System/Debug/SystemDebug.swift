@@ -65,6 +65,9 @@ enum SystemDebug {
                 settings.reminders.season.suhoor = true
                 settings.reminders.season.iftar = true
                 settings.reminders.season.oddNights = true
+                settings.reminders.season.zakat = true
+                settings.reminders.season.zakatFitr = true
+                settings.reminders.season.zakatDue = HijriMonthDay(month: 9, day: 22)
             }
             printRamadanReminders(app)
             acted = true
@@ -97,7 +100,11 @@ enum SystemDebug {
         var snapshot = settings
         snapshot.reminders = season
         let context = ReminderContent.Context(language: SystemLanguage(settings.app), timeZone: location.zone, place: location.label, name: settings.app.name)
-        for entry in ReminderScheduler.plan(settings: snapshot, logged: [:], now: at).prefix(8) {
+        let plan = ReminderScheduler.plan(settings: snapshot, logged: [:], now: at)
+        let zakat = plan.filter {
+            if case let .season(reminder) = $0.kind { reminder.kind == .zakat || reminder.kind == .zakatFitr } else { false }
+        }
+        for entry in plan.prefix(8) + zakat {
             let content = ReminderContent.make(entry, context)
             print("SystemDebug: Ramadan \(entry.id) \(entry.at.formatted(.dateTime.day().month().hour().minute())) — \(content.title) — \(content.body)")
         }

@@ -39,6 +39,8 @@ public struct HijriYearReview: Hashable, Sendable {
     /// The longest run of complete days within the year, as `PrayerStats.streaks` runs them.
     public var bestStreak = 0
     public var sunnah = 0
+    /// Prayers made up from before the log began.
+    public var madeUp = 0
 
     /// Sessions read to the end, by session.
     public var sessions: [AzkarSession: Int] = [:]
@@ -58,6 +60,11 @@ public struct HijriYearReview: Hashable, Sendable {
     public var tarawih = 0
     public var eidPrayers = 0
 
+    /// What was given in the year.
+    public var giving = GivingSummary(entries: [])
+    public var duasSaid = 0
+    public var duasAnswered = 0
+
     /// Muharram to Dhu al-Hijjah.
     public var months: [Month]
 
@@ -75,6 +82,10 @@ public struct HijriYearReview: Hashable, Sendable {
         let quran = QuranProgress(entries: history.quran)
         let khatmahs = Dictionary(grouping: quran.khatmahDates) { $0 }
         let hifz = Dictionary(grouping: history.hifz, by: \.day)
+        let makeups = Dictionary(grouping: history.makeups, by: \.day)
+        let given = Dictionary(grouping: history.giving, by: \.day)
+        let duas = Dictionary(grouping: history.duaEntries, by: \.day)
+        var givenInYear: [GivingEntry] = []
         var run = 0
         var counted = 0
         var active = 0
@@ -142,8 +153,24 @@ public struct HijriYearReview: Hashable, Sendable {
                 if deeds[.tarawih] != nil { tarawih += 1 }
                 if deeds[.eidPrayer] != nil { eidPrayers += 1 }
             }
+            if let made = makeups[day] {
+                isActive = true
+                madeUp += made.count
+            }
+            if let entries = given[day] {
+                isActive = true
+                givenInYear += entries
+            }
+            for entry in duas[day] ?? [] {
+                isActive = true
+                switch entry.kind {
+                case .said: duasSaid += 1
+                case .answered: duasAnswered += 1
+                }
+            }
             if isActive { active += 1 }
         }
+        giving = GivingSummary(entries: givenInYear)
         daysSoFar = counted
         activeDays = active
     }
@@ -159,6 +186,9 @@ public extension TrackerHistory {
         days.formUnion(seasons.keys)
         days.formUnion(quran.map(\.day))
         days.formUnion(hifz.map(\.day))
+        days.formUnion(makeups.map(\.day))
+        days.formUnion(giving.map(\.day))
+        days.formUnion(duaEntries.map(\.day))
         var years = Set(days.filter { $0 <= today }.map { HijriCalendar.date(of: $0, offset: offset).year })
         years.insert(current)
         return years.sorted(by: >)

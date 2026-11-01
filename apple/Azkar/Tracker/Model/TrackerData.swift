@@ -31,7 +31,10 @@ struct TrackerData {
             fasts: records.fasts,
             quran: records.quran,
             seasons: records.seasons,
-            hifz: records.hifz
+            hifz: records.hifz,
+            makeups: records.makeups,
+            giving: records.giving,
+            duaEntries: records.duaEntries
         )
         self.history = history
         let sessionsRead = Set(records.sessions.values.flatMap(\.keys))
@@ -56,6 +59,10 @@ struct TrackerData {
 
     func day(_ day: DayKey) -> DayRecords { records.day(day) }
 
+    var prayerBacklog: PrayerBacklog { PrayerBacklog(owedBefore: records.owedPrayersBefore, makeups: records.makeups) }
+
+    var duas: DuaProgress { DuaProgress(items: records.duas, entries: records.duaEntries) }
+
     /// Fasts kept to the end over the last `days` days, today included.
     func fastsKept(days: Int) -> Int {
         let start = today.adding(days: -(days - 1))
@@ -76,7 +83,7 @@ enum TrackerRoute: Hashable {
     case yearReview
 }
 
-/// The tracker's four areas, each with a page of its own.
+/// The tracker's areas, each with a page of its own.
 enum TrackerArea: Hashable {
-    case prayers, azkar, quran, fasting, ramadan
+    case prayers, azkar, quran, fasting, ramadan, giving, duas
 }

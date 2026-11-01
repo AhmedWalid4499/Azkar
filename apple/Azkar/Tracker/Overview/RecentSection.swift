@@ -65,7 +65,7 @@ struct TrackerRecentSection: View {
                                 count: (0..<days).reduce(0) { $0 + data.quran.pages(on: today.adding(days: -$1)) })
             case .fasting:
                 TrackerCountRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange, count: data.fastsKept(days: days))
-            case .ramadan:
+            case .ramadan, .giving, .duas:
                 EmptyView()
             }
         } header: {

@@ -10,6 +10,8 @@ enum TallyKind {
     static let dhikr = "dhikr"
     static let afterPrayer = "afterPrayer"
     static let tasbih = "tasbih"
+    /// Prayers owed from before the log began, by prayer.
+    static let owedPrayers = "owedPrayers"
     /// Single numbers, keyed by `Counter`.
     static let counter = "counter"
 
@@ -71,6 +73,22 @@ struct RecordRows {
         try fetch(#Predicate<HifzEntryRow> { $0.id == id }).first
     }
 
+    func makeup(_ id: UUID) throws -> PrayerMakeupRow? {
+        try fetch(#Predicate<PrayerMakeupRow> { $0.id == id }).first
+    }
+
+    func giving(_ id: UUID) throws -> GivingRow? {
+        try fetch(#Predicate<GivingRow> { $0.id == id }).first
+    }
+
+    func dua(_ id: UUID) throws -> DuaRow? {
+        try fetch(#Predicate<DuaRow> { $0.id == id }).first
+    }
+
+    func duaEntry(_ id: UUID) throws -> DuaEntryRow? {
+        try fetch(#Predicate<DuaEntryRow> { $0.id == id }).first
+    }
+
     func quranBookmark(_ page: Int) throws -> QuranBookmarkRow? {
         try fetch(#Predicate<QuranBookmarkRow> { $0.page == page }).first
     }
@@ -93,6 +111,45 @@ struct RecordRows {
         let high = days?.upperBound ?? Int.max
         return try fetch(#Predicate<HifzEntryRow> { $0.day >= low && $0.day <= high }).compactMap(\.entry)
             .sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+    }
+
+    /// The prayers made up on the days in `days` (all days when `nil`), in order.
+    func makeups(days: ClosedRange<Int>? = nil) throws -> [PrayerMakeup] {
+        let low = days?.lowerBound ?? Int.min
+        let high = days?.upperBound ?? Int.max
+        return try fetch(#Predicate<PrayerMakeupRow> { $0.day >= low && $0.day <= high }).compactMap(\.makeup)
+            .sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+    }
+
+    /// What was given on the days in `days` (all days when `nil`), in order.
+    func giving(days: ClosedRange<Int>? = nil) throws -> [GivingEntry] {
+        let low = days?.lowerBound ?? Int.min
+        let high = days?.upperBound ?? Int.max
+        return try fetch(#Predicate<GivingRow> { $0.day >= low && $0.day <= high }).compactMap(\.entry)
+            .sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+    }
+
+    /// The duas' log on the days in `days` (all days when `nil`), in order.
+    func duaEntries(days: ClosedRange<Int>? = nil) throws -> [DuaEntry] {
+        let low = days?.lowerBound ?? Int.min
+        let high = days?.upperBound ?? Int.max
+        return try fetch(#Predicate<DuaEntryRow> { $0.day >= low && $0.day <= high }).compactMap(\.entry)
+            .sorted { ($0.at, $0.id.uuidString) < ($1.at, $1.id.uuidString) }
+    }
+
+    func duas() throws -> [DuaItem] {
+        let rows: [DuaRow] = try fetch()
+        return rows.map { DuaItem(id: $0.id, text: $0.text, addedAt: $0.addedAt.nearestMillisecond) }
+            .sorted { ($0.addedAt, $0.id.uuidString) < ($1.addedAt, $1.id.uuidString) }
+    }
+
+    func owedPrayersBefore() throws -> [Prayer: Int] {
+        var owed: [Prayer: Int] = [:]
+        for prayer in Prayer.allCases {
+            let count = try value(TallyKind.owedPrayers, prayer.rawValue)
+            if count > 0 { owed[prayer] = count }
+        }
+        return owed
     }
 
     func quranBookmarks() throws -> [Int: Date] {
@@ -174,6 +231,11 @@ struct RecordRows {
         snapshot.quran = try quranEntries(days: days)
         snapshot.quranBookmarks = try quranBookmarks()
         snapshot.hifz = try hifzEntries(days: days)
+        snapshot.makeups = try makeups(days: days)
+        snapshot.giving = try giving(days: days)
+        snapshot.duaEntries = try duaEntries(days: days)
+        snapshot.duas = try duas()
+        snapshot.owedPrayersBefore = try owedPrayersBefore()
         snapshot.totals = try totals()
         snapshot.owedFastsBefore = try value(TallyKind.counter, TallyKind.Counter.owedFastsBefore)
         return snapshot
@@ -218,6 +280,10 @@ struct RecordRows {
         try delete(QuranBookmarkRow.self)
         try delete(SeasonRow.self)
         try delete(HifzEntryRow.self)
+        try delete(PrayerMakeupRow.self)
+        try delete(GivingRow.self)
+        try delete(DuaRow.self)
+        try delete(DuaEntryRow.self)
         let revisionKey = TallyKind.Counter.revision
         let counter = TallyKind.counter
         for row in try fetch(#Predicate<TallyRow> { $0.kind != counter || $0.key != revisionKey }) { context.delete(row) }
@@ -229,6 +295,23 @@ struct RecordRows {
 
     func insert(_ entry: HifzEntry) {
         context.insert(HifzEntryRow(id: entry.id, sura: entry.sura, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue))
+    }
+
+    func insert(_ makeup: PrayerMakeup) {
+        context.insert(PrayerMakeupRow(id: makeup.id, prayer: makeup.prayer.rawValue, day: makeup.day.number, at: makeup.at))
+    }
+
+    func insert(_ entry: GivingEntry) {
+        context.insert(GivingRow(id: entry.id, kind: entry.kind.rawValue, day: entry.day.number, at: entry.at,
+                                 amount: entry.amount.map { "\($0)" }, currency: entry.currency, note: entry.note))
+    }
+
+    func insert(_ dua: DuaItem) {
+        context.insert(DuaRow(id: dua.id, text: dua.text, addedAt: dua.addedAt))
+    }
+
+    func insert(_ entry: DuaEntry) {
+        context.insert(DuaEntryRow(id: entry.id, dua: entry.dua, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue))
     }
 
     func insert(_ record: SeasonRecord) {
@@ -285,6 +368,14 @@ struct RecordRows {
         }
         let hifz = Set(existing.hifz.map(\.id))
         for entry in incoming.hifz where !hifz.contains(entry.id) { insert(entry) }
+        let makeups = Set(existing.makeups.map(\.id))
+        for makeup in incoming.makeups where !makeups.contains(makeup.id) { insert(makeup) }
+        let giving = Set(existing.giving.map(\.id))
+        for entry in incoming.giving where !giving.contains(entry.id) { insert(entry) }
+        let duas = Set(existing.duas.map(\.id))
+        for dua in incoming.duas where !duas.contains(dua.id) { insert(dua) }
+        let duaEntries = Set(existing.duaEntries.map(\.id))
+        for entry in incoming.duaEntries where !duaEntries.contains(entry.id) { insert(entry) }
 
         let limit = RecordLimits.maxLifetimeRecitations
         func added(_ old: Int, _ new: Int) -> Int { min(limit, old + new) }
@@ -303,6 +394,9 @@ struct RecordRows {
         if existing.owedFastsBefore == 0, incoming.owedFastsBefore > 0 {
             try setValue(TallyKind.counter, TallyKind.Counter.owedFastsBefore, min(RecordLimits.maxOwedFastsBefore, incoming.owedFastsBefore))
         }
+        for (prayer, count) in incoming.owedPrayersBefore where (existing.owedPrayersBefore[prayer] ?? 0) == 0 && count > 0 {
+            try setValue(TallyKind.owedPrayers, prayer.rawValue, min(RecordLimits.maxOwedPrayersBefore, count))
+        }
     }
 }
 
@@ -310,6 +404,27 @@ extension HifzEntryRow {
     var entry: HifzEntry? {
         guard let day = DayKey(number: day), let kind = HifzEntry.Kind(rawValue: kind) else { return nil }
         return HifzEntry(id: id, sura: sura, day: day, at: at.nearestMillisecond, kind: kind)
+    }
+}
+
+extension PrayerMakeupRow {
+    var makeup: PrayerMakeup? {
+        guard let day = DayKey(number: day), let prayer = Prayer(rawValue: prayer) else { return nil }
+        return PrayerMakeup(id: id, prayer: prayer, day: day, at: at.nearestMillisecond)
+    }
+}
+
+extension GivingRow {
+    var entry: GivingEntry? {
+        guard let day = DayKey(number: day), let kind = GivingEntry.Kind(rawValue: kind) else { return nil }
+        return GivingEntry(id: id, kind: kind, day: day, at: at.nearestMillisecond, amount: amount.flatMap { Decimal(string: $0, locale: Locale(identifier: "en_US_POSIX")) }, currency: currency, note: note)
+    }
+}
+
+extension DuaEntryRow {
+    var entry: DuaEntry? {
+        guard let day = DayKey(number: day), let kind = DuaEntry.Kind(rawValue: kind) else { return nil }
+        return DuaEntry(id: id, dua: dua, day: day, at: at.nearestMillisecond, kind: kind)
     }
 }
 

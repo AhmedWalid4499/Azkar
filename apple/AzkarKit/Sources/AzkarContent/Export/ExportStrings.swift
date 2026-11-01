@@ -84,6 +84,18 @@ struct ExportStrings: Sendable {
     var hifzMemorisedHeader: String { ar ? "الحفظ: سور حُفظت" : "Memorisation: surahs memorised" }
     var hifzReviewedHeader: String { ar ? "الحفظ: سور رُوجعت" : "Memorisation: surahs reviewed" }
 
+    var makeupsHeader: String { ar ? "الصلوات المقضية من قبل" : "Prayers made up from before" }
+    func giving(_ kind: GivingEntry.Kind) -> String {
+        switch kind {
+        case .sadaqah: ar ? "الصدقة" : "Sadaqah"
+        case .zakat: ar ? "الزكاة" : "Zakat"
+        case .zakatAlFitr: ar ? "زكاة الفطر" : "Zakat al-fitr"
+        }
+    }
+    var givingNoteHeader: String { ar ? "العطاء: ملاحظات" : "Giving: notes" }
+    var duasSaidHeader: String { ar ? "أدعيتي: مرات الدعاء" : "My duas: times said" }
+    var duasAnsweredHeader: String { ar ? "أدعيتي: استُجيبت" : "My duas: answered" }
+
     var tarawihPlaceHeader: String { ar ? "التراويح: المكان" : "Tarawih: place" }
     var tarawihRakahsHeader: String { ar ? "التراويح: الركعات" : "Tarawih: rakahs" }
     var eidPrayerHeader: String { ar ? "صلاة العيد" : "Eid prayer" }

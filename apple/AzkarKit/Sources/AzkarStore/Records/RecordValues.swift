@@ -102,6 +102,12 @@ public struct DayRecords: Hashable, Sendable, Identifiable {
     public var quran: [QuranEntry] = []
     /// What was recorded about memorising that day, in order.
     public var hifz: [HifzEntry] = []
+    /// Prayers made up that day from before the log began, in order.
+    public var makeups: [PrayerMakeup] = []
+    /// What was given that day, in order.
+    public var giving: [GivingEntry] = []
+    /// What was recorded about the user's duas that day, in order.
+    public var duaEntries: [DuaEntry] = []
     /// The tarawih of the night falling on this evening, or the Eid prayer of this day.
     public var seasons: [SeasonDeed: SeasonRecord] = [:]
 
@@ -110,7 +116,7 @@ public struct DayRecords: Hashable, Sendable, Identifiable {
     public var id: DayKey { day }
 
     public var isEmpty: Bool {
-        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && hifz.isEmpty && seasons.isEmpty
+        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && hifz.isEmpty && makeups.isEmpty && giving.isEmpty && duaEntries.isEmpty && seasons.isEmpty
     }
 
     /// The day's tasbih in the shape the statistics read.
@@ -137,6 +143,16 @@ public struct RecordsSnapshot: Hashable, Sendable {
     public var seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:]
     /// The memorisation log, the only source of truth for `HifzProgress`, ordered by `at`.
     public var hifz: [HifzEntry] = []
+    /// Prayers owed from before the log began, as the user counts them.
+    public var owedPrayersBefore: [Prayer: Int] = [:]
+    /// Prayers made up from those, ordered by `at`.
+    public var makeups: [PrayerMakeup] = []
+    /// Everything given, ordered by `at`.
+    public var giving: [GivingEntry] = []
+    /// The user's duas, ordered by when each was added.
+    public var duas: [DuaItem] = []
+    /// What was recorded about them, ordered by `at`.
+    public var duaEntries: [DuaEntry] = []
 
     public init() {}
 
@@ -144,7 +160,7 @@ public struct RecordsSnapshot: Hashable, Sendable {
 
     /// Every day with any record, oldest first.
     public var days: [DayKey] {
-        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).union(hifz.map(\.day)).sorted()
+        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).union(hifz.map(\.day)).union(makeups.map(\.day)).union(giving.map(\.day)).union(duaEntries.map(\.day)).sorted()
     }
 }
 
@@ -176,4 +192,6 @@ public enum RecordLimits {
     public static let maxLifetimeRecitations = 1_000_000_000_000
     /// Days owed from before the fasting log began: a hundred Ramadans.
     public static let maxOwedFastsBefore = 3000
+    /// Prayers of one kind owed from before the log began: a hundred Hijri years of them.
+    public static let maxOwedPrayersBefore = 35_500
 }

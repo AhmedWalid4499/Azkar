@@ -34,6 +34,7 @@ struct TrackerDayView: View {
                 TrackerDayAzkarSection(data: data, day: day, sessions: records.sessions).id("azkar")
                 TrackerDayTasbihSection(data: data, records: records)
                 TrackerDayQuranSection(data: data, day: day)
+                TrackerDayDeedsSection(data: data, records: records)
                 TrackerDaySeasonSection(data: data, day: day).id("season")
                 TrackerDayFastSection(data: data, day: day, fast: records.fast).id("fast")
                 TrackerDayTimesSection(data: data, day: day)

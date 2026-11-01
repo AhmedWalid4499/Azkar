@@ -55,6 +55,10 @@ struct TrackerFormat {
         value.formatted(.number.locale(locale))
     }
 
+    func money(_ amount: Decimal, _ currency: String) -> String {
+        amount.formatted(.currency(code: currency).locale(locale))
+    }
+
     func percent(_ rate: Double) -> String {
         rate.formatted(.percent.precision(.fractionLength(0)).locale(locale))
     }

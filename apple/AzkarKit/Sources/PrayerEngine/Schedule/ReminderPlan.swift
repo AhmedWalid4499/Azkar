@@ -200,6 +200,8 @@ public enum ReminderPlan {
         case .kahf: moreSeasonIDBase + reminderID(day: day, digit: 0)
         case .witr: moreSeasonIDBase + reminderID(day: day, digit: 1)
         case .duha: moreSeasonIDBase + reminderID(day: day, digit: 2)
+        case .zakat: moreSeasonIDBase + reminderID(day: day, digit: 3)
+        case .zakatFitr: moreSeasonIDBase + reminderID(day: day, digit: 4)
         }
     }
 

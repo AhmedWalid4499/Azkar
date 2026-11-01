@@ -33,6 +33,11 @@ public struct ImportReport: Codable, Hashable, Sendable {
     public var hifzEntries: Int?
     /// Records of Ramadan and the Eids. `nil` in a report saved before they were tracked.
     public var seasonRecords: Int?
+    /// Prayers made up from before the log, things given and the user's duas; `nil` in a report
+    /// saved before they were tracked.
+    public var makeups: Int?
+    public var givingEntries: Int?
+    public var duas: Int?
 
     public static let webApp = "web-app"
     public static let backup = "backup"
@@ -57,6 +62,9 @@ public struct ImportReport: Codable, Hashable, Sendable {
         quranEntries = records.quran.count
         hifzEntries = records.hifz.count
         seasonRecords = records.seasons.values.reduce(0) { $0 + $1.count }
+        makeups = records.makeups.count
+        givingEntries = records.giving.count
+        duas = records.duas.count
     }
 
     /// Nothing was found to import.

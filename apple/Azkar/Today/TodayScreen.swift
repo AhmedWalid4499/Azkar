@@ -76,6 +76,8 @@ struct TodayScreen: View {
 
             SeasonSection(context: context, showsCalendar: $showsCalendar)
 
+            DuaMomentSection(context: context)
+
             TarawihSection(context: context)
 
             FastingSection(context: context, clock: clock)

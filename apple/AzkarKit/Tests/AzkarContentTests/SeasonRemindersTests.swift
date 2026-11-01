@@ -106,6 +106,44 @@ import Testing
         for offset in 1...6 { #expect(kinds(on: friday.adding(days: offset), wanted) == []) }
     }
 
+    @Test func zakatComesOnTheDayTheUserSetAndOnlyThen() throws {
+        let due = try #require(HijriMonthDay(month: 3, day: 12))
+        let day = try #require(SeasonReminders.zakatDay(due, hijriYear: 1449))
+        #expect(HijriCalendar.date(of: day).month == 3 && HijriCalendar.date(of: day).day == 12)
+        let wanted = choices {
+            $0.zakat = true
+            $0.zakatDue = due
+        }
+        #expect(SeasonReminders.plan(for: day, choices: wanted) == [SeasonReminder(kind: .zakat, anchor: .dhuhr)])
+        #expect(kinds(on: day.adding(days: 1), wanted) == [])
+        // The date stays when the reminder is off.
+        #expect(kinds(on: day, choices { $0.zakatDue = due }) == [])
+    }
+
+    @Test func aZakatDayOnTheThirtiethFallsOnTheLastDayOfAShortMonth() throws {
+        let due = try #require(HijriMonthDay(month: 2, day: 30))
+        for year in 1447...1460 {
+            let days = HijriCalendar.civilDays(ofYear: year, month: 2)
+            #expect(SeasonReminders.zakatDay(due, hijriYear: year) == days.last)
+        }
+    }
+
+    @Test func theNextZakatDayIsThisYearsUntilItHasPassed() throws {
+        let due = try #require(HijriMonthDay(month: 3, day: 12))
+        let day = try #require(SeasonReminders.zakatDay(due, hijriYear: 1449))
+        #expect(SeasonReminders.nextZakatDay(due, from: day) == day)
+        #expect(SeasonReminders.nextZakatDay(due, from: day.adding(days: -5)) == day)
+        #expect(SeasonReminders.nextZakatDay(due, from: day.adding(days: 1)) == SeasonReminders.zakatDay(due, hijriYear: 1450))
+    }
+
+    @Test func zakatAlFitrComesOnTheTwentyEighthOfRamadan() throws {
+        let days = HijriCalendar.civilDays(ofYear: 1448, month: HijriDate.ramadan)
+        let wanted = choices { $0.zakatFitr = true }
+        #expect(SeasonReminders.plan(for: days[27], choices: wanted) == [SeasonReminder(kind: .zakatFitr, anchor: .dhuhr)])
+        #expect(kinds(on: days[26], wanted) == [])
+        #expect(kinds(on: days[28], wanted) == [])
+    }
+
     @Test func witrAndDuhaComeEveryDayUntilTicked() {
         let day = DayKey(year: 2026, month: 11, day: 3)!
         let wanted = choices { $0.witr = true; $0.duha = true; $0.witrDelayMinutes = 60 }

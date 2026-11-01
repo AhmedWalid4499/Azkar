@@ -1,7 +1,7 @@
 import AzkarCore
 import Foundation
 
-/// Which of the fasting, Ramadan, Friday and sunnah reminders fall on a day. The times come from
+/// Which of the fasting, Ramadan, Friday, sunnah and zakat reminders fall on a day. The times come from
 /// the prayers of that day (`ReminderPlan`).
 public enum SeasonReminders {
     /// The page Surah al-Kahf begins on in the Medina Mushaf.
@@ -13,7 +13,7 @@ public enum SeasonReminders {
     /// Ramadan or for a day fasting is not permitted, which have no reasons.
     ///
     /// Friday brings Surah al-Kahf after sunrise, and every day Duha and Witr unless `isDone` says
-    /// they are already ticked for that day.
+    /// they are already ticked for that day. The user's zakat day and the 28th of Ramadan come at Dhuhr.
     public static func plan(for day: DayKey, choices: SeasonReminderChoices, offset: Int = 0,
                             isDone: (SunnahPrayer, DayKey) -> Bool = { _, _ in false }) -> [SeasonReminder] {
         var reminders: [SeasonReminder] = []
@@ -41,7 +41,26 @@ public enum SeasonReminders {
         if choices.witr, !isDone(.witr, day) {
             reminders.append(SeasonReminder(kind: .witr, anchor: .isha, offsetMinutes: choices.witrDelayMinutes))
         }
+        if choices.zakat, let due = choices.zakatDue, zakatDay(due, hijriYear: HijriCalendar.date(of: day, offset: offset).year, offset: offset) == day {
+            reminders.append(SeasonReminder(kind: .zakat, anchor: .dhuhr))
+        }
+        let hijri = HijriCalendar.date(of: day, offset: offset)
+        if choices.zakatFitr, hijri.month == HijriDate.ramadan, hijri.day == SeasonReminderChoices.zakatFitrDay {
+            reminders.append(SeasonReminder(kind: .zakatFitr, anchor: .dhuhr))
+        }
         return reminders
+    }
+
+    /// The day `due` falls on in a Hijri year; the last of the month when the month is short that year.
+    public static func zakatDay(_ due: HijriMonthDay, hijriYear: Int, offset: Int = 0) -> DayKey? {
+        let days = HijriCalendar.civilDays(ofYear: hijriYear, month: due.month, offset: offset)
+        return days.isEmpty ? nil : days[min(due.day, days.count) - 1]
+    }
+
+    /// The first day `due` falls on from `today`, today included.
+    public static func nextZakatDay(_ due: HijriMonthDay, from today: DayKey, offset: Int = 0) -> DayKey? {
+        let year = HijriCalendar.date(of: today, offset: offset).year
+        return [year, year + 1].lazy.compactMap { zakatDay(due, hijriYear: $0, offset: offset) }.first { $0 >= today }
     }
 }
 
