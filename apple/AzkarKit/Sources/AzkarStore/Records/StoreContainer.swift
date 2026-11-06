@@ -27,7 +27,7 @@ public enum StoreContainer {
     }
 
     public static func open(_ location: StoreLocation = .shared) throws -> Opened {
-        let schema = Schema(versionedSchema: AzkarSchemaV5.self)
+        let schema = Schema(versionedSchema: AzkarSchemaV6.self)
         let configuration: ModelConfiguration
         let url: URL?
         var isShared = false

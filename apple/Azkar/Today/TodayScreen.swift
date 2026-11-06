@@ -15,6 +15,7 @@ struct TodayScreen: View {
     @State private var showsLocation = false
     @State private var showsCalendar = false
     @State private var showsSettings = TodayScreen.opensSettings
+    @State private var showsCompanion = TodayScreen.opensCompanion
 
     var body: some View {
         let settings = app.settings.settings
@@ -35,6 +36,7 @@ struct TodayScreen: View {
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showsLocation) { LocationSheet() }
             .sheet(isPresented: $showsSettings) { SettingsScreen { showsSettings = false } }
+            .sheet(isPresented: $showsCompanion) { CompanionScreen(app: app) }
             .navigationDestination(isPresented: $showsCalendar) { IslamicCalendarScreen(today: context.today) }
         }
         .environment(\.locale, format.locale)
@@ -62,7 +64,7 @@ struct TodayScreen: View {
     /// Header, next prayer (or the first-run card), the season, tarawih, fasting, prayers, azkar, sunnah.
     private func sections(_ context: TodayContext) -> some View {
         List {
-            TodayHeader(context: context, showsLocation: $showsLocation, showsCalendar: $showsCalendar, showsSettings: $showsSettings)
+            TodayHeader(context: context, showsLocation: $showsLocation, showsCalendar: $showsCalendar, showsSettings: $showsSettings, showsCompanion: $showsCompanion)
 
             TravelNoticeSection(context: context, showsLocation: $showsLocation)
 
@@ -96,6 +98,15 @@ struct TodayScreen: View {
 }
 
 private extension TodayScreen {
+    /// DEBUG builds open the companion at launch with `-AzkarCompanion open`, for screenshots.
+    static var opensCompanion: Bool {
+        #if DEBUG
+        CompanionDemo.opens
+        #else
+        false
+        #endif
+    }
+
     /// DEBUG builds open Settings at launch with `-AzkarTab settings`, for screenshots.
     static var opensSettings: Bool {
         #if DEBUG

@@ -198,6 +198,18 @@ public final class RecordsModel {
         _ = try await apply(store.removeSeasonRecord(deed, on: day))
     }
 
+    /// Saves a conversation with the companion. Conversations are read with everything else, so
+    /// the records are read again rather than patched.
+    public func saveCompanion(_ conversation: CompanionConversation) async throws {
+        _ = try await store.saveCompanion(conversation)
+        await reload()
+    }
+
+    public func deleteCompanion(_ id: UUID) async throws {
+        _ = try await store.deleteCompanion(id)
+        await reload()
+    }
+
     /// Shows a change the store made. Its revision tells whether anything else was saved in
     /// between (by another process): then everything is read again as well.
     private func apply(_ change: RecordChange) async -> ChangeResult {

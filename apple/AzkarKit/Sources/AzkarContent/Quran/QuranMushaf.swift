@@ -93,6 +93,13 @@ public struct QuranMushaf: Sendable {
         juz = try reader.juz.map { QuranJuz(number: $0.number, page: page(of: try index($0.sura, $0.ayah)), sura: $0.sura, ayah: $0.ayah) }
     }
 
+    /// Ayat `from` to `to` of a surah (both included), or `nil` when the range is not in it.
+    public func ayat(sura: Int, from: Int, to: Int) -> ArraySlice<QuranAyah>? {
+        guard (1...suras.count).contains(sura), from >= 1, from <= to, to <= suras[sura - 1].ayahCount else { return nil }
+        let start = suras[..<(sura - 1)].reduce(0) { $0 + $1.ayahCount } + from - 1
+        return ayat[start...(start + to - from)]
+    }
+
     /// The ayat that begin on a page.
     public func ayat(onPage page: Int) -> ArraySlice<QuranAyah> {
         let start = pageStarts[page - 1]

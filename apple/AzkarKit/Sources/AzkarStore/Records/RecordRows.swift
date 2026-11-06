@@ -236,6 +236,7 @@ struct RecordRows {
         snapshot.duaEntries = try duaEntries(days: days)
         snapshot.duas = try duas()
         snapshot.owedPrayersBefore = try owedPrayersBefore()
+        if days == nil { snapshot.companion = try companionConversations() }
         snapshot.totals = try totals()
         snapshot.owedFastsBefore = try value(TallyKind.counter, TallyKind.Counter.owedFastsBefore)
         return snapshot
@@ -284,6 +285,7 @@ struct RecordRows {
         try delete(GivingRow.self)
         try delete(DuaRow.self)
         try delete(DuaEntryRow.self)
+        try delete(CompanionRow.self)
         let revisionKey = TallyKind.Counter.revision
         let counter = TallyKind.counter
         for row in try fetch(#Predicate<TallyRow> { $0.kind != counter || $0.key != revisionKey }) { context.delete(row) }
@@ -376,6 +378,8 @@ struct RecordRows {
         for dua in incoming.duas where !duas.contains(dua.id) { insert(dua) }
         let duaEntries = Set(existing.duaEntries.map(\.id))
         for entry in incoming.duaEntries where !duaEntries.contains(entry.id) { insert(entry) }
+        let conversations = Set(existing.companion.map(\.id))
+        for conversation in incoming.companion where !conversations.contains(conversation.id) { insert(conversation) }
 
         let limit = RecordLimits.maxLifetimeRecitations
         func added(_ old: Int, _ new: Int) -> Int { min(limit, old + new) }

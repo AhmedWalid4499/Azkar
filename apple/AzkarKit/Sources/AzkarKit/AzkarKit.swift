@@ -2,4 +2,5 @@
 @_exported import AzkarContent
 @_exported import AzkarCore
 @_exported import AzkarStore
+@_exported import Companion
 @_exported import PrayerEngine

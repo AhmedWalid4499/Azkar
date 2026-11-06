@@ -253,6 +253,39 @@ import Testing
         #expect(reopened.hifz.map(\.sura) == [67])
     }
 
+    /// The sixth version only adds the companion's table: a store of the fifth keeps its rows.
+    @Test func aStoreWrittenByTheFifthVersionKeepsItAllAndTakesConversations() async throws {
+        typealias V5 = AzkarSchemaV5
+        let directory = StorageTests.temporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let dua = UUID()
+        do {
+            let schema = Schema(versionedSchema: V5.self)
+            let configuration = ModelConfiguration(schema: schema, url: directory.appending(path: StoreContainer.fileName), cloudKitDatabase: .none)
+            let container = try ModelContainer(for: schema, migrationPlan: ShippedV5Plan.self, configurations: configuration)
+            let context = ModelContext(container)
+            context.insert(V5.PrayerRow(day: first.number, prayer: "fajr", status: "jamaah", loggedAt: at))
+            context.insert(V5.DuaRow(id: dua, text: "Guide me", addedAt: at))
+            context.insert(V5.PrayerMakeupRow(id: UUID(), prayer: "isha", day: first.number, at: at))
+            context.insert(V5.TallyRow(kind: TallyKind.counter, key: TallyKind.Counter.revision, value: 41))
+            try context.save()
+        }
+
+        let store = try RecordStore.open(.directory(directory), catalog: AzkarRecordTests.catalog, timeZone: { StorageTests.utc })
+        let records = try await store.snapshot()
+        #expect(records.prayers[first]?.prayers[.fajr]?.status == .jamaah)
+        #expect(records.duas.map(\.id) == [dua])
+        #expect(records.makeups.map(\.prayer) == [.isha])
+        #expect(records.companion.isEmpty)
+        #expect(try await store.revision() == 41)
+
+        _ = try await store.saveCompanion(CompanionConversation(startedAt: later, messages: [["role": "user", "content": "Salam"]]), at: later)
+        let again = try RecordStore.open(.directory(directory), catalog: AzkarRecordTests.catalog, timeZone: { StorageTests.utc })
+        #expect(try await again.companionConversations().count == 1)
+        #expect(try await again.snapshot().duas.map(\.id) == [dua])
+    }
+
     @Test func aStoreWrittenByTheFirstVersionOpensWithEveryRow() async throws {
         let directory = StorageTests.temporaryDirectory()
         defer { try? FileManager.default.removeItem(at: directory) }
@@ -385,12 +418,13 @@ import Testing
     @Test func theMigrationPlanGoesThroughEveryVersionInOrder() {
         #expect(AzkarSchemaV2.versionIdentifier == Schema.Version(2, 0, 0))
         #expect(AzkarSchemaV3.versionIdentifier == Schema.Version(3, 0, 0))
-        #expect(AzkarMigrationPlan.schemas.map { $0.versionIdentifier } == [Schema.Version(1, 0, 0), Schema.Version(2, 0, 0), Schema.Version(3, 0, 0), Schema.Version(4, 0, 0), Schema.Version(5, 0, 0)])
-        #expect(AzkarMigrationPlan.stages.count == 4)
+        #expect(AzkarMigrationPlan.schemas.map { $0.versionIdentifier } == [Schema.Version(1, 0, 0), Schema.Version(2, 0, 0), Schema.Version(3, 0, 0), Schema.Version(4, 0, 0), Schema.Version(5, 0, 0), Schema.Version(6, 0, 0)])
+        #expect(AzkarMigrationPlan.stages.count == 5)
         #expect(AzkarSchemaV2.models.count == AzkarSchemaV1.models.count + 2)
         #expect(AzkarSchemaV3.models.count == AzkarSchemaV2.models.count + 1)
         #expect(AzkarSchemaV4.models.count == AzkarSchemaV3.models.count + 1)
         #expect(AzkarSchemaV5.models.count == AzkarSchemaV4.models.count + 4)
+        #expect(AzkarSchemaV6.models.count == AzkarSchemaV5.models.count + 1)
     }
 }
 
@@ -402,6 +436,19 @@ private enum ShippedV4Plan: SchemaMigrationPlan {
             .lightweight(fromVersion: AzkarSchemaV1.self, toVersion: AzkarSchemaV2.self),
             .lightweight(fromVersion: AzkarSchemaV2.self, toVersion: AzkarSchemaV3.self),
             .lightweight(fromVersion: AzkarSchemaV3.self, toVersion: AzkarSchemaV4.self),
+        ]
+    }
+}
+
+/// The plan as it shipped with the fifth version.
+private enum ShippedV5Plan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [AzkarSchemaV1.self, AzkarSchemaV2.self, AzkarSchemaV3.self, AzkarSchemaV4.self, AzkarSchemaV5.self] }
+    static var stages: [MigrationStage] {
+        [
+            .lightweight(fromVersion: AzkarSchemaV1.self, toVersion: AzkarSchemaV2.self),
+            .lightweight(fromVersion: AzkarSchemaV2.self, toVersion: AzkarSchemaV3.self),
+            .lightweight(fromVersion: AzkarSchemaV3.self, toVersion: AzkarSchemaV4.self),
+            .lightweight(fromVersion: AzkarSchemaV4.self, toVersion: AzkarSchemaV5.self),
         ]
     }
 }
