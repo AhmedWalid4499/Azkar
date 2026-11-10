@@ -35,7 +35,9 @@ nonisolated enum SystemRoute: Hashable, Sendable {
         case "today": self = .today
         case "qibla": self = .qibla
         case "quran":
-            self = url.pathComponents.dropFirst().first.flatMap(Int.init).map(SystemRoute.quranPage) ?? .quran
+            // A page outside the mushaf (a mistyped or hostile link) opens the Quran tab only.
+            self = url.pathComponents.dropFirst().first.flatMap(Int.init)
+                .flatMap { QuranMushaf.pages.contains($0) ? SystemRoute.quranPage($0) : nil } ?? .quran
         case "azkar":
             guard let key = url.pathComponents.dropFirst().first, let session = AzkarSession(key) else { return nil }
             self = .azkar(session)

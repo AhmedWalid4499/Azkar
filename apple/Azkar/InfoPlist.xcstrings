@@ -1,0 +1,40 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSAlarmKitUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يستطيع تطبيق أذكار أن يرفع الأذان منبّهًا في أوقات الصلاة التي تختارها، حتى في الوضع الصامت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azkar can sound an adhan alarm at prayer times you choose, even in silent mode."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يستخدم أذكار موقعك لحساب مواقيت الصلاة واتجاه القبلة على جهازك. ولإظهار اسم المكان يُرسَل موقع تقريبي إلى Apple."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azkar uses your location to calculate prayer times and the Qibla direction on your iPhone. To show the place's name, an approximate position is looked up with Apple."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

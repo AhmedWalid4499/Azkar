@@ -8,8 +8,7 @@ import PackageDescription
 //   PrayerEngine  prayer times, schedules and the Qibla, on top of Adhan
 //   AzkarContent  the azkar dataset, the Hijri calendar, fasting days and statistics
 //   AzkarStore    the user's records and settings on the device, imports and backups
-//   Companion     the companion's conversations with Claude: requests, tools and what they show
-//   AzkarKit      re-exports all five
+//   AzkarKit      re-exports all four
 let package = Package(
     name: "AzkarKit",
     defaultLocalization: "en",
@@ -25,14 +24,12 @@ let package = Package(
     targets: [
         .target(name: "AzkarCore"),
         .target(name: "PrayerEngine", dependencies: ["AzkarCore", .product(name: "Adhan", package: "adhan-swift")]),
-        .target(name: "AzkarContent", dependencies: ["AzkarCore"], resources: [.copy("Resources/azkar.json"), .copy("Resources/quran-uthmani.txt"), .copy("Resources/quran-data.xml"), .copy("Resources/comfort-duas.json")]),
+        .target(name: "AzkarContent", dependencies: ["AzkarCore"], resources: [.copy("Resources/azkar.json"), .copy("Resources/quran-uthmani.txt"), .copy("Resources/quran-data.xml")]),
         .target(name: "AzkarStore", dependencies: ["AzkarCore"]),
-        .target(name: "Companion", dependencies: ["AzkarCore", "AzkarContent", "AzkarStore"]),
-        .target(name: "AzkarKit", dependencies: ["AzkarCore", "PrayerEngine", "AzkarContent", "AzkarStore", "Companion"]),
+        .target(name: "AzkarKit", dependencies: ["AzkarCore", "PrayerEngine", "AzkarContent", "AzkarStore"]),
         .testTarget(name: "AzkarCoreTests", dependencies: ["AzkarCore"]),
         .testTarget(name: "PrayerEngineTests", dependencies: ["PrayerEngine", .product(name: "Adhan", package: "adhan-swift")], exclude: ["Fixtures"]),
         .testTarget(name: "AzkarContentTests", dependencies: ["AzkarContent", .product(name: "Adhan", package: "adhan-swift")]),
         .testTarget(name: "AzkarStoreTests", dependencies: ["AzkarStore"]),
-        .testTarget(name: "CompanionTests", dependencies: ["Companion", "AzkarCore", "AzkarContent", "AzkarStore"]),
     ]
 )

@@ -1999,6 +1999,42 @@
         }
       }
     },
+    "Today’s date and five prayers, to tick off as you pray them.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تاريخ اليوم وصلواته الخمس، تعلّم عليها كلما صلّيت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s date and five prayers, to tick off as you pray them."
+          }
+        }
+      }
+    },
+    "Today’s prayers": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلوات اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s prayers"
+          }
+        }
+      }
+    },
     "Tomorrow": {
       "extractionState": "manual",
       "generatesSymbol": false,

@@ -142,6 +142,7 @@ private struct AzkarCard: View {
         .onChange(of: day) { flipped = false }
         .sheet(isPresented: $showsAll) {
             AzkarProgressSheet(session: session, day: day)
+                .appDirection()
         }
     }
 

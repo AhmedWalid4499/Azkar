@@ -1,4 +1,5 @@
 import BackgroundTasks
+import os
 import Foundation
 
 /// A background app refresh every few hours, so reminders, adhan alarms, the Live Activity, the
@@ -38,19 +39,32 @@ enum BackgroundRefresh {
         let box = TaskBox(task)
         let work = Task { @MainActor in
             await schedule()
+            guard !Task.isCancelled else { return }
             await SystemServices.shared.refresh(reason: "background refresh")
+            guard !Task.isCancelled else { return }
             await AutoBackup.shared.backUp()
-            box.task.setTaskCompleted(success: true)
+            box.complete(success: !Task.isCancelled)
         }
         task.expirationHandler = {
             work.cancel()
-            box.task.setTaskCompleted(success: false)
+            box.complete(success: false)
         }
     }
 
-    /// Carries the system's task across to the main actor; it is only completed once.
+    /// Carries the system's task across to the main actor, and completes it once: the work and the
+    /// expiration handler can both try.
     private nonisolated final class TaskBox: @unchecked Sendable {
-        let task: BGAppRefreshTask
+        private let task: BGAppRefreshTask
+        private let completed = OSAllocatedUnfairLock(initialState: false)
+
         init(_ task: BGAppRefreshTask) { self.task = task }
+
+        func complete(success: Bool) {
+            let first = completed.withLock { done in
+                defer { done = true }
+                return !done
+            }
+            if first { task.setTaskCompleted(success: success) }
+        }
     }
 }

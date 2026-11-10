@@ -44,8 +44,8 @@ extension ReminderSettings {
         morningAt = azkar["morningAt"] == .string("sunrise") ? .sunrise : .fajr
         let unloggedStored = stored["unloggedReminders"]?.object ?? [:]
         if let enabled = unloggedStored["enabled"]?.bool { unlogged = enabled }
-        if let lead = unloggedStored["leadMinutes"]?.number, WebRules.isInteger(lead), Self.unloggedLeadChoices.contains(Int(lead)) {
-            unloggedLeadMinutes = Int(lead)
+        if let lead = WebRules.int(unloggedStored["leadMinutes"]?.number), Self.unloggedLeadChoices.contains(lead) {
+            unloggedLeadMinutes = lead
         }
         if let raw = unloggedStored["ishaEnds"]?.string, let deadline = IshaDeadline(rawValue: raw) { ishaDeadline = deadline }
         let alarms = stored["adhanAlarms"]?.object ?? [:]
@@ -55,22 +55,21 @@ extension ReminderSettings {
             season.whiteDays = reminders["whiteDays"] == .bool(true)
             season.occasions = reminders["occasions"] == .bool(true)
             season.suhoor = reminders["suhoor"] == .bool(true)
-            if let lead = reminders["suhoorLeadMinutes"]?.number, WebRules.isInteger(lead), SeasonReminderChoices.suhoorLeadChoices.contains(Int(lead)) {
-                season.suhoorLeadMinutes = Int(lead)
+            if let lead = WebRules.int(reminders["suhoorLeadMinutes"]?.number), SeasonReminderChoices.suhoorLeadChoices.contains(lead) {
+                season.suhoorLeadMinutes = lead
             }
             season.iftar = reminders["iftar"] == .bool(true)
             season.oddNights = reminders["oddNights"] == .bool(true)
             season.kahf = reminders["kahf"] == .bool(true)
             season.witr = reminders["witr"] == .bool(true)
-            if let delay = reminders["witrDelayMinutes"]?.number, WebRules.isInteger(delay), SeasonReminderChoices.witrDelayChoices.contains(Int(delay)) {
-                season.witrDelayMinutes = Int(delay)
+            if let delay = WebRules.int(reminders["witrDelayMinutes"]?.number), SeasonReminderChoices.witrDelayChoices.contains(delay) {
+                season.witrDelayMinutes = delay
             }
             season.duha = reminders["duha"] == .bool(true)
             season.zakat = reminders["zakat"] == .bool(true)
             season.zakatFitr = reminders["zakatFitr"] == .bool(true)
-            if let due = reminders["zakatDue"], let month = due["month"]?.number, let day = due["day"]?.number,
-               WebRules.isInteger(month), WebRules.isInteger(day) {
-                season.zakatDue = HijriMonthDay(month: Int(month), day: Int(day))
+            if let due = reminders["zakatDue"], let month = WebRules.int(due["month"]?.number), let day = WebRules.int(due["day"]?.number) {
+                season.zakatDue = HijriMonthDay(month: month, day: day)
             }
         }
     }

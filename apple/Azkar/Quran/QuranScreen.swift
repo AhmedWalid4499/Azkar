@@ -41,6 +41,7 @@ struct QuranScreen: View {
         .fullScreenCover(item: $request) { request in
             if let mushaf {
                 QuranReaderView(mushaf: mushaf, startPage: request.page)
+                    .appDirection()
                     .environment(\.locale, format.formatting)
                     .environment(\.readingLocale, format)
             }
@@ -48,6 +49,7 @@ struct QuranScreen: View {
         .sheet(isPresented: $showsPaper) {
             if let mushaf {
                 QuranPaperSheet(mushaf: mushaf)
+                    .appDirection()
                     .environment(\.locale, format.formatting)
                     .environment(\.readingLocale, format)
             }
@@ -127,7 +129,8 @@ struct QuranScreen: View {
         .onChange(of: systemRouter.quranReaderPage, initial: true) { _, page in
             guard let page else { return }
             systemRouter.quranReaderPage = nil
-            if request == nil { request = QuranReaderRequest(page: page > 0 ? page : next) }
+            let target = QuranMushaf.pages.contains(page) ? page : next
+            if request?.page != target { request = QuranReaderRequest(page: target) }
         }
     }
 

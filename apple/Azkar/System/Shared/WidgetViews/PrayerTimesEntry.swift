@@ -26,6 +26,8 @@ nonisolated struct PrayerTimesEntry: TimelineEntry {
     let name: String
     let content: Content
     let azkar: [SessionProgress]
+    /// The user's Hijri day adjustment, for the date the widgets show.
+    var hijriOffset = 0
 
     var board: SystemPrayerBoard? {
         if case let .ready(board) = content { board } else { nil }

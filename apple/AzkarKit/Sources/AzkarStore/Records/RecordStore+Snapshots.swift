@@ -11,21 +11,22 @@ extension RecordStore {
 
     /// Adds what `snapshot` holds that the store does not, in one save. Where both have a
     /// prayer, a session, a counter, a fast or a season record on the same day, the store's own
-    /// stays, as do a Quran entry with the same id and a bookmark on the same page; lifetime
-    /// totals are added together.
+    /// stays, as do a Quran entry with the same id and a bookmark on the same page; each lifetime
+    /// total keeps the larger figure, so merging the same backup twice changes nothing.
     public func merge(_ snapshot: RecordsSnapshot) throws {
         try merge(snapshot, recording: nil)
     }
 
     /// Merges `snapshot` and records `report`, in the same save. With `once`, nothing happens when
-    /// an import from the same source was recorded before; returns whether it ran.
+    /// an import from the same source was recorded before, and its lifetime totals are added, since
+    /// they are a history of their own; returns whether it ran.
     @discardableResult
     func merge(_ snapshot: RecordsSnapshot, recording report: ImportReport?, once: Bool = false) throws -> Bool {
         let rows = rows()
         if once, let source = report?.source, try !rows.fetch(#Predicate<ImportRow> { $0.source == source }).isEmpty {
             return false
         }
-        try rows.insert(snapshot, over: try rows.snapshot())
+        try rows.insert(snapshot, over: try rows.snapshot(), addsTotals: once)
         if let report { try record(report, in: rows) }
         try commit(rows)
         return true

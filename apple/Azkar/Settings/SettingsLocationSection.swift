@@ -49,6 +49,7 @@ struct SettingsLocationSection: View {
             }
             .sheet(isPresented: $searching) {
                 LocationSearchSheet(initialQuery: demoQuery) { place in request.save(place, to: app.settings) }
+                    .appDirection()
             }
             #if DEBUG
             .task {

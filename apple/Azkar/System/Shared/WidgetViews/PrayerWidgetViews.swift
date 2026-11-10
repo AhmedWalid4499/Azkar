@@ -1,3 +1,4 @@
+import AppIntents
 import AzkarKit
 import SwiftUI
 import WidgetKit
@@ -231,3 +232,174 @@ struct WidgetInlineView: View {
         }
     }
 }
+
+// MARK: Today's prayers
+
+/// The "Today's prayers" widget: the day, and its five prayers to tick off as they are prayed.
+struct TodayPrayersWidgetView: View {
+    @Environment(\.widgetFamily) private var family
+    let entry: PrayerTimesEntry
+
+    var body: some View {
+        if let board = entry.board {
+            switch family {
+            case .accessoryRectangular: TodayPrayersRectangularView(board: board, language: entry.language, hijriOffset: entry.hijriOffset)
+            case .accessoryCircular: TodayPrayersCircularView(board: board, language: entry.language)
+            case .accessoryInline: TodayPrayersInlineView(board: board, language: entry.language)
+            default: TodayPrayersSmallView(board: board, language: entry.language, hijriOffset: entry.hijriOffset)
+            }
+        } else {
+            switch family {
+            case .accessoryInline, .accessoryCircular, .accessoryRectangular:
+                Label {
+                    Text(verbatim: SystemText.string("Set your location", entry.language))
+                } icon: {
+                    Image(systemName: "location.slash")
+                }
+            default:
+                WidgetNoLocationView(language: entry.language)
+            }
+        }
+    }
+}
+
+/// The date the five prayers are of, Gregorian and Hijri.
+private func todayLine(_ board: SystemPrayerBoard, _ language: SystemLanguage, hijriOffset: Int) -> String {
+    let day = board.rows.first?.day ?? board.today
+    return "\(SystemText.shortDay(day, language)) · \(SystemText.hijriDay(day, offset: hijriOffset, language))"
+}
+
+/// Lock Screen: the date over the five prayers, each a mark to tap once its time has come.
+struct TodayPrayersRectangularView: View {
+    let board: SystemPrayerBoard
+    let language: SystemLanguage
+    let hijriOffset: Int
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(verbatim: todayLine(board, language, hijriOffset: hijriOffset))
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .widgetAccentable()
+            HStack(spacing: 2) {
+                ForEach(board.rows) { row in
+                    TodayPrayerMark(row: row, board: board, language: language)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// One prayer as a mark over its name; tapping it marks it prayed on time once its time has come.
+struct TodayPrayerMark: View {
+    let row: SystemPrayerBoard.Row
+    let board: SystemPrayerBoard
+    let language: SystemLanguage
+
+    var body: some View {
+        let canTick = !row.isLogged && row.hasBegun(at: board.now)
+        Group {
+            if canTick {
+                Button(intent: TickPrayerIntent(prayer: row.prayer, day: row.day)) { content(canTick: true) }
+                    .buttonStyle(.plain)
+            } else {
+                content(canTick: false)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: label(canTick: canTick)))
+    }
+
+    private func content(canTick: Bool) -> some View {
+        let isNext = board.next?.prayer == row.prayer && board.next?.day == row.day
+        return VStack(spacing: 1) {
+            Image(systemName: row.isLogged ? "checkmark.circle.fill" : (canTick ? "circle" : "circle.dotted"))
+                .font(.title3)
+                .widgetAccentable(row.isLogged)
+                .contentTransition(.symbolEffect(.replace))
+            Text(verbatim: SystemText.prayer(row.prayer, language, on: row.day))
+                .font(.system(size: 10, weight: isNext ? .bold : .regular))
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+        }
+        .foregroundStyle(row.isLogged || canTick ? .primary : .secondary)
+        .contentShape(.rect)
+    }
+
+    private func label(canTick: Bool) -> String {
+        let name = SystemText.prayer(row.prayer, language, on: row.day)
+        if let status = row.status { return SystemText.format("%1$@, %2$@: %3$@", language, name, row.at.map { SystemText.time($0, in: board.place.timeZone, language) } ?? "", SystemText.status(status, language)) }
+        let time = row.at.map { SystemText.time($0, in: board.place.timeZone, language) } ?? ""
+        return canTick ? SystemText.format("%1$@, %2$@: not logged. Mark as prayed on time.", language, name, time) : SystemText.format("%1$@, %2$@", language, name, time)
+    }
+}
+
+/// Lock Screen: how many of the day's five prayers are logged, as a ring.
+struct TodayPrayersCircularView: View {
+    let board: SystemPrayerBoard
+    let language: SystemLanguage
+
+    var body: some View {
+        let logged = board.rows.filter(\.isLogged).count
+        Gauge(value: Double(logged), in: 0...Double(max(board.rows.count, 1))) {
+            Image(systemName: "checkmark")
+        } currentValueLabel: {
+            Text(verbatim: SystemText.format("%1$@/%2$@", language, SystemText.number(logged, language), SystemText.number(board.rows.count, language)))
+                .font(.system(size: 14, weight: .semibold))
+                .minimumScaleFactor(0.6)
+        }
+        .gaugeStyle(.accessoryCircularCapacity)
+        .widgetAccentable()
+        .accessibilityLabel(Text(verbatim: SystemText.format("%1$@ of %2$@ logged", language, SystemText.number(logged, language), SystemText.number(board.rows.count, language))))
+    }
+}
+
+/// Lock Screen, above the clock: how many are logged, and the next prayer.
+struct TodayPrayersInlineView: View {
+    let board: SystemPrayerBoard
+    let language: SystemLanguage
+
+    var body: some View {
+        let logged = board.rows.filter(\.isLogged).count
+        let count = SystemText.format("%1$@/%2$@", language, SystemText.number(logged, language), SystemText.number(board.rows.count, language))
+        Label {
+            if let next = board.next {
+                Text(verbatim: "\(count) · \(SystemText.prayer(next.prayer, language, on: next.day)) \(SystemText.time(next.at, in: board.place.timeZone, language))")
+            } else {
+                Text(verbatim: count)
+            }
+        } icon: {
+            Image(systemName: "checkmark.circle")
+        }
+    }
+}
+
+/// Home Screen: the date over the five prayers with their times, each one to tick.
+struct TodayPrayersSmallView: View {
+    let board: SystemPrayerBoard
+    let language: SystemLanguage
+    let hijriOffset: Int
+
+    var body: some View {
+        let day = board.rows.first?.day ?? board.today
+        VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(verbatim: SystemText.shortDay(day, language))
+                    .font(.subheadline.weight(.semibold))
+                Text(verbatim: SystemText.hijriDay(day, offset: hijriOffset, language))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            Spacer(minLength: 0)
+            WidgetPrayerRows(board: board, language: language, spacing: 2)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .dynamicTypeSize(...DynamicTypeSize.large)
+    }
+}
+

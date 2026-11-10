@@ -118,7 +118,7 @@ struct LocationPromptCard: View {
             .accessibilityElement(children: .combine)
             LocationChoiceRows(chooser: chooser)
         }
-        .sheet(isPresented: $chooser.showsSearch) { CitySearchSheet(chooser: chooser) }
+        .sheet(isPresented: $chooser.showsSearch) { CitySearchSheet(chooser: chooser).appDirection() }
     }
 }
 
@@ -175,6 +175,7 @@ struct LocationSheet: View {
             }
             .sheet(isPresented: $chooser.showsSearch) {
                 CitySearchSheet(chooser: chooser) { dismiss() }
+                    .appDirection()
             }
         }
         .presentationDetents([.medium, .large])

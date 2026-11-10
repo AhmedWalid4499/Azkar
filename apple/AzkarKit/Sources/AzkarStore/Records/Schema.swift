@@ -1324,8 +1324,9 @@ enum AzkarSchemaV6: VersionedSchema {
         }
     }
 
-    /// One conversation with the companion (`CompanionConversation`). `messages` is the JSON of
-    /// the messages exchanged with Claude, appended to and never rewritten.
+    /// A conversation with an AI companion that was removed before release. Nothing writes this
+    /// table any more; it stays, empty, because stores that reached this version must still open
+    /// (a shipped version is never changed), and erasing everything still clears it.
     @Model final class CompanionRow {
         #Unique<CompanionRow>([\.id])
         var id: UUID
@@ -1373,7 +1374,7 @@ enum AzkarMigrationPlan: SchemaMigrationPlan {
             .lightweight(fromVersion: AzkarSchemaV3.self, toVersion: AzkarSchemaV4.self),
             // V5 only adds the tables of prayers made up, giving and the user's duas.
             .lightweight(fromVersion: AzkarSchemaV4.self, toVersion: AzkarSchemaV5.self),
-            // V6 only adds the companion's conversations.
+            // V6 only adds the companion's table, now unused.
             .lightweight(fromVersion: AzkarSchemaV5.self, toVersion: AzkarSchemaV6.self),
         ]
     }

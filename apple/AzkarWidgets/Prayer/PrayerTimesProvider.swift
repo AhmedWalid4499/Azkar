@@ -38,7 +38,8 @@ nonisolated struct PrayerTimesProvider: TimelineProvider {
         for date in dates {
             guard let board = SystemPrayerBoard(settings: settings, prayers: prayers, now: date) else { continue }
             let azkar = await progress(at: date, board: board, store: store)
-            entries.append(PrayerTimesEntry(date: date, language: language, name: settings.app.name, content: .ready(board), azkar: azkar))
+            entries.append(PrayerTimesEntry(date: date, language: language, name: settings.app.name, content: .ready(board), azkar: azkar,
+                                            hijriOffset: settings.app.hijriOffset))
         }
         return entries
     }

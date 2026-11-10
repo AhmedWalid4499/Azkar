@@ -101,6 +101,7 @@ struct TrackerRamadanSections: View {
 private struct TrackerRamadanGoalSection: View {
     let data: TrackerData
     @Environment(AppEnvironment.self) private var app
+    @Environment(\.locale) private var locale
 
     var body: some View {
         let goal = data.settings.app.ramadanKhatmahGoal
@@ -108,7 +109,7 @@ private struct TrackerRamadanGoalSection: View {
             Picker(selection: Binding(get: { goal }, set: { value in app.settings.update { $0.app.ramadanKhatmahGoal = value } })) {
                 Text(SeasonL("No goal")).tag(0)
                 ForEach(1...5, id: \.self) { count in
-                    Text(verbatim: count.formatted()).tag(count)
+                    Text(verbatim: count.formatted(.number.locale(locale))).tag(count)
                 }
             } label: {
                 Label { Text(SeasonL("Khatmahs this Ramadan")) } icon: { Image(systemName: "target").foregroundStyle(.indigo) }

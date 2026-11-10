@@ -60,10 +60,12 @@ struct TasbihView: View {
             } onRemove: { id in
                 model.removeCustom(id: id)
             }
+            .appDirection()
             .presentationDetents([.medium, .large])
         }
         .sheet(isPresented: $editsCustomTarget) {
             TasbihCustomTargetSheet(target: settings.tasbihTarget) { model.setTarget($0) }
+                .appDirection()
                 .presentationDetents([.height(260)])
         }
         .sensoryFeedback(.impact(weight: .light), trigger: model.ticks) { _, _ in settings.haptics }

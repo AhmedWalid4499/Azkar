@@ -7,15 +7,20 @@ struct DuaMomentSection: View {
     @Environment(AppEnvironment.self) private var app
     let context: TodayContext
     @State private var showing = false
+    /// The moment the sheet was opened in: it stays up when that moment ends (at Maghrib, say)
+    /// while the person is still reading.
+    @State private var opened: DuaMoment?
 
     var body: some View {
         let records = app.records.records
         let open = DuaProgress(items: records.duas, entries: records.duaEntries).open
         let times = context.todayTimes?.times
-        if !open.isEmpty, let moment = DuaMoments.current(now: context.now, today: context.today, beforeDawn: context.beforeDawn,
-                                                          asr: times?[.asr], maghrib: times?[.maghrib], offset: app.settings.settings.app.hijriOffset) {
+        let current = DuaMoments.current(now: context.now, today: context.today, beforeDawn: context.beforeDawn,
+                                         asr: times?[.asr], maghrib: times?[.maghrib], offset: app.settings.settings.app.hijriOffset)
+        if !open.isEmpty, let moment = current ?? (showing ? opened : nil) {
             Section {
                 Button {
+                    opened = moment
                     showing = true
                 } label: {
                     HStack(spacing: 12) {

@@ -4206,60 +4206,80 @@
       "extractionState": "manual",
       "localizations": {
         "ar": {
-          "variations": {
-            "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "إلى الصفحة %1$lld، %2$lld صفحة"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "إلى الصفحة %1$lld، صفحة واحدة"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "إلى الصفحة %1$lld، صفحتان"
-                }
-              },
-              "few": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "إلى الصفحة %1$lld، %2$lld صفحات"
-                }
-              },
-              "many": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "إلى الصفحة %1$lld، %2$lld صفحة"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "إلى الصفحة %1$lld، %2$lld صفحة"
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلى الصفحة %1$lld، %#@pages@"
+          },
+          "substitutions": {
+            "pages": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "zero": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg صفحة"
+                    }
+                  },
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "صفحة واحدة"
+                    }
+                  },
+                  "two": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "صفحتان"
+                    }
+                  },
+                  "few": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg صفحات"
+                    }
+                  },
+                  "many": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg صفحة"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg صفحة"
+                    }
+                  }
                 }
               }
             }
           }
         },
         "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "To page %1$lld, %2$lld page"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "To page %1$lld, %2$lld pages"
+          "stringUnit": {
+            "state": "translated",
+            "value": "To page %1$lld, %#@pages@"
+          },
+          "substitutions": {
+            "pages": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg page"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg pages"
+                    }
+                  }
                 }
               }
             }

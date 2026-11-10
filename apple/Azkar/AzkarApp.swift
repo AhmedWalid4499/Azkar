@@ -35,7 +35,7 @@ struct StartupFailureView: View {
 
     var body: some View {
         ContentUnavailableView {
-            Label("Azkar couldn’t open your records", systemImage: "exclamationmark.triangle")
+            Label { Text("Azkar couldn’t open your records", tableName: "App") } icon: { Image(systemName: "exclamationmark.triangle") }
         } description: {
             Text(error.localizedDescription)
         }

@@ -38,8 +38,6 @@ public struct ImportReport: Codable, Hashable, Sendable {
     public var makeups: Int?
     public var givingEntries: Int?
     public var duas: Int?
-    /// Conversations with the companion; `nil` in a report saved before they were kept.
-    public var companionConversations: Int?
 
     public static let webApp = "web-app"
     public static let backup = "backup"
@@ -67,7 +65,6 @@ public struct ImportReport: Codable, Hashable, Sendable {
         makeups = records.makeups.count
         givingEntries = records.giving.count
         duas = records.duas.count
-        companionConversations = records.companion.count
     }
 
     /// Nothing was found to import.

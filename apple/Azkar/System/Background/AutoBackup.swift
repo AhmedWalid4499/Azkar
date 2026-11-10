@@ -68,8 +68,8 @@ final class AutoBackup {
         isRunning = true
         defer { isRunning = false }
         // Going to the background leaves a few seconds, which this asks to finish in.
-        let task = UIApplication.shared.beginBackgroundTask(withName: "Azkar backup", expirationHandler: nil)
-        defer { UIApplication.shared.endBackgroundTask(task) }
+        let time = BackgroundTime(name: "Azkar backup")
+        defer { time.end() }
         do {
             let store = try SharedRecords.store()
             let revision = try await store.revision()
@@ -103,5 +103,22 @@ final class AutoBackup {
         defer { if scoped { folder.stopAccessingSecurityScopedResource() } }
         try BackupFolder.save(data, as: name, in: folder, catalog: catalog)
         return isStale ? try? folder.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil) : nil
+    }
+}
+
+/// Background time asked of iOS, given back exactly once: when the work is done, or when the time
+/// runs out first (iOS ends an app that keeps it past then).
+@MainActor
+private final class BackgroundTime {
+    private var id = UIBackgroundTaskIdentifier.invalid
+
+    init(name: String) {
+        id = UIApplication.shared.beginBackgroundTask(withName: name) { [weak self] in self?.end() }
+    }
+
+    func end() {
+        guard id != .invalid else { return }
+        UIApplication.shared.endBackgroundTask(id)
+        id = .invalid
     }
 }

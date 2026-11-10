@@ -11,7 +11,17 @@ struct QuranPaperSheet: View {
     @State private var confirmsKhatmah = false
     @FocusState private var editing: Bool
 
-    private var page: Int? { Int(pageText).flatMap { QuranMushaf.pages.contains($0) ? $0 : nil } }
+    /// The page typed, in Western or Arabic-Indic digits (the Arabic keyboard's number pad).
+    private var page: Int? {
+        let digits = String(pageText.trimmingCharacters(in: .whitespaces).unicodeScalars.map { scalar in
+            switch scalar.value {
+            case 0x660...0x669: Character(Unicode.Scalar(scalar.value - 0x660 + 0x30)!)
+            case 0x6F0...0x6F9: Character(Unicode.Scalar(scalar.value - 0x6F0 + 0x30)!)
+            default: Character(scalar)
+            }
+        })
+        return Int(digits).flatMap { QuranMushaf.pages.contains($0) ? $0 : nil }
+    }
     private var day: DayKey { DayKey(.now, in: app.settings.settings.timeZone) }
 
     var body: some View {

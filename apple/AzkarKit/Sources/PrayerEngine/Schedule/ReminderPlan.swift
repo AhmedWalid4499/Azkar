@@ -166,7 +166,11 @@ public enum ReminderPlan {
     }
 
     /// What the app hands to the system: the reminders after `now` and within the next `windowDays`
-    /// days, the first `reminderLimit` of them. `dayFor` gives the prayer times of a day at the saved place.
+    /// days, at most `reminderLimit` of them, in time order. The prayer, "not logged yet" and azkar
+    /// reminders take the soonest places, as on the website; the rest (Duha, Witr, fasting, Ramadan
+    /// and the like) only the places they leave, so a week of Duha reminders never pushes out a
+    /// prayer later in the week when the app is not opened to schedule again. `dayFor` gives the
+    /// prayer times of a day at the saved place.
     public static func upcoming(
         dayFor: (DayKey) -> PrayerDay,
         timeZone: TimeZone,
@@ -178,7 +182,12 @@ public enum ReminderPlan {
         // does anyway. To the day after the window: the last day's Isha ends on it.
         let days = (0..<(windowDays + 3)).map { dayFor(today.adding(days: $0 - 1)) }
         let until = now.addingTimeInterval(TimeInterval(windowDays * 86_400))
-        return Array(entries(days: days, choices: choices).filter { $0.at > now && $0.at <= until }.prefix(reminderLimit))
+        let due = entries(days: days, choices: choices).filter { $0.at > now && $0.at <= until }
+        guard due.count > reminderLimit else { return due }
+        let isSeason = { (entry: ReminderEntry) in if case .season = entry.kind { true } else { false } }
+        let core = due.enumerated().filter { !isSeason($0.element) }.prefix(reminderLimit)
+        let rest = due.enumerated().filter { isSeason($0.element) }.prefix(reminderLimit - core.count)
+        return (core + rest).sorted { $0.offset < $1.offset }.map(\.element)
     }
 
     static func digit(_ prayer: Prayer) -> Int {

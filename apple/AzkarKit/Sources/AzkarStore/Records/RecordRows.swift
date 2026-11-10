@@ -236,7 +236,6 @@ struct RecordRows {
         snapshot.duaEntries = try duaEntries(days: days)
         snapshot.duas = try duas()
         snapshot.owedPrayersBefore = try owedPrayersBefore()
-        if days == nil { snapshot.companion = try companionConversations() }
         snapshot.totals = try totals()
         snapshot.owedFastsBefore = try value(TallyKind.counter, TallyKind.Counter.owedFastsBefore)
         return snapshot
@@ -323,8 +322,9 @@ struct RecordRows {
     /// Inserts what `incoming` holds that `existing` does not. Per day, a prayer, a sunnah
     /// prayer, a session's record, a session's counts, a tasbih counter, a fast and a season
     /// record of each deed are each kept from `existing` when both have one, as are a Quran
-    /// entry with the same id and a bookmark on the same page. Lifetime totals are added together.
-    func insert(_ incoming: RecordsSnapshot, over existing: RecordsSnapshot = RecordsSnapshot()) throws {
+    /// entry with the same id and a bookmark on the same page. Lifetime totals are added when `addsTotals`
+    /// (a separate history), else each keeps the larger figure.
+    func insert(_ incoming: RecordsSnapshot, over existing: RecordsSnapshot = RecordsSnapshot(), addsTotals: Bool = false) throws {
         for (day, record) in incoming.prayers {
             let have = existing.prayers[day]
             for (prayer, entry) in record.prayers where have?.prayers[prayer] == nil {
@@ -378,11 +378,12 @@ struct RecordRows {
         for dua in incoming.duas where !duas.contains(dua.id) { insert(dua) }
         let duaEntries = Set(existing.duaEntries.map(\.id))
         for entry in incoming.duaEntries where !duaEntries.contains(entry.id) { insert(entry) }
-        let conversations = Set(existing.companion.map(\.id))
-        for conversation in incoming.companion where !conversations.contains(conversation.id) { insert(conversation) }
 
+        // Lifetime totals can't be told apart by day. A separate history (the website's, imported
+        // once) adds to them; a backup may hold the very counts already here (added to the records
+        // it was made from, or added twice), so it keeps the larger figure instead.
         let limit = RecordLimits.maxLifetimeRecitations
-        func added(_ old: Int, _ new: Int) -> Int { min(limit, old + new) }
+        func added(_ old: Int, _ new: Int) -> Int { min(limit, addsTotals ? old + new : max(old, new)) }
         let have = existing.totals
         let totals = incoming.totals
         for (id, count) in totals.dhikr { try setValue(TallyKind.dhikr, id, added(have.dhikr[id] ?? 0, count)) }

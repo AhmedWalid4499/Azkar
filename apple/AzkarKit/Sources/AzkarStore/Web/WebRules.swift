@@ -15,6 +15,13 @@ enum WebRules {
         value.isFinite && value.rounded(.towardZero) == value
     }
 
+    /// A whole number small enough to become an `Int`; `nil` otherwise. `Int(Double)` traps beyond its
+    /// range, and a damaged or hand-edited file can hold any number.
+    static func int(_ value: Double?) -> Int? {
+        guard let value, isInteger(value), abs(value) <= maxSafeInteger else { return nil }
+        return Int(value)
+    }
+
     /// `typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= max` (progressData `isWhole`).
     static func whole(_ value: JSONValue?, max: Double) -> Int? {
         guard let number = value?.number, isInteger(number), number >= 0, number <= max else { return nil }

@@ -153,9 +153,6 @@ public struct RecordsSnapshot: Hashable, Sendable {
     public var duas: [DuaItem] = []
     /// What was recorded about them, ordered by `at`.
     public var duaEntries: [DuaEntry] = []
-    /// The companion's conversations, the latest first. Read only with everything (a backup, a
-    /// full load), never with a range of days.
-    public var companion: [CompanionConversation] = []
 
     public init() {}
 

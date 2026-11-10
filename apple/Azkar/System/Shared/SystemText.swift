@@ -133,6 +133,19 @@ nonisolated enum SystemText {
         max(0, Int((date.timeIntervalSince(now) / 60).rounded(.up)))
     }
 
+    /// "Mon 10 Nov": a calendar day, short, in the widget's language and digits.
+    static func shortDay(_ day: DayKey, _ language: SystemLanguage) -> String {
+        let style = Date.FormatStyle(locale: language.locale, calendar: Calendar(identifier: .gregorian), timeZone: .gmt)
+            .weekday(.abbreviated).day().month(.abbreviated)
+        return day.noonUTC.formatted(style)
+    }
+
+    /// "20 Jumada al-Ula": the Hijri day and month of a calendar day.
+    static func hijriDay(_ day: DayKey, offset: Int, _ language: SystemLanguage) -> String {
+        let hijri = HijriCalendar.date(of: day, offset: offset)
+        return "\(number(hijri.day, language)) \(HijriFormat.monthName(hijri.month, language: language.isArabic ? .ar : .en))"
+    }
+
     static func number(_ value: Int, _ language: SystemLanguage) -> String {
         value.formatted(.number.locale(language.locale))
     }

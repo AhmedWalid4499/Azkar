@@ -253,8 +253,8 @@ import Testing
         #expect(reopened.hifz.map(\.sura) == [67])
     }
 
-    /// The sixth version only adds the companion's table: a store of the fifth keeps its rows.
-    @Test func aStoreWrittenByTheFifthVersionKeepsItAllAndTakesConversations() async throws {
+    /// The sixth version only adds a table nothing writes: a store of the fifth keeps its rows.
+    @Test func aStoreWrittenByTheFifthVersionKeepsItAll() async throws {
         typealias V5 = AzkarSchemaV5
         let directory = StorageTests.temporaryDirectory()
         defer { try? FileManager.default.removeItem(at: directory) }
@@ -277,12 +277,11 @@ import Testing
         #expect(records.prayers[first]?.prayers[.fajr]?.status == .jamaah)
         #expect(records.duas.map(\.id) == [dua])
         #expect(records.makeups.map(\.prayer) == [.isha])
-        #expect(records.companion.isEmpty)
         #expect(try await store.revision() == 41)
 
-        _ = try await store.saveCompanion(CompanionConversation(startedAt: later, messages: [["role": "user", "content": "Salam"]]), at: later)
+        _ = try await store.logMakeup(.fajr, on: first, at: later)
         let again = try RecordStore.open(.directory(directory), catalog: AzkarRecordTests.catalog, timeZone: { StorageTests.utc })
-        #expect(try await again.companionConversations().count == 1)
+        #expect(try await again.snapshot().makeups.count == 2)
         #expect(try await again.snapshot().duas.map(\.id) == [dua])
     }
 

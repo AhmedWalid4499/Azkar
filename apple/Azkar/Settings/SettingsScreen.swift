@@ -24,9 +24,6 @@ struct SettingsScreen: View {
                         NavigationLink(value: SettingsPage.reader) {
                             Label { Text("Azkar reader", tableName: SettingsText.table) } icon: { Image(systemName: "book") }
                         }
-                        NavigationLink(value: SettingsPage.companion) {
-                            Label { Text(CL("Companion")) } icon: { Image(systemName: "bubble.left.and.text.bubble.right") }
-                        }
                     }
                     SettingsGeneralSection()
                         .id("general")
@@ -63,7 +60,6 @@ struct SettingsScreen: View {
                 case .reader: SettingsReaderView()
                 case .imported: SettingsImportHistoryView()
                 case .about: SettingsAboutView()
-                case .companion: CompanionKeyForm {}
                 }
             }
         }
@@ -79,7 +75,7 @@ struct SettingsScreen: View {
 
 /// The pages Settings opens.
 enum SettingsPage: Hashable {
-    case calculation, adjustments, reminders, reader, imported, about, companion
+    case calculation, adjustments, reminders, reader, imported, about
 }
 
 #Preview {

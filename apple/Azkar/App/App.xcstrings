@@ -11,6 +11,23 @@
         }
       }
     },
+    "Azkar couldn’t open your records" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر على أذكار فتح سجلاتك"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azkar couldn’t open your records"
+          }
+        }
+      }
+    },
     "Qibla" : {
       "localizations" : {
         "ar" : {

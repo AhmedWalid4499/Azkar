@@ -51,10 +51,8 @@ public enum WebStores {
     static let giving = "giving"
     /// The native app's own duas and their log, kept the same way.
     static let duas = "duas"
-    /// The native app's conversations with the companion, kept the same way.
-    static let companion = "companion"
     /// Every store read.
-    static var stores: [String] { names + [progressSpare, quran, seasons, hifz, makeups, giving, duas, companion] }
+    static var stores: [String] { names + [progressSpare, quran, seasons, hifz, makeups, giving, duas] }
 
     /// What `persist` hands to a store's `merge` while loading.
     enum Loaded {
@@ -108,7 +106,7 @@ public enum WebStores {
         let known = Set(stores.map { prefix + $0 })
         snapshot.ignored = Set(entries.keys.filter { !known.contains($0) && $0.hasPrefix(prefix) })
         func entry(_ name: String) -> StoredEntry { entries[prefix + name] ?? .missing }
-        for name in names + [quran, seasons, hifz, makeups, giving, duas, companion] {
+        for name in names + [quran, seasons, hifz, makeups, giving, duas] {
             if case let .json(value) = entry(name), value.isTruthy { snapshot.found.insert(name) }
         }
 
@@ -185,9 +183,6 @@ public enum WebStores {
         }).persisted)
         snapshot.records.duas = asked.items
         snapshot.records.duaEntries = asked.entries
-        snapshot.records.companion = WebCompanion.read(load(entry(companion), version: WebCompanion.version, migrate: { state, _ in
-            WebCompanion.web(WebCompanion.read(state))
-        }).persisted)
 
         snapshot.records.seasons = WebSeasons.read(load(entry(seasons), version: WebSeasons.version, migrate: { state, _ in
             WebSeasons.web(WebSeasons.read(state))
@@ -234,9 +229,6 @@ public enum WebStores {
         }
         if !records.duas.isEmpty || !records.duaEntries.isEmpty {
             stores[prefix + duas] = stored(WebDuas.web(records.duas, entries: records.duaEntries), WebDuas.version)
-        }
-        if !records.companion.isEmpty {
-            stores[prefix + companion] = stored(WebCompanion.web(records.companion), WebCompanion.version)
         }
         return stores
     }

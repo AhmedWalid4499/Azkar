@@ -32,12 +32,24 @@ enum SystemDebugRender {
             language.uses24Hour = settings.app.timeFormat == .twentyFourHour
             let entry: PrayerTimesEntry
             if let board {
-                entry = PrayerTimesEntry(date: board.now, language: language, name: settings.app.name, content: .ready(board), azkar: sample.azkar)
+                entry = PrayerTimesEntry(date: board.now, language: language, name: settings.app.name, content: .ready(board), azkar: sample.azkar,
+                                         hijriOffset: settings.app.hijriOffset)
             } else {
                 entry = PrayerTimesEntry(date: .now, language: language, name: "", content: .noLocation, azkar: [])
             }
             for (family, size) in families {
                 save(widget(entry, family), size: size, variant, to: folder.appending(path: "widget-\(family)-\(variant.name).png"))
+            }
+            if let board {
+                let offset = settings.app.hijriOffset
+                save(TodayPrayersRectangularView(board: board, language: language, hijriOffset: offset).frame(width: 172, height: 76).background(.gray.opacity(0.3), in: .rect(cornerRadius: 12)),
+                     size: CGSize(width: 172, height: 76), variant, to: folder.appending(path: "today-rectangular-\(variant.name).png"))
+                save(TodayPrayersCircularView(board: board, language: language).frame(width: 76, height: 76).background(Circle().fill(.gray.opacity(0.3))),
+                     size: CGSize(width: 76, height: 76), variant, to: folder.appending(path: "today-circular-\(variant.name).png"))
+                save(TodayPrayersInlineView(board: board, language: language).frame(width: 257, height: 26),
+                     size: CGSize(width: 257, height: 26), variant, to: folder.appending(path: "today-inline-\(variant.name).png"))
+                save(home(TodayPrayersSmallView(board: board, language: language, hijriOffset: offset), CGSize(width: 170, height: 170)),
+                     size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "today-small-\(variant.name).png"))
             }
             for (name, quran) in [("quran", QuranWidgetEntry.sample(language: language)), ("quran-ramadan", QuranWidgetEntry.sample(language: language, inRamadan: true))] {
                 save(home(QuranWidgetSmallView(entry: quran), CGSize(width: 170, height: 170)), size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "\(name)-small-\(variant.name).png"))

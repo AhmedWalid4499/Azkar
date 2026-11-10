@@ -22,6 +22,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Azkar can sound an adhan alarm at prayer times you choose, even in silent mode.</string>
 	<key>UIAppFonts</key>

@@ -45,8 +45,8 @@ extension ReaderSettings {
     public init(web value: JSONValue?) {
         self.init()
         guard let stored = value?.object else { return }
-        if let scale = stored["arabicScale"]?.number, WebRules.isInteger(scale), Self.arabicScales.contains(Int(scale)) {
-            arabicScale = Int(scale)
+        if let scale = WebRules.int(stored["arabicScale"]?.number), Self.arabicScales.contains(scale) {
+            arabicScale = scale
         }
         for (key, path) in [("showTransliteration", \ReaderSettings.showTransliteration), ("showTranslation", \.showTranslation)] {
             switch stored[key] {

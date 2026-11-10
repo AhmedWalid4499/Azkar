@@ -63,9 +63,10 @@ struct CounterDock: View {
             .buttonStyle(.glass)
             .controlSize(.large)
 
+            // Compact, so the dhikr above keeps the room: the count and its hint on one line.
             Button(action: onCount) {
-                VStack(spacing: 2) {
-                    HStack(spacing: 8) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    HStack(spacing: 6) {
                         if isDone {
                             Image(systemName: "checkmark")
                                 .transition(.scale.combined(with: .opacity))
@@ -73,16 +74,16 @@ struct CounterDock: View {
                         Text(verbatim: "\(locale.number(count)) / \(locale.number(target))")
                             .contentTransition(.numericText(value: Double(count)))
                     }
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .font(.system(.title2, design: .rounded, weight: .bold))
                     .monospacedDigit()
                     hint
                         .font(.subheadline.weight(.medium))
                         .opacity(0.85)
                 }
-                .frame(maxWidth: .infinity, minHeight: 92)
+                .frame(maxWidth: .infinity, minHeight: 52)
             }
             .buttonStyle(.glassProminent)
-            .buttonBorderShape(.roundedRectangle(radius: 32))
+            .buttonBorderShape(.roundedRectangle(radius: 26))
             // Deep enough in light and dark for the white label to read clearly.
             .tint(isDone ? Self.doneTint : Self.countTint)
             .accessibilityLabel(label)

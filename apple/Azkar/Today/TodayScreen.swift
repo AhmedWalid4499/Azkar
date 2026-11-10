@@ -1,4 +1,5 @@
 import AzkarKit
+import Combine
 import SwiftUI
 import UIKit
 
@@ -15,7 +16,6 @@ struct TodayScreen: View {
     @State private var showsLocation = false
     @State private var showsCalendar = false
     @State private var showsSettings = TodayScreen.opensSettings
-    @State private var showsCompanion = TodayScreen.opensCompanion
 
     var body: some View {
         let settings = app.settings.settings
@@ -34,9 +34,8 @@ struct TodayScreen: View {
             .navigationTitle(Text(L("Today")))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
-            .sheet(isPresented: $showsLocation) { LocationSheet() }
-            .sheet(isPresented: $showsSettings) { SettingsScreen { showsSettings = false } }
-            .sheet(isPresented: $showsCompanion) { CompanionScreen(app: app) }
+            .sheet(isPresented: $showsLocation) { LocationSheet().appDirection() }
+            .sheet(isPresented: $showsSettings) { SettingsScreen { showsSettings = false }.appDirection() }
             .navigationDestination(isPresented: $showsCalendar) { IslamicCalendarScreen(today: context.today) }
         }
         .environment(\.locale, format.locale)
@@ -50,10 +49,11 @@ struct TodayScreen: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { clock.refresh() }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in
+        // Posted on whichever thread noticed the change; the clock lives on the main actor.
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification).receive(on: RunLoop.main)) { _ in
             clock.refresh()
         }
-        .onReceive(NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange).receive(on: RunLoop.main)) { _ in
             clock.refresh()
         }
         #if DEBUG
@@ -64,7 +64,7 @@ struct TodayScreen: View {
     /// Header, next prayer (or the first-run card), the season, tarawih, fasting, prayers, azkar, sunnah.
     private func sections(_ context: TodayContext) -> some View {
         List {
-            TodayHeader(context: context, showsLocation: $showsLocation, showsCalendar: $showsCalendar, showsSettings: $showsSettings, showsCompanion: $showsCompanion)
+            TodayHeader(context: context, showsLocation: $showsLocation, showsCalendar: $showsCalendar, showsSettings: $showsSettings)
 
             TravelNoticeSection(context: context, showsLocation: $showsLocation)
 
@@ -98,15 +98,6 @@ struct TodayScreen: View {
 }
 
 private extension TodayScreen {
-    /// DEBUG builds open the companion at launch with `-AzkarCompanion open`, for screenshots.
-    static var opensCompanion: Bool {
-        #if DEBUG
-        CompanionDemo.opens
-        #else
-        false
-        #endif
-    }
-
     /// DEBUG builds open Settings at launch with `-AzkarTab settings`, for screenshots.
     static var opensSettings: Bool {
         #if DEBUG

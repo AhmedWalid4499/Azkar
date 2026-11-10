@@ -44,6 +44,7 @@ extension AppEnvironment {
 /// tap on the place clears the night.
 struct TarawihControl: View {
     @Environment(AppEnvironment.self) private var app
+    @Environment(\.locale) private var locale
     let record: SeasonRecord?
     let evening: DayKey
 
@@ -63,7 +64,7 @@ struct TarawihControl: View {
                 )) {
                     Text(SeasonL("Not counted")).tag(Int?.none)
                     ForEach(Self.rakahChoices, id: \.self) { rakahs in
-                        Text(verbatim: rakahs.formatted()).tag(Int?.some(rakahs))
+                        Text(verbatim: rakahs.formatted(.number.locale(locale))).tag(Int?.some(rakahs))
                     }
                 } label: {
                     Text(SeasonL("Rakahs"))

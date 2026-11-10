@@ -10,7 +10,6 @@ struct TodayHeader: View {
     @Binding var showsLocation: Bool
     @Binding var showsCalendar: Bool
     @Binding var showsSettings: Bool
-    @Binding var showsCompanion: Bool
 
     var body: some View {
         let appSettings = app.settings.settings.app
@@ -21,7 +20,6 @@ struct TodayHeader: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
                     Spacer(minLength: 8)
-                    companionButton
                     settingsButton
                 }
                 Text(format.longDay(context.today))
@@ -48,18 +46,6 @@ struct TodayHeader: View {
             showsSettings = true
         } label: {
             Label { Text(L("Settings")) } icon: { Image(systemName: "gearshape") }
-                .labelStyle(.iconOnly)
-                .font(.title3)
-        }
-        .buttonBorderShape(.circle)
-        .buttonStyle(.glass)
-    }
-
-    private var companionButton: some View {
-        Button {
-            showsCompanion = true
-        } label: {
-            Label { Text(L("Companion")) } icon: { Image(systemName: "bubble.left.and.text.bubble.right") }
                 .labelStyle(.iconOnly)
                 .font(.title3)
         }

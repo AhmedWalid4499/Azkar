@@ -43,6 +43,7 @@ struct ReaderView: View {
                 model.isOverviewShown = false
                 model.go(to: position, reduceMotion: reduceMotion)
             }, onStartOver: { model.startOver() })
+            .appDirection()
             .presentationDetents([.medium, .large])
         }
         .sensoryFeedback(.impact(weight: .light), trigger: model.ticks) { _, _ in settings.haptics }

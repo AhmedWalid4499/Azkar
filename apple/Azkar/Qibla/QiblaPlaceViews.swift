@@ -21,6 +21,7 @@ struct QiblaNoLocationView: View {
         }
         .sheet(isPresented: $searching) {
             LocationSearchSheet { place in request.save(place, to: app.settings) }
+                .appDirection()
         }
     }
 }
@@ -46,6 +47,7 @@ struct QiblaNearView: View {
         }
         .sheet(isPresented: $searching) {
             LocationSearchSheet { place in request.save(place, to: app.settings) }
+                .appDirection()
         }
     }
 }
