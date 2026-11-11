@@ -7,7 +7,7 @@
 	<key>AzkarWalletPassType</key>
 	<string>pass.io.github.ahmedwalid4499.azkar</string>
 	<key>AzkarWalletServer</key>
-	<string></string>
+	<string>https://azkar-wallet.ahmedwalid4499.workers.dev</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>io.github.ahmedwalid4499.azkar.refresh</string>
