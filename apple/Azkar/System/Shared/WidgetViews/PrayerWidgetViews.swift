@@ -290,10 +290,13 @@ struct TodayPrayersRectangularView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
                 .widgetAccentable()
-            HStack(spacing: 2) {
-                ForEach(board.rows) { row in
+            // Each mark as wide as its name, the room left shared between them: equal columns would
+            // squeeze Maghrib (and Jumu'ah) into smaller type than the others.
+            HStack(spacing: 0) {
+                ForEach(Array(board.rows.enumerated()), id: \.element.id) { index, row in
+                    if index > 0 { Spacer(minLength: 2) }
                     TodayPrayerMark(row: row, board: board, language: language)
-                        .frame(maxWidth: .infinity)
+                        .fixedSize()
                 }
             }
         }
@@ -330,9 +333,8 @@ struct TodayPrayerMark: View {
                 .widgetAccentable(row.isLogged)
                 .contentTransition(.symbolEffect(.replace))
             Text(verbatim: SystemText.prayer(row.prayer, language, on: row.day))
-                .font(.system(size: 10, weight: isNext ? .bold : .regular))
+                .font(.system(size: 10, weight: isNext ? .semibold : .regular))
                 .lineLimit(1)
-                .minimumScaleFactor(0.6)
         }
         .foregroundStyle(row.isLogged || canTick ? .primary : .secondary)
         .contentShape(.rect)

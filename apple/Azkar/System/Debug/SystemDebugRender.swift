@@ -53,8 +53,10 @@ enum SystemDebugRender {
             }
             if let board {
                 let offset = settings.app.hijriOffset
-                save(TodayPrayersRectangularView(board: board, language: language, hijriOffset: offset).frame(width: 172, height: 76).background(.gray.opacity(0.3), in: .rect(cornerRadius: 12)),
-                     size: CGSize(width: 172, height: 76), variant, to: folder.appending(path: "today-rectangular-\(variant.name).png"))
+                let lock = compact ? CGSize(width: 160, height: 72) : CGSize(width: 172, height: 76)
+                save(TodayPrayersRectangularView(board: board, language: language, hijriOffset: offset).frame(width: lock.width, height: lock.height)
+                        .background(.gray.opacity(0.3), in: .rect(cornerRadius: 12)),
+                     size: lock, variant, to: folder.appending(path: "today-rectangular-\(variant.name).png"))
                 save(TodayPrayersCircularView(board: board, language: language).frame(width: 76, height: 76).background(Circle().fill(.gray.opacity(0.3))),
                      size: CGSize(width: 76, height: 76), variant, to: folder.appending(path: "today-circular-\(variant.name).png"))
                 save(TodayPrayersInlineView(board: board, language: language).frame(width: 257, height: 26),
