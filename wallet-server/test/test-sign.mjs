@@ -32,6 +32,7 @@ check(['pass.json', 'manifest.json', 'signature', 'icon.png', 'icon@2x.png', 'lo
 const pass = JSON.parse(strFromU8(files['pass.json']))
 check(pass.passTypeIdentifier === 'pass.test' && pass.teamIdentifier === 'TEAM123456' && pass.serialNumber === 'abcdef12-3456', 'identity comes from the server')
 check(!('webServiceURL' in pass) && pass.sharingProhibited === true && pass.formatVersion === 1, 'fields the app may not set are dropped')
+check(pass.barcodes?.[0]?.format === 'PKBarcodeFormatQR' && pass.barcodes[0].message.endsWith('/get.html') && pass.barcodes[0].altText === 'Scan to get Azkar', 'the QR code leads to the app page')
 const manifest = JSON.parse(strFromU8(files['manifest.json']))
 check(Object.entries(manifest).every(([name, hash]) => createHash('sha1').update(files[name]).digest('hex') === hash), 'every hash in the manifest matches its file')
 writeFileSync(join(dir, 'manifest.json'), files['manifest.json'])
@@ -39,6 +40,18 @@ writeFileSync(join(dir, 'signature'), files['signature'])
 let verified = true
 try { ssl('cms', '-verify', '-binary', '-inform', 'DER', '-in', 'signature', '-content', 'manifest.json', '-CAfile', 'ca.pem', '-purpose', 'any', '-out', '/dev/null') } catch { verified = false }
 check(verified, 'the signature verifies over manifest.json with the certificate chain')
+
+check(!('thumbnail@2x.png' in files), 'a card without a ring (builds before 5) has no thumbnail')
+const ringed = unzipSync(new Uint8Array(await (await worker.fetch(request({ ...card, ring: '10110' }), env)).arrayBuffer()))
+check(['thumbnail.png', 'thumbnail@2x.png', 'thumbnail@3x.png', 'logo@3x.png'].every((f) => f in ringed) && JSON.parse(strFromU8(ringed['manifest.json']))['thumbnail@3x.png'], 'a ring adds the thumbnail, listed in the manifest')
+const odd = unzipSync(new Uint8Array(await (await worker.fetch(request({ ...card, ring: '../../x' }), env)).arrayBuffer()))
+check(!('thumbnail@2x.png' in odd), 'an unknown ring is ignored')
+
+const tricky = { serialNumber: 'abcdef12-3456', pass: { locations: [{ latitude: 1, longitude: 2 }], generic: { primaryFields: [{ key: 'p', value: '1', attributedValue: '<a href="https://evil.example">x</a>', label: 'L' }, { key: 'q' }] } } }
+const cleaned = JSON.parse(strFromU8(unzipSync(new Uint8Array(await (await worker.fetch(request(tricky), env)).arrayBuffer()))['pass.json']))
+check(cleaned.barcodes.length === 1 && cleaned.barcodes[0].message.endsWith('/get.html'), 'the app cannot change where the QR code leads')
+check(!('locations' in cleaned) && cleaned.generic.primaryFields.length === 1 && !('attributedValue' in cleaned.generic.primaryFields[0]), 'only plain text fields are signed')
+check((await worker.fetch(new Request('https://w.example/v1/pass', { method: 'POST', headers: { 'x-azkar-key': 'k' }, body: 'null' }), env)).status === 400, 'a body of null is refused')
 
 check((await worker.fetch(request(card, 'wrong'), env)).status === 401, 'a wrong app key is refused')
 check((await worker.fetch(request({ ...card, serialNumber: '../x' }), env)).status === 400, 'a bad serial number is refused')

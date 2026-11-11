@@ -134,7 +134,7 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ · %2$@"
+            "value": "%1$@، %2$@"
           }
         },
         "en": {
@@ -1243,6 +1243,24 @@
         }
       }
     },
+    "Log your prayers in Azkar and this card updates. Prayers ticked from a widget appear here the next time you open Azkar.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجّل صلواتك في أذكار فتتحدّث هذه البطاقة. وما تعلّمه من الأدوات يظهر هنا عندما تفتح أذكار."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log your prayers in Azkar and this card updates. Prayers ticked from a widget appear here the next time you open Azkar."
+          }
+        }
+      }
+    },
     "Logged %1$@: %2$@.": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1476,6 +1494,24 @@
         }
       },
       "generatesSymbol": false
+    },
+    "Not logged": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تُسجَّل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not logged"
+          }
+        }
+      }
     },
     "Now": {
       "extractionState": "manual",
@@ -1945,6 +1981,24 @@
         }
       }
     },
+    "Scan to get Azkar": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "امسح الرمز لتحميل أذكار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan to get Azkar"
+          }
+        }
+      }
+    },
     "Set your location": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -2013,6 +2067,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Status"
+          }
+        }
+      }
+    },
+    "Streak": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المواظبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streak"
           }
         }
       }
@@ -2142,24 +2214,6 @@
         }
       },
       "generatesSymbol": false
-    },
-    "Tick each prayer in Azkar or its widgets. This card updates when you do, and each new day.": {
-      "extractionState": "manual",
-      "generatesSymbol": false,
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "علّم على كل صلاة في تطبيق أذكار أو أدواته، وتتحدّث هذه البطاقة عندها ومع كل يوم جديد."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tick each prayer in Azkar or its widgets. This card updates when you do, and each new day."
-          }
-        }
-      }
     },
     "Time for Duha": {
       "extractionState": "manual",

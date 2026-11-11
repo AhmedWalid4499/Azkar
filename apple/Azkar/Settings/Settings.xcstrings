@@ -524,19 +524,19 @@
         }
       }
     },
-    "A card with today’s date and your five prayers, ticked as you log them. It updates when you log a prayer, and each new day.": {
+    "A card with today’s date and your five prayers, ticked as you log them. It updates when you log a prayer in Azkar and when you open the app.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "بطاقة فيها تاريخ اليوم وصلواتك الخمس، مُعلَّمًا عليها ما سجّلته. تتحدّث كلما سجّلت صلاة ومع كل يوم جديد."
+            "value": "بطاقة فيها تاريخ اليوم وصلواتك الخمس، مُعلَّمًا عليها ما سجّلته. تتحدّث كلما سجّلت صلاة في أذكار وكلما فتحت التطبيق."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A card with today’s date and your five prayers, ticked as you log them. It updates when you log a prayer, and each new day."
+            "value": "A card with today’s date and your five prayers, ticked as you log them. It updates when you log a prayer in Azkar and when you open the app."
           }
         }
       }
@@ -1217,6 +1217,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a folder"
+          }
+        }
+      }
+    },
+    "Choose your location first, then add the card.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختر موقعك أولًا، ثم أضف البطاقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your location first, then add the card."
           }
         }
       }
@@ -2866,6 +2884,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings taken over"
+          }
+        }
+      }
+    },
+    "Show in Wallet": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض في المحفظة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Wallet"
           }
         }
       }

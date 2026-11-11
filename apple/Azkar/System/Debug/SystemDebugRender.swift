@@ -20,7 +20,17 @@ enum SystemDebugRender {
         Variant(name: "ar-light", language: SystemLanguage(code: "ar"), scheme: .light, type: .large),
         Variant(name: "ar-dark", language: SystemLanguage(code: "ar", arabicDigits: true), scheme: .dark, type: .large),
         Variant(name: "en-xxxl", language: SystemLanguage(code: "en"), scheme: .light, type: .xxxLarge),
+        // The 6.3-inch iPhones' smaller widgets (158 points).
+        Variant(name: "en-compact", language: SystemLanguage(code: "en"), scheme: .light, type: .large),
+        Variant(name: "ar-compact", language: SystemLanguage(code: "ar", arabicDigits: true), scheme: .light, type: .large),
+        Variant(name: "en-compact-xxl", language: SystemLanguage(code: "en"), scheme: .light, type: .xxLarge),
     ]
+
+    /// Home Screen sizes: 6.9-inch, or 6.3-inch for a compact variant.
+    nonisolated(unsafe) static var compact = false
+    static var small: CGSize { compact ? CGSize(width: 158, height: 158) : CGSize(width: 170, height: 170) }
+    static var medium: CGSize { compact ? CGSize(width: 338, height: 158) : CGSize(width: 364, height: 170) }
+    static var large: CGSize { compact ? CGSize(width: 338, height: 354) : CGSize(width: 364, height: 382) }
 
     static func run() async {
         let (settings, board) = await SystemServices.shared.currentBoard()
@@ -28,6 +38,7 @@ enum SystemDebugRender {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let sample = PrayerTimesEntry.sample()
         for variant in variants {
+            compact = variant.name.contains("compact")
             var language = variant.language
             language.uses24Hour = settings.app.timeFormat == .twentyFourHour
             let entry: PrayerTimesEntry
@@ -48,17 +59,17 @@ enum SystemDebugRender {
                      size: CGSize(width: 76, height: 76), variant, to: folder.appending(path: "today-circular-\(variant.name).png"))
                 save(TodayPrayersInlineView(board: board, language: language).frame(width: 257, height: 26),
                      size: CGSize(width: 257, height: 26), variant, to: folder.appending(path: "today-inline-\(variant.name).png"))
-                save(home(TodayPrayersSmallView(board: board, language: language, hijriOffset: offset), CGSize(width: 170, height: 170)),
-                     size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "today-small-\(variant.name).png"))
+                save(home(TodayPrayersSmallView(board: board, language: language, hijriOffset: offset), small),
+                     size: small, variant, to: folder.appending(path: "today-small-\(variant.name).png"))
             }
             for (name, quran) in [("quran", QuranWidgetEntry.sample(language: language)), ("quran-ramadan", QuranWidgetEntry.sample(language: language, inRamadan: true))] {
-                save(home(QuranWidgetSmallView(entry: quran), CGSize(width: 170, height: 170)), size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "\(name)-small-\(variant.name).png"))
-                save(home(QuranWidgetMediumView(entry: quran), CGSize(width: 364, height: 170)), size: CGSize(width: 364, height: 170), variant, to: folder.appending(path: "\(name)-medium-\(variant.name).png"))
+                save(home(QuranWidgetSmallView(entry: quran), small), size: small, variant, to: folder.appending(path: "\(name)-small-\(variant.name).png"))
+                save(home(QuranWidgetMediumView(entry: quran), medium), size: medium, variant, to: folder.appending(path: "\(name)-medium-\(variant.name).png"))
                 save(QuranWidgetRectangularView(entry: quran).frame(width: 172, height: 76).background(.gray.opacity(0.3), in: .rect(cornerRadius: 12)),
                      size: CGSize(width: 172, height: 76), variant, to: folder.appending(path: "\(name)-rectangular-\(variant.name).png"))
             }
             save(WidgetNoLocationView(language: language).padding(16).frame(width: 170, height: 170).background(WidgetBackdrop()).clipShape(.rect(cornerRadius: 22)),
-                 size: CGSize(width: 170, height: 170), variant, to: folder.appending(path: "widget-empty-\(variant.name).png"))
+                 size: small, variant, to: folder.appending(path: "widget-empty-\(variant.name).png"))
             if let board, let state = NextPrayerAttributes.ContentState(board: board, language: language, hijriOffset: settings.app.hijriOffset) {
                 save(lockScreen(state), size: CGSize(width: 374, height: 170), variant, to: folder.appending(path: "activity-lock-\(variant.name).png"))
                 save(island(state, language), size: CGSize(width: 374, height: 200), variant, to: folder.appending(path: "activity-island-\(variant.name).png"))
@@ -75,19 +86,19 @@ enum SystemDebugRender {
         print("SystemDebug: rendered into \(folder.path(percentEncoded: false))")
     }
 
-    static let families: [(String, CGSize)] = [
-        ("small", CGSize(width: 170, height: 170)), ("medium", CGSize(width: 364, height: 170)), ("large", CGSize(width: 364, height: 382)),
+    static var families: [(String, CGSize)] { [
+        ("small", small), ("medium", medium), ("large", large),
         ("circular", CGSize(width: 76, height: 76)), ("rectangular", CGSize(width: 172, height: 76)), ("inline", CGSize(width: 257, height: 26)),
-    ]
+    ] }
 
     @ViewBuilder
     static func widget(_ entry: PrayerTimesEntry, _ family: String) -> some View {
         if let board = entry.board, let next = board.next {
             let language = entry.language
             switch family {
-            case "small": home(WidgetSmallView(board: board, next: next, language: language), CGSize(width: 170, height: 170))
-            case "medium": home(WidgetMediumView(board: board, next: next, language: language), CGSize(width: 364, height: 170))
-            case "large": home(WidgetLargeView(entry: entry, board: board, next: next), CGSize(width: 364, height: 382))
+            case "small": home(WidgetSmallView(board: board, next: next, language: language), small)
+            case "medium": home(WidgetMediumView(board: board, next: next, language: language), medium)
+            case "large": home(WidgetLargeView(entry: entry, board: board, next: next), large)
             case "circular": WidgetCircularView(board: board, next: next, language: language).frame(width: 76, height: 76).background(Circle().fill(.gray.opacity(0.3)))
             case "rectangular": WidgetRectangularView(board: board, next: next, language: language).frame(width: 172, height: 76).background(.gray.opacity(0.3), in: .rect(cornerRadius: 12))
             default: WidgetInlineView(board: board, next: next, language: language).frame(width: 257, height: 26)

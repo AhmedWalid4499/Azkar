@@ -42,10 +42,13 @@ struct WidgetNextPrayerSummary: View {
             Text(verbatim: time)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+            // The system ticks the timer itself; it is sized for its widest value, so it is kept
+            // to one line and leading, like the lines above it.
             Text(timerInterval: board.now...max(board.now, next.at), countsDown: true)
                 .font(.title3.monospacedDigit().weight(.semibold))
-                .contentTransition(.numericText(countsDown: true))
+                .multilineTextAlignment(.leading)
                 .lineLimit(1)
+                .minimumScaleFactor(0.8)
                 .accessibilityLabel(Text(verbatim: SystemText.string("Time remaining", language)))
         }
         .accessibilityElement(children: .combine)
@@ -58,6 +61,8 @@ struct WidgetPrayerRow: View {
     let board: SystemPrayerBoard
     let language: SystemLanguage
     var isNext = false
+    /// The time without AM/PM, where the width is short.
+    var compact = false
 
     var body: some View {
         let canTick = !row.isLogged && row.hasBegun(at: board.now)
@@ -84,8 +89,9 @@ struct WidgetPrayerRow: View {
             Text(verbatim: SystemText.prayer(row.prayer, language, on: row.day))
                 .fontWeight(isNext ? .bold : .regular)
                 .lineLimit(1)
+                .layoutPriority(1)
             Spacer(minLength: 4)
-            Text(verbatim: row.at.map { SystemText.time($0, in: board.place.timeZone, language) } ?? "—")
+            Text(verbatim: row.at.map { compact ? SystemText.clock($0, in: board.place.timeZone, language) : SystemText.time($0, in: board.place.timeZone, language) } ?? "—")
                 .monospacedDigit()
                 .foregroundStyle(isNext ? .primary : .secondary)
                 .lineLimit(1)
@@ -111,11 +117,13 @@ struct WidgetPrayerRows: View {
     let board: SystemPrayerBoard
     let language: SystemLanguage
     var spacing: CGFloat = 4
+    var compact = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
             ForEach(board.rows) { row in
-                WidgetPrayerRow(row: row, board: board, language: language, isNext: board.next?.prayer == row.prayer && board.next?.day == row.day)
+                WidgetPrayerRow(row: row, board: board, language: language, isNext: board.next?.prayer == row.prayer && board.next?.day == row.day,
+                                compact: compact)
             }
         }
     }

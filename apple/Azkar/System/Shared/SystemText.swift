@@ -146,6 +146,11 @@ nonisolated enum SystemText {
         return "\(number(hijri.day, language)) \(HijriFormat.monthName(hijri.month, language: language.isArabic ? .ar : .en))"
     }
 
+    /// Between two parts of a line: " · ", or "، " in Arabic, where a middle dot reads as the digit zero (٠).
+    static func separator(_ language: SystemLanguage) -> String {
+        language.isArabic ? "، " : " · "
+    }
+
     static func number(_ value: Int, _ language: SystemLanguage) -> String {
         value.formatted(.number.locale(language.locale))
     }

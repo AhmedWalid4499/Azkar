@@ -47,6 +47,8 @@ struct WidgetSmallView: View {
             WidgetLoggedCount(board: board, language: language)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        // Larger text would push the countdown out of the square.
+        .dynamicTypeSize(...DynamicTypeSize.large)
     }
 }
 
@@ -77,7 +79,7 @@ struct WidgetLargeView: View {
 
     var body: some View {
         let language = entry.language
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top) {
                 WidgetNextPrayerSummary(board: board, next: next, language: language)
                 Spacer(minLength: 8)
@@ -92,7 +94,7 @@ struct WidgetLargeView: View {
                 }
             }
             Divider()
-            WidgetPrayerRows(board: board, language: language, spacing: 6)
+            WidgetPrayerRows(board: board, language: language, spacing: 4)
                 .font(.subheadline)
             if !entry.azkar.isEmpty {
                 Divider()
@@ -107,7 +109,8 @@ struct WidgetLargeView: View {
             }
             Spacer(minLength: 0)
         }
-        .dynamicTypeSize(...DynamicTypeSize.xLarge)
+        // The 6.3-inch iPhones' large widget is 354 points tall: larger text would overflow it.
+        .dynamicTypeSize(...DynamicTypeSize.large)
     }
 }
 
@@ -190,6 +193,7 @@ struct WidgetCircularView: View {
         }
         .progressViewStyle(.circular)
         .widgetAccentable()
+        .dynamicTypeSize(...DynamicTypeSize.large)
         .accessibilityLabel(Text(verbatim: SystemText.format("%1$@ at %2$@", language, SystemText.prayer(next.prayer, language, on: next.day), SystemText.time(next.at, in: board.place.timeZone, language))))
     }
 }
@@ -214,7 +218,11 @@ struct WidgetRectangularView: View {
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(.secondary)
         }
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
         .frame(maxWidth: .infinity, alignment: .leading)
+        // Three lines fill the Lock Screen's space: larger text would cut off the countdown.
+        .dynamicTypeSize(...DynamicTypeSize.large)
         .accessibilityElement(children: .combine)
     }
 }
@@ -266,7 +274,7 @@ struct TodayPrayersWidgetView: View {
 /// The date the five prayers are of, Gregorian and Hijri.
 private func todayLine(_ board: SystemPrayerBoard, _ language: SystemLanguage, hijriOffset: Int) -> String {
     let day = board.rows.first?.day ?? board.today
-    return "\(SystemText.shortDay(day, language)) · \(SystemText.hijriDay(day, offset: hijriOffset, language))"
+    return "\(SystemText.shortDay(day, language))\(SystemText.separator(language))\(SystemText.hijriDay(day, offset: hijriOffset, language))"
 }
 
 /// Lock Screen: the date over the five prayers, each a mark to tap once its time has come.
@@ -290,6 +298,7 @@ struct TodayPrayersRectangularView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .dynamicTypeSize(...DynamicTypeSize.large)
     }
 }
 
@@ -316,7 +325,7 @@ struct TodayPrayerMark: View {
     private func content(canTick: Bool) -> some View {
         let isNext = board.next?.prayer == row.prayer && board.next?.day == row.day
         return VStack(spacing: 1) {
-            Image(systemName: row.isLogged ? "checkmark.circle.fill" : (canTick ? "circle" : "circle.dotted"))
+            Image(systemName: row.status?.symbolName ?? (canTick ? "circle" : "circle.dotted"))
                 .font(.title3)
                 .widgetAccentable(row.isLogged)
                 .contentTransition(.symbolEffect(.replace))
@@ -353,6 +362,7 @@ struct TodayPrayersCircularView: View {
         }
         .gaugeStyle(.accessoryCircularCapacity)
         .widgetAccentable()
+        .dynamicTypeSize(...DynamicTypeSize.large)
         .accessibilityLabel(Text(verbatim: SystemText.format("%1$@ of %2$@ logged", language, SystemText.number(logged, language), SystemText.number(board.rows.count, language))))
     }
 }
@@ -367,7 +377,7 @@ struct TodayPrayersInlineView: View {
         let count = SystemText.format("%1$@/%2$@", language, SystemText.number(logged, language), SystemText.number(board.rows.count, language))
         Label {
             if let next = board.next {
-                Text(verbatim: "\(count) · \(SystemText.prayer(next.prayer, language, on: next.day)) \(SystemText.time(next.at, in: board.place.timeZone, language))")
+                Text(verbatim: "\(count)\(SystemText.separator(language))\(SystemText.prayer(next.prayer, language, on: next.day)) \(SystemText.time(next.at, in: board.place.timeZone, language))")
             } else {
                 Text(verbatim: count)
             }
@@ -385,7 +395,7 @@ struct TodayPrayersSmallView: View {
 
     var body: some View {
         let day = board.rows.first?.day ?? board.today
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(verbatim: SystemText.shortDay(day, language))
                     .font(.subheadline.weight(.semibold))
@@ -396,7 +406,8 @@ struct TodayPrayersSmallView: View {
             .lineLimit(1)
             .minimumScaleFactor(0.7)
             Spacer(minLength: 0)
-            WidgetPrayerRows(board: board, language: language, spacing: 2)
+            // Times without AM/PM, so a name as long as Maghrib or Jumu'ah keeps its room.
+            WidgetPrayerRows(board: board, language: language, spacing: 0, compact: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .dynamicTypeSize(...DynamicTypeSize.large)

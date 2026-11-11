@@ -126,7 +126,8 @@ final class SystemServices {
         let active = UIApplication.shared.applicationState == .active
         await liveActivity.update(settings: settings, board: board, canStart: active)
         await WatchBridge.shared.push(settings: settings, board: board)
-        await WalletCard.shared.update(settings: settings, board: board)
+        // Off the refresh: a slow network must not hold up reminders and the rest.
+        Task { await WalletCard.shared.update(settings: settings, board: board) }
         scheduleNextChange(board)
     }
 

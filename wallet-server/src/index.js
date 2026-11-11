@@ -6,9 +6,16 @@
 
 import { buildPass } from './sign.js'
 import { IMAGES } from './images.js'
+import { LOGO, RINGS } from './art.js'
 
 /** What the app may set; identity, signing and web-service fields always come from the server. */
-const ALLOWED = ['description', 'logoText', 'foregroundColor', 'backgroundColor', 'labelColor', 'generic', 'relevantDates', 'relevantDate', 'locations']
+const ALLOWED = ['description', 'logoText', 'foregroundColor', 'backgroundColor', 'labelColor', 'generic', 'relevantDates', 'relevantDate']
+/** The rows of a generic card, and what each field may carry. */
+const SECTIONS = ['headerFields', 'primaryFields', 'secondaryFields', 'auxiliaryFields', 'backFields']
+const FIELD_KEYS = ['key', 'label', 'value', 'textAlignment']
+const MAX_TEXT = 400
+/** Where the card's QR code leads: a page about the app, which sends people to the App Store once it is there. */
+const GET_URL = 'https://ahmedwalid4499.github.io/Azkar/get.html'
 const MAX_BODY = 32 * 1024
 
 export default {
@@ -27,6 +34,7 @@ export default {
     } catch {
       return text('Not JSON', 400)
     }
+    if (typeof input !== 'object' || input === null) return text('Not an object', 400)
     const serialNumber = typeof input.serialNumber === 'string' ? input.serialNumber : ''
     if (!/^[A-Za-z0-9-]{8,64}$/.test(serialNumber) || typeof input.pass !== 'object' || input.pass === null) {
       return text('Missing serialNumber or pass', 400)
@@ -34,7 +42,12 @@ export default {
 
     const pass = { formatVersion: 1 }
     for (const key of ALLOWED) if (key in input.pass) pass[key] = input.pass[key]
+    pass.generic = cleanFields(pass.generic)
     if (!pass.generic) return text('The pass needs generic fields', 400)
+    for (const key of ['description', 'logoText', 'foregroundColor', 'backgroundColor', 'labelColor', 'relevantDate']) {
+      if (key in pass && (typeof pass[key] !== 'string' || pass[key].length > MAX_TEXT)) delete pass[key]
+    }
+    if ('relevantDates' in pass && !Array.isArray(pass.relevantDates)) delete pass.relevantDates
     Object.assign(pass, {
       passTypeIdentifier: env.PASS_TYPE_ID,
       teamIdentifier: env.TEAM_ID,
@@ -43,9 +56,18 @@ export default {
       description: pass.description || 'Azkar',
       sharingProhibited: true,
     })
+    // The QR code fills the bottom of the card; the app sends its caption in the card's language.
+    const qrText = typeof input.qrText === 'string' && input.qrText.length <= 60 ? input.qrText : 'Scan to get Azkar'
+    pass.barcodes = [{ format: 'PKBarcodeFormatQR', message: GET_URL, messageEncoding: 'iso-8859-1', altText: qrText }]
+
+    // The ring of the prayers logged, Fajr first ("10110"), beside "Prayed today". Builds before
+    // build 5 send none, and their card has no ring.
+    const images = { ...IMAGES, ...LOGO }
+    const ring = typeof input.ring === 'string' && /^[01]{5}$/.test(input.ring) ? RINGS[input.ring] : undefined
+    if (ring) Object.assign(images, { 'thumbnail.png': ring[0], 'thumbnail@2x.png': ring[0], 'thumbnail@3x.png': ring[1] })
 
     try {
-      const file = buildPass(pass, IMAGES, {
+      const file = buildPass(pass, images, {
         certificate: env.PASS_CERTIFICATE,
         key: env.PASS_KEY,
         keyPassword: env.PASS_KEY_PASSWORD,
@@ -59,6 +81,24 @@ export default {
       return text('Signing failed', 500)
     }
   },
+}
+
+/** Keeps only the card's rows and plain text fields, so the key in the app can't be used to sign anything else. */
+function cleanFields(generic) {
+  if (typeof generic !== 'object' || generic === null) return undefined
+  const clean = {}
+  for (const section of SECTIONS) {
+    if (!Array.isArray(generic[section])) continue
+    clean[section] = generic[section].slice(0, 10).flatMap((field) => {
+      if (typeof field !== 'object' || field === null || typeof field.key !== 'string') return []
+      const kept = {}
+      for (const key of FIELD_KEYS) {
+        if (typeof field[key] === 'string' && field[key].length <= MAX_TEXT) kept[key] = field[key]
+      }
+      return 'value' in kept ? [kept] : []
+    })
+  }
+  return Object.keys(clean).length ? clean : undefined
 }
 
 const text = (body, status) => new Response(body, { status, headers: { 'content-type': 'text/plain' } })

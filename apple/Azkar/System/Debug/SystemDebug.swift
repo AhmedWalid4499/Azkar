@@ -3,6 +3,8 @@ import AlarmKit
 import AppIntents
 import AzkarKit
 import Foundation
+import PassKit
+import UIKit
 import UserNotifications
 
 /// Debug-build launch arguments for trying the system features in the simulator:
@@ -20,8 +22,26 @@ import UserNotifications
 /// - `-SystemDebugTapKahf` builds next Friday's Surah al-Kahf reminder and answers it as a tap does.
 /// - `-SystemDebugBackup` backs up automatically to Documents/BackupTest, with no folder picker.
 /// - `-SystemDebugWallet` prints the Wallet card's content for now.
+/// - `-SystemDebugWalletAdd` signs the card with the live server and opens Wallet's "Add" sheet, which shows it.
 /// - `-SystemDebugDump` prints the pending reminders, the adhan alarms and the Live Activity (also after each of the above).
 enum SystemDebug {
+    @MainActor
+    static func presentWalletCard() async {
+        let (settings, board) = await SystemServices.shared.currentBoard()
+        guard let board else { return print("SystemDebug: no place, no Wallet card") }
+        do {
+            let pass = try await WalletCard.shared.makePass(settings: settings, board: board)
+            guard let sheet = PKAddPassesViewController(pass: pass),
+                  var top = UIApplication.shared.connectedScenes.compactMap({ ($0 as? UIWindowScene)?.keyWindow }).first?.rootViewController
+            else { return print("SystemDebug: the Wallet sheet could not open") }
+            while let presented = top.presentedViewController { top = presented }
+            top.present(sheet, animated: false)
+            print("SystemDebug: Wallet sheet open, ring \(WalletCardContent.ring(board))")
+        } catch {
+            print("SystemDebug: the Wallet card failed: \(error)")
+        }
+    }
+
     static func runLaunchArguments(_ app: AppEnvironment) async {
         let defaults = UserDefaults.standard
         var acted = false
@@ -61,9 +81,13 @@ enum SystemDebug {
         if defaults.bool(forKey: "SystemDebugWallet") {
             let (settings, board) = await SystemServices.shared.currentBoard()
             if let board {
-                let content = WalletCardContent.pass(board: board, language: SystemLanguage(settings.app), hijriOffset: settings.app.hijriOffset)
+                let content = WalletCardContent.pass(board: board, language: SystemLanguage(settings.app), hijriOffset: settings.app.hijriOffset, streak: 12)
                 print("SystemDebug: wallet \(content.text)")
+                print("SystemDebug: wallet ring \(WalletCardContent.ring(board))")
             }
+        }
+        if defaults.bool(forKey: "SystemDebugWalletAdd") {
+            await presentWalletCard()
         }
         if defaults.bool(forKey: "SystemDebugSeason") {
             app.settings.update { settings in

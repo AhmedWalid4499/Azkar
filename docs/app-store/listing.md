@@ -173,5 +173,5 @@ https://ahmedwalid4499.github.io/Azkar/privacy.html
 - **App Review notes:**
 
 ```
-No sign-in is needed. Location is optional and used only on the device, for prayer times and the Qibla; a city can also be chosen by name. The adhan alarm uses iOS alarms (AlarmKit) and asks for permission when first turned on. All records are stored on the device; the app has no server.
+No sign-in is needed. Location is optional and used only on the device, for prayer times and the Qibla; a city can also be chosen by name. The adhan alarm uses iOS alarms (AlarmKit) and asks for permission when first turned on. All records are stored on the device. The only network service is optional: if the user adds the "Today's prayers" Apple Wallet card (Settings > Apple Wallet), the app sends that card's content to our signing server (azkar-wallet.ahmedwalid4499.workers.dev), which signs the pass and keeps nothing.
 ```
