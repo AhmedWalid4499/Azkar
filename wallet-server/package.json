@@ -1,0 +1,14 @@
+{
+  "name": "azkar-wallet-server",
+  "private": true,
+  "type": "module",
+  "description": "Signs the Azkar app's Apple Wallet card. Runs on Cloudflare Workers.",
+  "scripts": {
+    "test": "node test/test-sign.mjs",
+    "deploy": "npx wrangler@4 deploy"
+  },
+  "dependencies": {
+    "fflate": "0.8.2",
+    "node-forge": "1.3.1"
+  }
+}

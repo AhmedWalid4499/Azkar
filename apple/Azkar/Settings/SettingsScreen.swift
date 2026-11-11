@@ -27,6 +27,7 @@ struct SettingsScreen: View {
                     }
                     SettingsGeneralSection()
                         .id("general")
+                    SettingsWalletSection()
                     SettingsAutoBackupSection()
                     SettingsDataSection()
                         .id("data")

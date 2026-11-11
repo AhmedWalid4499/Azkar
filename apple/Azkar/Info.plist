@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AzkarWalletKey</key>
+	<string>$(AZKAR_WALLET_KEY)</string>
+	<key>AzkarWalletPassType</key>
+	<string>pass.io.github.ahmedwalid4499.azkar</string>
+	<key>AzkarWalletServer</key>
+	<string></string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>io.github.ahmedwalid4499.azkar.refresh</string>

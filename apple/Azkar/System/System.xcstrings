@@ -55,6 +55,24 @@
         }
       }
     },
+    "%1$@ of %2$@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ من %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ of %2$@"
+          }
+        }
+      }
+    },
     "%1$@ of %2$@ logged": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1243,6 +1261,24 @@
         }
       }
     },
+    "Logging prayers": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الصلوات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logging prayers"
+          }
+        }
+      }
+    },
     "Maghrib": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1711,6 +1747,24 @@
         }
       }
     },
+    "Prayed today": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلّيت اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayed today"
+          }
+        }
+      }
+    },
     "Prayed ✓": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1761,6 +1815,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prayer times"
+          }
+        }
+      }
+    },
+    "Prayer times for": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مواقيت الصلاة لـ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prayer times for"
           }
         }
       }
@@ -2070,6 +2142,24 @@
         }
       },
       "generatesSymbol": false
+    },
+    "Tick each prayer in Azkar or its widgets. This card updates when you do, and each new day.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "علّم على كل صلاة في تطبيق أذكار أو أدواته، وتتحدّث هذه البطاقة عندها ومع كل يوم جديد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tick each prayer in Azkar or its widgets. This card updates when you do, and each new day."
+          }
+        }
+      }
     },
     "Time for Duha": {
       "extractionState": "manual",

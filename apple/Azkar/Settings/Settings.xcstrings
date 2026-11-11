@@ -524,6 +524,23 @@
         }
       }
     },
+    "A card with today’s date and your five prayers, ticked as you log them. It updates when you log a prayer, and each new day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بطاقة فيها تاريخ اليوم وصلواتك الخمس، مُعلَّمًا عليها ما سجّلته. تتحدّث كلما سجّلت صلاة ومع كل يوم جديد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A card with today’s date and your five prayers, ticked as you log them. It updates when you log a prayer, and each new day."
+          }
+        }
+      }
+    },
     "A light tap with each count.": {
       "extractionState": "manual",
       "localizations": {
@@ -758,6 +775,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Appearance"
+          }
+        }
+      }
+    },
+    "Apple Wallet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Wallet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Wallet"
           }
         }
       }
@@ -1234,6 +1268,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clear your location?"
+          }
+        }
+      }
+    },
+    "Couldn’t prepare the card. Try again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تجهيز البطاقة. حاول مرة أخرى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t prepare the card. Try again"
           }
         }
       }
@@ -2547,6 +2598,23 @@
         }
       }
     },
+    "Preparing the card…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ تجهيز البطاقة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing the card…"
+          }
+        }
+      }
+    },
     "Privacy": {
       "extractionState": "manual",
       "localizations": {
@@ -3155,6 +3223,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The backup couldn’t be saved, so nothing was changed. This iPhone’s storage may be full."
+          }
+        }
+      }
+    },
+    "The card is in Wallet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البطاقة في المحفظة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The card is in Wallet"
           }
         }
       }

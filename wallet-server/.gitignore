@@ -1,0 +1,8 @@
+node_modules
+.wrangler
+.dev.vars
+*.pem
+*.p12
+*.cer
+.app-key
+*.certSigningRequest

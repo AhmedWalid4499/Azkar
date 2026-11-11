@@ -19,6 +19,7 @@ import UserNotifications
 /// - `-SystemDebugSeason` turns on every reminder of the fasting days and of Ramadan.
 /// - `-SystemDebugTapKahf` builds next Friday's Surah al-Kahf reminder and answers it as a tap does.
 /// - `-SystemDebugBackup` backs up automatically to Documents/BackupTest, with no folder picker.
+/// - `-SystemDebugWallet` prints the Wallet card's content for now.
 /// - `-SystemDebugDump` prints the pending reminders, the adhan alarms and the Live Activity (also after each of the above).
 enum SystemDebug {
     static func runLaunchArguments(_ app: AppEnvironment) async {
@@ -56,6 +57,13 @@ enum SystemDebug {
         if let intent = defaults.string(forKey: "SystemDebugIntent") {
             await run(intent: intent)
             acted = true
+        }
+        if defaults.bool(forKey: "SystemDebugWallet") {
+            let (settings, board) = await SystemServices.shared.currentBoard()
+            if let board {
+                let content = WalletCardContent.pass(board: board, language: SystemLanguage(settings.app), hijriOffset: settings.app.hijriOffset)
+                print("SystemDebug: wallet \(content.text)")
+            }
         }
         if defaults.bool(forKey: "SystemDebugSeason") {
             app.settings.update { settings in

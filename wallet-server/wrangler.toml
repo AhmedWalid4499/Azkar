@@ -1,0 +1,8 @@
+name = "azkar-wallet"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# The Pass Type ID you create at developer.apple.com. The team ID is set as a secret (TEAM_ID).
+PASS_TYPE_ID = "pass.io.github.ahmedwalid4499.azkar"
