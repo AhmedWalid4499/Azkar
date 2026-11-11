@@ -13,6 +13,9 @@ struct RootView: View {
     @State private var tab = RootView.launchTab
     @State private var todayNavigation = TodayNavigation.shared
     @State private var systemRouter = SystemRouter.shared
+    /// The welcome (name, then permissions) has been through, or was not needed.
+    @AppStorage("welcome.done") private var welcomed = false
+    @State private var welcoming = false
 
     var body: some View {
         let appSettings = app.settings.settings.app
@@ -50,6 +53,19 @@ struct RootView: View {
         }
         .task { await app.run() }
         .task { await SystemServices.shared.run(app) }
+        .onAppear {
+            // Once, on the first launch. Someone who already gave a name has been here before.
+            guard !welcomed else { return }
+            if app.settings.settings.app.name.isEmpty, RootView.showsWelcome { welcoming = true } else { welcomed = true }
+        }
+        .fullScreenCover(isPresented: $welcoming) {
+            WelcomeView {
+                welcomed = true
+                welcoming = false
+            }
+            .environment(\.locale, appSettings.language.locale ?? systemLocale)
+            .appDirection()
+        }
         #if DEBUG
         // `-AzkarRoute azkar://azkar/morning` follows a link the way a widget or notification would.
         .task {
@@ -67,6 +83,17 @@ struct RootView: View {
     private func openReading(_ session: AzkarSession, day: DayKey?) {
         tab = .azkar
         ReadingRouter.shared.open(session, day: day)
+    }
+
+    /// Release builds always welcome a first launch. DEBUG builds launched with arguments for a
+    /// screenshot skip it, unless `-AzkarWelcome YES` (or `permissions`) asks for it.
+    static var showsWelcome: Bool {
+        #if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments.dropFirst()
+        return UserDefaults.standard.string(forKey: "AzkarWelcome") != nil || !arguments.contains { $0.hasPrefix("-") }
+        #else
+        true
+        #endif
     }
 
     /// DEBUG builds open at `-AzkarTab <today|azkar|quran|qibla|tracker>`, for screenshots.

@@ -33,8 +33,8 @@ enum ReminderContent {
             let name = SystemText.prayer(prayer, language, on: entry.day)
             let time = SystemText.time(deadline.endsAt, in: context.timeZone, language)
             let duration = SystemText.duration(minutes: SystemText.minutes(from: entry.at, to: deadline.endsAt), language)
-            content.title = named.map { SystemText.format("%1$@, you haven’t logged %2$@ yet", language, $0, name) }
-                ?? SystemText.format("You haven’t logged %@ yet", language, name)
+            content.title = named.map { SystemText.format("%1$@, did you pray %2$@?", language, $0, name) }
+                ?? SystemText.format("Did you pray %@?", language, name)
             content.body = deadline.preferred
                 ? SystemText.format("The preferred time for %1$@ ends in %2$@, at %3$@", language, name, duration, time)
                 : SystemText.format("%1$@ time ends in %2$@, at %3$@", language, name, duration, time)
@@ -75,33 +75,40 @@ extension ReminderContent {
         let language = context.language
         // The time of the prayer the reminder comes before.
         let time = SystemText.time(entry.at.addingTimeInterval(TimeInterval(-reminder.offsetMinutes * 60)), in: context.timeZone, language)
+        // By name when the user gave one, as the prayer and azkar reminders are.
+        let named = context.name.isEmpty ? nil : SystemText.isolate(context.name)
+        func title(_ plain: String, _ withName: String) -> String {
+            named.map { SystemText.format(withName, language, $0) } ?? SystemText.string(plain, language)
+        }
         switch reminder.kind {
         case let .fast(reason):
             content.title = SystemText.string(fastTitle(reason), language)
-            content.body = SystemText.string("A good day to fast.", language)
+            content.body = named.map { SystemText.format("%@, it’s a good day to fast.", language, $0) } ?? SystemText.string("A good day to fast.", language)
         case .suhoor:
-            content.title = SystemText.string("Time for suhoor", language)
+            content.title = title("Time for suhoor", "%@, time for suhoor")
             content.body = SystemText.format("Fajr is at %@", language, time)
         case .iftar:
-            content.title = SystemText.format("Iftar in %@", language, SystemText.duration(minutes: SeasonReminderChoices.iftarLeadMinutes, language))
+            let lead = SystemText.duration(minutes: SeasonReminderChoices.iftarLeadMinutes, language)
+            content.title = named.map { SystemText.format("%1$@, iftar in %2$@", language, $0, lead) } ?? SystemText.format("Iftar in %@", language, lead)
             content.body = SystemText.format("Maghrib is at %@", language, time)
         case let .oddNight(night):
-            content.title = SystemText.format("Night %@ of Ramadan", language, SystemText.number(night, language))
+            let number = SystemText.number(night, language)
+            content.title = named.map { SystemText.format("%1$@, it’s night %2$@ of Ramadan", language, $0, number) } ?? SystemText.format("Night %@ of Ramadan", language, number)
             content.body = SystemText.string("One of the odd nights of the last ten.", language)
         case .kahf:
-            content.title = SystemText.string("Friday: Surah al-Kahf", language)
+            content.title = title("Friday: Surah al-Kahf", "%@, it’s Friday: read Surah al-Kahf")
             content.body = SystemText.string("Open it in the mushaf.", language)
         case .witr:
-            content.title = SystemText.string("Time for Witr", language)
+            content.title = title("Time for Witr", "%@, time for Witr")
             content.body = SystemText.string("Before you sleep.", language)
         case .duha:
-            content.title = SystemText.string("Time for Duha", language)
+            content.title = title("Time for Duha", "%@, time for Duha")
             content.body = SystemText.string("The time for Duha has begun.", language)
         case .zakat:
-            content.title = SystemText.string("Your zakat date", language)
+            content.title = title("Your zakat date", "%@, today is your zakat date")
             content.body = SystemText.string("Today is the day you set for your zakat.", language)
         case .zakatFitr:
-            content.title = SystemText.string("Zakat al-fitr", language)
+            content.title = title("Zakat al-fitr", "%@, remember your zakat al-fitr")
             content.body = SystemText.string("Give it before the Eid prayer.", language)
         }
         let page = reminder.kind == .kahf ? SeasonReminders.kahfPage : nil

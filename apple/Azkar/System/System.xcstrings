@@ -181,6 +181,60 @@
         }
       }
     },
+    "%1$@, did you pray %2$@?": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هل صلّيت %2$@ يا %1$@؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, did you pray %2$@?"
+          }
+        }
+      }
+    },
+    "%1$@, iftar in %2$@": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإفطار بعد %2$@ يا %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, iftar in %2$@"
+          }
+        }
+      }
+    },
+    "%1$@, it’s night %2$@ of Ramadan": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الليلة %2$@ من رمضان يا %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, it’s night %2$@ of Ramadan"
+          }
+        }
+      }
+    },
     "%1$@, it’s time for %2$@": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -289,6 +343,114 @@
         }
       }
     },
+    "%@, it’s Friday: read Surah al-Kahf": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم الجمعة، اقرأ سورة الكهف يا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, it’s Friday: read Surah al-Kahf"
+          }
+        }
+      }
+    },
+    "%@, it’s a good day to fast.": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يوم يُستحب صيامه يا %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, it’s a good day to fast."
+          }
+        }
+      }
+    },
+    "%@, remember your zakat al-fitr": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا تنسَ زكاة الفطر يا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, remember your zakat al-fitr"
+          }
+        }
+      }
+    },
+    "%@, time for Duha": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان وقت الضحى يا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, time for Duha"
+          }
+        }
+      }
+    },
+    "%@, time for Witr": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان وقت الوتر يا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, time for Witr"
+          }
+        }
+      }
+    },
+    "%@, time for suhoor": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان وقت السحور يا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, time for suhoor"
+          }
+        }
+      }
+    },
     "%@, time for the evening azkar": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -321,6 +483,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@, time for the morning azkar"
+          }
+        }
+      }
+    },
+    "%@, today is your zakat date": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم موعد زكاتك يا %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, today is your zakat date"
           }
         }
       }
@@ -627,6 +807,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dhuhr"
+          }
+        }
+      }
+    },
+    "Did you pray %@?": {
+      "extractionState": "manual",
+      "generatesSymbol": false,
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هل صلّيت %@؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Did you pray %@?"
           }
         }
       }
