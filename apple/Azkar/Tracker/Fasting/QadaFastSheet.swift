@@ -56,10 +56,10 @@ struct TrackerQadaFastSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() }
+                    SheetButton(.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) { save(day) }
+                    SheetButton(.confirm) { save(day) }
                 }
             }
             .sensoryFeedback(.success, trigger: saved)

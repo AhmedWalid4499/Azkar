@@ -82,7 +82,7 @@ private struct DuaMomentSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .close) { dismiss() }
+                    SheetButton(.close) { dismiss() }
                 }
             }
             .safeAreaInset(edge: .bottom) {

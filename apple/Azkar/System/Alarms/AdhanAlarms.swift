@@ -5,6 +5,7 @@ import Foundation
 import SwiftUI
 
 /// What an adhan alarm carries.
+@available(iOS 26.1, *)
 nonisolated struct AdhanMetadata: AlarmMetadata {
     var prayer: Prayer
     var day: DayKey
@@ -13,7 +14,8 @@ nonisolated struct AdhanMetadata: AlarmMetadata {
 /// The adhan as an alarm (AlarmKit) at the times of the prayers chosen in Settings: it sounds through
 /// silent mode and Focus. Alarms are set for `windowDays` days ahead and renewed whenever the app
 /// runs (launch, foreground, background refresh), so they keep coming; each alarm's id is derived
-/// from its day and prayer, so scheduling again only changes what moved.
+/// from its day and prayer, so scheduling again only changes what moved. Its alert needs iOS 26.1.
+@available(iOS 26.1, *)
 enum AdhanAlarms {
     /// Days ahead: up to 15 alarms, well within what the system lets an app keep.
     static let windowDays = 3
@@ -103,7 +105,9 @@ enum AdhanAlarms {
 struct OpenTodayLiveIntent: LiveActivityIntent {
     static let title = LocalizedStringResource("Open Today", table: "System")
     static let isDiscoverable = false
-    static let supportedModes: IntentModes = .foreground(.immediate)
+    static let openAppWhenRun = true
+    @available(iOS 26.0, *)
+    static var supportedModes: IntentModes { .foreground(.immediate) }
 
     init() {}
 

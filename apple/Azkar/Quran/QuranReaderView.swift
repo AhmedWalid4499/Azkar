@@ -63,7 +63,7 @@ struct QuranReaderView: View {
             }
         }
         .alert(Text(QL("Khatmah complete")), isPresented: Binding(get: { finished != nil }, set: { if !$0 { finished = nil } })) {
-            Button(role: .confirm) {} label: { Text(QL("Done")) }
+            Button {} label: { Text(QL("Done")) }
         } message: {
             Text(QL("This is khatmah number \(finished ?? 0). Your place goes back to the beginning."))
         }
@@ -89,14 +89,14 @@ struct QuranReaderView: View {
 
     private func header(_ shown: Int, bookmarked: Bool) -> some View {
         HStack(spacing: 8) {
-            Button(role: .close) {
+            SheetButton(.close) {
                 dismiss()
             } label: {
                 Label { Text(QL("Close")) } icon: { Image(systemName: "xmark") }
                     .labelStyle(.iconOnly)
             }
             .buttonBorderShape(.circle)
-            .buttonStyle(.glass)
+            .glassButtonStyle()
             Spacer(minLength: 4)
             VStack(spacing: 0) {
                 Text(verbatim: mushaf.sura(ofPage: shown).name)
@@ -119,7 +119,7 @@ struct QuranReaderView: View {
                 .labelStyle(.iconOnly)
             }
             .buttonBorderShape(.circle)
-            .buttonStyle(.glass)
+            .glassButtonStyle()
         }
         .padding(.horizontal, 14)
         .padding(.bottom, 4)
@@ -143,7 +143,7 @@ struct QuranReaderView: View {
                 }
                 .font(.subheadline.weight(.semibold))
             }
-            .buttonStyle(.glassProminent)
+            .prominentButtonStyle()
             .disabled(here)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
@@ -164,7 +164,7 @@ struct QuranReaderView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .glassEffect()
+        .glassCapsule()
     }
 
     private var checkTitle: Text {

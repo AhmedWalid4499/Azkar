@@ -28,7 +28,11 @@ enum BackgroundRefresh {
         let request = BGAppRefreshTaskRequest(identifier: identifier)
         request.earliestBeginDate = Date(timeIntervalSinceNow: delay)
         do {
-            try await BGTaskScheduler.shared.submitTaskRequest(request)
+            if #available(iOS 27.0, *) {
+                try await BGTaskScheduler.shared.submitTaskRequest(request)
+            } else {
+                try BGTaskScheduler.shared.submit(request)
+            }
         } catch {
             // Unavailable in the simulator and when Background App Refresh is off.
             print("Azkar: background refresh not scheduled: \(error)")

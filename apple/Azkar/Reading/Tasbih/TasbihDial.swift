@@ -45,7 +45,7 @@ struct TasbihDial: View {
             .contentShape(.circle)
         }
         .buttonStyle(DialStyle())
-        .glassEffect(.regular.interactive(), in: .circle)
+        .glassCircle()
         .accessibilityLabel(label(round: round))
         .accessibilityHint(Text("Double-tap to count", tableName: "Reading"))
         .animation(.smooth(duration: 0.2), value: reached)

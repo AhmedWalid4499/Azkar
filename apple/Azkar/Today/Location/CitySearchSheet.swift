@@ -69,7 +69,7 @@ struct CitySearchSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() }
+                    SheetButton(.cancel) { dismiss() }
                 }
             }
             .task(id: trimmed) { await search(trimmed) }

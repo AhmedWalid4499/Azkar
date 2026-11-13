@@ -170,7 +170,7 @@ struct LocationSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(role: .close) { dismiss() }
+                    SheetButton(.close) { dismiss() }
                 }
             }
             .sheet(isPresented: $chooser.showsSearch) {

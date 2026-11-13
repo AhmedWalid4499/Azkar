@@ -62,7 +62,7 @@ struct WelcomeView: View {
             Button(action: next) {
                 Text("Continue", tableName: "App").frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glassProminent)
+            .prominentButtonStyle()
             .controlSize(.large)
             Button(action: next) {
                 Text("Skip", tableName: "App")
@@ -104,17 +104,31 @@ private struct WelcomePermissionsPage: View {
                 .font(.system(size: 60))
                 .foregroundStyle(.tint)
                 .accessibilityHidden(true)
-            Text("Reminders and the adhan", tableName: "App")
-                .font(.largeTitle.bold())
-                .multilineTextAlignment(.center)
-            Text("Azkar reminds you when each prayer’s time comes, asks whether you prayed before it ends, and can sound the adhan as an alarm, even in silent mode.", tableName: "App")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+            Group {
+                if SystemPermissions.alarmsAvailable {
+                    Text("Reminders and the adhan", tableName: "App")
+                } else {
+                    Text("Reminders", tableName: "App")
+                }
+            }
+            .font(.largeTitle.bold())
+            .multilineTextAlignment(.center)
+            Group {
+                if SystemPermissions.alarmsAvailable {
+                    Text("Azkar reminds you when each prayer’s time comes, asks whether you prayed before it ends, and can sound the adhan as an alarm, even in silent mode.", tableName: "App")
+                } else {
+                    Text("Azkar reminds you when each prayer’s time comes and asks whether you prayed before it ends.", tableName: "App")
+                }
+            }
+            .font(.body)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
             VStack(spacing: 0) {
                 row(Text("Notifications", tableName: "App"), symbol: "bell.fill", state: permissions.notifications)
-                Divider().padding(.leading, 52)
-                row(Text("Alarms", tableName: "App"), symbol: "alarm.fill", state: permissions.alarms)
+                if SystemPermissions.alarmsAvailable {
+                    Divider().padding(.leading, 52)
+                    row(Text("Alarms", tableName: "App"), symbol: "alarm.fill", state: permissions.alarms)
+                }
             }
             .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 16))
             Text("You can change these at any time in Settings › Reminders.", tableName: "App")
@@ -125,13 +139,14 @@ private struct WelcomePermissionsPage: View {
             Button(action: onDone) {
                 Text("Start", tableName: "App").frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glassProminent)
+            .prominentButtonStyle()
             .controlSize(.large)
             .disabled(asking)
         }
         .task {
             // One system prompt after the other; nothing is asked twice.
-            let notifications = await permissions.requestNotifications()
+            // Allowing notifications turns on the one at each prayer time.
+            let notifications = await SystemServices.shared.requestNotifications()
             _ = await permissions.requestAlarms()
             if notifications { await SystemServices.shared.refresh(reason: "welcome") }
             asking = false

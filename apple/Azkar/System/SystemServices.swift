@@ -14,8 +14,8 @@ import WidgetKit
 /// and in a background refresh every few hours. `SystemAppDelegate` sets up what must exist before
 /// launch ends (the notification delegate, the background task).
 ///
-/// For screens: `permissions` (notification and alarm permission, with `requestNotifications()` /
-/// `requestAlarms()`), `liveActivity` (`isOn`, `isRunning`, `isAllowed`) with `setLiveActivity(_:)`.
+/// For screens: `permissions` (notification and alarm permission, with `requestAlarms()`),
+/// `requestNotifications()`, `liveActivity` (`isOn`, `isRunning`, `isAllowed`) with `setLiveActivity(_:)`.
 @MainActor
 @Observable
 final class SystemServices {
@@ -116,11 +116,13 @@ final class SystemServices {
 
         let (logged, sunnah) = await loggedPrayers(around: now, timeZone: settings.timeZone)
         await ReminderScheduler.reschedule(settings: settings, logged: logged, sunnah: sunnah, now: now)
-        if Self.alarmLanguage != language.code {
-            AdhanAlarms.cancelAll()
-            Self.alarmLanguage = language.code
+        if #available(iOS 26.1, *) {
+            if Self.alarmLanguage != language.code {
+                AdhanAlarms.cancelAll()
+                Self.alarmLanguage = language.code
+            }
+            await AdhanAlarms.reschedule(settings: settings, now: now)
         }
-        await AdhanAlarms.reschedule(settings: settings, now: now)
 
         let (_, board) = await currentBoard(settings: settings, now: now)
         let active = UIApplication.shared.applicationState == .active
@@ -190,7 +192,7 @@ final class SystemServices {
         // The alerts wait for the user; following changes must not.
         if switchedOn || placeArrived {
             Task {
-                if await permissions.requestNotifications() { await refresh(reason: "notifications allowed") }
+                await requestNotifications()
             }
         }
         if !now.adhan.isSubset(of: was.adhan) {
@@ -200,13 +202,30 @@ final class SystemServices {
         }
     }
 
+    /// Asks for notifications if not asked before, and refreshes once they are allowed. When the user
+    /// allows them in answer, the notification at each prayer time turns on with them (the "not logged
+    /// yet" reminders are on from the start). Returns whether they are allowed.
+    @discardableResult
+    func requestNotifications() async -> Bool {
+        let answer = await permissions.requestNotifications()
+        if answer.justAllowed {
+            if let app {
+                if !app.settings.settings.reminders.prayers { app.settings.update { $0.reminders.prayers = true } }
+            } else {
+                _ = SharedRecords.settings.update { $0.reminders.prayers = true }
+            }
+        }
+        if answer.allowed { await refresh(reason: "notifications allowed") }
+        return answer.allowed
+    }
+
     /// Settings that arrived already on (the web app's data, a restored backup) but were never asked
     /// for: ask once, when a place is saved so the reminders mean something.
     func askForMissingPermissions(_ settings: SettingsSnapshot) {
         guard settings.location != nil else { return }
         if permissions.notifications == .notDetermined, ReminderScheduler.wantsNotifications(settings.reminders) {
             Task {
-                if await permissions.requestNotifications() { await refresh(reason: "notifications allowed") }
+                await requestNotifications()
             }
         }
         if permissions.alarms == .notDetermined, !settings.reminders.adhan.isEmpty {

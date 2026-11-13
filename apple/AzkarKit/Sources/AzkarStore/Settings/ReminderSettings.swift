@@ -9,7 +9,8 @@ public struct ReminderSettings: Hashable, Sendable {
     public static let unloggedLeadChoices = [10, 15, 30, 45, 60]
     public static let `default` = ReminderSettings()
 
-    /// A notification at each of the five prayer times (the website's `notifications`).
+    /// A notification at each of the five prayer times (the website's `notifications`). The app turns
+    /// it on when the user first allows notifications.
     public var prayers = false
     /// A reminder shortly before each prayer's time ends while it is not logged. On by default.
     public var unlogged = true

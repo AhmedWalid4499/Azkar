@@ -86,8 +86,20 @@ final class QiblaCompass {
     }
 
     /// Headings are given for the top of `view` as it is shown, whichever way the phone is turned.
+    /// Before iOS 27, for the top of the screen in its current orientation. Called again on each layout.
     func measure(from view: UIView?) {
-        manager.headingBody = view
+        if #available(iOS 27.0, *) {
+            if manager.headingBody !== view { manager.headingBody = view }
+        } else if let orientation = view?.window?.windowScene?.interfaceOrientation {
+            let device: CLDeviceOrientation = switch orientation {
+            case .portraitUpsideDown: .portraitUpsideDown
+            // The interface turns the other way from the device.
+            case .landscapeLeft: .landscapeRight
+            case .landscapeRight: .landscapeLeft
+            default: .portrait
+            }
+            if manager.headingOrientation != device { manager.headingOrientation = device }
+        }
     }
 }
 
@@ -119,13 +131,29 @@ private final class HeadingReceiver: NSObject, CLLocationManagerDelegate {
 struct QiblaHeadingAnchor: UIViewRepresentable {
     let onView: (UIView?) -> Void
 
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
+    func makeUIView(context: Context) -> AnchorView {
+        let view = AnchorView()
         view.isUserInteractionEnabled = false
         view.isAccessibilityElement = false
+        view.onLayout = onView
         onView(view)
         return view
     }
 
-    func updateUIView(_ uiView: UIView, context: Context) {}
+    func updateUIView(_ uiView: AnchorView, context: Context) {}
+
+    /// Tells again after it joins a window and after each layout (a turn of the phone lays it out anew).
+    final class AnchorView: UIView {
+        var onLayout: ((UIView?) -> Void)?
+
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            onLayout?(self)
+        }
+
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            onLayout?(self)
+        }
+    }
 }

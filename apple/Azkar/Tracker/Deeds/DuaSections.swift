@@ -55,7 +55,7 @@ struct TrackerDuaSections: View {
                 } label: {
                     Text("Delete", tableName: "Tracker")
                 }
-                Button(role: .cancel) {}
+                SheetButton(.cancel) {}
             } message: {
                 Text("Its words are removed. The times you made it stay counted.", tableName: "Tracker")
             }
@@ -162,10 +162,10 @@ struct TrackerDuaSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() }
+                    SheetButton(.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) { save() }
+                    SheetButton(.confirm) { save() }
                         .disabled(DuaItem.cleaned(text) == nil)
                 }
             }

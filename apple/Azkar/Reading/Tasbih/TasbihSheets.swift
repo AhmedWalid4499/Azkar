@@ -93,7 +93,7 @@ struct TasbihPresetSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .close) { dismiss() }
+                    SheetButton(.close) { dismiss() }
                 }
             }
         }
@@ -147,10 +147,10 @@ struct TasbihCustomTargetSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() }
+                    SheetButton(.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) {
+                    SheetButton(.confirm) {
                         if let value, isValid {
                             onSave(value)
                             dismiss()

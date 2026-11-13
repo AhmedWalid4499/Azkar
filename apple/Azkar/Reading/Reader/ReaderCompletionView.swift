@@ -46,11 +46,11 @@ struct ReaderCompletionView: View {
                     Button(action: onDone) {
                         Text("Done", tableName: "Reading").frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.glassProminent)
+                    .prominentButtonStyle()
                     Button(action: onReview) {
                         Text("Review again", tableName: "Reading").frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.glass)
+                    .glassButtonStyle()
                 }
                 .controlSize(.large)
                 .padding(.top, 16)

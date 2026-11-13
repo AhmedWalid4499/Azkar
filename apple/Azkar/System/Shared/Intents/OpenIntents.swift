@@ -9,7 +9,9 @@ import Foundation
 struct OpenAzkarSessionIntent: AppIntent {
     static let title = LocalizedStringResource("Open Azkar Session", table: "System")
     static let description = IntentDescription(LocalizedStringResource("Opens the reader at a session of azkar.", table: "System"))
-    static let supportedModes: IntentModes = .foreground(.immediate)
+    static let openAppWhenRun = true
+    @available(iOS 26.0, *)
+    static var supportedModes: IntentModes { .foreground(.immediate) }
 
     @Parameter(title: LocalizedStringResource("Azkar", table: "System"))
     var session: SessionChoice
@@ -31,7 +33,9 @@ struct OpenAzkarSessionIntent: AppIntent {
 struct OpenQiblaIntent: AppIntent {
     static let title = LocalizedStringResource("Open Qibla", table: "System")
     static let description = IntentDescription(LocalizedStringResource("Shows the direction of the Kaaba.", table: "System"))
-    static let supportedModes: IntentModes = .foreground(.immediate)
+    static let openAppWhenRun = true
+    @available(iOS 26.0, *)
+    static var supportedModes: IntentModes { .foreground(.immediate) }
 
     init() {}
 
@@ -45,7 +49,9 @@ struct OpenQiblaIntent: AppIntent {
 struct OpenQuranIntent: AppIntent {
     static let title = LocalizedStringResource("Open Quran", table: "System")
     static let description = IntentDescription(LocalizedStringResource("Opens the mushaf where you stopped.", table: "System"))
-    static let supportedModes: IntentModes = .foreground(.immediate)
+    static let openAppWhenRun = true
+    @available(iOS 26.0, *)
+    static var supportedModes: IntentModes { .foreground(.immediate) }
 
     init() {}
 
@@ -59,7 +65,9 @@ struct OpenQuranIntent: AppIntent {
 struct OpenTodayIntent: AppIntent {
     static let title = LocalizedStringResource("Open Today", table: "System")
     static let isDiscoverable = false
-    static let supportedModes: IntentModes = .foreground(.immediate)
+    static let openAppWhenRun = true
+    @available(iOS 26.0, *)
+    static var supportedModes: IntentModes { .foreground(.immediate) }
 
     init() {}
 

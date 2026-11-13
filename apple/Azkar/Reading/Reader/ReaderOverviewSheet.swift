@@ -31,11 +31,11 @@ struct ReaderOverviewSheet: View {
                 .onAppear { proxy.scrollTo(model.index, anchor: .center) }
             }
             .navigationTitle(Text("All azkar", tableName: "Reading"))
-            .navigationSubtitle(Text("\(model.doneCount) of \(model.items.count) done", tableName: "Reading"))
+            .navigationSubtitleIfAvailable(Text("\(model.doneCount) of \(model.items.count) done", tableName: "Reading"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .close) { dismiss() }
+                    SheetButton(.close) { dismiss() }
                 }
             }
             .confirmationDialog(Text("Start this reading over?", tableName: "Reading"), isPresented: $confirmsStartOver, titleVisibility: .visible) {

@@ -26,7 +26,7 @@ struct RootView: View {
             Tab(value: AppTab.qibla) { QiblaScreen() } label: { label("Qibla", systemImage: "location.north.line") }
             Tab(value: AppTab.tracker) { TrackerScreen() } label: { label("Tracker", systemImage: "calendar") }
         }
-        .tabBarMinimizeBehavior(.onScrollDown)
+        .tabBarMinimizesOnScroll()
         .preferredColorScheme(appSettings.theme.colorScheme)
         // No branches here: changing the language must not rebuild the tabs and lose where the user is.
         .environment(\.locale, appSettings.language.locale ?? systemLocale)

@@ -116,7 +116,7 @@ struct TasbihView: View {
                 Button { choosesPreset = true } label: {
                     Label { Text("Change", tableName: "Reading") } icon: { Image(systemName: "arrow.left.arrow.right") }
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
                 .accessibilityLabel(Text("Change what you are counting", tableName: "Reading"))
             }
         }
@@ -191,7 +191,7 @@ struct TasbihView: View {
             }
             .disabled(current == 0)
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .controlSize(.large)
     }
 }

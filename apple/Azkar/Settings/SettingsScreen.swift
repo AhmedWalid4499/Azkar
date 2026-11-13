@@ -50,7 +50,7 @@ struct SettingsScreen: View {
             .navigationTitle(Text("Settings", tableName: SettingsText.table))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .close, action: onClose)
+                    SheetButton(.close, action: onClose)
                 }
             }
             .navigationDestination(for: SettingsPage.self) { page in

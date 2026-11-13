@@ -21,7 +21,7 @@ nonisolated struct AzkarShortcuts: AppShortcutsProvider {
                 "I prayed in \(.applicationName)",
             ],
             shortTitle: LocalizedStringResource("Log Current Prayer", table: "System"),
-            systemImageName: "checkmark.circle.badge.plus"
+            systemImageName: "checkmark.circle"
         )
         AppShortcut(
             intent: NextPrayerIntent(),

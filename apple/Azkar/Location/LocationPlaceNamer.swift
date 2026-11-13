@@ -37,6 +37,7 @@ enum LocationPlaceNamer {
             latitude: LocationService.rounded(latitude, places: 2),
             longitude: LocationService.rounded(longitude, places: 2)
         )
+        guard #available(iOS 26.0, *) else { return await geocoded(approximate, locale: locale) }
         guard let request = MKReverseGeocodingRequest(location: approximate) else { return nil }
         request.preferredLocale = locale
         let timer = Task {
@@ -50,15 +51,57 @@ enum LocationPlaceNamer {
 
     /// "Cairo, Egypt": the city (or the item's own name) and the country in the interface language.
     static func named(_ item: MKMapItem, locale: Locale) -> Named {
+        guard #available(iOS 26.0, *) else { return named(item.placemark, name: item.name, zone: item.timeZone, locale: locale) }
         let address = item.addressRepresentations
         let code = address?.region?.identifier.uppercased()
         let country = code.flatMap { locale.localizedString(forRegionCode: $0) } ?? address?.regionName
         let city = address?.cityName ?? item.name
+        return Named(label: label(city: city, country: country, locale: locale), countryCode: code, timeZone: item.timeZone?.identifier)
+    }
+
+    private static func label(city: String?, country: String?, locale: Locale) -> String {
         var parts: [String] = []
         if let city, !city.isEmpty { parts.append(city) }
         if let country, !country.isEmpty, !parts.contains(country) { parts.append(country) }
-        let separator = locale.language.languageCode == .arabic ? "، " : ", "
-        return Named(label: parts.joined(separator: separator), countryCode: code, timeZone: item.timeZone?.identifier)
+        return parts.joined(separator: separator(locale))
+    }
+
+    private static func separator(_ locale: Locale) -> String {
+        locale.language.languageCode == .arabic ? "، " : ", "
+    }
+
+    // MARK: Before iOS 26
+
+    /// The place at a fix with Core Location's geocoder (MapKit's reverse geocoding came with iOS 26).
+    private static func geocoded(_ location: CLLocation, locale: Locale) async -> Named? {
+        let geocoder = CLGeocoder()
+        let timer = Task {
+            try? await Task.sleep(for: namingTimeout)
+            if !Task.isCancelled { geocoder.cancelGeocode() }
+        }
+        defer { timer.cancel() }
+        guard let placemark = try? await geocoder.reverseGeocodeLocation(location, preferredLocale: locale).first else { return nil }
+        return named(placemark, name: placemark.name, zone: placemark.timeZone, locale: locale)
+    }
+
+    private static func named(_ placemark: CLPlacemark, name: String?, zone: TimeZone?, locale: Locale) -> Named {
+        let code = placemark.isoCountryCode?.uppercased()
+        let country = code.flatMap { locale.localizedString(forRegionCode: $0) } ?? placemark.country
+        return Named(label: label(city: placemark.locality ?? name, country: country, locale: locale), countryCode: code, timeZone: zone?.identifier)
+    }
+
+    /// "Springfield, Illinois, United States".
+    private static func cityWithContext(_ item: MKMapItem, locale: Locale) -> String? {
+        if #available(iOS 26.0, *) { return item.addressRepresentations?.cityWithContext(.full) }
+        let placemark = item.placemark
+        let code = placemark.isoCountryCode?.uppercased()
+        let country = code.flatMap { locale.localizedString(forRegionCode: $0) } ?? placemark.country
+        let parts = [placemark.locality ?? item.name, placemark.administrativeArea, country].compactMap { $0 }.filter { !$0.isEmpty }
+        return parts.isEmpty ? nil : parts.joined(separator: separator(locale))
+    }
+
+    private static func coordinate(of item: MKMapItem) -> CLLocationCoordinate2D {
+        if #available(iOS 26.0, *) { item.location.coordinate } else { item.placemark.coordinate }
     }
 
     // MARK: City search
@@ -77,11 +120,11 @@ enum LocationPlaceNamer {
         for item in items.compactMap({ $0 }) {
             var named = named(item, locale: locale)
             // "Springfield, IL, United States": enough to tell places of one name apart.
-            if let context = item.addressRepresentations?.cityWithContext(.full), !context.isEmpty {
+            if let context = cityWithContext(item, locale: locale), !context.isEmpty {
                 named.label = withoutRepeats(context)
             }
             guard !named.label.isEmpty, let zone = await zone(of: item, named: named, locale: locale) else { continue }
-            let coordinate = item.location.coordinate
+            let coordinate = coordinate(of: item)
             let latitude = LocationService.rounded(coordinate.latitude, places: 4)
             let longitude = LocationService.rounded(coordinate.longitude, places: 4)
             guard seen.insert(named.label).inserted else { continue }
@@ -132,7 +175,7 @@ enum LocationPlaceNamer {
     /// The item's zone; when the search result lacks one, the reverse-geocoded place's.
     private static func zone(of item: MKMapItem, named: Named, locale: Locale) async -> String? {
         if let zone = named.timeZone { return zone }
-        let coordinate = item.location.coordinate
+        let coordinate = coordinate(of: item)
         return await name(latitude: coordinate.latitude, longitude: coordinate.longitude, locale: locale)?.timeZone
     }
 }

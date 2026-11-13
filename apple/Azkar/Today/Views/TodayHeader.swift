@@ -50,7 +50,7 @@ struct TodayHeader: View {
                 .font(.title3)
         }
         .buttonBorderShape(.circle)
-        .buttonStyle(.glass)
+        .glassButtonStyle()
     }
 
     private func hijriButton(offset: Int) -> some View {

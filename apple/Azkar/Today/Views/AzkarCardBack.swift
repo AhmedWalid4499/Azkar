@@ -123,7 +123,7 @@ struct AzkarProgressSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .close) { dismiss() }
+                    SheetButton(.close) { dismiss() }
                 }
             }
         }

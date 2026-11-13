@@ -1,4 +1,3 @@
-import AlarmKit
 import AzkarKit
 import SwiftUI
 import UIKit
@@ -12,7 +11,7 @@ struct SettingsRemindersView: View {
     @Environment(\.locale) private var locale
     @Environment(\.scenePhase) private var scenePhase
     @State private var notifications: UNAuthorizationStatus?
-    @State private var alarms: AlarmManager.AuthorizationState?
+    @State private var alarms: SystemPermissions.State?
 
     private var reminders: ReminderSettings { app.settings.settings.reminders }
 
@@ -160,16 +159,18 @@ struct SettingsRemindersView: View {
                 }
             }
 
-            Section {
-                ForEach(Prayer.allCases) { prayer in
-                    Toggle(isOn: adhanBinding(prayer)) {
-                        Text(SettingsText.prayer(prayer, locale: locale))
+            if SystemPermissions.alarmsAvailable {
+                Section {
+                    ForEach(Prayer.allCases) { prayer in
+                        Toggle(isOn: adhanBinding(prayer)) {
+                            Text(SettingsText.prayer(prayer, locale: locale))
+                        }
                     }
+                } header: {
+                    Text("Adhan alarm", tableName: SettingsText.table)
+                } footer: {
+                    Text("Sounds the adhan as an alarm when the prayer’s time begins, even in silent mode or a Focus.", tableName: SettingsText.table)
                 }
-            } header: {
-                Text("Adhan alarm", tableName: SettingsText.table)
-            } footer: {
-                Text("Sounds the adhan as an alarm when the prayer’s time begins, even in silent mode or a Focus.", tableName: SettingsText.table)
             }
         }
         .navigationTitle(Text("Reminders", tableName: SettingsText.table))
@@ -188,10 +189,12 @@ struct SettingsRemindersView: View {
             } label: {
                 Label { Text("Notifications", tableName: SettingsText.table) } icon: { Image(systemName: "bell") }
             }
-            LabeledContent {
-                Text(alarmsText)
-            } label: {
-                Label { Text("Alarms", tableName: SettingsText.table) } icon: { Image(systemName: "alarm") }
+            if SystemPermissions.alarmsAvailable {
+                LabeledContent {
+                    Text(alarmsText)
+                } label: {
+                    Label { Text("Alarms", tableName: SettingsText.table) } icon: { Image(systemName: "alarm") }
+                }
             }
             if notifications == .denied || alarms == .denied, let url = URL(string: UIApplication.openSettingsURLString) {
                 Link(destination: url) {
@@ -220,7 +223,7 @@ struct SettingsRemindersView: View {
 
     private var alarmsText: String {
         switch alarms {
-        case .authorized: SettingsText.string("Allowed", locale: locale)
+        case .allowed: SettingsText.string("Allowed", locale: locale)
         case .denied: SettingsText.string("Off", locale: locale)
         case .notDetermined: SettingsText.string("Not asked yet", locale: locale)
         default: ""
@@ -229,7 +232,9 @@ struct SettingsRemindersView: View {
 
     private func readPermissions() async {
         notifications = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
-        alarms = AlarmManager.shared.authorizationState
+        let permissions = SystemServices.shared.permissions
+        await permissions.refresh()
+        alarms = SystemPermissions.alarmsAvailable ? permissions.alarms : nil
     }
 
     // MARK: Bindings

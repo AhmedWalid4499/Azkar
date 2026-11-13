@@ -264,12 +264,14 @@ enum SystemDebug {
             let date = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
             print("  \(request.identifier) [\(request.content.categoryIdentifier)] \(date.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "soon") — \(request.content.title) — \(request.content.body)")
         }
-        let planned = AdhanAlarms.plan(settings: SharedRecords.settings.load(), now: .now)
-        print("SystemDebug: \(planned.count) adhan alarms planned: \(planned.map { "\($0.prayer) \($0.day) \($0.at.formatted(date: .omitted, time: .shortened)) \($0.id.uuidString)" })")
-        let alarms = (try? AlarmManager.shared.alarms) ?? []
-        print("SystemDebug: \(alarms.count) adhan alarms (permission \(SystemServices.shared.permissions.alarms))")
-        for alarm in alarms {
-            if case let .fixed(date)? = alarm.schedule { print("  \(alarm.id) \(alarm.state) \(date.formatted(date: .abbreviated, time: .shortened))") }
+        if #available(iOS 26.1, *) {
+            let planned = AdhanAlarms.plan(settings: SharedRecords.settings.load(), now: .now)
+            print("SystemDebug: \(planned.count) adhan alarms planned: \(planned.map { "\($0.prayer) \($0.day) \($0.at.formatted(date: .omitted, time: .shortened)) \($0.id.uuidString)" })")
+            let alarms = (try? AlarmManager.shared.alarms) ?? []
+            print("SystemDebug: \(alarms.count) adhan alarms (permission \(SystemServices.shared.permissions.alarms))")
+            for alarm in alarms {
+                if case let .fixed(date)? = alarm.schedule { print("  \(alarm.id) \(alarm.state) \(date.formatted(date: .abbreviated, time: .shortened))") }
+            }
         }
         let activity = SystemServices.shared.liveActivity
         print("SystemDebug: Live Activity on \(activity.isOn), running \(activity.isRunning), allowed \(activity.isAllowed)")

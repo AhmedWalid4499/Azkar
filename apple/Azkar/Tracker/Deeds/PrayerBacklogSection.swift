@@ -150,10 +150,10 @@ struct TrackerOwedPrayersSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() }
+                    SheetButton(.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) {
+                    SheetButton(.confirm) {
                         Task {
                             try? await app.records.setOwedPrayersBefore(owed)
                             dismiss()

@@ -79,6 +79,23 @@
         }
       }
     },
+    "Azkar reminds you when each prayer’s time comes and asks whether you prayed before it ends." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يذكّرك أذكار بدخول وقت كل صلاة، ويسألك هل صلّيت قبل خروج وقتها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azkar reminds you when each prayer’s time comes and asks whether you prayed before it ends."
+          }
+        }
+      }
+    },
     "Azkar reminds you when each prayer’s time comes, asks whether you prayed before it ends, and can sound the adhan as an alarm, even in silent mode." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -96,6 +113,23 @@
         }
       }
     },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
     "Continue" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -109,6 +143,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continue"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
           }
         }
       }
@@ -163,6 +214,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "القرآن"
+          }
+        }
+      }
+    },
+    "Reminders" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التذكيرات"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
           }
         }
       }

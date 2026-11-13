@@ -230,10 +230,10 @@ struct TrackerGivingSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) { dismiss() }
+                    SheetButton(.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) { save(currency: chosen) }
+                    SheetButton(.confirm) { save(currency: chosen) }
                         .disabled(!amount.isEmpty && GivingEntry.parsedAmount(amount) == nil)
                 }
             }

@@ -60,7 +60,7 @@ struct CounterDock: View {
                 }
                 .disabled(!canGoNext)
             }
-            .buttonStyle(.glass)
+            .glassButtonStyle()
             .controlSize(.large)
 
             // Compact, so the dhikr above keeps the room: the count and its hint on one line.
@@ -82,7 +82,7 @@ struct CounterDock: View {
                 }
                 .frame(maxWidth: .infinity, minHeight: 52)
             }
-            .buttonStyle(.glassProminent)
+            .prominentButtonStyle()
             .buttonBorderShape(.roundedRectangle(radius: 26))
             // Deep enough in light and dark for the white label to read clearly.
             .tint(isDone ? Self.doneTint : Self.countTint)

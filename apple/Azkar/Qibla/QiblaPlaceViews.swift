@@ -69,7 +69,7 @@ private struct QiblaLocationActions: View {
                     Image(systemName: "location.fill")
                 }
             }
-            .buttonStyle(.glassProminent)
+            .prominentButtonStyle()
             .disabled(request.isLocating)
 
             Button {
@@ -77,7 +77,7 @@ private struct QiblaLocationActions: View {
             } label: {
                 Text("Search for a city", tableName: LocationText.table)
             }
-            .buttonStyle(.glass)
+            .glassButtonStyle()
 
             LocationRequestStatus(phase: request.phase)
                 .font(.footnote)

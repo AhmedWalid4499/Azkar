@@ -54,10 +54,10 @@ struct QuranPaperSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .close) { dismiss() }
+                    SheetButton(.close) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) {
+                    SheetButton(.confirm) {
                         confirm()
                     } label: {
                         Text(QL("Save"))
