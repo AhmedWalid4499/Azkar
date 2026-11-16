@@ -19,12 +19,38 @@ struct SettingsRemindersView: View {
         Form {
             permissionSection
 
+            if app.settings.settings.app.menstrualSince != nil {
+                Section {
+                    Label {
+                        Text(M("Menstrual mode is on, so the prayer, adhan and fasting reminders are paused until you turn it off."))
+                    } icon: {
+                        Image(systemName: "moon.stars.fill").foregroundStyle(Color.menstrual)
+                    }
+                    .font(.subheadline)
+                }
+            }
+
             Section { NextPrayerActivityToggle() }
 
             Section {
                 Toggle(isOn: binding(\.prayers)) {
                     Text("Notify me at prayer times", tableName: SettingsText.table)
                     Text("A notification when each of the five prayers begins.", tableName: SettingsText.table)
+                }
+                if reminders.prayers {
+                    Picker(selection: binding(\.prayerSound)) {
+                        Text("Adhan", tableName: SettingsText.table).tag(PrayerSound.adhan)
+                        Text("Default", tableName: SettingsText.table).tag(PrayerSound.standard)
+                    } label: {
+                        Text("Sound", tableName: SettingsText.table)
+                    }
+                    if reminders.prayerSound == .adhan {
+                        AdhanPreviewButton()
+                    }
+                }
+            } footer: {
+                if reminders.prayers, reminders.prayerSound == .adhan {
+                    Text("The adhan’s opening plays for 27 seconds, as long as iOS lets a notification sound last. It follows your iPhone’s ring and silent switch.", tableName: SettingsText.table)
                 }
             }
 

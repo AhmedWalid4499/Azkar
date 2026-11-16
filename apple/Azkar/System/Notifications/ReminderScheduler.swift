@@ -21,7 +21,8 @@ enum ReminderScheduler {
         guard canDeliver, let location = settings.location else { return }
 
         let context = ReminderContent.Context(
-            language: SystemLanguage(settings.app), timeZone: location.zone, place: location.label, name: settings.app.name
+            language: SystemLanguage(settings.app), timeZone: location.zone, place: location.label, name: settings.app.name,
+            prayerSound: settings.reminders.prayerSound
         )
         let current = Dictionary(pending.map { ($0.identifier, $0) }, uniquingKeysWith: { first, _ in first })
         for entry in wanted {
@@ -46,7 +47,8 @@ enum ReminderScheduler {
     /// The reminders due after `now` within the plan's window.
     static func plan(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:], now: Date) -> [ReminderEntry] {
         guard let location = settings.location, let place = PrayerPlace(location) else { return [] }
-        let reminders = settings.reminders
+        // Less what menstrual mode pauses while it is on.
+        let reminders = settings.activeReminders
         let season = reminders.season
         let offset = settings.app.hijriOffset
         let choices = ReminderChoices(
@@ -83,5 +85,6 @@ enum ReminderScheduler {
             && request.content.title == content.title
             && request.content.body == content.body
             && request.content.categoryIdentifier == content.categoryIdentifier
+            && request.content.userInfo[ReminderContent.soundKey] as? String == content.userInfo[ReminderContent.soundKey] as? String
     }
 }

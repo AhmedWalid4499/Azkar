@@ -6,7 +6,7 @@ import UserNotifications
 import WidgetKit
 
 /// The parts of the app that run with the system: reminders (local notifications), adhan alarms,
-/// background refresh, the "Next prayer" Live Activity and widget reloads.
+/// the prayers menstrual mode excuses, background refresh, the "Next prayer" Live Activity and widget reloads.
 ///
 /// `run(_:)`, which the root view calls once, keeps all of them in step with the user's records and
 /// settings for as long as the app runs: at launch, on coming to the foreground, whenever a record
@@ -114,12 +114,16 @@ final class SystemServices {
         let language = SystemLanguage(settings.app)
         if categoriesLanguage != language { registerCategories(language) }
 
+        // What menstrual mode excuses is logged first, so the reminders below see it.
+        if let store = try? SharedRecords.store() { await MenstrualMode.catchUp(settings: settings, store: store, now: now) }
         let (logged, sunnah) = await loggedPrayers(around: now, timeZone: settings.timeZone)
         await ReminderScheduler.reschedule(settings: settings, logged: logged, sunnah: sunnah, now: now)
         if #available(iOS 26.1, *) {
-            if Self.alarmLanguage != language.code {
+            // Alarms keep the title and sound they were set with: set them all again when either changes.
+            let setWith = "\(language.code) \(AdhanAlarms.soundVersion)"
+            if Self.alarmLanguage != setWith {
                 AdhanAlarms.cancelAll()
-                Self.alarmLanguage = language.code
+                Self.alarmLanguage = setWith
             }
             await AdhanAlarms.reschedule(settings: settings, now: now)
         }
@@ -267,7 +271,7 @@ final class SystemServices {
         UNUserNotificationCenter.current().setNotificationCategories(NotificationCategories.all(language))
     }
 
-    /// The language the adhan alarms were last set in (their titles are fixed when set).
+    /// The language and sound the adhan alarms were last set with (both are fixed when set).
     private static var alarmLanguage: String? {
         get { UserDefaults.standard.string(forKey: "system.alarms.language") }
         set { UserDefaults.standard.set(newValue, forKey: "system.alarms.language") }

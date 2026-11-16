@@ -68,6 +68,8 @@ struct TodayScreen: View {
 
             TravelNoticeSection(context: context, showsLocation: $showsLocation)
 
+            MenstrualNoticeSection(context: context)
+
             if context.location == nil {
                 LocationPromptCard()
             } else if context.locationUnusable {

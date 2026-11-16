@@ -262,7 +262,7 @@ enum SystemDebug {
         print("SystemDebug: \(pending.count) pending notifications (permission \(SystemServices.shared.permissions.notifications))")
         for request in pending {
             let date = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
-            print("  \(request.identifier) [\(request.content.categoryIdentifier)] \(date.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "soon") — \(request.content.title) — \(request.content.body)")
+            print("  \(request.identifier) [\(request.content.categoryIdentifier)] \(date.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "soon") — \(request.content.title) — \(request.content.body) — sound: \(request.content.userInfo[ReminderContent.soundKey] as? String ?? "default")")
         }
         if #available(iOS 26.1, *) {
             let planned = AdhanAlarms.plan(settings: SharedRecords.settings.load(), now: .now)

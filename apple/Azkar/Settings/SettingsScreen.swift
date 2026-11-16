@@ -25,6 +25,8 @@ struct SettingsScreen: View {
                             Label { Text("Azkar reader", tableName: SettingsText.table) } icon: { Image(systemName: "book") }
                         }
                     }
+                    SettingsMenstrualSection()
+                        .id("menstrual")
                     SettingsGeneralSection()
                         .id("general")
                     SettingsWalletSection()

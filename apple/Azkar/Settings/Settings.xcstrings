@@ -626,6 +626,23 @@
         }
       }
     },
+    "Adhan": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأذان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adhan"
+          }
+        }
+      }
+    },
     "Adhan alarm": {
       "extractionState": "manual",
       "localizations": {
@@ -1358,6 +1375,23 @@
         }
       }
     },
+    "Default": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الافتراضي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default"
+          }
+        }
+      }
+    },
     "Dhuhr": {
       "extractionState": "manual",
       "localizations": {
@@ -2085,6 +2119,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Light"
+          }
+        }
+      }
+    },
+    "Listen": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استماع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen"
           }
         }
       }
@@ -2991,6 +3042,23 @@
         }
       }
     },
+    "Sound": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصوت"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound"
+          }
+        }
+      }
+    },
     "Sounds the adhan as an alarm when the prayer’s time begins, even in silent mode or a Focus.": {
       "extractionState": "manual",
       "localizations": {
@@ -3055,6 +3123,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Standard follows the Shafi‘i, Maliki and Hanbali schools. Hanafi places Asr later."
+          }
+        }
+      }
+    },
+    "Stop": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إيقاف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop"
           }
         }
       }
@@ -3242,6 +3327,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "The White Days"
+          }
+        }
+      }
+    },
+    "The adhan of the prayer notifications and alarms, published on Wikimedia Commons by Atcovi. Its opening, shortened and re-encoded, shared under the same licence.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأذان في إشعارات الصلاة ومنبّهاتها، نشره Atcovi على ويكيميديا كومنز. استُخدم مطلعه مختصرًا ومعاد الترميز، ويُشارَك بالترخيص نفسه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The adhan of the prayer notifications and alarms, published on Wikimedia Commons by Atcovi. Its opening, shortened and re-encoded, shared under the same licence."
+          }
+        }
+      }
+    },
+    "The adhan’s opening plays for 27 seconds, as long as iOS lets a notification sound last. It follows your iPhone’s ring and silent switch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُرفع مطلع الأذان ٢٧ ثانية، وهي أطول مدة يسمح بها iOS لصوت الإشعار. ويتبع مفتاح الرنين والصامت في هاتفك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The adhan’s opening plays for 27 seconds, as long as iOS lets a notification sound last. It follows your iPhone’s ring and silent switch."
           }
         }
       }

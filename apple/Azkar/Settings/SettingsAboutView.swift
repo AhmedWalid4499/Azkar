@@ -63,6 +63,17 @@ struct SettingsAboutView: View {
             } header: {
                 Text("Software and fonts", tableName: SettingsText.table)
             }
+
+            Section {
+                CreditRow(
+                    name: "Aaqib Azeez",
+                    detail: SettingsText.string("The adhan of the prayer notifications and alarms, published on Wikimedia Commons by Atcovi. Its opening, shortened and re-encoded, shared under the same licence.", locale: locale),
+                    license: "Creative Commons Attribution-ShareAlike 4.0",
+                    url: URL(string: "https://commons.wikimedia.org/wiki/File:The_Adhan_-_Muslim_Call_to_Prayer_-_Aaqib_Azeez.mp3")
+                )
+            } header: {
+                Text("Sound", tableName: SettingsText.table)
+            }
         }
         .navigationTitle(Text("About Azkar", tableName: SettingsText.table))
         .navigationBarTitleDisplayMode(.inline)

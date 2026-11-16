@@ -1,3 +1,4 @@
+import ActivityKit
 import AlarmKit
 import AppIntents
 import AzkarKit
@@ -12,13 +13,15 @@ nonisolated struct AdhanMetadata: AlarmMetadata {
 }
 
 /// The adhan as an alarm (AlarmKit) at the times of the prayers chosen in Settings: it sounds through
-/// silent mode and Focus. Alarms are set for `windowDays` days ahead and renewed whenever the app
+/// silent mode and Focus, with the recording of the adhan the prayer notifications use. Alarms are set for `windowDays` days ahead and renewed whenever the app
 /// runs (launch, foreground, background refresh), so they keep coming; each alarm's id is derived
 /// from its day and prayer, so scheduling again only changes what moved. Its alert needs iOS 26.1.
 @available(iOS 26.1, *)
 enum AdhanAlarms {
     /// Days ahead: up to 15 alarms, well within what the system lets an app keep.
     static let windowDays = 3
+    /// Raised when the alarm's sound changes, so alarms already set are set again with the new one.
+    nonisolated static let soundVersion = "adhan-1"
 
     nonisolated struct Planned: Hashable, Sendable {
         let id: UUID
@@ -65,7 +68,8 @@ enum AdhanAlarms {
     }
 
     static func plan(settings: SettingsSnapshot, now: Date) -> [Planned] {
-        let chosen = settings.reminders.adhan
+        // None while menstrual mode is on.
+        let chosen = settings.activeReminders.adhan
         guard !chosen.isEmpty, let location = settings.location, let place = PrayerPlace(location) else { return [] }
         let today = DayKey(now, in: place.timeZone)
         let days = PrayerCalculator.days(from: today.adding(days: -1), count: windowDays + 2, at: place, config: settings.calculation)
@@ -92,7 +96,8 @@ enum AdhanAlarms {
         let open = AlarmButton(text: verbatim(SystemText.string("Open", language)), textColor: .white, systemImageName: "arrow.up.forward.app")
         let presentation = AlarmPresentation(alert: AlarmPresentation.Alert(title: verbatim(title), secondaryButton: open, secondaryButtonBehavior: .custom))
         let attributes = AlarmAttributes(presentation: presentation, metadata: AdhanMetadata(prayer: planned.prayer, day: planned.day), tintColor: .azkarAccent)
-        return .alarm(schedule: .fixed(planned.at), attributes: attributes, secondaryIntent: OpenTodayLiveIntent())
+        return .alarm(schedule: .fixed(planned.at), attributes: attributes, secondaryIntent: OpenTodayLiveIntent(),
+                      sound: .named(ReminderContent.adhanSound))
     }
 
     /// Text already in the interface language, shown as it is.

@@ -60,6 +60,56 @@ import Testing
         #expect(AppSettings(web: ["quranGoal": ["start": "2026-12-01", "end": "2026-11-01"]]).quranGoal == nil)
     }
 
+    @Test func menstrualModeSurvivesTheTripAndOffWritesNothing() {
+        var settings = AppSettings()
+        #expect(settings.web["menstrualSince"] == nil)
+        settings.menstrualSince = Date(epochMilliseconds: 1_790_000_000_000)
+        #expect(settings.web["menstrualSince"] == .number(1_790_000_000_000))
+        #expect(AppSettings(web: settings.web).menstrualSince == settings.menstrualSince)
+        #expect(AppSettings(web: ["menstrualSince": "1790000000000"]).menstrualSince == nil)
+        #expect(AppSettings(web: ["menstrualSince": -5]).menstrualSince == nil)
+    }
+
+    @Test func thePrayerSoundIsTheAdhanUnlessChosenAndOnlyAChoiceIsWritten() {
+        var reminders = ReminderSettings()
+        #expect(reminders.prayerSound == .adhan)
+        #expect(reminders.web["prayerSound"] == nil)
+        reminders.prayerSound = .standard
+        #expect(reminders.web["prayerSound"] == .string("default"))
+        #expect(ReminderSettings(web: reminders.web).prayerSound == .standard)
+        #expect(ReminderSettings(web: ["prayerSound": "bells"]).prayerSound == .adhan)
+    }
+
+    @Test func menstrualModePausesPrayingAndFastingRemindersOnly() {
+        var reminders = ReminderSettings()
+        reminders.prayers = true
+        reminders.morningAzkar = true
+        reminders.eveningAzkar = true
+        reminders.adhan = [.fajr, .maghrib]
+        reminders.season.mondayThursday = true
+        reminders.season.whiteDays = true
+        reminders.season.occasions = true
+        reminders.season.suhoor = true
+        reminders.season.iftar = true
+        reminders.season.duha = true
+        reminders.season.witr = true
+        reminders.season.kahf = true
+        reminders.season.oddNights = true
+        reminders.season.zakatFitr = true
+
+        var snapshot = SettingsSnapshot(reminders: reminders)
+        #expect(snapshot.activeReminders == reminders)
+        snapshot.app.menstrualSince = Date(epochMilliseconds: 1_790_000_000_000)
+        let paused = snapshot.activeReminders
+        #expect(!paused.prayers && !paused.unlogged && paused.adhan.isEmpty)
+        #expect(!paused.season.mondayThursday && !paused.season.whiteDays && !paused.season.occasions)
+        #expect(!paused.season.suhoor && !paused.season.iftar && !paused.season.duha && !paused.season.witr)
+        #expect(paused.morningAzkar && paused.eveningAzkar)
+        #expect(paused.season.kahf && paused.season.oddNights && paused.season.zakatFitr)
+        // The choices themselves are kept for when the mode is turned off.
+        #expect(snapshot.reminders == reminders)
+    }
+
     @Test func aSuhoorLeadNotOnOfferGoesBackToTheDefault() {
         let reminders = ReminderSettings(web: ["seasonReminders": ["suhoor": true, "suhoorLeadMinutes": 7]])
         #expect(reminders.season.suhoor)

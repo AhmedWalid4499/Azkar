@@ -35,9 +35,14 @@ public struct AppSettings: Hashable, Sendable {
     public var ramadanKhatmahGoal = 0
     /// The khatmah the user means to finish by a date, from the day it was set. The native app's own.
     public var quranGoal: QuranGoal?
+    /// When menstrual mode was turned on; `nil` while it is off. While it is on, prayers are logged
+    /// as excused and the prayer and fasting reminders pause (`ReminderSettings.duringMenstruation`).
+    /// The native app's own.
+    public var menstrualSince: Date?
 
     public init(language: Language = .system, theme: Theme = .system, timeFormat: TimeFormat = .twelveHour,
-                arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0, quranGoal: QuranGoal? = nil) {
+                arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0, quranGoal: QuranGoal? = nil,
+                menstrualSince: Date? = nil) {
         self.language = language
         self.theme = theme
         self.timeFormat = timeFormat
@@ -46,6 +51,7 @@ public struct AppSettings: Hashable, Sendable {
         self.name = name
         self.ramadanKhatmahGoal = ramadanKhatmahGoal
         self.quranGoal = quranGoal
+        self.menstrualSince = menstrualSince
     }
 
     /// The same settings made valid: the offset and the goal clamped, the name cleaned (as the website's `update`).
@@ -107,10 +113,13 @@ extension AppSettings {
         if let goal = stored["quranGoal"]?.object, let start = goal["start"]?.string.flatMap(DayKey.init), let end = goal["end"]?.string.flatMap(DayKey.init), start <= end {
             self.quranGoal = QuranGoal(start: start, end: end)
         }
+        if let since = stored["menstrualSince"]?.number, WebRules.isInteger(since), since > 0 {
+            self.menstrualSince = Date(epochMilliseconds: Int64(since))
+        }
     }
 
-    /// What the website's settings store saves, and the goal when there is one: the website has no
-    /// such field, so without one the settings stay exactly what it writes.
+    /// What the website's settings store saves, and the goal and menstrual mode when there are: the
+    /// website has no such fields, so without them the settings stay exactly what it writes.
     public var web: JSONValue {
         var fields: [String: JSONValue] = [
             "language": .string(language.rawValue),
@@ -122,6 +131,7 @@ extension AppSettings {
         ]
         if ramadanKhatmahGoal != 0 { fields["ramadanKhatmahGoal"] = JSONValue(ramadanKhatmahGoal) }
         if let quranGoal { fields["quranGoal"] = ["start": .string(quranGoal.start.description), "end": .string(quranGoal.end.description)] }
+        if let menstrualSince { fields["menstrualSince"] = JSONValue(ms: menstrualSince) }
         return .object(fields)
     }
 }

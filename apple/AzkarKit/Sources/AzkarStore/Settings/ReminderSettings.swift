@@ -12,6 +12,8 @@ public struct ReminderSettings: Hashable, Sendable {
     /// A notification at each of the five prayer times (the website's `notifications`). The app turns
     /// it on when the user first allows notifications.
     public var prayers = false
+    /// What that notification sounds like. The native app's own.
+    public var prayerSound: PrayerSound = .adhan
     /// A reminder shortly before each prayer's time ends while it is not logged. On by default.
     public var unlogged = true
     /// Minutes before the end of the prayer's time; one of `unloggedLeadChoices`.
@@ -31,6 +33,32 @@ public struct ReminderSettings: Hashable, Sendable {
 
     /// The same settings made valid (a lead time not on offer goes back to the default).
     public func sanitized() -> ReminderSettings { ReminderSettings(web: web) }
+
+    /// What still reminds while menstrual mode is on: the azkar, Surah al-Kahf, the odd nights and
+    /// zakat. Everything about praying or fasting pauses: the prayer times, "not logged yet", the
+    /// adhan, the fasting days, suhoor and iftar, Duha and Witr. The choices themselves are kept.
+    public var duringMenstruation: ReminderSettings {
+        var paused = self
+        paused.prayers = false
+        paused.unlogged = false
+        paused.adhan = []
+        paused.season.mondayThursday = false
+        paused.season.whiteDays = false
+        paused.season.occasions = false
+        paused.season.suhoor = false
+        paused.season.iftar = false
+        paused.season.duha = false
+        paused.season.witr = false
+        return paused
+    }
+}
+
+/// The sound of the notification at each prayer time.
+public enum PrayerSound: String, CaseIterable, Sendable {
+    /// The opening of the adhan (as long as iOS lets a notification sound run).
+    case adhan
+    /// The iPhone's own notification sound.
+    case standard = "default"
 }
 
 extension ReminderSettings {
@@ -39,6 +67,7 @@ extension ReminderSettings {
         self.init()
         let stored = value?.object ?? [:]
         prayers = stored["notifications"] == .bool(true)
+        if let raw = stored["prayerSound"]?.string, let sound = PrayerSound(rawValue: raw) { prayerSound = sound }
         let azkar = stored["azkarReminders"]?.object ?? [:]
         morningAzkar = azkar["morning"] == .bool(true)
         eveningAzkar = azkar["evening"] == .bool(true)
@@ -84,6 +113,7 @@ extension ReminderSettings {
             "adhanAlarms": .object(Dictionary(uniqueKeysWithValues: Prayer.allCases.map { ($0.rawValue, JSONValue.bool(adhan.contains($0))) })),
         ]
         // The website has none of these, so a backup only carries them once they are used.
+        if prayerSound != .adhan { fields["prayerSound"] = .string(prayerSound.rawValue) }
         if season != SeasonReminderChoices() {
             fields["seasonReminders"] = [
                 "mondayThursday": .bool(season.mondayThursday), "whiteDays": .bool(season.whiteDays), "occasions": .bool(season.occasions),

@@ -1,0 +1,737 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "A guide for these days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دليل لهذه الأيام"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A guide for these days"
+          }
+        }
+      }
+    },
+    "Afterwards" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعد الطهر"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afterwards"
+          }
+        }
+      }
+    },
+    "Aisha said: “We were commanded to make up the fasts, and we were not commanded to make up the prayers.” Sahih Muslim 335." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قالت عائشة رضي الله عنها: «فنؤمر بقضاء الصوم ولا نؤمر بقضاء الصلاة». صحيح مسلم ٣٣٥."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aisha said: “We were commanded to make up the fasts, and we were not commanded to make up the prayers.” Sahih Muslim 335."
+          }
+        }
+      }
+    },
+    "Ask for whatever you need, whenever you like." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسألي الله ما تحتاجين في أي وقت."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask for whatever you need, whenever you like."
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Charity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الصدقة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Charity"
+          }
+        }
+      }
+    },
+    "Day %lld · Prayers are excused and their reminders paused." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اليوم %lld، والصلوات معذورة وتذكيراتها متوقفة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day %lld · Prayers are excused and their reminders paused."
+          }
+        }
+      }
+    },
+    "Dhikr" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الذكر"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dhikr"
+          }
+        }
+      }
+    },
+    "Dua" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الدعاء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dua"
+          }
+        }
+      }
+    },
+    "During Hajj the Prophet ﷺ told Aisha, when her period came: “Do all that the pilgrim does, except going around the House until you are pure.” Sahih al-Bukhari 305." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قال النبي ﷺ لعائشة رضي الله عنها لما حاضت في الحج: «فافعلي ما يفعل الحاج، غير أن لا تطوفي بالبيت حتى تطهري». صحيح البخاري ٣٠٥."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "During Hajj the Prophet ﷺ told Aisha, when her period came: “Do all that the pilgrim does, except going around the House until you are pure.” Sahih al-Bukhari 305."
+          }
+        }
+      }
+    },
+    "Each day is logged as an excused fast, so the days to make up are counted for you." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يُسجَّل كل يوم إفطارًا بعذر، فتُحصى لك الأيام التي تقضينها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Each day is logged as an excused fast, so the days to make up are counted for you."
+          }
+        }
+      }
+    },
+    "For women" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "للنساء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For women"
+          }
+        }
+      }
+    },
+    "For women: during your period, prayers are logged as excused and their reminders pause." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "للنساء: في أيام الحيض تُسجَّل الصلوات بعذر وتتوقف تذكيراتها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For women: during your period, prayers are logged as excused and their reminders pause."
+          }
+        }
+      }
+    },
+    "Giving, however little, and helping those around you." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العطاء ولو كان قليلًا، وإعانة من حولك."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giving, however little, and helping those around you."
+          }
+        }
+      }
+    },
+    "Guide" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الدليل"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guide"
+          }
+        }
+      }
+    },
+    "In Ramadan, fasts are excused too" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفي رمضان يُسجَّل الصيام بعذر أيضًا"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Ramadan, fasts are excused too"
+          }
+        }
+      }
+    },
+    "Istighfar and salawat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاستغفار والصلاة على النبي ﷺ"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Istighfar and salawat"
+          }
+        }
+      }
+    },
+    "Learning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "طلب العلم"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learning"
+          }
+        }
+      }
+    },
+    "Listen to a recitation, or to a lesson of tafsir." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استمعي إلى تلاوة أو إلى درس في التفسير."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listen to a recitation, or to a lesson of tafsir."
+          }
+        }
+      }
+    },
+    "Listening to the Quran" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاستماع إلى القرآن"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listening to the Quran"
+          }
+        }
+      }
+    },
+    "Menstrual mode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضع الحيض"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menstrual mode"
+          }
+        }
+      }
+    },
+    "Menstrual mode is on, so the prayer, adhan and fasting reminders are paused until you turn it off." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضع الحيض مفعّل، فتذكيرات الصلاة والأذان والصيام متوقفة حتى توقفيه."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menstrual mode is on, so the prayer, adhan and fasting reminders are paused until you turn it off."
+          }
+        }
+      }
+    },
+    "On since %@. Prayers are logged as excused and their reminders are paused." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مفعّل منذ %@. تُسجَّل الصلوات بعذر وتتوقف تذكيراتها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On since %@. Prayers are logged as excused and their reminders are paused."
+          }
+        }
+      }
+    },
+    "Prayer and fasting are lifted from you in these days, and the door to Allah stays open. Here is what you can keep doing." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رُفعت عنكِ الصلاة والصيام في هذه الأيام، وباب الله مفتوح. وهذا ما يمكنك الاستمرار فيه."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prayer and fasting are lifted from you in these days, and the door to Allah stays open. Here is what you can keep doing."
+          }
+        }
+      }
+    },
+    "Prayer reminders come back. If a prayer’s time is still running, it’s no longer marked as excused, so you can pray it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعود تذكيرات الصلاة. وإن كان وقت صلاةٍ ما زال قائمًا، فلن تبقى مسجّلة بعذر لتصلّيها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prayer reminders come back. If a prayer’s time is still running, it’s no longer marked as excused, so you can pray it."
+          }
+        }
+      }
+    },
+    "Prayer reminders pause" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تتوقف تذكيرات الصلاة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prayer reminders pause"
+          }
+        }
+      }
+    },
+    "Prayer times, “not logged yet”, the adhan and the fasting reminders. Your azkar reminders carry on." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوقات الصلاة و«لم تُسجَّل بعد» والأذان وتذكيرات الصيام. أما تذكيرات الأذكار فتستمر."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prayer times, “not logged yet”, the adhan and the fasting reminders. Your azkar reminders carry on."
+          }
+        }
+      }
+    },
+    "Prayers are marked as excused" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تُسجَّل الصلوات بعذر"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prayers are marked as excused"
+          }
+        }
+      }
+    },
+    "Reading about the Quran, the hadith and the life of the Prophet ﷺ." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القراءة في علوم القرآن والحديث وسيرة النبي ﷺ."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading about the Quran, the hadith and the life of the Prophet ﷺ."
+          }
+        }
+      }
+    },
+    "Reciting the Quran" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تلاوة القرآن"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reciting the Quran"
+          }
+        }
+      }
+    },
+    "Scholars differ over reciting the Quran during menstruation: many hold that it is not recited, while others allow it, especially from memory or to keep what was learnt. Most hold that the mushaf itself is not touched directly." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختلف العلماء في قراءة الحائض للقرآن: فكثير منهم يمنعها، وأجازها آخرون، لا سيما من الحفظ أو لتثبيت المحفوظ. وجمهورهم على أن المصحف لا يُمَسّ مباشرة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scholars differ over reciting the Quran during menstruation: many hold that it is not recited, while others allow it, especially from memory or to keep what was learnt. Most hold that the mushaf itself is not touched directly."
+          }
+        }
+      }
+    },
+    "Seeking forgiveness, and sending blessings on the Prophet ﷺ." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "طلب المغفرة، والإكثار من الصلاة على النبي ﷺ."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seeking forgiveness, and sending blessings on the Prophet ﷺ."
+          }
+        }
+      }
+    },
+    "The prayers of these days are not made up. The fasts of Ramadan are made up later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الصلوات الفائتة في هذه الأيام لا تُقضى، أما صيام رمضان فيُقضى بعدها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The prayers of these days are not made up. The fasts of Ramadan are made up later."
+          }
+        }
+      }
+    },
+    "The worship you can still do, one tap away on Today." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العبادات التي يمكنك القيام بها، على بُعد لمسة في «اليوم»."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The worship you can still do, one tap away on Today."
+          }
+        }
+      }
+    },
+    "Turn off" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn off"
+          }
+        }
+      }
+    },
+    "Turn off menstrual mode?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف وضع الحيض؟"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn off menstrual mode?"
+          }
+        }
+      }
+    },
+    "Turn on menstrual mode?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تفعيل وضع الحيض؟"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on menstrual mode?"
+          }
+        }
+      }
+    },
+    "What you can still do" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما يمكنك القيام به"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What you can still do"
+          }
+        }
+      }
+    },
+    "Where scholars differ, follow the scholars you trust." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفيما اختلف فيه العلماء، اتّبعي من تثقين بعلمه."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where scholars differ, follow the scholars you trust."
+          }
+        }
+      }
+    },
+    "While it’s on, Azkar adjusts to these days. Until you turn it off:" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما دام مفعّلًا، يتكيّف أذكار مع هذه الأيام. وإلى أن توقفيه:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "While it’s on, Azkar adjusts to these days. Until you turn it off:"
+          }
+        }
+      }
+    },
+    "Yes, turn it on" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نعم، تفعيل الوضع"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes, turn it on"
+          }
+        }
+      }
+    },
+    "Your morning and evening azkar, tasbih, and remembering Allah at any time." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أذكار الصباح والمساء والتسبيح، وذكر الله في كل وقت."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your morning and evening azkar, tasbih, and remembering Allah at any time."
+          }
+        }
+      }
+    },
+    "Your streaks and stats stay as they are, and an excused prayer is never owed." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تبقى سلاسلك وإحصاءاتك كما هي، والصلاة المعذورة لا تُقضى."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your streaks and stats stay as they are, and an excused prayer is never owed."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

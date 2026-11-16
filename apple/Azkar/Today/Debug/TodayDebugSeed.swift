@@ -56,6 +56,12 @@ enum TodayDebugSeed {
         case "none": app.settings.update { $0.location = nil }
         default: break
         }
+        // `-TodayMenstrual 5`: menstrual mode on since five hours ago; `-TodayMenstrual off` turns it off.
+        if UserDefaults.standard.string(forKey: "TodayMenstrual") == "off" {
+            app.settings.update { $0.app.menstrualSince = nil }
+        } else if let hours = UserDefaults.standard.string(forKey: "TodayMenstrual").flatMap(Double.init) {
+            app.settings.update { $0.app.menstrualSince = Date.now.addingTimeInterval(-hours * 3600) }
+        }
     }
 
     @MainActor

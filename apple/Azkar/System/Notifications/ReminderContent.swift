@@ -12,7 +12,15 @@ enum ReminderContent {
         /// The saved place as shown; empty when unknown.
         var place: String
         var name: String
+        /// The sound of the notification at each prayer time.
+        var prayerSound: PrayerSound = .adhan
     }
+
+    /// The opening of the adhan, recited by Aaqib Azeez (see About): 27 seconds, within the 30 that
+    /// iOS allows a notification or alarm sound. Bundled as 16-bit PCM in a CAF file.
+    nonisolated static let adhanSound = "adhan.caf"
+    /// Which sound a reminder was given, in its `userInfo`, so a changed choice is scheduled again.
+    nonisolated static let soundKey = "sound"
 
     static func make(_ entry: ReminderEntry, _ context: Context) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
@@ -63,7 +71,12 @@ enum ReminderContent {
         case let .season(reminder):
             season(reminder, entry, context, into: content)
         }
-        content.sound = .default
+        if case .prayer = entry.kind, context.prayerSound == .adhan {
+            content.sound = UNNotificationSound(named: UNNotificationSoundName(adhanSound))
+            content.userInfo[soundKey] = PrayerSound.adhan.rawValue
+        } else {
+            content.sound = .default
+        }
         content.interruptionLevel = .active
         return content
     }

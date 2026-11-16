@@ -30,6 +30,11 @@ public struct SettingsSnapshot: Hashable, Sendable {
         )
     }
 
+    /// The reminders to give now: those chosen, less what menstrual mode pauses while it is on.
+    public var activeReminders: ReminderSettings {
+        app.menstrualSince == nil ? reminders : reminders.duringMenstruation
+    }
+
     /// The zone "today" is worked out in: the saved place's, else the device's (as the website's `currentDateKey`).
     public var timeZone: TimeZone { location?.zone ?? .current }
 }

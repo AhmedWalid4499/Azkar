@@ -3,7 +3,8 @@ import SwiftUI
 
 /// Fasting on Today. In Ramadan: the day of Ramadan, when suhoor ends (Fajr) and iftar is
 /// (Maghrib), a countdown to the next of them, and today's fast. Outside Ramadan, only on a day
-/// recommended for a voluntary fast (or one with a fast logged): why, and "I'm fasting today".
+/// recommended for a voluntary fast (or one with a fast logged): why, and "I'm fasting today"; not
+/// suggested while menstrual mode is on.
 /// Never on the two Eids or the days of Tashriq.
 struct FastingSection: View {
     @Environment(AppEnvironment.self) private var app
@@ -17,7 +18,7 @@ struct FastingSection: View {
         if let ramadanDay = info.ramadanDay {
             RamadanCard(context: context, clock: clock, ramadanDay: ramadanDay, record: record,
                         tomorrowIsRamadan: HijriCalendar.isRamadan(context.today.adding(days: 1), offset: offset))
-        } else if info.forbidden == nil, info.isRecommended || record != nil {
+        } else if info.forbidden == nil, (info.isRecommended && app.settings.settings.app.menstrualSince == nil) || record != nil {
             RecommendedFastCard(context: context, info: info, record: record)
         }
     }
