@@ -32,6 +32,8 @@
 	<false/>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Azkar can sound an adhan alarm at prayer times you choose, even in silent mode.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Azkar adds prayer times to a calendar of their own when you ask, and removes them when you ask. It doesn’t read your other events.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Amiri-Regular.ttf</string>

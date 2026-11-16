@@ -116,6 +116,7 @@ enum SystemDebug {
         if defaults.bool(forKey: "SystemDebugRender") {
             await SystemDebugRender.run()
         }
+        await PrayerExportDebug.run(app)
         if acted || defaults.bool(forKey: "SystemDebugDump") {
             await SystemServices.shared.refresh(reason: "debug", reloadWidgets: true)
             await dump()

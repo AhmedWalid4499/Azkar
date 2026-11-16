@@ -18,6 +18,23 @@
         }
       }
     },
+    "NSCalendarsFullAccessUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يضيف أذكار مواقيت الصلاة إلى تقويم خاص بها عندما تطلب ذلك، ويزيلها عندما تطلب. ولا يقرأ أحداثك الأخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azkar adds prayer times to a calendar of their own when you ask, and removes them when you ask. It doesn’t read your other events."
+          }
+        }
+      }
+    },
     "NSLocationWhenInUseUsageDescription": {
       "extractionState": "manual",
       "localizations": {
