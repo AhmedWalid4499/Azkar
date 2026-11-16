@@ -14,6 +14,8 @@ public struct TrackerHistory: Hashable, Sendable {
     public var seasons: [DayKey: [SeasonDeed: SeasonRecord]]
     /// The memorisation log.
     public var hifz: [HifzEntry]
+    /// Memorisation plans, ended ones included.
+    public var hifzPlans: [HifzPlan]
     /// Prayers made up from before the log began.
     public var makeups: [PrayerMakeup]
     public var giving: [GivingEntry]
@@ -21,7 +23,7 @@ public struct TrackerHistory: Hashable, Sendable {
 
     public init(prayers: PrayerHistory = [:], sessions: SessionHistory = [:], tasbih: TasbihHistory = [:], fasts: FastingHistory = [:], quran: [QuranEntry] = [],
                 seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:], hifz: [HifzEntry] = [],
-                makeups: [PrayerMakeup] = [], giving: [GivingEntry] = [], duaEntries: [DuaEntry] = []) {
+                makeups: [PrayerMakeup] = [], giving: [GivingEntry] = [], duaEntries: [DuaEntry] = [], hifzPlans: [HifzPlan] = []) {
         self.prayers = prayers
         self.sessions = sessions
         self.tasbih = tasbih
@@ -29,6 +31,7 @@ public struct TrackerHistory: Hashable, Sendable {
         self.quran = quran
         self.seasons = seasons
         self.hifz = hifz
+        self.hifzPlans = hifzPlans
         self.makeups = makeups
         self.giving = giving
         self.duaEntries = duaEntries
@@ -97,6 +100,7 @@ public enum TrackerStats {
             || history.quran.contains { $0.day <= today }
             || history.seasons.contains { $0.key <= today && !$0.value.isEmpty }
             || history.hifz.contains { $0.day <= today }
+            || history.hifzPlans.contains { $0.start <= today }
             || history.makeups.contains { $0.day <= today }
             || history.giving.contains { $0.day <= today }
             || history.duaEntries.contains { $0.day <= today }
@@ -152,6 +156,7 @@ public enum TrackerStats {
         days.formUnion(history.fasts.keys)
         days.formUnion(history.quran.map(\.day))
         days.formUnion(history.hifz.map(\.day))
+        days.formUnion(history.hifzPlans.map(\.start))
         days.formUnion(history.makeups.map(\.day))
         days.formUnion(history.giving.map(\.day))
         days.formUnion(history.duaEntries.map(\.day))

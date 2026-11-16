@@ -51,7 +51,7 @@ import Testing
             ["id": .string(UUID().uuidString), "sura": 115, "day": "2026-11-01", "at": 1, "kind": "memorised"],
             ["id": .string(UUID().uuidString), "sura": 2, "day": "2026-11-01", "at": 1, "kind": "memorised"],
         ]])
-        #expect(read.map(\.sura) == [2])
+        #expect(read.entries.map(\.sura) == [2])
     }
 }
 

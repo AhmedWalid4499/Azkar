@@ -134,6 +134,18 @@ public final class RecordsModel {
         _ = try await apply(store.addHifz(kind, sura: sura, on: day, at: at))
     }
 
+    public func logHifz(_ kind: HifzEntry.Kind, spans: [AyahSpan], strength: HifzStrength? = nil, on day: DayKey, at: Date = .now) async throws {
+        _ = try await apply(store.addHifz(kind, spans: spans, strength: strength, on: day, at: at))
+    }
+
+    public func startHifzPlan(_ target: HifzPlan.Target, from start: DayKey, to targetDay: DayKey, dailyAyat: Int, at: Date = .now) async throws {
+        _ = try await apply(store.addHifzPlan(target, from: start, to: targetDay, dailyAyat: dailyAyat, at: at))
+    }
+
+    public func endHifzPlan(_ id: UUID, at: Date = .now) async throws {
+        _ = try await apply(store.finishHifzPlan(id, at: at))
+    }
+
     public func undoHifzEntry(_ id: UUID) async throws {
         if let change = try await store.removeHifzEntry(id) { _ = await apply(change) }
     }

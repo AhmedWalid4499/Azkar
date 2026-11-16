@@ -12,6 +12,8 @@ public struct RecordChange: Hashable, Sendable {
     public var owedPrayersBefore: [Prayer: Int]
     public var duas: [DuaItem]
     public var quranBookmarks: [Int: Date]
+    /// Every memorisation plan, ended ones included.
+    public var hifzPlans: [HifzPlan]
     /// Per-dhikr counts deleted because they were more than `RecordLimits.detailDays` older than
     /// the day counted (as the website prunes them), by day.
     public var prunedCounts: [DayKey: Set<AzkarSession>]
@@ -79,6 +81,7 @@ extension RecordsSnapshot {
         owedPrayersBefore = change.owedPrayersBefore
         duas = change.duas
         quranBookmarks = change.quranBookmarks
+        hifzPlans = change.hifzPlans
         for (day, pruned) in change.prunedCounts {
             guard var kept = counts[day] else { continue }
             for session in pruned { kept[session] = nil }

@@ -31,6 +31,8 @@ public struct ImportReport: Codable, Hashable, Sendable {
     public var quranEntries: Int?
     /// Lines of the memorisation log; `nil` in a report saved before it was tracked.
     public var hifzEntries: Int?
+    /// Memorisation plans; `nil` in a report saved before there were any.
+    public var hifzPlans: Int?
     /// Records of Ramadan and the Eids. `nil` in a report saved before they were tracked.
     public var seasonRecords: Int?
     /// Prayers made up from before the log, things given and the user's duas; `nil` in a report
@@ -61,6 +63,7 @@ public struct ImportReport: Codable, Hashable, Sendable {
         tasbih = records.totals.tasbihCount
         quranEntries = records.quran.count
         hifzEntries = records.hifz.count
+        hifzPlans = records.hifzPlans.count
         seasonRecords = records.seasons.values.reduce(0) { $0 + $1.count }
         makeups = records.makeups.count
         givingEntries = records.giving.count

@@ -98,6 +98,7 @@ extension ReminderSettings {
             season.duha = reminders["duha"] == .bool(true)
             season.zakat = reminders["zakat"] == .bool(true)
             season.zakatFitr = reminders["zakatFitr"] == .bool(true)
+            season.hifzReview = reminders["hifzReview"] == .bool(true)
             if let due = reminders["zakatDue"], let month = WebRules.int(due["month"]?.number), let day = WebRules.int(due["day"]?.number) {
                 season.zakatDue = HijriMonthDay(month: month, day: day)
             }
@@ -120,7 +121,7 @@ extension ReminderSettings {
                 "suhoor": .bool(season.suhoor), "suhoorLeadMinutes": JSONValue(season.suhoorLeadMinutes),
                 "iftar": .bool(season.iftar), "oddNights": .bool(season.oddNights), "kahf": .bool(season.kahf),
                 "witr": .bool(season.witr), "witrDelayMinutes": JSONValue(season.witrDelayMinutes), "duha": .bool(season.duha),
-                "zakat": .bool(season.zakat), "zakatFitr": .bool(season.zakatFitr),
+                "zakat": .bool(season.zakat), "zakatFitr": .bool(season.zakatFitr), "hifzReview": .bool(season.hifzReview),
                 "zakatDue": season.zakatDue.map { ["month": JSONValue($0.month), "day": JSONValue($0.day)] } ?? .null,
             ]
         }

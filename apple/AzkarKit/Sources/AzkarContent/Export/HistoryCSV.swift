@@ -127,10 +127,24 @@ public enum HistoryCSV {
         if !history.hifz.isEmpty {
             let entries = Dictionary(grouping: history.hifz, by: \.day)
             func count(_ key: DayKey, _ kind: HifzEntry.Kind) -> Int? { entries[key].map { $0.filter { $0.kind == kind }.count } }
+            func ayat(_ key: DayKey, _ kind: HifzEntry.Kind) -> Int? { entries[key].map { $0.filter { $0.kind == kind }.reduce(0) { $0 + $1.span.count } } }
             columns += [
                 Column(header: words.hifzMemorisedHeader) { key in number(count(key, .memorised)) },
                 Column(header: words.hifzReviewedHeader) { key in number(count(key, .reviewed)) },
+                Column(header: words.hifzAyatMemorisedHeader) { key in number(ayat(key, .memorised)) },
+                Column(header: words.hifzAyatReviewedHeader) { key in number(ayat(key, .reviewed)) },
+                // Each line of the day's log: what, which ayat ("2:1-143"), and how a review went.
+                Column(header: words.hifzDetailsHeader) { key in
+                    (entries[key] ?? []).map { words.hifzLine($0) }.joined(separator: "; ")
+                },
             ]
+        }
+
+        if !history.hifzPlans.isEmpty {
+            let started = Dictionary(grouping: history.hifzPlans, by: \.start)
+            columns.append(Column(header: words.hifzPlanHeader) { key in
+                (started[key] ?? []).map { words.hifzPlan($0, zone: zone) }.joined(separator: "; ")
+            })
         }
 
         if !history.makeups.isEmpty {

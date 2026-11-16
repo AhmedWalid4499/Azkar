@@ -1,3 +1,4 @@
+import AzkarCore
 import Foundation
 
 /// One ayah as Tanzil publishes it. The first ayah of most surahs carries the basmala in front.
@@ -164,6 +165,18 @@ public struct QuranPageIndex: Sendable {
     }
 
     private func sura(ofPage page: Int) -> Int { pageStarts[page - 1] / 1000 }
+
+    /// The ayat that begin on a page, as indexes of the whole Qur'an (`QuranLayout`).
+    public func ayahIndexes(ofPage page: Int) -> Range<Int> {
+        func index(_ start: Int) -> Int { QuranLayout.index(sura: start / 1000, ayah: start % 1000) }
+        return index(pageStarts[page - 1])..<(page < QuranMushaf.pageCount ? index(pageStarts[page]) : QuranLayout.ayahTotal)
+    }
+
+    /// The pages a juz spans: from the one it begins on to the one before the next juz begins
+    /// (the page a juz begins on is counted in it, as `juz(ofPage:)` does).
+    public func pages(ofJuz juz: Int) -> ClosedRange<Int> {
+        juzPages[juz - 1]...(juz < juzPages.count ? max(juzPages[juz - 1], juzPages[juz] - 1) : QuranMushaf.pageCount)
+    }
 }
 
 public enum QuranResources {

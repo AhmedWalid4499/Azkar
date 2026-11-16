@@ -211,6 +211,8 @@ public enum ReminderPlan {
         case .duha: moreSeasonIDBase + reminderID(day: day, digit: 2)
         case .zakat: moreSeasonIDBase + reminderID(day: day, digit: 3)
         case .zakatFitr: moreSeasonIDBase + reminderID(day: day, digit: 4)
+        // 9, far from the next free digits, which other reminders may take.
+        case .hifzReview: moreSeasonIDBase + reminderID(day: day, digit: 9)
         }
     }
 

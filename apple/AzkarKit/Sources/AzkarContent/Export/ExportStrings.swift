@@ -83,6 +83,44 @@ struct ExportStrings: Sendable {
     var quranLastReadHeader: String { ar ? "القرآن: وقت آخر قراءة" : "Quran: last read at" }
     var hifzMemorisedHeader: String { ar ? "الحفظ: سور حُفظت" : "Memorisation: surahs memorised" }
     var hifzReviewedHeader: String { ar ? "الحفظ: سور رُوجعت" : "Memorisation: surahs reviewed" }
+    var hifzAyatMemorisedHeader: String { ar ? "الحفظ: آيات حُفظت" : "Memorisation: ayat memorised" }
+    var hifzAyatReviewedHeader: String { ar ? "الحفظ: آيات رُوجعت" : "Memorisation: ayat reviewed" }
+    var hifzDetailsHeader: String { ar ? "الحفظ: التفاصيل" : "Memorisation: details" }
+    var hifzPlanHeader: String { ar ? "الحفظ: خطة بدأت" : "Memorisation: plan started" }
+
+    /// "2:1-143 memorised", "67 reviewed (weak)": the surah alone when it is the whole of it.
+    func hifzLine(_ entry: HifzEntry) -> String {
+        let span = entry.span
+        let ayat = entry.isWholeSura ? "\(span.sura)" : "\(span.sura):\(span.from)-\(span.to)"
+        let kind = switch entry.kind {
+        case .memorised: ar ? "حُفظت" : "memorised"
+        case .reviewed: ar ? "رُوجعت" : "reviewed"
+        case .forgotten: ar ? "نُسيت" : "no longer memorised"
+        }
+        guard let strength = entry.strength else { return "\(ayat) \(kind)" }
+        return "\(ayat) \(kind) (\(hifzStrength(strength)))"
+    }
+
+    func hifzStrength(_ strength: HifzStrength) -> String {
+        switch strength {
+        case .weak: ar ? "ضعيفة" : "weak"
+        case .good: ar ? "جيدة" : "good"
+        case .strong: ar ? "متقنة" : "strong"
+        }
+    }
+
+    /// "juz:30 by 2026-12-31, 5 ayat a day", with when it ended if it has.
+    func hifzPlan(_ plan: HifzPlan, zone: TimeZone) -> String {
+        let target = switch plan.target {
+        case let .sura(sura): ar ? "سورة \(sura)" : "surah \(sura)"
+        case let .juz(juz): ar ? "الجزء \(juz)" : "juz \(juz)"
+        case let .range(from, to): "\(from)-\(to)"
+        }
+        let line = ar ? "\(target) حتى \(plan.targetDay)، \(plan.dailyAyat) آيات يوميًا" : "\(target) by \(plan.targetDay), \(plan.dailyAyat) ayat a day"
+        guard let ended = plan.endedAt else { return line }
+        let when = HistoryCSV.isoMinute(ended, in: zone)
+        return ar ? "\(line) (انتهت \(when))" : "\(line) (ended \(when))"
+    }
 
     var makeupsHeader: String { ar ? "الصلوات المقضية من قبل" : "Prayers made up from before" }
     func giving(_ kind: GivingEntry.Kind) -> String {

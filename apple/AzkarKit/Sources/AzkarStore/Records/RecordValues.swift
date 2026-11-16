@@ -143,6 +143,8 @@ public struct RecordsSnapshot: Hashable, Sendable {
     public var seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:]
     /// The memorisation log, the only source of truth for `HifzProgress`, ordered by `at`.
     public var hifz: [HifzEntry] = []
+    /// Every memorisation plan, ended ones included, the first made first.
+    public var hifzPlans: [HifzPlan] = []
     /// Prayers owed from before the log began, as the user counts them.
     public var owedPrayersBefore: [Prayer: Int] = [:]
     /// Prayers made up from those, ordered by `at`.

@@ -41,6 +41,8 @@ public struct SeasonReminderChoices: Hashable, Sendable {
     public static let witrDelayChoices = [30, 60, 120, 180]
     /// How long after sunrise the Duha reminder comes, once its time has settled in.
     public static let duhaDelayMinutes = 45
+    /// How long after Fajr the memorisation review reminder comes.
+    public static let hifzReviewDelayMinutes = 30
     /// How long after sunrise on Friday the Surah al-Kahf reminder comes.
     public static let kahfDelayMinutes = 60
     /// The day of Ramadan the zakat al-fitr reminder comes: in time to give it before the Eid prayer
@@ -64,10 +66,12 @@ public struct SeasonReminderChoices: Hashable, Sendable {
     public var zakatDue: HijriMonthDay?
     public var zakat = false
     public var zakatFitr = false
+    /// A morning reminder on the days memorised ayat are due for review.
+    public var hifzReview = false
 
     public init() {}
 
-    public var isAnyOn: Bool { mondayThursday || whiteDays || occasions || suhoor || iftar || oddNights || kahf || witr || duha || (zakat && zakatDue != nil) || zakatFitr }
+    public var isAnyOn: Bool { mondayThursday || whiteDays || occasions || suhoor || iftar || oddNights || kahf || witr || duha || (zakat && zakatDue != nil) || zakatFitr || hifzReview }
 }
 
 /// One such reminder on one day, at a time of that day's prayers.
@@ -86,6 +90,8 @@ public struct SeasonReminder: Hashable, Sendable {
         /// The user's zakat falls due today.
         case zakat
         case zakatFitr
+        /// Memorised ayat are due for review.
+        case hifzReview
     }
 
     public var kind: Kind

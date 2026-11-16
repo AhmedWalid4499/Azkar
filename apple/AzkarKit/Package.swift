@@ -30,6 +30,6 @@ let package = Package(
         .testTarget(name: "AzkarCoreTests", dependencies: ["AzkarCore"]),
         .testTarget(name: "PrayerEngineTests", dependencies: ["PrayerEngine", .product(name: "Adhan", package: "adhan-swift")], exclude: ["Fixtures"]),
         .testTarget(name: "AzkarContentTests", dependencies: ["AzkarContent", .product(name: "Adhan", package: "adhan-swift")]),
-        .testTarget(name: "AzkarStoreTests", dependencies: ["AzkarStore"]),
+        .testTarget(name: "AzkarStoreTests", dependencies: ["AzkarStore"], resources: [.copy("Fixtures")]),
     ]
 )
