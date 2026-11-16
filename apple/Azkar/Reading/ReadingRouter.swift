@@ -9,6 +9,12 @@ enum ReadingDestination: Hashable {
     case session(AzkarSession, day: DayKey?)
     /// The tasbih counter.
     case tasbih
+    /// Riyad as-Salihin: its books, favourites and search.
+    case hadithLibrary
+    /// One of its books, by number (0 for the Introduction).
+    case hadithBook(Int)
+    /// One hadith, by its number.
+    case hadith(Int)
 }
 
 /// The Azkar tab's navigation, for opening a session from elsewhere in the app (the Today
@@ -43,6 +49,11 @@ final class ReadingRouter {
 
     func openTasbih() {
         path = [.tasbih]
+    }
+
+    /// Opens hadith `number` in the Riyad as-Salihin library, with the library behind it.
+    func openHadith(_ number: Int) {
+        path = [.hadithLibrary, .hadith(number)]
     }
 
     /// Back to the session picker.

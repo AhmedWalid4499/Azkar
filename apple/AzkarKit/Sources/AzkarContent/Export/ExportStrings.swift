@@ -99,6 +99,7 @@ struct ExportStrings: Sendable {
     var tarawihPlaceHeader: String { ar ? "التراويح: المكان" : "Tarawih: place" }
     var tarawihRakahsHeader: String { ar ? "التراويح: الركعات" : "Tarawih: rakahs" }
     var eidPrayerHeader: String { ar ? "صلاة العيد" : "Eid prayer" }
+    var hadithReadHeader: String { ar ? "حديث اليوم: رقمه في رياض الصالحين" : "Hadith of the day: Riyad as-Salihin no." }
     var placeNotStated: String { ar ? "غير محدد" : "Not stated" }
     var prayed: String { ar ? "صُلّيت" : "Prayed" }
 

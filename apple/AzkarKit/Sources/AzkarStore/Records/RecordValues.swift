@@ -110,13 +110,15 @@ public struct DayRecords: Hashable, Sendable, Identifiable {
     public var duaEntries: [DuaEntry] = []
     /// The tarawih of the night falling on this evening, or the Eid prayer of this day.
     public var seasons: [SeasonDeed: SeasonRecord] = [:]
+    /// The number of the Riyad as-Salihin hadith of the day, once it was opened that day.
+    public var hadithRead: Int?
 
     public init(day: DayKey) { self.day = day }
 
     public var id: DayKey { day }
 
     public var isEmpty: Bool {
-        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && hifz.isEmpty && makeups.isEmpty && giving.isEmpty && duaEntries.isEmpty && seasons.isEmpty
+        prayer.isEmpty && sessions.isEmpty && counts.isEmpty && tasbih.isEmpty && fast == nil && quran.isEmpty && hifz.isEmpty && makeups.isEmpty && giving.isEmpty && duaEntries.isEmpty && seasons.isEmpty && hadithRead == nil
     }
 
     /// The day's tasbih in the shape the statistics read.
@@ -153,6 +155,8 @@ public struct RecordsSnapshot: Hashable, Sendable {
     public var duas: [DuaItem] = []
     /// What was recorded about them, ordered by `at`.
     public var duaEntries: [DuaEntry] = []
+    /// The hadith of the day, by the day it was opened on: its number in Riyad as-Salihin.
+    public var hadithRead: [DayKey: Int] = [:]
 
     public init() {}
 
@@ -160,7 +164,7 @@ public struct RecordsSnapshot: Hashable, Sendable {
 
     /// Every day with any record, oldest first.
     public var days: [DayKey] {
-        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).union(hifz.map(\.day)).union(makeups.map(\.day)).union(giving.map(\.day)).union(duaEntries.map(\.day)).sorted()
+        Set(prayers.keys).union(sessions.keys).union(counts.keys).union(tasbih.keys).union(fasts.keys).union(quran.map(\.day)).union(seasons.keys).union(hifz.map(\.day)).union(makeups.map(\.day)).union(giving.map(\.day)).union(duaEntries.map(\.day)).union(hadithRead.keys).sorted()
     }
 }
 

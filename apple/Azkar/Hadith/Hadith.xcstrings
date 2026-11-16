@@ -1,0 +1,414 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%lld found": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النتائج: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld found"
+          }
+        }
+      }
+    },
+    "Add to favourites": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة إلى المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to favourites"
+          }
+        }
+      }
+    },
+    "Book %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الكتاب %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Book %lld"
+          }
+        }
+      }
+    },
+    "Book %lld, hadith %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الكتاب %1$lld، الحديث %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Book %1$lld, hadith %2$lld"
+          }
+        }
+      }
+    },
+    "Books": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الكتب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Books"
+          }
+        }
+      }
+    },
+    "By Imam an-Nawawi. %lld hadith, numbered as on sunnah.com. The Arabic is shown as the source gives it, some with vowel marks and some without.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "للإمام النووي. %lld حديث، مرقّمة كما في sunnah.com. يُعرض النص العربي كما ورد في المصدر، بعضه مشكول وبعضه بلا تشكيل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By Imam an-Nawawi. %lld hadith, numbered as on sunnah.com. The Arabic is shown as the source gives it, some with vowel marks and some without."
+          }
+        }
+      }
+    },
+    "Favourite": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favourite"
+          }
+        }
+      }
+    },
+    "Favourites": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favourites"
+          }
+        }
+      }
+    },
+    "From Riyad as-Salihin by Imam an-Nawawi. The Arabic is shown as the source gives it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من رياض الصالحين للإمام النووي. يُعرض النص العربي كما ورد في المصدر."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From Riyad as-Salihin by Imam an-Nawawi. The Arabic is shown as the source gives it."
+          }
+        }
+      }
+    },
+    "Hadith %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحديث %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hadith %@"
+          }
+        }
+      }
+    },
+    "Hadith of the day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حديث اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hadith of the day"
+          }
+        }
+      }
+    },
+    "Hadith of the day read": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قراءة حديث اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hadith of the day read"
+          }
+        }
+      }
+    },
+    "Introduction": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المقدمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introduction"
+          }
+        }
+      }
+    },
+    "Introduction, hadith %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المقدمة، الحديث %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introduction, hadith %lld"
+          }
+        }
+      }
+    },
+    "No. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رقم %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No. %@"
+          }
+        }
+      }
+    },
+    "Open in library": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح في المكتبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in library"
+          }
+        }
+      }
+    },
+    "Read today": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قُرئ اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read today"
+          }
+        }
+      }
+    },
+    "Remove from favourites": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة من المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from favourites"
+          }
+        }
+      }
+    },
+    "Riyad as-Salihin": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رياض الصالحين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riyad as-Salihin"
+          }
+        }
+      }
+    },
+    "Riyad as-Salihin %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رياض الصالحين %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riyad as-Salihin %@"
+          }
+        }
+      }
+    },
+    "Share": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
+    "Source": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التخريج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source"
+          }
+        }
+      }
+    },
+    "The hadith collection of Imam an-Nawawi, to read and search": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كتاب الإمام النووي في الحديث، للقراءة والبحث"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hadith collection of Imam an-Nawawi, to read and search"
+          }
+        }
+      }
+    },
+    "Words or a number": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كلمات أو رقم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Words or a number"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

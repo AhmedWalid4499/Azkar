@@ -51,7 +51,14 @@ struct RootView: View {
             todayNavigation.sessionRequest = nil
             openReading(request.session, day: request.day)
         }
+        .onChange(of: todayNavigation.hadithRequest) { _, number in
+            guard let number else { return }
+            todayNavigation.hadithRequest = nil
+            tab = .azkar
+            ReadingRouter.shared.openHadith(number)
+        }
         .task { await app.run() }
+        .task { await HadithLibrary.shared.load() }
         .task { await SystemServices.shared.run(app) }
         .onAppear {
             // Once, on the first launch. Someone who already gave a name has been here before.

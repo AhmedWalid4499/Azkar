@@ -36,6 +36,7 @@ extension RecordsSnapshot {
         records.giving = giving.filter { $0.day == day }
         records.duaEntries = duaEntries.filter { $0.day == day }
         records.seasons = seasons[day] ?? [:]
+        records.hadithRead = hadithRead[day]
         return records
     }
 
@@ -53,6 +54,7 @@ extension RecordsSnapshot {
         tasbih[key] = records.tasbih.isEmpty ? nil : records.tasbih
         fasts[key] = records.fast
         seasons[key] = records.seasons.isEmpty ? nil : records.seasons
+        hadithRead[key] = records.hadithRead
         // Most changes are not about the Quran: the log is put in order again only when one is.
         if quran.filter({ $0.day == key }) != records.quran {
             quran = (quran.filter { $0.day != key } + records.quran).inLogOrder

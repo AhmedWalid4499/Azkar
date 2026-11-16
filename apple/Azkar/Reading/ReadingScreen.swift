@@ -53,6 +53,12 @@ private struct ReadingStack: View {
                             .id("\(session)-\(day)")
                     case .tasbih:
                         TasbihView(context: context)
+                    case .hadithLibrary:
+                        HadithLibraryView()
+                    case let .hadithBook(number):
+                        HadithBookView(number: number)
+                    case let .hadith(number):
+                        HadithNumberView(number: number)
                     }
                 }
         }

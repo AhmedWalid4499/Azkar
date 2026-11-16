@@ -51,8 +51,10 @@ public enum WebStores {
     static let giving = "giving"
     /// The native app's own duas and their log, kept the same way.
     static let duas = "duas"
+    /// The native app's hadith of the day read, kept the same way.
+    static let hadith = "hadith"
     /// Every store read.
-    static var stores: [String] { names + [progressSpare, quran, seasons, hifz, makeups, giving, duas] }
+    static var stores: [String] { names + [progressSpare, quran, seasons, hifz, makeups, giving, duas, hadith] }
 
     /// What `persist` hands to a store's `merge` while loading.
     enum Loaded {
@@ -106,7 +108,7 @@ public enum WebStores {
         let known = Set(stores.map { prefix + $0 })
         snapshot.ignored = Set(entries.keys.filter { !known.contains($0) && $0.hasPrefix(prefix) })
         func entry(_ name: String) -> StoredEntry { entries[prefix + name] ?? .missing }
-        for name in names + [quran, seasons, hifz, makeups, giving, duas] {
+        for name in names + [quran, seasons, hifz, makeups, giving, duas, hadith] {
             if case let .json(value) = entry(name), value.isTruthy { snapshot.found.insert(name) }
         }
 
@@ -187,6 +189,9 @@ public enum WebStores {
         snapshot.records.seasons = WebSeasons.read(load(entry(seasons), version: WebSeasons.version, migrate: { state, _ in
             WebSeasons.web(WebSeasons.read(state))
         }).persisted)
+        snapshot.records.hadithRead = WebHadith.read(load(entry(hadith), version: WebHadith.version, migrate: { state, _ in
+            WebHadith.web(WebHadith.read(state))
+        }).persisted)
         return snapshot
     }
 
@@ -229,6 +234,9 @@ public enum WebStores {
         }
         if !records.duas.isEmpty || !records.duaEntries.isEmpty {
             stores[prefix + duas] = stored(WebDuas.web(records.duas, entries: records.duaEntries), WebDuas.version)
+        }
+        if !records.hadithRead.isEmpty {
+            stores[prefix + hadith] = stored(WebHadith.web(records.hadithRead), WebHadith.version)
         }
         return stores
     }

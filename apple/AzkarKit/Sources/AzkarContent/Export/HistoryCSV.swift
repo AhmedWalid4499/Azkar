@@ -11,7 +11,8 @@ import Foundation
 /// of the Quran is recorded (a history without any exports as it did before), the pages read,
 /// the khatmahs finished and when the day's reading was last logged. After those, once anything
 /// of Ramadan or the Eids is recorded (a history without any again exports as it did), the
-/// tarawih falling on that evening, by place and rakahs, and the day's Eid prayer. A cell is empty
+/// tarawih falling on that evening, by place and rakahs, and the day's Eid prayer. Last of all, once
+/// a hadith of the day was read, its Riyad as-Salihin number on each day it was. A cell is empty
 /// where nothing was recorded. Times are `YYYY-MM-DD HH:mm` on `timeZone`'s wall clock.
 public enum HistoryCSV {
     public struct Options: Sendable {
@@ -177,6 +178,10 @@ public enum HistoryCSV {
                     record(key, .eidPrayer).map { $0.place.map(words.place) ?? words.prayed } ?? ""
                 },
             ]
+        }
+
+        if !history.hadithRead.isEmpty {
+            columns.append(Column(header: words.hadithReadHeader) { number(history.hadithRead[$0]) })
         }
 
         let line = { (cells: [String]) in cells.map(field).joined(separator: ",") }

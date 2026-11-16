@@ -39,6 +39,9 @@ public struct AppSettings: Hashable, Sendable {
     /// as excused and the prayer and fasting reminders pause (`ReminderSettings.duringMenstruation`).
     /// The native app's own.
     public var menstrualSince: Date?
+    /// The Riyad as-Salihin hadith the user keeps, by number, ascending and each once (see
+    /// `withHadithFavourite`). The native app's own.
+    public var hadithFavourites: [Int] = []
 
     public init(language: Language = .system, theme: Theme = .system, timeFormat: TimeFormat = .twelveHour,
                 arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0, quranGoal: QuranGoal? = nil,
@@ -54,9 +57,22 @@ public struct AppSettings: Hashable, Sendable {
         self.menstrualSince = menstrualSince
     }
 
+    /// Hadith numbers as kept: positive, each once, ascending.
+    public static func sanitizeHadithFavourites(_ numbers: [Int]) -> [Int] {
+        Array(Set(numbers.filter { $0 > 0 })).sorted()
+    }
+
+    /// The same settings with hadith `number` kept as a favourite, or no longer kept.
+    public func withHadithFavourite(_ number: Int, _ on: Bool) -> AppSettings {
+        var copy = self
+        copy.hadithFavourites = Self.sanitizeHadithFavourites(on ? hadithFavourites + [number] : hadithFavourites.filter { $0 != number })
+        return copy
+    }
+
     /// The same settings made valid: the offset and the goal clamped, the name cleaned (as the website's `update`).
     public func sanitized() -> AppSettings {
         var copy = self
+        copy.hadithFavourites = Self.sanitizeHadithFavourites(hadithFavourites)
         copy.hijriOffset = min(Self.hijriOffsetRange.upperBound, max(Self.hijriOffsetRange.lowerBound, hijriOffset))
         copy.name = Self.sanitizeName(name)
         copy.ramadanKhatmahGoal = min(Self.ramadanKhatmahGoalRange.upperBound, max(Self.ramadanKhatmahGoalRange.lowerBound, ramadanKhatmahGoal))
@@ -116,9 +132,14 @@ extension AppSettings {
         if let since = stored["menstrualSince"]?.number, WebRules.isInteger(since), since > 0 {
             self.menstrualSince = Date(epochMilliseconds: Int64(since))
         }
+        if let favourites = stored["hadithFavourites"]?.array {
+            self.hadithFavourites = Self.sanitizeHadithFavourites(favourites.compactMap { value in
+                value.number.flatMap { WebRules.isInteger($0) && $0 > 0 && $0 < 1_000_000 ? Int($0) : nil }
+            })
+        }
     }
 
-    /// What the website's settings store saves, and the goal and menstrual mode when there are: the
+    /// What the website's settings store saves, and the goal, menstrual mode and hadith favourites when there are: the
     /// website has no such fields, so without them the settings stay exactly what it writes.
     public var web: JSONValue {
         var fields: [String: JSONValue] = [
@@ -132,6 +153,7 @@ extension AppSettings {
         if ramadanKhatmahGoal != 0 { fields["ramadanKhatmahGoal"] = JSONValue(ramadanKhatmahGoal) }
         if let quranGoal { fields["quranGoal"] = ["start": .string(quranGoal.start.description), "end": .string(quranGoal.end.description)] }
         if let menstrualSince { fields["menstrualSince"] = JSONValue(ms: menstrualSince) }
+        if !hadithFavourites.isEmpty { fields["hadithFavourites"] = .array(hadithFavourites.map { JSONValue($0) }) }
         return .object(fields)
     }
 }

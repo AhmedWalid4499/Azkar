@@ -43,6 +43,10 @@ struct SessionPickerView: View {
                 Section {
                     TasbihRow(day: clock.tasbihDay)
                 }
+
+                Section {
+                    HadithLibraryRow()
+                }
             }
             .listSectionSpacing(.compact)
         }

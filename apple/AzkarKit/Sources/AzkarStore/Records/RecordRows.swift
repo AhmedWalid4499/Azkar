@@ -14,6 +14,8 @@ enum TallyKind {
     static let owedPrayers = "owedPrayers"
     /// Single numbers, keyed by `Counter`.
     static let counter = "counter"
+    /// The hadith of the day opened, keyed by the day (`YYYY-MM-DD`), its value the hadith's number.
+    static let hadithRead = "hadithRead"
 
     enum Counter {
         static let recitations = "recitations"
@@ -228,6 +230,7 @@ struct RecordRows {
             guard let record = row.record else { continue }
             snapshot.seasons[record.day, default: [:]][record.deed] = record
         }
+        snapshot.hadithRead = try hadithRead(days: low...high)
         snapshot.quran = try quranEntries(days: days)
         snapshot.quranBookmarks = try quranBookmarks()
         snapshot.hifz = try hifzEntries(days: days)
@@ -239,6 +242,17 @@ struct RecordRows {
         snapshot.totals = try totals()
         snapshot.owedFastsBefore = try value(TallyKind.counter, TallyKind.Counter.owedFastsBefore)
         return snapshot
+    }
+
+    /// The hadith of the day opened on each day in `days`.
+    func hadithRead(days: ClosedRange<Int>) throws -> [DayKey: Int] {
+        let kind = TallyKind.hadithRead
+        var read: [DayKey: Int] = [:]
+        for row in try fetch(#Predicate<TallyRow> { $0.kind == kind }) {
+            guard let day = DayKey(row.key), days.contains(day.number), row.value > 0 else { continue }
+            read[day] = row.value
+        }
+        return read
     }
 
     func totals() throws -> LifetimeTotals {
@@ -367,6 +381,9 @@ struct RecordRows {
         }
         for (day, records) in incoming.seasons {
             for (deed, record) in records where existing.seasons[day]?[deed] == nil { insert(record) }
+        }
+        for (day, number) in incoming.hadithRead where existing.hadithRead[day] == nil && number > 0 {
+            try setValue(TallyKind.hadithRead, day.description, number)
         }
         let hifz = Set(existing.hifz.map(\.id))
         for entry in incoming.hifz where !hifz.contains(entry.id) { insert(entry) }
