@@ -127,6 +127,15 @@ struct SettingsRemindersView: View {
             }
 
             Section {
+                Toggle(isOn: binding(\.season.hifzReview)) {
+                    Text("Memorisation review", tableName: SettingsText.table)
+                    Text("After Fajr, on days memorised ayat are due.", tableName: SettingsText.table)
+                }
+            } header: {
+                Text("Quran", tableName: SettingsText.table)
+            }
+
+            Section {
                 Toggle(isOn: binding(\.season.mondayThursday)) {
                     Text("Mondays and Thursdays", tableName: SettingsText.table)
                 }

@@ -101,7 +101,7 @@ import Testing
 
     @Test func aPlanShowsTodaysPortionAndHowFarAheadOrBehind() {
         // Al-Mulk (30 ayat) in ten days from day 0, three a day.
-        let plan = HifzPlan(createdAt: .now, start: day, target: .sura(67), targetDay: day.adding(days: 9), dailyAyat: 3)
+        let plan = HifzPlan(createdAt: Date(timeIntervalSince1970: -1), start: day, target: .sura(67), targetDay: day.adding(days: 9), dailyAyat: 3)
         #expect(HifzPlan.dailyAyat(for: .sura(67), from: day, to: day.adding(days: 9), progress: HifzProgress(entries: [])) == 3)
 
         var standing = HifzPlanStanding(plan: plan, progress: HifzProgress(entries: []), entries: [], today: day)
@@ -133,6 +133,16 @@ import Testing
         let all = log + [entry(.memorised, 112, nil, nil, 1), entry(.memorised, 114, nil, nil, 1)]
         standing = HifzPlanStanding(plan: plan, progress: HifzProgress(entries: all), entries: all, today: day.adding(days: 1))
         #expect(standing.isComplete && standing.left == 0 && standing.neededPerDay == 0)
+    }
+
+    @Test func whatWasHeldWhenThePlanBeganIsNotAhead() {
+        let held = [entry(.memorised, 78, 1, 15, 0)]
+        let plan = HifzPlan(createdAt: Date(timeIntervalSince1970: 86_400 * 1.5), start: day.adding(days: 1), target: .juz(30), targetDay: day.adding(days: 31), dailyAyat: 18)
+        var standing = HifzPlanStanding(plan: plan, progress: HifzProgress(entries: held), entries: held, today: day.adding(days: 1))
+        #expect(standing.balance == 0 && standing.todayPortion == [AyahSpan(sura: 78, from: 16, to: 33)])
+        let more = held + [entry(.memorised, 78, 16, 40, 1, second: 86_400)]
+        standing = HifzPlanStanding(plan: plan, progress: HifzProgress(entries: more), entries: more, today: day.adding(days: 1))
+        #expect(standing.isTodayDone && standing.balance == 25 - 18)
     }
 
     @Test func entriesWrittenBeforeRangesStillDecode() throws {

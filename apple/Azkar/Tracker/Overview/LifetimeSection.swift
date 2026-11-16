@@ -40,6 +40,12 @@ struct TrackerLifetimeSection: View {
                     TrackerTotalRow(name: LocalizedStringResource("Surahs memorised", table: "Tracker"), symbol: "brain.head.profile", tint: .purple, value: hifz.memorisedCount) {
                         Text("Reviews: \(hifz.totalReviews)", tableName: "Tracker")
                     }
+                    TrackerTotalRow(name: LocalizedStringResource("Ayat held by heart", table: "Tracker"), symbol: "text.book.closed.fill", tint: .purple, value: hifz.heldAyat) {
+                        Text("Ayat memorised over time: \(hifz.totalMemorisedAyat)", tableName: "Tracker")
+                    }
+                    if !data.records.hifzPlans.isEmpty {
+                        TrackerTotalRow(name: LocalizedStringResource("Memorisation plans", table: "Tracker"), symbol: "calendar.badge.plus", tint: .purple, value: data.records.hifzPlans.count)
+                    }
                 }
             case .fasting:
                 TrackerTotalRow(name: LocalizedStringResource("Fasts kept", table: "Tracker"), symbol: TrackerMark.fast, tint: .orange,

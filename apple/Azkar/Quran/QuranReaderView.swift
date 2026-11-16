@@ -17,6 +17,8 @@ struct QuranReaderView: View {
     @State private var checkedPage = 0
     @State private var saved: QuranSavedNote?
     @State private var finished: Int?
+    @State private var memorising: HifzLogRequest?
+    @Environment(\.readingLocale) private var format
 
     init(mushaf: QuranMushaf, startPage: Int) {
         self.mushaf = mushaf
@@ -61,6 +63,12 @@ struct QuranReaderView: View {
             } label: {
                 Text(QL("Save"))
             }
+        }
+        .sheet(item: $memorising) { request in
+            HifzLogSheet(mushaf: mushaf, request: request)
+                .appDirection()
+                .environment(\.locale, format.formatting)
+                .environment(\.readingLocale, format)
         }
         .alert(Text(QL("Khatmah complete")), isPresented: Binding(get: { finished != nil }, set: { if !$0 { finished = nil } })) {
             Button {} label: { Text(QL("Done")) }
@@ -107,6 +115,14 @@ struct QuranReaderView: View {
                     .foregroundStyle(.secondary)
             }
             Spacer(minLength: 4)
+            Button {
+                memorising = .page(shown)
+            } label: {
+                Label { Text(QL("Log this page as memorised")) } icon: { Image(systemName: "brain.head.profile") }
+                    .labelStyle(.iconOnly)
+            }
+            .buttonBorderShape(.circle)
+            .glassButtonStyle()
             Button {
                 setBookmark(shown, on: !bookmarked)
             } label: {

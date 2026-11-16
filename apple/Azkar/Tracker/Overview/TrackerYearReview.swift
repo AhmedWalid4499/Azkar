@@ -146,6 +146,17 @@ private struct TrackerYearSections: View {
             if review.surasReviewed > 0 {
                 TrackerTotalRow(name: LocalizedStringResource("Surahs reviewed", table: "Tracker"), symbol: "arrow.clockwise", tint: .purple, value: review.surasReviewed)
             }
+            if review.ayatMemorised > 0 {
+                TrackerTotalRow(name: LocalizedStringResource("Ayat memorised", table: "Tracker"), symbol: "text.book.closed.fill", tint: .purple, value: review.ayatMemorised)
+            }
+            if review.ayatReviewed > 0 {
+                TrackerTotalRow(name: LocalizedStringResource("Ayat reviewed", table: "Tracker"), symbol: "arrow.clockwise.circle", tint: .purple, value: review.ayatReviewed) {
+                    Text("Weak reviews: \(review.weakReviews)", tableName: "Tracker")
+                }
+            }
+            if review.plansStarted > 0 {
+                TrackerTotalRow(name: LocalizedStringResource("Memorisation plans", table: "Tracker"), symbol: "calendar.badge.plus", tint: .purple, value: review.plansStarted)
+            }
         } header: {
             format.text(TrackerArea.quran.title)
         }

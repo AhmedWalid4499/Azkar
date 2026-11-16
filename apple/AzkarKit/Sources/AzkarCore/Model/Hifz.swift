@@ -359,7 +359,8 @@ public struct HifzPlanStanding: Hashable, Sendable {
     public let todayGoal: Int
     /// What is left of today's portion, the next ayat not held, in mushaf order.
     public let todayPortion: [AyahSpan]
-    /// Ayat ahead of the plan (negative when behind), counting today once its portion is done.
+    /// Ayat ahead of the plan (negative when behind), counting today once its portion is done. What was
+    /// already held when the plan began counts neither way.
     public let balance: Int
     /// Days from today to the target day, both included; 0 once it has passed.
     public let daysLeft: Int
@@ -387,9 +388,11 @@ public struct HifzPlanStanding: Hashable, Sendable {
         todayGoal = today < plan.start ? 0 : min(plan.dailyAyat, total - heldBefore)
         let wanted = max(0, todayGoal - doneToday)
         todayPortion = QuranLayout.spans(indexes.lazy.filter { !progress.isHeld(at: $0) }.prefix(wanted))
+        let before = HifzProgress(entries: entries.filter { $0.at < plan.createdAt })
+        let heldAtStart = indexes.filter { before.isHeld(at: $0) }.count
         let elapsed = max(0, plan.start.days(to: today))
         let countsToday = today >= plan.start && doneToday >= todayGoal
-        let expected = min(total, plan.dailyAyat * (elapsed + (countsToday ? 1 : 0)))
+        let expected = min(total, heldAtStart + plan.dailyAyat * (elapsed + (countsToday ? 1 : 0)))
         balance = held - expected
         daysLeft = max(0, today.days(to: plan.targetDay) + 1)
         let left = total - held

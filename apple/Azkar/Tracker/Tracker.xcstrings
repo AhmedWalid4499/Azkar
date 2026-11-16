@@ -921,6 +921,74 @@
         }
       }
     },
+    "Ayat held by heart": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آيات محفوظة الآن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayat held by heart"
+          }
+        }
+      }
+    },
+    "Ayat memorised": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آيات حُفظت"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayat memorised"
+          }
+        }
+      }
+    },
+    "Ayat memorised over time: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آيات حُفظت على مرّ الوقت: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayat memorised over time: %lld"
+          }
+        }
+      }
+    },
+    "Ayat reviewed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آيات رُوجعت"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayat reviewed"
+          }
+        }
+      }
+    },
     "Azkar": {
       "extractionState": "manual",
       "localizations": {
@@ -2264,6 +2332,23 @@
         }
       }
     },
+    "Juz %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجزء %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juz %lld"
+          }
+        }
+      }
+    },
     "Key": {
       "extractionState": "manual",
       "localizations": {
@@ -2753,6 +2838,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Memorisation"
+          }
+        }
+      }
+    },
+    "Memorisation plans": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خطط الحفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorisation plans"
           }
         }
       }
@@ -3845,6 +3947,57 @@
         }
       }
     },
+    "Reviewed %@: good": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "راجعتَ %@: جيدة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviewed %@: good"
+          }
+        }
+      }
+    },
+    "Reviewed %@: strong": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "راجعتَ %@: متقنة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviewed %@: strong"
+          }
+        }
+      }
+    },
+    "Reviewed %@: weak": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "راجعتَ %@: ضعيفة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviewed %@: weak"
+          }
+        }
+      }
+    },
     "Reviews: %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -3892,6 +4045,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "البدء"
+          }
+        }
+      }
+    },
+    "Started a memorisation plan: %@ by %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدأتَ خطة حفظ: %1$@ بحلول %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Started a memorisation plan: %@ by %@"
+          }
+        }
+      }
+    },
+    "Started a memorisation plan: %@ by %@ (ended)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدأتَ خطة حفظ: %1$@ بحلول %2$@ (انتهت)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Started a memorisation plan: %@ by %@ (ended)"
           }
         }
       }
@@ -4467,6 +4654,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "صيام التطوع"
+          }
+        }
+      }
+    },
+    "Weak reviews: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مراجعات ضعيفة: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weak reviews: %lld"
           }
         }
       }

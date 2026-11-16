@@ -13,7 +13,7 @@ public struct HifzMap: Sendable {
 
         public static func < (lhs: Standing, rhs: Standing) -> Bool { lhs.rawValue < rhs.rawValue }
 
-        init(_ strength: HifzStrength?) {
+        public init(_ strength: HifzStrength?) {
             switch strength {
             case .weak: self = .weak
             case nil: self = .unrated

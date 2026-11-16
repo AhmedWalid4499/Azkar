@@ -47,6 +47,11 @@ extension RecordStore {
         try finishHifzPlan(id, at: now)
     }
 
+    /// The memorisation log, in the order it happened.
+    public func hifzLog() throws -> [HifzEntry] {
+        try rows().hifzEntries()
+    }
+
     /// Takes a line out of the memorisation log, as an undo.
     public func undoHifzEntry(_ id: UUID) throws {
         _ = try removeHifzEntry(id)

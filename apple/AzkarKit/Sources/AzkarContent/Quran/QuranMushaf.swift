@@ -100,6 +100,22 @@ public struct QuranMushaf: Sendable {
         return ayat[start..<(page < Self.pageCount ? pageStarts[page] : ayat.count)]
     }
 
+    /// The page an ayah is on: the last that begins with it or before it.
+    public func page(of ref: AyahRef) -> Int {
+        let index = QuranLayout.index(ref)
+        var low = 0, high = pageStarts.count - 1
+        while low < high {
+            let middle = (low + high + 1) / 2
+            if pageStarts[middle] <= index { low = middle } else { high = middle - 1 }
+        }
+        return low + 1
+    }
+
+    /// The ayat of a page, cut by surah.
+    public func spans(onPage page: Int) -> [AyahSpan] {
+        QuranLayout.spans(ayat(onPage: page).map { QuranLayout.index(sura: $0.sura, ayah: $0.number) })
+    }
+
     /// The juz a page is in: the last that begins on it or before it.
     public func juz(ofPage page: Int) -> QuranJuz {
         juz.last { $0.page <= page } ?? juz[0]
