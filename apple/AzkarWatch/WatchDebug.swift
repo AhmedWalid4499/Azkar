@@ -5,10 +5,15 @@ import Foundation
 /// Debug builds, for trying the Watch app with no one at the wrist. The Watch simulator drops launch
 /// arguments and the environment, so it reads `Documents/watch-debug`, then removes it: a prayer
 /// to tick off once the board has arrived and a number of tasbih to count and send, as in `asr 7`.
-/// `Documents/watch-debug-tasbih` opens on the tasbih page.
+/// `Documents/watch-debug-tasbih` opens on the tasbih page; `Documents/watch-debug-list` scrolls the
+/// prayers page down to the five prayers (for screenshots).
 enum WatchDebug {
     static var startsOnTasbih: Bool {
         FileManager.default.fileExists(atPath: URL.documentsDirectory.appending(path: "watch-debug-tasbih").path)
+    }
+
+    static var scrollsToList: Bool {
+        FileManager.default.fileExists(atPath: URL.documentsDirectory.appending(path: "watch-debug-list").path)
     }
 
     static func run(_ store: WatchStore) async {

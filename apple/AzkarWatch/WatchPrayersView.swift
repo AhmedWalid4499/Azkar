@@ -10,15 +10,25 @@ struct WatchPrayersView: View {
         TimelineView(.everyMinute) { context in
             let now = context.date
             if let board = store.board, let today = board.day(at: now) {
-                List {
-                    if let next = board.next(after: now) {
-                        Section { nextPrayer(next) }
-                    }
-                    Section {
-                        ForEach(today.rows) { row in
-                            WatchPrayerRow(row: row, day: today.day, board: board, now: now, store: store)
+                ScrollViewReader { proxy in
+                    List {
+                        if let next = board.next(after: now) {
+                            Section { nextPrayer(next) }
+                        }
+                        Section {
+                            ForEach(today.rows) { row in
+                                WatchPrayerRow(row: row, day: today.day, board: board, now: now, store: store)
+                                    .id(row.prayer)
+                            }
                         }
                     }
+                    #if DEBUG
+                    .task {
+                        guard WatchDebug.scrollsToList else { return }
+                        try? await Task.sleep(for: .milliseconds(400))
+                        proxy.scrollTo(Prayer.asr, anchor: .center)
+                    }
+                    #endif
                 }
             } else {
                 ContentUnavailableView {
