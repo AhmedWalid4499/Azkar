@@ -64,27 +64,4 @@ import Testing
         let left = try FileManager.default.contentsOfDirectory(atPath: folder.path(percentEncoded: false)).sorted()
         #expect(left == ["azkar-backup-2026-01-01.json.bak", "azkar-backup-2026-09-03.json", "azkar-backup-old.json", "my-notes.json"])
     }
-
-    @Test func aBackupNotYetDownloadedIsListedByItsName() async throws {
-        let folder = try folder()
-        let data = try await backup()
-        try save(data, "azkar-backup-2026-09-02.json", in: folder)
-        try Data("stand-in".utf8).write(to: folder.appending(path: ".azkar-backup-2026-09-01.json.icloud"))
-        try Data("stand-in".utf8).write(to: folder.appending(path: ".azkar-backup-2026-09-02.json.icloud"))
-        #expect(try BackupFolder.backups(in: folder) == ["azkar-backup-2026-09-01.json", "azkar-backup-2026-09-02.json"])
-    }
-
-    @Test func aSavedBackupReadsBackThroughTheFolder() async throws {
-        let folder = try folder()
-        let data = try await backup()
-        try save(data, "azkar-backup-2026-09-01.json", in: folder)
-        #expect(try BackupFolder.read("azkar-backup-2026-09-01.json", in: folder) == data)
-        #expect(throws: (any Error).self) { try BackupFolder.read("azkar-backup-2026-09-02.json", in: folder) }
-    }
-
-    @Test func theDayComesFromTheName() {
-        #expect(BackupFolder.day(of: "azkar-backup-2026-09-01.json") == DayKey("2026-09-01"))
-        #expect(BackupFolder.day(of: "azkar-backup-2026-13-01.json") == nil)
-        #expect(BackupFolder.day(of: "notes.json") == nil)
-    }
 }

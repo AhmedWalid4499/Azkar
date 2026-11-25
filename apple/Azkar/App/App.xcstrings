@@ -181,23 +181,6 @@
         }
       }
     },
-    "Nothing was changed. You can try again in Settings › iCloud." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "لم يتغيّر شيء. يمكنك المحاولة مرة أخرى من الإعدادات › iCloud."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nothing was changed. You can try again in Settings › iCloud."
-          }
-        }
-      }
-    },
     "Notifications" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -265,40 +248,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reminders and the adhan"
-          }
-        }
-      }
-    },
-    "Restore my records" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "استعادة سجلاتي"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restore my records"
-          }
-        }
-      }
-    },
-    "Saved %@." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "حُفظت في %@."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Saved %@."
           }
         }
       }
@@ -421,40 +370,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Your name"
-          }
-        }
-      }
-    },
-    "Your records are in iCloud" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "سجلاتك محفوظة في iCloud"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your records are in iCloud"
-          }
-        }
-      }
-    },
-    "Your records couldn’t be restored" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تعذّرت استعادة سجلاتك"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your records couldn’t be restored"
           }
         }
       }

@@ -1,4 +1,3 @@
-import AzkarCore
 import Foundation
 
 /// Backups kept in a folder the user chose: one file a day, named as `Backup.fileName`, the latest
@@ -30,31 +29,9 @@ public enum BackupFolder {
         try prune(folder, keep: keep)
     }
 
-    /// The backups in `folder` by name, oldest first: the date in the name sorts them. A file
-    /// iCloud has not downloaded yet, which may show as `.<name>.icloud`, is listed by its name.
+    /// The backups in `folder` by name, oldest first: the date in the name sorts them.
     public static func backups(in folder: URL) throws -> [String] {
-        let names = try FileManager.default.contentsOfDirectory(atPath: folder.path(percentEncoded: false))
-        return Set(names.map(downloadedName)).filter(isBackupName).sorted()
-    }
-
-    /// Reads the backup `name` in `folder`, coordinated, so iCloud downloads it first if it must.
-    public static func read(_ name: String, in folder: URL) throws -> Data {
-        let url = folder.appending(path: name, directoryHint: .notDirectory)
-        // Only a file in iCloud can be downloaded; elsewhere this has nothing to do.
-        try? FileManager.default.startDownloadingUbiquitousItem(at: url)
-        var coordination: NSError?
-        var result: Result<Data, Error> = .failure(CocoaError(.fileReadUnknown))
-        NSFileCoordinator().coordinate(readingItemAt: url, options: [], error: &coordination) { url in
-            result = Result { try Data(contentsOf: url) }
-        }
-        if let coordination { throw coordination }
-        return try result.get()
-    }
-
-    /// The day in a backup's name: `azkar-backup-2026-09-01.json` is 1 September 2026.
-    public static func day(of name: String) -> DayKey? {
-        guard isBackupName(name) else { return nil }
-        return DayKey(String(name.dropFirst("azkar-backup-".count).dropLast(".json".count)))
+        try FileManager.default.contentsOfDirectory(atPath: folder.path(percentEncoded: false)).filter(isBackupName).sorted()
     }
 
     private static func prune(_ folder: URL, keep: Int) throws {
@@ -64,15 +41,7 @@ public enum BackupFolder {
             NSFileCoordinator().coordinate(writingItemAt: url, options: .forDeleting, error: &coordination) { url in
                 try? FileManager.default.removeItem(at: url)
             }
-            try? FileManager.default.removeItem(at: folder.appending(path: ".\(name).icloud", directoryHint: .notDirectory))
         }
-    }
-
-    /// `.azkar-backup-2026-09-01.json.icloud`, the stand-in for a file not downloaded, is
-    /// `azkar-backup-2026-09-01.json`.
-    static func downloadedName(_ name: String) -> String {
-        guard name.hasPrefix("."), name.hasSuffix(".icloud") else { return name }
-        return String(name.dropFirst().dropLast(".icloud".count))
     }
 
     /// `azkar-backup-YYYY-MM-DD.json`.

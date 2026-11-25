@@ -71,8 +71,24 @@ struct SettingsDataSection: View {
                     outcome = .failed(SettingsText.string("The file couldn’t be read.", locale: locale))
                 }
             }
-            .restoreBackupDialog($pending) { contents, mode in
-                Task { await restore(contents, mode: mode) }
+            .confirmationDialog(
+                Text("Restore this backup?", tableName: SettingsText.table),
+                isPresented: Binding(get: { pending != nil }, set: { if !$0 { pending = nil } }),
+                titleVisibility: .visible,
+                presenting: pending
+            ) { contents in
+                Button(role: .destructive) {
+                    Task { await restore(contents, mode: .replace) }
+                } label: {
+                    Text("Replace everything", tableName: SettingsText.table)
+                }
+                Button {
+                    Task { await restore(contents, mode: .merge) }
+                } label: {
+                    Text("Add to my records", tableName: SettingsText.table)
+                }
+            } message: { contents in
+                Text(restoreMessage(contents))
             }
             .alert(item: $outcome) { outcome in
                 switch outcome {
@@ -137,7 +153,7 @@ struct SettingsDataSection: View {
         } header: {
             Text("Your data", tableName: SettingsText.table)
         } footer: {
-            Text("Your prayer log, progress and settings are kept on this iPhone, inside the app. With “Save to iCloud” on, a copy is also kept in your iCloud, so removing the app or changing phones loses nothing. You can also export a backup, which opens in the Azkar website too.", tableName: SettingsText.table)
+            Text("Your prayer log, progress and settings are kept only on this iPhone, inside the app; removing the app removes them. Export a backup before you do, or before changing phones. A backup also opens in the Azkar website.", tableName: SettingsText.table)
         }
     }
 
@@ -145,10 +161,24 @@ struct SettingsDataSection: View {
         Backup.fileName(in: app.settings.settings.timeZone)
     }
 
+    private func restoreMessage(_ contents: Backup.Contents) -> String {
+        let preview = ImportReport(source: ImportReport.backup, at: .now, snapshot: contents.snapshot, settings: [])
+        var lines: [String] = []
+        if let exported = contents.exportedAt {
+            let date = exported.formatted(Date.FormatStyle(date: .long, time: .shortened).locale(locale))
+            lines.append(SettingsText.string("Exported \(date).", locale: locale))
+        }
+        lines.append(SettingsImportSummary.counts(preview, locale: locale))
+        lines.append(SettingsText.string("“Replace everything” makes the app exactly as the backup is, settings included. “Add to my records” keeps what is here and adds what the backup has.", locale: locale))
+        return lines.joined(separator: "\n\n")
+    }
+
     private func restore(_ contents: Backup.Contents, mode: Backup.Mode) async {
         pending = nil
         do {
-            let report = try await SettingsBackupImport.restore(contents, mode: mode, app: app)
+            let report = try await Backup.restore(contents, into: app.store, settings: app.settingsStore, mode: mode)
+            app.settings.reload()
+            await app.records.reload()
             await loadReports()
             outcome = .restored(report)
         } catch {

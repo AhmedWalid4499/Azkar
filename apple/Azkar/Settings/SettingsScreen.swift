@@ -31,7 +31,6 @@ struct SettingsScreen: View {
                     SettingsGeneralSection()
                         .id("general")
                     SettingsWalletSection()
-                    SettingsICloudSection()
                     SettingsAutoBackupSection()
                     SettingsDataSection()
                         .id("data")
