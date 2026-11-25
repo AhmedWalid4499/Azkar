@@ -1,6 +1,40 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ laps counted today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ laps counted today"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ من الأشواط اليوم"
+          }
+        }
+      }
+    },
+    "%@ said today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ said today"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ اليوم"
+          }
+        }
+      }
+    },
     "%lld fasts, %lld tarawih, %lld khatmahs": {
       "extractionState": "manual",
       "localizations": {
@@ -100,6 +134,108 @@
         }
       }
     },
+    "10 Dhul Hijjah: the day of sacrifice": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 Dhul Hijjah: the day of sacrifice"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العاشر من ذي الحجة: يوم النحر"
+          }
+        }
+      }
+    },
+    "11 to 13 Dhul Hijjah: the days of Tashriq": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "11 to 13 Dhul Hijjah: the days of Tashriq"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من الحادي عشر إلى الثالث عشر من ذي الحجة: أيام التشريق"
+          }
+        }
+      }
+    },
+    "8 Dhul Hijjah: the day of Tarwiyah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 Dhul Hijjah: the day of Tarwiyah"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الثامن من ذي الحجة: يوم التروية"
+          }
+        }
+      }
+    },
+    "9 Dhul Hijjah: Arafah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "9 Dhul Hijjah: Arafah"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التاسع من ذي الحجة: يوم عرفة"
+          }
+        }
+      }
+    },
+    "A short reminder of the steps, not a ruling: follow the scholars you trust for the details of your Hajj.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A short reminder of the steps, not a ruling: follow the scholars you trust for the details of your Hajj."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكير موجز بالمناسك وليس فتوى: ارجع إلى من تثق به من أهل العلم في تفاصيل حجّك."
+          }
+        }
+      }
+    },
+    "All seven laps are done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All seven laps are done"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمّت الأشواط السبعة"
+          }
+        }
+      }
+    },
     "At home": {
       "extractionState": "manual",
       "localizations": {
@@ -130,6 +266,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "At the masjid"
+          }
+        }
+      }
+    },
+    "Count the laps: %@ of %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Count the laps: %@ of %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عدّ الأشواط: %1$@ من %2$@"
           }
         }
       }
@@ -202,6 +355,57 @@
         }
       }
     },
+    "Done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم"
+          }
+        }
+      }
+    },
+    "Each lap round the Ka'bah, from the Black Stone back to it": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each lap round the Ka'bah, from the Black Stone back to it"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل شوط دورة حول الكعبة، من الحجر الأسود إليه"
+          }
+        }
+      }
+    },
+    "Each way between as-Safa and al-Marwah is one lap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each way between as-Safa and al-Marwah is one lap"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل ذهاب بين الصفا والمروة شوط"
+          }
+        }
+      }
+    },
     "Eid Mubarak": {
       "extractionState": "manual",
       "localizations": {
@@ -249,6 +453,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eid al-Fitr"
+          }
+        }
+      }
+    },
+    "Enter ihram, go to Mina and pray there, each prayer in its time, shortening the four-rakah prayers.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter ihram, go to Mina and pray there, each prayer in its time, shortening the four-rakah prayers."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أحرِم واذهب إلى منى وصلِّ فيها كل صلاة في وقتها، مع قصر الرباعية."
           }
         }
       }
@@ -304,6 +525,23 @@
         }
       }
     },
+    "From the night of Eid until the Eid prayer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From the night of Eid until the Eid prayer"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من ليلة العيد إلى صلاة العيد"
+          }
+        }
+      }
+    },
     "Goal reached": {
       "extractionState": "manual",
       "localizations": {
@@ -317,6 +555,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Goal reached"
+          }
+        }
+      }
+    },
+    "Hajj and Umrah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hajj and Umrah"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحج والعمرة"
+          }
+        }
+      }
+    },
+    "Hajj and Umrah mode": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hajj and Umrah mode"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وضع الحج والعمرة"
+          }
+        }
+      }
+    },
+    "Hajj completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hajj completed"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُدّي الحج"
           }
         }
       }
@@ -338,6 +627,40 @@
         }
       }
     },
+    "I completed an Umrah today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I completed an Umrah today"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدّيت عمرة اليوم"
+          }
+        }
+      }
+    },
+    "I completed the Hajj": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I completed the Hajj"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدّيت الحج"
+          }
+        }
+      }
+    },
     "I prayed the Eid prayer": {
       "extractionState": "manual",
       "localizations": {
@@ -351,6 +674,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "I prayed the Eid prayer"
+          }
+        }
+      }
+    },
+    "Ihram and the talbiyah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihram and the talbiyah"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإحرام والتلبية"
           }
         }
       }
@@ -420,6 +760,23 @@
         }
       }
     },
+    "In all": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In all"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المجموع"
+          }
+        }
+      }
+    },
     "Islamic calendar": {
       "extractionState": "manual",
       "localizations": {
@@ -471,6 +828,23 @@
         }
       }
     },
+    "Lap %@ of %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lap %@ of %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الشوط %1$@ من %2$@"
+          }
+        }
+      }
+    },
     "Logged": {
       "extractionState": "manual",
       "localizations": {
@@ -484,6 +858,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Logged"
+          }
+        }
+      }
+    },
+    "Make the intention at the miqat and repeat the talbiyah until you reach the Ka'bah.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make the intention at the miqat and repeat the talbiyah until you reach the Ka'bah."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انوِ النسك عند الميقات، وأكثِر من التلبية حتى تصل إلى الكعبة."
           }
         }
       }
@@ -518,6 +909,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Masjid %1$lld, home %2$lld, %3$lld rakahs"
+          }
+        }
+      }
+    },
+    "Men shave the head or shorten the hair; women shorten it by a fingertip's length. The Umrah is complete.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Men shave the head or shorten the hair; women shorten it by a fingertip's length. The Umrah is complete."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحلق الرجل رأسه أو يقصّر، وتقصّر المرأة قدر أنملة، وبذلك تتمّ العمرة."
           }
         }
       }
@@ -709,6 +1117,40 @@
         }
       }
     },
+    "Pray Maghrib and Isha together, spend the night, and after Fajr remember Allah at al-Mash'ar al-Haram.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pray Maghrib and Isha together, spend the night, and after Fajr remember Allah at al-Mash'ar al-Haram."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلِّ المغرب والعشاء جمعًا وبِتْ بها، واذكر الله بعد الفجر عند المشعر الحرام."
+          }
+        }
+      }
+    },
+    "Pray two rakahs behind the Station of Ibrahim, or anywhere in the mosque, then drink Zamzam.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pray two rakahs behind the Station of Ibrahim, or anywhere in the mosque, then drink Zamzam."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلِّ ركعتين خلف مقام إبراهيم أو في أي مكان من المسجد، ثم اشرب من زمزم."
+          }
+        }
+      }
+    },
     "Previous year": {
       "extractionState": "manual",
       "localizations": {
@@ -794,6 +1236,210 @@
         }
       }
     },
+    "Sa'i": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sa'i"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السعي"
+          }
+        }
+      }
+    },
+    "Sa'i laps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sa'i laps"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أشواط السعي"
+          }
+        }
+      }
+    },
+    "Say the takbir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Say the takbir"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التكبير"
+          }
+        }
+      }
+    },
+    "Seven laps between as-Safa and al-Marwah, starting at as-Safa and ending at al-Marwah.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seven laps between as-Safa and al-Marwah, starting at as-Safa and ending at al-Marwah."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سبعة أشواط بين الصفا والمروة، تبدأ بالصفا وتنتهي بالمروة."
+          }
+        }
+      }
+    },
+    "Seven laps round the Ka'bah, starting at the Black Stone. Say the takbir each time you pass it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seven laps round the Ka'bah, starting at the Black Stone. Say the takbir each time you pass it."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سبعة أشواط حول الكعبة تبدأ من الحجر الأسود، وكبّر كلما حاذيته."
+          }
+        }
+      }
+    },
+    "Shaving or shortening the hair": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shaving or shortening the hair"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحلق أو التقصير"
+          }
+        }
+      }
+    },
+    "Shows the steps of Umrah and Hajj on Today, with their duas and a counter for the laps of tawaf and sa'i.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows the steps of Umrah and Hajj on Today, with their duas and a counter for the laps of tawaf and sa'i."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعرض مناسك العمرة والحج في صفحة اليوم، مع أدعيتها وعدّاد لأشواط الطواف والسعي."
+          }
+        }
+      }
+    },
+    "Stand at Arafah from after noon until sunset in dua and remembrance, then go to Muzdalifah.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stand at Arafah from after noon until sunset in dua and remembrance, then go to Muzdalifah."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قف بعرفة من بعد الزوال إلى غروب الشمس في دعاء وذكر، ثم انصرف إلى مزدلفة."
+          }
+        }
+      }
+    },
+    "Start again": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start again"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ابدأ من جديد"
+          }
+        }
+      }
+    },
+    "Stay at Mina and each day after noon stone the three jamarat, seven pebbles each, making dua after the first two.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stay at Mina and each day after noon stone the three jamarat, seven pebbles each, making dua after the first two."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بِتْ بمنى، وارمِ كل يوم بعد الزوال الجمرات الثلاث بسبع حصيات لكلٍّ منها، وادعُ بعد الأولى والوسطى."
+          }
+        }
+      }
+    },
+    "Stone Jamrat al-Aqabah with seven pebbles, offer the sacrifice, shave or shorten the hair, and make tawaf al-ifadah and the sa'i.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stone Jamrat al-Aqabah with seven pebbles, offer the sacrifice, shave or shorten the hair, and make tawaf al-ifadah and the sa'i."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ارمِ جمرة العقبة بسبع حصيات، واذبح هديك، واحلق أو قصّر، وطُف طواف الإفاضة واسعَ."
+          }
+        }
+      }
+    },
+    "Takbir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takbir"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التكبير"
+          }
+        }
+      }
+    },
     "Tarawih": {
       "extractionState": "manual",
       "localizations": {
@@ -824,6 +1470,159 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tarawih, night %lld"
+          }
+        }
+      }
+    },
+    "Tawaf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tawaf"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الطواف"
+          }
+        }
+      }
+    },
+    "Tawaf laps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tawaf laps"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أشواط الطواف"
+          }
+        }
+      }
+    },
+    "The days of Hajj": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The days of Hajj"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيام الحج"
+          }
+        }
+      }
+    },
+    "The days of Tashriq": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The days of Tashriq"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيام التشريق"
+          }
+        }
+      }
+    },
+    "The farewell tawaf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The farewell tawaf"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "طواف الوداع"
+          }
+        }
+      }
+    },
+    "The last thing before leaving Makkah: seven laps round the Ka'bah.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last thing before leaving Makkah: seven laps round the Ka'bah."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر ما تفعله قبل مغادرة مكة: سبعة أشواط حول الكعبة."
+          }
+        }
+      }
+    },
+    "The night at Muzdalifah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The night at Muzdalifah"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المبيت بمزدلفة"
+          }
+        }
+      }
+    },
+    "The steps, their duas and a lap counter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The steps, their duas and a lap counter"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المناسك وأدعيتها وعدّاد الأشواط"
+          }
+        }
+      }
+    },
+    "The ten days of Dhul Hijjah: day %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The ten days of Dhul Hijjah: day %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عشر ذي الحجة: اليوم %@"
           }
         }
       }
@@ -923,6 +1722,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tomorrow"
+          }
+        }
+      }
+    },
+    "Two rakahs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two rakahs"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ركعتا الطواف"
+          }
+        }
+      }
+    },
+    "Umrah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umrah"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العمرة"
+          }
+        }
+      }
+    },
+    "Umrah completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umrah completed"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُدّيت العمرة"
+          }
+        }
+      }
+    },
+    "Undo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تراجع"
           }
         }
       }

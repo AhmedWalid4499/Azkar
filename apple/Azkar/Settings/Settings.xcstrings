@@ -660,6 +660,23 @@
         }
       }
     },
+    "After Fajr from 1 to 13 Dhul Hijjah and on the morning of Eid al-Fitr, and at Maghrib on the night of Eid al-Fitr.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After Fajr from 1 to 13 Dhul Hijjah and on the morning of Eid al-Fitr, and at Maghrib on the night of Eid al-Fitr."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد الفجر من الأول إلى الثالث عشر من ذي الحجة وصباح عيد الفطر، وعند المغرب ليلة عيد الفطر."
+          }
+        }
+      }
+    },
     "After Isha, unless you’ve ticked it off.": {
       "extractionState": "manual",
       "localizations": {
@@ -3229,6 +3246,23 @@
         }
       }
     },
+    "Takbir of the Eid": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takbir of the Eid"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تكبير العيد"
+          }
+        }
+      }
+    },
     "Tasbih count": {
       "extractionState": "manual",
       "localizations": {
@@ -3293,6 +3327,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The Arabic written in Latin letters."
+          }
+        }
+      }
+    },
+    "The Eid": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Eid"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العيد"
           }
         }
       }

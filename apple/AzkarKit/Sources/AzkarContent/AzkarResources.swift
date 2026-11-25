@@ -11,4 +11,12 @@ public enum AzkarResources {
         }
         return url
     }
+
+    /// The duas for occasions, built for the native app only by `scripts/azkar/build-occasions.mjs`.
+    public static var occasionsURL: URL {
+        guard let url = Bundle.module.url(forResource: "occasions", withExtension: "json") else {
+            preconditionFailure("occasions.json is missing from the AzkarKit bundle")
+        }
+        return url
+    }
 }

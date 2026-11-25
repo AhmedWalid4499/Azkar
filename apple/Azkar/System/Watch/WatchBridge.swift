@@ -37,7 +37,7 @@ final class WatchBridge: NSObject, WCSessionDelegate {
                     WatchBoard.Row(prayer: prayer, at: day[prayer: prayer], status: board.status(of: prayer, on: day.day))
                 })
             },
-            tasbihDay: board.today, tasbihCount: today.tasbih.values.reduce(0) { $0 + $1.count },
+            tasbihDay: board.today, tasbihCount: today.tasbih.filter { TasbihRecord.isTasbih($0.key) }.values.reduce(0) { $0 + $1.count },
             appliedActions: applied.suffix(Self.shownApplied)
         )
         // The time it was made on is not a change worth sending.

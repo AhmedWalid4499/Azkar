@@ -73,6 +73,19 @@ struct ExportStrings: Sendable {
     var tasbihFree: String { ar ? "عدّ حرّ" : "Free count" }
     func tasbihCount(_ preset: String) -> String { ar ? "التسبيح: \(preset): العدد" : "Tasbih: \(preset): count" }
     func tasbihLastAt(_ preset: String) -> String { ar ? "التسبيح: \(preset): وقت آخر عدّ" : "Tasbih: \(preset): last count at" }
+    var umrahHeader: String { ar ? "العمرة" : "Umrah" }
+    var hajjHeader: String { ar ? "الحج" : "Hajj" }
+    var done: String { ar ? "أُدّيت" : "Done" }
+    func lapsHeader(_ lap: HajjLap) -> String {
+        switch lap {
+        case .tawaf: ar ? "أشواط الطواف" : "Tawaf laps"
+        case .sai: ar ? "أشواط السعي" : "Sa'i laps"
+        }
+    }
+    var takbir: String { ar ? "التكبير" : "Takbir" }
+    var occasionsCount: String { ar ? "أدعية المناسبات: العدد" : "Duas for occasions: count" }
+    var occasionsSaid: String { ar ? "أدعية المناسبات: ما قيل" : "Duas for occasions: said" }
+    var occasionsLastAt: String { ar ? "أدعية المناسبات: وقت آخر دعاء" : "Duas for occasions: last said at" }
 
     var fastKindHeader: String { ar ? "الصيام" : "Fast" }
     var fastStatusHeader: String { ar ? "الصيام: الحالة" : "Fast: status" }

@@ -26,6 +26,7 @@ struct SettingsScreen: View {
                         }
                     }
                     SettingsMenstrualSection()
+                    SettingsHajjSection()
                         .id("menstrual")
                     SettingsGeneralSection()
                         .id("general")

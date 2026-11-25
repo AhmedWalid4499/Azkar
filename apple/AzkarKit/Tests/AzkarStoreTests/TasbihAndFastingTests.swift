@@ -109,3 +109,32 @@ import Testing
         #expect(try await store.owedFastsBefore() == RecordLimits.maxOwedFastsBefore)
     }
 }
+
+/// The duas for occasions, the takbir and the laps of Hajj and Umrah, kept with the tasbih
+/// counter's records under their own keys.
+@Suite struct OtherCountersTests {
+    let today = day("2026-09-01")
+    let start = instant("2026-09-01T05:00:00Z")
+
+    func store() throws -> RecordStore { try makeStore(catalog: AzkarRecordTests.catalog) }
+
+    @Test func occasionTakbirAndLapsAreKeptButNotCountedAsTasbih() async throws {
+        let store = try store()
+        try await store.countTasbih("subhanallah", on: today, at: start)
+        try await store.countTasbih("occasion-10-1", on: today, at: start)
+        try await store.countTasbih("occasion-10-1", on: today, at: start.addingTimeInterval(60))
+        try await store.countTasbih(TasbihRecord.takbir, on: today, at: start)
+        let change = try await store.countTasbih(HajjLap.tawaf.rawValue, times: 7, on: today, at: start)
+        #expect(change.day.tasbih["occasion-10-1"]?.count == 2)
+        #expect(change.day.tasbih["occasion-10-1"]?.lastAt == start.addingTimeInterval(60))
+        #expect(change.day.tasbih[TasbihRecord.takbir]?.count == 1)
+        #expect(change.day.tasbih["tawaf"]?.count == 7)
+        #expect(change.totals.tasbihCount == 2, "subhanallah and the takbir")
+        #expect(change.totals.occasionCount == 2)
+    }
+
+    @Test func unknownKeysAreStillRefused() async throws {
+        let change = try await store().countTasbih("not-a-preset", on: today, at: start)
+        #expect(change.result == .unchanged)
+    }
+}

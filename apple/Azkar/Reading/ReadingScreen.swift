@@ -53,6 +53,12 @@ private struct ReadingStack: View {
                             .id("\(session)-\(day)")
                     case .tasbih:
                         TasbihView(context: context)
+                    case .occasions:
+                        OccasionsView()
+                    case let .occasion(number):
+                        if let chapter = OccasionsBook.bundled.chapter(number) {
+                            OccasionChapterView(chapter: chapter)
+                        }
                     }
                 }
         }

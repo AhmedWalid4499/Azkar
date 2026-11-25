@@ -415,6 +415,23 @@
         }
       }
     },
+    "%@, these are days of takbir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, these are days of takbir"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@، هذه أيام التكبير"
+          }
+        }
+      }
+    },
     "%@, time for Duha": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -807,6 +824,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Day"
+          }
+        }
+      }
+    },
+    "Days of takbir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days of takbir"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيام التكبير"
           }
         }
       }
@@ -1977,6 +2011,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Records how you prayed one of the five prayers."
+          }
+        }
+      }
+    },
+    "Remember Allah with the takbir, and count it on Today.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remember Allah with the takbir, and count it on Today."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أكثِر من التكبير، وعُدّه في صفحة اليوم."
           }
         }
       }

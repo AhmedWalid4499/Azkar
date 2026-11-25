@@ -33,6 +33,9 @@ struct TodayFormat {
 
     var isArabic: Bool { Self.isArabic(locale) }
 
+    /// A count in the user's digits.
+    func number(_ value: Int) -> String { value.formatted(.number.locale(locale)) }
+
     /// "5:42 PM" or "17:42", in the place's zone.
     func time(_ date: Date) -> String {
         Self.formatter(template: hour12 ? "hmm" : "Hmm", locale: locale, timeZone: timeZone).string(from: date)

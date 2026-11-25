@@ -6,6 +6,10 @@ public enum SeasonDeed: String, Codable, CaseIterable, Sendable {
     case tarawih
     /// The prayer of either Eid.
     case eidPrayer
+    /// An Umrah completed that day (logged from the Hajj and Umrah guide).
+    case umrah
+    /// The Hajj, logged on the day of Arafah or the day it was completed.
+    case hajj
 }
 
 /// Where a prayer was prayed.

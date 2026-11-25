@@ -22,12 +22,15 @@ public enum HistoryCSV {
         public var hijriOffset: Int
         /// Gives the tasbih presets' names and order.
         public var dataset: AzkarDataset
+        /// Names the duas for occasions by their chapter.
+        public var occasions: OccasionsBook
 
-        public init(locale: DisplayLocale, timeZone: String, hijriOffset: Int, dataset: AzkarDataset = .bundled) {
+        public init(locale: DisplayLocale, timeZone: String, hijriOffset: Int, dataset: AzkarDataset = .bundled, occasions: OccasionsBook = .bundled) {
             self.locale = locale
             self.timeZone = timeZone
             self.hijriOffset = hijriOffset
             self.dataset = dataset
+            self.occasions = occasions
         }
     }
 
@@ -107,6 +110,19 @@ public enum HistoryCSV {
             columns.append(Column(header: words.tasbihLastAt(name)) { time(records($0).compactMap(\.lastAt).max()) })
         }
 
+        // The duas for occasions said that day: how many in all, which (by chapter), and when last.
+        let occasions = { (key: DayKey) in OccasionStats.records(in: history.tasbih[key] ?? []) }
+        columns += [
+            Column(header: words.occasionsCount) { key in
+                let found = occasions(key)
+                return found.isEmpty ? "" : String(OccasionStats.count(of: found))
+            },
+            Column(header: words.occasionsSaid) { key in
+                occasionNames(occasions(key), book: options.occasions, words: words)
+            },
+            Column(header: words.occasionsLastAt) { time(occasions($0).compactMap(\.lastAt).max()) },
+        ]
+
         columns += [
             Column(header: words.fastKindHeader) { history.fasts[$0].map { words.fastKind($0.kind) } ?? "" },
             Column(header: words.fastStatusHeader) { history.fasts[$0].map { words.fastStatus($0.status) } ?? "" },
@@ -177,6 +193,24 @@ public enum HistoryCSV {
                     record(key, .eidPrayer).map { $0.place.map(words.place) ?? words.prayed } ?? ""
                 },
             ]
+            // Umrah and Hajj, once either has been logged (Hajj and Umrah mode).
+            if history.seasons.values.contains(where: { $0[.umrah] != nil || $0[.hajj] != nil }) {
+                columns += [
+                    Column(header: words.umrahHeader) { key in record(key, .umrah) == nil ? "" : words.done },
+                    Column(header: words.hajjHeader) { key in record(key, .hajj) == nil ? "" : words.done },
+                ]
+            }
+        }
+
+        // The laps of tawaf and sa'i counted in the Hajj and Umrah guide, when there are any.
+        if history.tasbih.values.joined().contains(where: { HajjLap(rawValue: $0.preset) != nil }) {
+            for lap in HajjLap.allCases {
+                let laps = { (key: DayKey) in (history.tasbih[key] ?? []).filter { $0.preset == lap.rawValue } }
+                columns.append(Column(header: words.lapsHeader(lap)) { key in
+                    let found = laps(key)
+                    return found.isEmpty ? "" : String(found.reduce(0) { $0 + max(0, $1.count) })
+                })
+            }
         }
 
         let line = { (cells: [String]) in cells.map(field).joined(separator: ",") }
@@ -188,15 +222,36 @@ public enum HistoryCSV {
     /// other preset counted (one the dataset no longer has); then the free count.
     static func tasbihColumns(_ history: TasbihHistory, dataset: AzkarDataset) -> [String] {
         let used = Set(history.values.joined().map(\.preset))
-        let others = used.subtracting(dataset.tasbihIDs).subtracting([TasbihRecord.freeCount]).sorted()
+        let others = used.subtracting(dataset.tasbihIDs).subtracting([TasbihRecord.freeCount]).filter(TasbihRecord.isTasbih).sorted()
         return dataset.tasbihIDs + others + [TasbihRecord.freeCount]
     }
 
     /// In English its transliteration, in Arabic its text, both from the dataset; else its id.
     static func presetName(_ preset: String, dataset: AzkarDataset, words: ExportStrings) -> String {
         if preset == TasbihRecord.freeCount { return words.tasbihFree }
+        if preset == TasbihRecord.takbir { return words.takbir }
         guard let dhikr = dataset.dhikr(id: preset) else { return preset }
         let name = words.language == .ar ? dhikr.arabic : (dhikr.transliteration ?? dhikr.id)
         return name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// The chapters of the duas said, in the book's order, each with how many times its duas
+    /// were said: "When leaving home ×2; Travel ×1". An id the book no longer has is named as it is.
+    static func occasionNames(_ records: [TasbihRecord], book: OccasionsBook, words: ExportStrings) -> String {
+        var byChapter: [Int: Int] = [:]
+        var unknown: [String] = []
+        for record in records {
+            if let chapter = book.chapter(ofItem: record.preset) {
+                byChapter[chapter.number, default: 0] += record.count
+            } else {
+                unknown.append(record.preset)
+            }
+        }
+        let named = byChapter.keys.sorted().compactMap { number -> String? in
+            guard let chapter = book.chapter(number) else { return nil }
+            let title = words.language == .ar ? chapter.title.ar : chapter.title.en
+            return "\(title) ×\(byChapter[number]!)"
+        }
+        return (named + unknown.sorted()).joined(separator: "; ")
     }
 }

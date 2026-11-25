@@ -513,6 +513,23 @@
         }
       }
     },
+    "%lld said in all": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld said in all"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المجموع: %lld"
+          }
+        }
+      }
+    },
     "%lld this month": {
       "extractionState": "manual",
       "localizations": {
@@ -1550,6 +1567,23 @@
         }
       }
     },
+    "Duas for occasions": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duas for occasions"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدعية المناسبات"
+          }
+        }
+      }
+    },
     "Duas made": {
       "extractionState": "manual",
       "localizations": {
@@ -2430,6 +2464,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Last made up: %@, %@"
+          }
+        }
+      }
+    },
+    "Last said %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last said %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر مرة: %@"
           }
         }
       }
@@ -4011,6 +4062,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Surahs reviewed"
+          }
+        }
+      }
+    },
+    "Takbir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takbir"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التكبير"
           }
         }
       }

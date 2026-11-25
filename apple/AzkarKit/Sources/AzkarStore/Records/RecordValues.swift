@@ -84,7 +84,11 @@ public struct LifetimeTotals: Hashable, Sendable, Codable {
     }
 
     /// Everything counted on the tasbih counter.
-    public var tasbihCount: Int { tasbih.values.reduce(tasbihFree, +) }
+    /// Everything counted on the tasbih counter: the duas for occasions and the laps of tawaf and
+    /// sa'i kept beside it are not tasbih.
+    public var tasbihCount: Int { tasbih.filter { TasbihRecord.isTasbih($0.key) }.values.reduce(tasbihFree, +) }
+    /// Every dua for an occasion ever said.
+    public var occasionCount: Int { tasbih.filter { TasbihRecord.isOccasion($0.key) }.values.reduce(0, +) }
 }
 
 /// Everything recorded on one day.

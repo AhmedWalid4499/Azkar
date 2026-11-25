@@ -39,6 +39,8 @@ public struct AppSettings: Hashable, Sendable {
     /// as excused and the prayer and fasting reminders pause (`ReminderSettings.duringMenstruation`).
     /// The native app's own.
     public var menstrualSince: Date?
+    /// Shows the Hajj and Umrah guide on Today, with its lap counters. The native app's own.
+    public var hajjMode = false
 
     public init(language: Language = .system, theme: Theme = .system, timeFormat: TimeFormat = .twelveHour,
                 arabicDigits: Bool = true, hijriOffset: Int = 0, name: String = "", ramadanKhatmahGoal: Int = 0, quranGoal: QuranGoal? = nil,
@@ -116,6 +118,7 @@ extension AppSettings {
         if let since = stored["menstrualSince"]?.number, WebRules.isInteger(since), since > 0 {
             self.menstrualSince = Date(epochMilliseconds: Int64(since))
         }
+        self.hajjMode = stored["hajjMode"] == .bool(true)
     }
 
     /// What the website's settings store saves, and the goal and menstrual mode when there are: the
@@ -132,6 +135,7 @@ extension AppSettings {
         if ramadanKhatmahGoal != 0 { fields["ramadanKhatmahGoal"] = JSONValue(ramadanKhatmahGoal) }
         if let quranGoal { fields["quranGoal"] = ["start": .string(quranGoal.start.description), "end": .string(quranGoal.end.description)] }
         if let menstrualSince { fields["menstrualSince"] = JSONValue(ms: menstrualSince) }
+        if hajjMode { fields["hajjMode"] = .bool(true) }
         return .object(fields)
     }
 }

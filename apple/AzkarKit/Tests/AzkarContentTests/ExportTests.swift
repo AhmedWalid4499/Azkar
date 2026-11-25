@@ -75,7 +75,8 @@ struct ExportTests {
     static func load() throws -> Fixture { try Fixtures.load(Fixture.self, "history-csv.json") }
 
     /// The bundled dataset's presets plus the free count: two columns each.
-    static func tasbihColumnCount(_ dataset: AzkarDataset = .bundled) -> Int { (dataset.tasbihIDs.count + 1) * 2 }
+    /// The tasbih presets and the free count, two columns each, then three for the duas for occasions.
+    static func tasbihColumnCount(_ dataset: AzkarDataset = .bundled) -> Int { (dataset.tasbihIDs.count + 1) * 2 + 3 }
 
     static let nativeColumnCount = Prayer.allCases.count * 7 + 3
 

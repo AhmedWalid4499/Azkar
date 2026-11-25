@@ -185,5 +185,29 @@ struct TrackerDaySeasonSection: View {
                 }
             }
         }
+        // Hajj and Umrah: shown when either was logged that day, any lap was counted, or the mode is on.
+        let tasbih = data.records.tasbih[day] ?? [:]
+        let laps = HajjLap.allCases.map { lap in (lap, tasbih[lap.rawValue]?.count ?? 0) }
+        if data.settings.app.hajjMode || seasons[.umrah] != nil || seasons[.hajj] != nil || laps.contains(where: { $0.1 > 0 }) {
+            Section {
+                ForEach([SeasonDeed.umrah, .hajj], id: \.self) { deed in
+                    Toggle(isOn: Binding(
+                        get: { seasons[deed] != nil },
+                        set: { $0 ? app.saveSeason(deed, on: day) : app.clearSeason(deed, on: day) }
+                    )) {
+                        Text(deed == .umrah ? SeasonL("Umrah completed") : SeasonL("Hajj completed"))
+                    }
+                }
+                ForEach(laps.filter { $0.1 > 0 }, id: \.0) { lap, count in
+                    LabeledContent {
+                        Text(verbatim: count.formatted()).monospacedDigit()
+                    } label: {
+                        Text(lap == .tawaf ? SeasonL("Tawaf laps") : SeasonL("Sa'i laps"))
+                    }
+                }
+            } header: {
+                Text(SeasonL("Hajj and Umrah"))
+            }
+        }
     }
 }

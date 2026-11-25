@@ -168,6 +168,15 @@ struct SettingsRemindersView: View {
             }
 
             Section {
+                Toggle(isOn: binding(\.season.takbir)) {
+                    Text("Takbir of the Eid", tableName: SettingsText.table)
+                    Text("After Fajr from 1 to 13 Dhul Hijjah and on the morning of Eid al-Fitr, and at Maghrib on the night of Eid al-Fitr.", tableName: SettingsText.table)
+                }
+            } header: {
+                Text("The Eid", tableName: SettingsText.table)
+            }
+
+            Section {
                 if reminders.season.zakatDue != nil {
                     Toggle(isOn: binding(\.season.zakat)) {
                         Text("Your zakat date", tableName: SettingsText.table)

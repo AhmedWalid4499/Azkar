@@ -48,6 +48,14 @@ public enum SeasonReminders {
         if choices.zakatFitr, hijri.month == HijriDate.ramadan, hijri.day == SeasonReminderChoices.zakatFitrDay {
             reminders.append(SeasonReminder(kind: .zakatFitr, anchor: .dhuhr))
         }
+        if choices.takbir {
+            // After Fajr on each takbir day, and at Maghrib as the night of Eid al-Fitr begins.
+            if TakbirDays.season(on: day, afterMaghrib: false, offset: offset) != nil {
+                reminders.append(SeasonReminder(kind: .takbir, anchor: .fajr, offsetMinutes: SeasonReminderChoices.takbirDelayMinutes))
+            } else if TakbirDays.season(on: day, afterMaghrib: true, offset: offset) == .eidAlFitr {
+                reminders.append(SeasonReminder(kind: .takbir, anchor: .maghrib, offsetMinutes: SeasonReminderChoices.takbirDelayMinutes))
+            }
+        }
         return reminders
     }
 

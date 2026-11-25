@@ -15,6 +15,7 @@ import SwiftUI
 ///     -TodayFlip morning,evening            azkar cards turned over at launch
 ///     -TodayRamadanSeed                     last Ramadan logged, and a khatmah goal of 2
 ///     -TodayProgress morning                a card's list of azkar open at launch
+///     -TodayHajj YES                        Hajj and Umrah mode on
 enum TodayDebugLaunch {
     static var seed: String? { UserDefaults.standard.string(forKey: "TodaySeed") }
     static var name: String? { UserDefaults.standard.string(forKey: "TodayName") }
@@ -61,6 +62,10 @@ enum TodayDebugSeed {
             app.settings.update { $0.app.menstrualSince = nil }
         } else if let hours = UserDefaults.standard.string(forKey: "TodayMenstrual").flatMap(Double.init) {
             app.settings.update { $0.app.menstrualSince = Date.now.addingTimeInterval(-hours * 3600) }
+        }
+        // `-TodayHajj YES|NO`: Hajj and Umrah mode on or off.
+        if UserDefaults.standard.object(forKey: "TodayHajj") != nil {
+            app.settings.update { $0.app.hajjMode = UserDefaults.standard.bool(forKey: "TodayHajj") }
         }
     }
 

@@ -90,6 +90,8 @@ enum ReadingDebug {
             if defaults.bool(forKey: "ReadingSeed") { await seed(context) }
             switch defaults.string(forKey: "ReadingOpen") {
             case "tasbih": router.openTasbih()
+            case "occasions": router.path = [.occasions]
+            case let key? where key.hasPrefix("occasion:"): router.openOccasion(Int(key.dropFirst(9)) ?? 10)
             case let key?: if let session = AzkarSession(key) { router.open(session) }
             case nil: break
             }

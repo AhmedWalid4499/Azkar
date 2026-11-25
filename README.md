@@ -84,6 +84,16 @@ node scripts/azkar/build.mjs    # assemble src/features/azkar/data/azkar.json
 node scripts/azkar/verify.mjs   # cross-check the Arabic and the hadith numbers against other witnesses
 ```
 
+### Duas for occasions (iPhone app only)
+
+The iPhone app also has the rest of *Hisn al-Muslim*: 123 more chapters, from waking up and leaving home to travel, rain, illness, worry and the rites of Hajj and Umrah, in 13 themes (210 entries, 183 of them words to say). Five chapters are left out because they are virtues or manners rather than words to say (51, 108, 109, 132 and 133). They are built into their own file, `apple/AzkarKit/Sources/AzkarContent/Resources/occasions.json`, so the website's dataset is unchanged:
+
+```sh
+node scripts/azkar/build-occasions.mjs   # from the same pinned asellam/HisnElMuslim file
+```
+
+The Arabic, the chapter titles and the references are copied from asellam's text as it is, with only whitespace tidied. Nothing is patched, and no second witness is compared word by word as it is for the daily sessions. The build lists the 42 words the source leaves without a final mark; most are "alladhi" and "allati" written without the shadda. The English meanings, transliterations and references, in `scripts/azkar/occasions/`, were written for this project. A Swift test keeps a fingerprint of every Arabic text.
+
 The app and its tests need none of those downloads. The unit tests require every Qur'anic passage to equal its ayat exactly, check each ayah against a checksum taken from the Tanzil download, keep a fingerprint of each recited text so that an accidental edit of a single mark is noticed, check the vocalisation is complete, and check the order, counts and per-prayer rules of the after-prayer, sleep and tasbih lists.
 
 Some of the virtues shown rest on narrations whose grading scholars differ on; each dhikr's reference names who graded its chain.

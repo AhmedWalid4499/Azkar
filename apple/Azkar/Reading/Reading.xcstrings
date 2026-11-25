@@ -811,6 +811,23 @@
         }
       }
     },
+    "Duas for every occasion": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duas for every occasion"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدعية لكل مناسبة"
+          }
+        }
+      }
+    },
     "Enter a whole number from %@ to %@.": {
       "extractionState": "manual",
       "localizations": {
@@ -862,6 +879,23 @@
         }
       }
     },
+    "Family and marriage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Family and marriage"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسرة والزواج"
+          }
+        }
+      }
+    },
     "Finish": {
       "extractionState": "manual",
       "localizations": {
@@ -879,6 +913,40 @@
         }
       }
     },
+    "Food and fasting": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food and fasting"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الطعام والصيام"
+          }
+        }
+      }
+    },
+    "Forgiveness and remembrance": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forgiveness and remembrance"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاستغفار والذكر"
+          }
+        }
+      }
+    },
     "Free count": {
       "extractionState": "manual",
       "localizations": {
@@ -892,6 +960,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "عدّ حرّ"
+          }
+        }
+      }
+    },
+    "Hajj, Umrah and the sacrifice": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hajj, Umrah and the sacrifice"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحج والعمرة والأضحية"
+          }
+        }
+      }
+    },
+    "Illness, death and the graves": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Illness, death and the graves"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المرض والموت والقبور"
+          }
+        }
+      }
+    },
+    "In the prayer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the prayer"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في الصلاة"
+          }
+        }
+      }
+    },
+    "Leaving home, travel, rain, worry, illness and more, from Hisn al-Muslim": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leaving home, travel, rain, worry, illness and more, from Hisn al-Muslim"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الخروج من المنزل والسفر والمطر والهمّ والمرض وغيرها، من حصن المسلم"
           }
         }
       }
@@ -1168,6 +1304,74 @@
         }
       }
     },
+    "Said it": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Said it"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قلتُه"
+          }
+        }
+      }
+    },
+    "Said today: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Said today: %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قيل اليوم: %@"
+          }
+        }
+      }
+    },
+    "Say it %@ times": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Say it %@ times"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُقال %@ مرات"
+          }
+        }
+      }
+    },
+    "Search the duas": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search the duas"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ابحث في الأدعية"
+          }
+        }
+      }
+    },
     "Start over": {
       "extractionState": "manual",
       "localizations": {
@@ -1420,6 +1624,23 @@
         }
       }
     },
+    "The night": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The night"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الليل"
+          }
+        }
+      }
+    },
     "The words of the dhikr": {
       "extractionState": "manual",
       "localizations": {
@@ -1488,6 +1709,40 @@
         }
       }
     },
+    "Travel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Travel"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السفر"
+          }
+        }
+      }
+    },
+    "Undo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تراجع"
+          }
+        }
+      }
+    },
     "Undo one count": {
       "extractionState": "manual",
       "localizations": {
@@ -1518,6 +1773,108 @@
           "stringUnit": {
             "state": "translated",
             "value": "فضل هذا الذِّكر"
+          }
+        }
+      }
+    },
+    "Waking, dressing and the home": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waking, dressing and the home"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاستيقاظ واللباس والمنزل"
+          }
+        }
+      }
+    },
+    "Weather and nature": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weather and nature"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الطقس والطبيعة"
+          }
+        }
+      }
+    },
+    "What to do": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What to do"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ما يُفعل"
+          }
+        }
+      }
+    },
+    "With other people": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With other people"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مع الناس"
+          }
+        }
+      }
+    },
+    "Worry, fear and hardship": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worry, fear and hardship"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الهمّ والخوف والشدّة"
+          }
+        }
+      }
+    },
+    "Wudu, the masjid and the adhan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wudu, the masjid and the adhan"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوضوء والمسجد والأذان"
           }
         }
       }

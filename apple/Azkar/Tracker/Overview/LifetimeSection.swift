@@ -32,6 +32,9 @@ struct TrackerLifetimeSection: View {
                     Text("Every count in the reader", tableName: "Tracker")
                 }
                 TrackerTotalRow(name: LocalizedStringResource("Tasbih", table: "Tracker"), symbol: "circle.hexagongrid.fill", tint: .brown, value: totals.tasbihCount)
+                if totals.occasionCount > 0 {
+                    TrackerTotalRow(name: LocalizedStringResource("Duas for occasions", table: "Tracker"), symbol: "hands.and.sparkles.fill", tint: .teal, value: totals.occasionCount)
+                }
             case .quran:
                 TrackerTotalRow(name: LocalizedStringResource("Pages read", table: "Tracker"), symbol: "book.pages.fill", tint: .green, value: data.quran.totalPages)
                 TrackerTotalRow(name: LocalizedStringResource("Khatmahs", table: "Tracker"), symbol: "checkmark.seal.fill", tint: .teal, value: data.quran.khatmahs)

@@ -9,6 +9,10 @@ enum ReadingDestination: Hashable {
     case session(AzkarSession, day: DayKey?)
     /// The tasbih counter.
     case tasbih
+    /// The duas for every occasion, by theme.
+    case occasions
+    /// One chapter of the duas for occasions, by its number in Hisn al-Muslim.
+    case occasion(Int)
 }
 
 /// The Azkar tab's navigation, for opening a session from elsewhere in the app (the Today
@@ -43,6 +47,11 @@ final class ReadingRouter {
 
     func openTasbih() {
         path = [.tasbih]
+    }
+
+    /// Opens one chapter of the duas for occasions, over the list of them.
+    func openOccasion(_ chapter: Int) {
+        path = [.occasions, .occasion(chapter)]
     }
 
     /// Back to the session picker.

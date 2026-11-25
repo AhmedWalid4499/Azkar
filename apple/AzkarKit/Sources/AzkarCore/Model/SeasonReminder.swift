@@ -46,6 +46,8 @@ public struct SeasonReminderChoices: Hashable, Sendable {
     /// The day of Ramadan the zakat al-fitr reminder comes: in time to give it before the Eid prayer
     /// whether the month has 29 days or 30.
     public static let zakatFitrDay = 28
+    /// How long after Fajr (or Maghrib, on the night of Eid al-Fitr) the takbir reminder comes.
+    public static let takbirDelayMinutes = 15
 
     public var mondayThursday = false
     public var whiteDays = false
@@ -64,10 +66,13 @@ public struct SeasonReminderChoices: Hashable, Sendable {
     public var zakatDue: HijriMonthDay?
     public var zakat = false
     public var zakatFitr = false
+    /// The takbir: after Fajr on 1 to 13 Dhu al-Hijjah and on the morning of Eid al-Fitr, and at
+    /// Maghrib on the night of Eid al-Fitr.
+    public var takbir = false
 
     public init() {}
 
-    public var isAnyOn: Bool { mondayThursday || whiteDays || occasions || suhoor || iftar || oddNights || kahf || witr || duha || (zakat && zakatDue != nil) || zakatFitr }
+    public var isAnyOn: Bool { mondayThursday || whiteDays || occasions || suhoor || iftar || oddNights || kahf || witr || duha || (zakat && zakatDue != nil) || zakatFitr || takbir }
 }
 
 /// One such reminder on one day, at a time of that day's prayers.
@@ -86,6 +91,8 @@ public struct SeasonReminder: Hashable, Sendable {
         /// The user's zakat falls due today.
         case zakat
         case zakatFitr
+        /// The takbir days of the Eid.
+        case takbir
     }
 
     public var kind: Kind

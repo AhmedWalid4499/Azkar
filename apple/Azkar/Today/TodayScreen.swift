@@ -80,6 +80,10 @@ struct TodayScreen: View {
 
             SeasonSection(context: context, showsCalendar: $showsCalendar)
 
+            TakbirSection(context: context)
+
+            HajjSection(context: context)
+
             DuaMomentSection(context: context)
 
             TarawihSection(context: context)
