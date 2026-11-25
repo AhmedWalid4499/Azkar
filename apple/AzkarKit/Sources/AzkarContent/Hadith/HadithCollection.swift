@@ -159,50 +159,38 @@ public final class HadithCollection: Sendable {
         return results
     }
 
-    /// Text as the search compares it: vowel marks, Qur'anic annotation marks and tatweel removed;
-    /// every hamza or madda on an alif and the wasla written as a bare alif, hamza on waw or ya as the
-    /// letter alone, alif maqsura as ya and ta marbuta as ha; anything not a letter or digit a single
-    /// space; Latin letters folded to lower case.
-    public static func normalised(_ text: String) -> String {
-        var out = String.UnicodeScalarView()
-        var pendingSpace = false
-        for scalar in text.unicodeScalars {
-            let value = scalar.value
-            switch value {
-            case 0x064B...0x065F, 0x0670, 0x06D6...0x06ED, 0x0640: continue
-            default: break
-            }
-            let mapped: Unicode.Scalar
-            switch value {
-            case 0x0622, 0x0623, 0x0625, 0x0671, 0x0672, 0x0673: mapped = "\u{0627}"
-            case 0x0624: mapped = "\u{0648}"
-            case 0x0626, 0x0649, 0x06CC: mapped = "\u{064A}"
-            case 0x0629: mapped = "\u{0647}"
-            case 0x0660...0x0669: mapped = Unicode.Scalar(value - 0x0660 + 0x30)!
-            case 0x06F0...0x06F9: mapped = Unicode.Scalar(value - 0x06F0 + 0x30)!
-            default: mapped = scalar
-            }
-            guard mapped.properties.isAlphabetic || ("0"..."9").contains(mapped) else {
-                pendingSpace = true
-                continue
-            }
-            if pendingSpace, !out.isEmpty { out.append(" ") }
-            pendingSpace = false
-            for lower in mapped.properties.lowercaseMapping.unicodeScalars { out.append(lower) }
+    /// The hadith matching `query`, each with its text cut into matches for highlighting (starting
+    /// shortly before the first match when that lies deep in a long hadith) and how many times the
+    /// words occur in it.
+    public func searchHits(_ query: String, limit: Int = 2000) -> [HadithSearchHit] {
+        let terms = ArabicSearch.terms(query).filter { Int($0) == nil }
+        return search(query, limit: limit).map { found in
+            HadithSearchHit(hadith: found,
+                            segments: ArabicSearch.segments(of: found.text, matching: terms, lead: 80),
+                            occurrences: ArabicSearch.count(of: terms, in: found.text))
         }
-        return String(out)
+    }
+
+    /// Text as the search compares it (`ArabicSearch.normalised`).
+    public static func normalised(_ text: String) -> String {
+        ArabicSearch.normalised(text)
     }
 
     /// Arabic-Indic and Persian digits as 0-9; anything else unchanged.
     static func westernDigits(_ text: String) -> String {
-        String(String.UnicodeScalarView(text.unicodeScalars.map { scalar in
-            switch scalar.value {
-            case 0x0660...0x0669: Unicode.Scalar(scalar.value - 0x0660 + 0x30)!
-            case 0x06F0...0x06F9: Unicode.Scalar(scalar.value - 0x06F0 + 0x30)!
-            default: scalar
-            }
-        }))
+        ArabicSearch.westernDigits(text)
     }
+}
+
+/// A hadith found by a search.
+public struct HadithSearchHit: Hashable, Sendable, Identifiable {
+    public let hadith: Hadith
+    /// Its text cut into the words found and what lies between them.
+    public let segments: [ArabicSearch.Segment]
+    /// How many times the words typed occur in its text (0 when only its number was typed).
+    public let occurrences: Int
+
+    public var id: Int { hadith.number }
 }
 
 private extension Int64 {

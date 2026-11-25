@@ -73,9 +73,15 @@ struct SettingsAboutView: View {
                 )
                 CreditRow(
                     name: "Tanzil Project",
-                    detail: SettingsText.string("The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1.", locale: locale),
+                    detail: SettingsText.string("The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1; the search also reads the Simple Clean text, version 1.1, which is not shown.", locale: locale),
                     license: "Creative Commons Attribution 3.0",
                     url: URL(string: "https://tanzil.net")
+                )
+                CreditRow(
+                    name: SettingsText.string("Tafsir Center for Qur'anic Studies", locale: locale),
+                    detail: SettingsText.string("The tafsir: al-Mukhtasar fi Tafsir al-Qur'an al-Karim, in Arabic, unchanged, as published on QuranEnc.com (taken 25 November 2026).", locale: locale),
+                    license: SettingsText.string("Republished under QuranEnc.com's terms", locale: locale),
+                    url: URL(string: "https://quranenc.com/ar/browse/arabic_mokhtasar")
                 )
             } header: {
                 Text("Software and fonts", tableName: SettingsText.table)

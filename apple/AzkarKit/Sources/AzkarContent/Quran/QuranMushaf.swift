@@ -14,6 +14,8 @@ public struct QuranSura: Hashable, Sendable, Identifiable {
     public var name: String
     /// In Latin letters: "Al-Baqara".
     public var transliteration: String
+    /// Its meaning in English, as Tanzil gives it: "The Cow".
+    public var english: String = ""
     public var ayahCount: Int
     /// The page it begins on.
     public var page: Int
@@ -89,7 +91,7 @@ public struct QuranMushaf: Sendable {
         self.ayat = ayat
         self.pageStarts = pageStarts
         suras = try reader.suras.map {
-            QuranSura(number: $0.number, name: $0.name, transliteration: $0.transliteration, ayahCount: $0.ayahCount, page: page(of: try index($0.number, 1)))
+            QuranSura(number: $0.number, name: $0.name, transliteration: $0.transliteration, english: $0.english, ayahCount: $0.ayahCount, page: page(of: try index($0.number, 1)))
         }
         juz = try reader.juz.map { QuranJuz(number: $0.number, page: page(of: try index($0.sura, $0.ayah)), sura: $0.sura, ayah: $0.ayah) }
     }
@@ -198,6 +200,8 @@ public struct QuranPageIndex: Sendable {
 public enum QuranResources {
     static var textURL: URL { url("quran-uthmani", "txt") }
     static var metadataURL: URL { url("quran-data", "xml") }
+    static var searchTextURL: URL { url("quran-simple-clean", "txt") }
+    static var mukhtasarURL: URL { url("tafsir-mukhtasar", "json") }
 
     private static func url(_ name: String, _ type: String) -> URL {
         guard let url = Bundle.module.url(forResource: name, withExtension: type) else {
@@ -213,6 +217,7 @@ private final class QuranMetadataReader: NSObject, XMLParserDelegate {
         var number: Int
         var name: String
         var transliteration: String
+        var english: String
         var ayahCount: Int
     }
 
@@ -231,7 +236,7 @@ private final class QuranMetadataReader: NSObject, XMLParserDelegate {
         case "sura":
             guard let number = attributes["index"].flatMap(Int.init), let ayahCount = attributes["ayas"].flatMap(Int.init),
                   let name = attributes["name"], let transliteration = attributes["tname"] else { return }
-            suras.append(Sura(number: number, name: name, transliteration: transliteration, ayahCount: ayahCount))
+            suras.append(Sura(number: number, name: name, transliteration: transliteration, english: attributes["ename"] ?? "", ayahCount: ayahCount))
         case "juz":
             if let start = start(attributes) { juz.append(start) }
         case "page":

@@ -37,3 +37,10 @@ struct QuranReaderRequest: Identifiable, Hashable {
     let id = UUID()
     let page: Int
 }
+
+/// A page to open the tafsir at, and the ayah on it to bring into view.
+struct QuranTafsirRequest: Identifiable, Hashable {
+    let id = UUID()
+    let page: Int
+    var focus: AyahRef?
+}

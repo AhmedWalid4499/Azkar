@@ -7,7 +7,7 @@ struct HadithLibraryView: View {
     @Environment(AppEnvironment.self) private var app
     @State private var library = HadithLibrary.shared
     @State private var query = ""
-    @State private var results: [Hadith]?
+    @State private var results: [HadithSearchHit]?
 
     var body: some View {
         Group {
@@ -44,7 +44,7 @@ struct HadithLibraryView: View {
             try? await Task.sleep(for: .milliseconds(180))
             guard !Task.isCancelled else { return }
             let collection = await library.load()
-            let found = await Task.detached(priority: .userInitiated) { collection.search(typed) }.value
+            let found = await Task.detached(priority: .userInitiated) { collection.searchHits(typed) }.value
             if !Task.isCancelled { results = found }
         }
     }
@@ -73,15 +73,21 @@ struct HadithLibraryView: View {
     }
 
     @ViewBuilder
-    private func searchResults(_ results: [Hadith]) -> some View {
+    private func searchResults(_ results: [HadithSearchHit]) -> some View {
         if results.isEmpty {
             ContentUnavailableView.search(text: query)
                 .listRowBackground(Color.clear)
         } else {
+            let occurrences = results.map(\.occurrences).reduce(0, +)
             Section {
-                ForEach(results) { HadithRow(hadith: $0) }
+                ForEach(results) { HadithRow(hadith: $0.hadith, segments: $0.segments, occurrences: $0.occurrences) }
             } header: {
-                Text(H("\(results.count) found"))
+                if occurrences > 0 {
+                    Text(H("Found \(occurrences) times in \(results.count) hadith"))
+                        .monospacedDigit()
+                } else {
+                    Text(H("\(results.count) found"))
+                }
             }
         }
     }
@@ -120,6 +126,10 @@ private struct HadithBookRow: View {
 /// A hadith in a list: its number and the start of its text; opens it in full.
 struct HadithRow: View {
     let hadith: Hadith
+    /// From a search: the text cut into the words found and what lies between them.
+    var segments: [ArabicSearch.Segment]?
+    /// From a search: how many times the words occur in it.
+    var occurrences = 0
     @Environment(AppEnvironment.self) private var app
     @Environment(\.locale) private var locale
 
@@ -136,10 +146,23 @@ struct HadithRow: View {
                             .foregroundStyle(.yellow)
                             .accessibilityLabel(Text(H("Favourite")))
                     }
+                    if occurrences > 1 {
+                        Spacer(minLength: 4)
+                        Text(H("\(occurrences) times"))
+                            .font(.caption)
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                    }
                 }
-                Text(verbatim: hadith.text)
+                Group {
+                    if let segments {
+                        Text(AttributedString(searchSegments: segments))
+                    } else {
+                        Text(verbatim: hadith.text)
+                    }
+                }
                     .font(.custom(RecitationFont.regular, size: 18, relativeTo: .body))
-                    .lineLimit(3)
+                    .lineLimit(segments == nil ? 3 : 4)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .environment(\.layoutDirection, .rightToLeft)
             }

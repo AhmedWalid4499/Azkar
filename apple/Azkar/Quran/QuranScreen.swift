@@ -11,6 +11,15 @@ struct QuranScreen: View {
     @State private var request: QuranReaderRequest?
     @State private var showsPaper = false
     @State private var systemRouter = SystemRouter.shared
+    @State private var tafsir: QuranTafsirRequest?
+    @State private var query = ""
+    @State private var searchMode = QuranSearchMode.anywhere
+    @State private var results: QuranSearchResults?
+
+    private struct SearchKey: Equatable {
+        var query: String
+        var mode: QuranSearchMode
+    }
 
     private enum QuranList: Hashable { case suras, juz, bookmarks, hifz }
 
@@ -19,11 +28,37 @@ struct QuranScreen: View {
         let format = ReadingLocale(locale: baseLocale, app: settings.app, timeZone: settings.timeZone)
         NavigationStack {
             Group {
-                if let mushaf {
+                if let mushaf, let results {
+                    QuranSearchResultsView(mushaf: mushaf, query: query, results: results) { page in
+                        request = QuranReaderRequest(page: page)
+                    } tafsir: { hit in
+                        tafsir = QuranTafsirRequest(page: hit.page, focus: hit.ref)
+                    }
+                } else if let mushaf {
                     content(mushaf)
                 } else {
                     Color.clear
                 }
+            }
+            .searchable(text: $query, prompt: Text(QL("A word, a surah or 2:255")))
+            .searchScopes($searchMode, activation: .onSearchPresentation) {
+                Text(QL("Part of a word")).tag(QuranSearchMode.anywhere)
+                Text(QL("Whole word")).tag(QuranSearchMode.wholeWord)
+            }
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.never)
+            // A short pause after typing, then the search runs away from the main actor.
+            .task(id: SearchKey(query: query, mode: searchMode)) {
+                let typed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !typed.isEmpty else {
+                    results = nil
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(200))
+                guard !Task.isCancelled else { return }
+                let mode = searchMode
+                let found = await Task.detached(priority: .userInitiated) { QuranSearch.bundled.search(typed, mode: mode) }.value
+                if !Task.isCancelled { results = found }
             }
             .navigationTitle(Text(QL("Quran")))
             .toolbar {
@@ -41,6 +76,15 @@ struct QuranScreen: View {
         .fullScreenCover(item: $request) { request in
             if let mushaf {
                 QuranReaderView(mushaf: mushaf, startPage: request.page)
+                    .appDirection()
+                    .environment(\.locale, format.formatting)
+                    .environment(\.readingLocale, format)
+            }
+        }
+        .sheet(item: $tafsir) { request in
+            if let mushaf {
+                QuranTafsirSheet(mushaf: mushaf, page: request.page, focus: request.focus)
+                    .presentationDetents([.medium, .large])
                     .appDirection()
                     .environment(\.locale, format.formatting)
                     .environment(\.readingLocale, format)
@@ -73,6 +117,12 @@ struct QuranScreen: View {
             if UserDefaults.standard.string(forKey: "AzkarQuranList") == "hifz" { list = .hifz }
             let page = UserDefaults.standard.integer(forKey: "AzkarQuranPage")
             if page > 0 { request = QuranReaderRequest(page: page) }
+            // `-AzkarQuranSearch الصلاة`: that search typed; `-AzkarQuranTafsir 2:255`: its tafsir open.
+            if let typed = UserDefaults.standard.string(forKey: "AzkarQuranSearch") { query = typed }
+            if let typed = UserDefaults.standard.string(forKey: "AzkarQuranTafsir"),
+               let hit = await Task.detached(operation: { QuranSearch.bundled.search(typed) }).value.reference {
+                tafsir = QuranTafsirRequest(page: hit.page, focus: hit.ref)
+            }
             #endif
         }
     }
@@ -228,7 +278,7 @@ private struct QuranProgressCard: View {
     }
 }
 
-private struct QuranSuraRow: View {
+struct QuranSuraRow: View {
     @Environment(\.readingLocale) private var format
     let sura: QuranSura
     let action: () -> Void

@@ -2,8 +2,10 @@
 //
 //   node scripts/quran/fetch.mjs
 //
-// Both files are kept exactly as published, notice included: Tanzil's terms allow verbatim copies
-// only. QuranResourceTests pins their hashes, so a change here must be investigated, not accepted.
+// Every file is kept exactly as published, notice included: Tanzil's terms allow verbatim copies
+// only. The Simple Clean text (no vowel marks, everyday spelling) is never shown: the search reads
+// it, so that a word typed as usual finds its Uthmani spelling. QuranMushafTests and
+// QuranSearchTests pin their hashes, so a change here must be investigated, not accepted.
 
 import { writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -13,6 +15,7 @@ const RESOURCES = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'app
 
 const FILES = [
   ['quran-uthmani.txt', 'https://tanzil.net/pub/download/index.php?quranType=uthmani&marks=true&sajdah=true&rub=true&outType=txt-2&agree=true'],
+  ['quran-simple-clean.txt', 'https://tanzil.net/pub/download/index.php?quranType=simple-clean&outType=txt-2&agree=true'],
   ['quran-data.xml', 'https://tanzil.net/res/text/metadata/quran-data.xml'],
 ]
 

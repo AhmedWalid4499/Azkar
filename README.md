@@ -98,6 +98,19 @@ The app and its tests need none of those downloads. The unit tests require every
 
 Some of the virtues shown rest on narrations whose grading scholars differ on; each dhikr's reference names who graded its chain.
 
+### Qur'an search and tafsir (iPhone app only)
+
+The Quran tab searches by word or phrase, by surah name or number, and by reference ("2:255"). Words are matched against Tanzil's Simple Clean text (version 1.1, everyday spelling, no marks), so a word typed as usual finds its Uthmani spelling; the results show the Uthmani text with the words found highlighted. The Simple Clean file is bundled verbatim with Tanzil's notice and is never shown. The hadith library's search highlights its matches in the same way.
+
+The tafsir is *al-Mukhtasar fi Tafsir al-Qur'an al-Karim* (Arabic), by the Tafsir Center for Qur'anic Studies, as published on [QuranEnc.com](https://quranenc.com/ar/browse/arabic_mokhtasar), whose terms allow republishing it unchanged with credit to the publisher and QuranEnc.com. Each ayah's text is copied exactly; only the container changes, from SQLite to JSON. QuranEnc publishes no version number for its Arabic tafsirs, so the download date stands for it.
+
+```sh
+node scripts/quran/fetch.mjs         # the Uthmani and Simple Clean texts and the page table, from tanzil.net
+node scripts/quran/fetch-tafsir.mjs  # al-Mukhtasar from QuranEnc.com (Node 22.5+ for node:sqlite)
+```
+
+Tests pin the hash of every one of these files.
+
 If you find a mistake in a text, a count, a reference or a translation, please open an issue.
 
 ## Privacy

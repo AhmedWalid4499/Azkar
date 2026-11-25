@@ -2939,6 +2939,23 @@
         }
       }
     },
+    "Republished under QuranEnc.com's terms": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُعاد نشره وفق شروط QuranEnc.com"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Republished under QuranEnc.com's terms"
+          }
+        }
+      }
+    },
     "Reset all to zero": {
       "extractionState": "manual",
       "localizations": {
@@ -3365,6 +3382,23 @@
         }
       }
     },
+    "Tafsir Center for Qur'anic Studies": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مركز تفسير للدراسات القرآنية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tafsir Center for Qur'anic Studies"
+          }
+        }
+      }
+    },
     "Takbir of the Eid": {
       "extractionState": "manual",
       "localizations": {
@@ -3467,19 +3501,19 @@
         }
       }
     },
-    "The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1.": {
+    "The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1; the search also reads the Simple Clean text, version 1.1, which is not shown.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "نص القرآن وتقسيم صفحاته دون تغيير. النص العثماني، الإصدار ١٫١."
+            "value": "نص القرآن وتقسيم صفحاته دون تغيير. النص العثماني، الإصدار ١٫١؛ ويقرأ البحث أيضًا النص المبسّط (Simple Clean)، الإصدار ١٫١، ولا يُعرض."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1."
+            "value": "The Qur'an text and its page divisions, unchanged. Uthmani text, version 1.1; the search also reads the Simple Clean text, version 1.1, which is not shown."
           }
         }
       }
@@ -3667,6 +3701,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The source details are given as their authors wrote them."
+          }
+        }
+      }
+    },
+    "The tafsir: al-Mukhtasar fi Tafsir al-Qur'an al-Karim, in Arabic, unchanged, as published on QuranEnc.com (taken 25 November 2026).": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التفسير: «المختصر في تفسير القرآن الكريم» بالعربية، دون تغيير، كما نُشر في موسوعة القرآن الكريم QuranEnc.com (أُخذ في ٢٥ نوفمبر ٢٠٢٦)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The tafsir: al-Mukhtasar fi Tafsir al-Qur'an al-Karim, in Arabic, unchanged, as published on QuranEnc.com (taken 25 November 2026)."
           }
         }
       }

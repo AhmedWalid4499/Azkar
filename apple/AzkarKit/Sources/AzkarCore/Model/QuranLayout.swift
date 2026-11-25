@@ -72,7 +72,7 @@ public enum QuranLayout {
     }
 
     public static func contains(_ ref: AyahRef) -> Bool {
-        (1...ayahCount(of: ref.sura)).contains(ref.ayah)
+        ref.ayah >= 1 && ref.ayah <= ayahCount(of: ref.sura)
     }
 
     /// The ayah's index in the whole Qur'an, 0 for 1:1. The ref must exist.

@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ %@:%@ · page %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@:%3$@ · صفحة %4$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@:%@ · page %lld"
+          }
+        }
+      }
+    },
     "%lld ayat": {
       "extractionState": "manual",
       "localizations": {
@@ -558,6 +575,23 @@
         }
       }
     },
+    "%lld times": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المرات: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld times"
+          }
+        }
+      }
+    },
     "A few slips": {
       "extractionState": "manual",
       "localizations": {
@@ -571,6 +605,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "A few slips"
+          }
+        }
+      }
+    },
+    "A word, a surah or 2:255": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كلمة أو سورة أو ٢:٢٥٥"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A word, a surah or 2:255"
           }
         }
       }
@@ -656,6 +707,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "At this pace you finish on %@."
+          }
+        }
+      }
+    },
+    "Ayah %lld of surah %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الآية %1$lld من سورة %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayah %lld of surah %@"
           }
         }
       }
@@ -945,6 +1013,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish by"
+          }
+        }
+      }
+    },
+    "Found %lld times in %lld ayat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المرات: %1$lld · الآيات: %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Found %lld times in %lld ayat"
+          }
+        }
+      }
+    },
+    "From al-Mukhtasar fi Tafsir al-Qur'an al-Karim, by the Tafsir Center for Qur'anic Studies, as published on QuranEnc.com (taken %@). Shown unchanged.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من «المختصر في تفسير القرآن الكريم» لمركز تفسير للدراسات القرآنية، كما نُشر في موسوعة القرآن الكريم QuranEnc.com (أُخذ في %@)، دون تغيير."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From al-Mukhtasar fi Tafsir al-Qur'an al-Karim, by the Tafsir Center for Qur'anic Studies, as published on QuranEnc.com (taken %@). Shown unchanged."
           }
         }
       }
@@ -1476,6 +1578,23 @@
         }
       }
     },
+    "Next page": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصفحة التالية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next page"
+          }
+        }
+      }
+    },
     "Next review %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1782,6 +1901,23 @@
         }
       }
     },
+    "Part of a word": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جزء من كلمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Part of a word"
+          }
+        }
+      }
+    },
     "Plan complete. Masha’Allah!": {
       "extractionState": "manual",
       "localizations": {
@@ -1812,6 +1948,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plan options"
+          }
+        }
+      }
+    },
+    "Previous page": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصفحة السابقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous page"
           }
         }
       }
@@ -2102,6 +2255,40 @@
         }
       }
     },
+    "Tafsir": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التفسير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tafsir"
+          }
+        }
+      }
+    },
+    "Tafsir of this page": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تفسير هذه الصفحة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tafsir of this page"
+          }
+        }
+      }
+    },
     "That counts %lld pages as read. Save?": {
       "extractionState": "manual",
       "localizations": {
@@ -2333,6 +2520,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "What"
+          }
+        }
+      }
+    },
+    "Whole word": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كلمة كاملة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whole word"
           }
         }
       }

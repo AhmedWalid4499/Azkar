@@ -18,6 +18,23 @@
         }
       }
     },
+    "%lld times": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المرات: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld times"
+          }
+        }
+      }
+    },
     "Add to favourites": {
       "extractionState": "manual",
       "localizations": {
@@ -133,6 +150,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favourites"
+          }
+        }
+      }
+    },
+    "Found %lld times in %lld hadith": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المرات: %1$lld · الأحاديث: %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Found %lld times in %lld hadith"
           }
         }
       }

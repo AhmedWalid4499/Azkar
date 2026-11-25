@@ -18,6 +18,7 @@ struct QuranReaderView: View {
     @State private var saved: QuranSavedNote?
     @State private var finished: Int?
     @State private var memorising: HifzLogRequest?
+    @State private var tafsir: QuranTafsirRequest?
     @Environment(\.readingLocale) private var format
 
     init(mushaf: QuranMushaf, startPage: Int) {
@@ -70,6 +71,13 @@ struct QuranReaderView: View {
                 .environment(\.locale, format.formatting)
                 .environment(\.readingLocale, format)
         }
+        .sheet(item: $tafsir) { request in
+            QuranTafsirSheet(mushaf: mushaf, page: request.page, focus: request.focus)
+                .presentationDetents([.medium, .large])
+                .appDirection()
+                .environment(\.locale, format.formatting)
+                .environment(\.readingLocale, format)
+        }
         .alert(Text(QL("Khatmah complete")), isPresented: Binding(get: { finished != nil }, set: { if !$0 { finished = nil } })) {
             Button {} label: { Text(QL("Done")) }
         } message: {
@@ -101,6 +109,14 @@ struct QuranReaderView: View {
                 dismiss()
             } label: {
                 Label { Text(QL("Close")) } icon: { Image(systemName: "xmark") }
+                    .labelStyle(.iconOnly)
+            }
+            .buttonBorderShape(.circle)
+            .glassButtonStyle()
+            Button {
+                tafsir = QuranTafsirRequest(page: shown)
+            } label: {
+                Label { Text(QL("Tafsir of this page")) } icon: { Image(systemName: "text.book.closed") }
                     .labelStyle(.iconOnly)
             }
             .buttonBorderShape(.circle)
