@@ -7,7 +7,8 @@ struct SettingsICloudSection: View {
 
     var body: some View {
         Section {
-            Toggle(isOn: $backup.iCloudOn) {
+            // Off, and not to be turned on, while there is no iCloud to save to.
+            Toggle(isOn: Binding(get: { backup.iCloudAvailable && backup.iCloudOn }, set: { backup.iCloudOn = $0 })) {
                 Label { Text("Save to iCloud", tableName: SettingsText.table) } icon: { Image(systemName: "icloud") }
             }
             .disabled(!backup.iCloudAvailable)
