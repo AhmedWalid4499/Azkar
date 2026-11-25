@@ -81,6 +81,8 @@ struct SettingsCalculationView: View {
             } footer: {
                 Text("Calculation methods differ from region to region, and each mosque follows one of them. Choose the settings your local mosque uses so these times match its timetable.", tableName: SettingsText.table)
             }
+
+            PrayerExportSection()
         }
         .navigationTitle(Text("Prayer times", tableName: SettingsText.table))
         .navigationBarTitleDisplayMode(.inline)
