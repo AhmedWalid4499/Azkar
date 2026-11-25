@@ -3,12 +3,23 @@ import SwiftUI
 
 /// Shown once, the first time the app opens: the user's name, which the greeting and the reminders
 /// use, then permission for the reminders and the adhan alarm, asked for as soon as that page appears.
+/// When there are no records yet and iCloud holds a backup, it offers to restore the latest.
 struct WelcomeView: View {
     @Environment(AppEnvironment.self) private var app
+    @Environment(\.locale) private var locale
     let onDone: () -> Void
     @State private var page = WelcomeView.firstPage
     @State private var name = ""
     @FocusState private var editing: Bool
+    @State private var iCloudBackup: ICloudOffer?
+    @State private var restoring = false
+    @State private var restoreFailed = false
+
+    /// The latest backup in iCloud, read and ready to restore.
+    private struct ICloudOffer {
+        let name: String
+        let contents: Backup.Contents
+    }
 
     private enum Page {
         case name, permissions
@@ -58,6 +69,10 @@ struct WelcomeView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+            if let iCloudBackup {
+                iCloudCard(iCloudBackup)
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+            }
             Spacer(minLength: 24)
             Button(action: next) {
                 Text("Continue", tableName: "App").frame(maxWidth: .infinity)
@@ -71,6 +86,76 @@ struct WelcomeView: View {
             .opacity(name.trimmingCharacters(in: .whitespaces).isEmpty ? 1 : 0)
         }
         .onAppear { editing = true }
+        .task { await findICloudBackup() }
+        .alert(Text("Your records couldn’t be restored", tableName: "App"), isPresented: $restoreFailed) {} message: {
+            Text("Nothing was changed. You can try again in Settings › iCloud.", tableName: "App")
+        }
+    }
+
+    private func iCloudCard(_ offer: ICloudOffer) -> some View {
+        VStack(spacing: 10) {
+            Label { Text("Your records are in iCloud", tableName: "App") } icon: { Image(systemName: "icloud.fill") }
+                .font(.headline)
+            Text(verbatim: offerSummary(offer))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            Button {
+                Task { await restore(offer) }
+            } label: {
+                if restoring {
+                    ProgressView().frame(maxWidth: .infinity)
+                } else {
+                    Text("Restore my records", tableName: "App").frame(maxWidth: .infinity)
+                }
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            .disabled(restoring)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity)
+        .background(Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 16))
+    }
+
+    /// "Saved 16 November 2026, 9:41 PM. 152 prayers, 40 azkar sessions and 3 fasts."
+    private func offerSummary(_ offer: ICloudOffer) -> String {
+        let preview = ImportReport(source: ImportReport.backup, at: .now, snapshot: offer.contents.snapshot, settings: [])
+        let counts = SettingsImportSummary.counts(preview, locale: locale)
+        guard let saved = offer.contents.exportedAt else { return counts }
+        let date = saved.formatted(Date.FormatStyle(date: .long, time: .shortened).locale(locale))
+        return String(localized: LocalizedStringResource("Saved \(date).", table: "App", locale: locale)) + " " + counts
+    }
+
+    /// Only for a first launch with nothing recorded yet. iCloud can take a few seconds to list
+    /// what another install saved, so it looks a few times.
+    private func findICloudBackup() async {
+        guard ICloudBackups.isAvailable else { return }
+        for _ in 0..<5 {
+            guard (try? await app.store.snapshot().isEmpty) == true else { return }
+            if let latest = await ICloudBackups.list().first {
+                guard let contents = try? await ICloudBackups.read(latest, catalog: app.store.catalog) else { return }
+                withAnimation(.smooth) { iCloudBackup = ICloudOffer(name: latest, contents: contents) }
+                return
+            }
+            do { try await Task.sleep(for: .seconds(2)) } catch { return }
+        }
+    }
+
+    /// Restores everything, settings and name included, then moves on to the permissions. Should
+    /// something have been recorded meanwhile, the backup is added to it instead, so nothing goes.
+    private func restore(_ offer: ICloudOffer) async {
+        restoring = true
+        defer { restoring = false }
+        let empty = (try? await app.store.snapshot().isEmpty) == true
+        do {
+            _ = try await SettingsBackupImport.restore(offer.contents, mode: empty ? .replace : .merge, app: app)
+            AutoBackup.shared.restored(fromICloud: offer.name)
+            editing = false
+            withAnimation(.smooth) { page = .permissions }
+        } catch {
+            restoreFailed = true
+        }
     }
 
     /// DEBUG builds open the permissions page with `-AzkarWelcome permissions`, for screenshots.

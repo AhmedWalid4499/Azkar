@@ -34,6 +34,18 @@
 	<string>Azkar can sound an adhan alarm at prayer times you choose, even in silent mode.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Azkar adds prayer times to a calendar of their own when you ask, and removes them when you ask. It doesn’t read your other events.</string>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.io.github.ahmedwalid4499.azkar</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>Azkar</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>Any</string>
+		</dict>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Amiri-Regular.ttf</string>

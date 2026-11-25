@@ -1136,6 +1136,40 @@
         }
       }
     },
+    "Azkar saves a copy of everything to your iCloud Drive whenever it changes: one file a day, the latest 30, in iCloud Drive › Azkar › Backups. Only you can see it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحفظ أذكار نسخة من كل شيء في iCloud Drive الخاص بك كلما تغيّر: ملف لكل يوم، وآخر ٣٠ ملفًا، في iCloud Drive › Azkar › Backups. لا يراها أحد غيرك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azkar saves a copy of everything to your iCloud Drive whenever it changes: one file a day, the latest 30, in iCloud Drive › Azkar › Backups. Only you can see it."
+          }
+        }
+      }
+    },
+    "Azkar saves one when your records change and you leave the app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحفظ أذكار نسخة عندما تتغيّر سجلاتك وتغادر التطبيق."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azkar saves one when your records change and you leave the app."
+          }
+        }
+      }
+    },
     "Azkar sessions": {
       "extractionState": "manual",
       "localizations": {
@@ -1507,6 +1541,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Duha"
+          }
+        }
+      }
+    },
+    "Each is a full copy of your records and settings on that day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل ملف نسخة كاملة من سجلاتك وإعداداتك في ذلك اليوم."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each is a full copy of your records and settings on that day."
           }
         }
       }
@@ -2412,6 +2463,23 @@
         }
       }
     },
+    "No backups in iCloud yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد نسخ في iCloud بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No backups in iCloud yet"
+          }
+        }
+      }
+    },
     "No change": {
       "extractionState": "manual",
       "localizations": {
@@ -2990,6 +3058,23 @@
         }
       }
     },
+    "Restore from iCloud": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاستعادة من iCloud"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore from iCloud"
+          }
+        }
+      }
+    },
     "Restore this backup?": {
       "extractionState": "manual",
       "localizations": {
@@ -3037,6 +3122,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Same as iPhone"
+          }
+        }
+      }
+    },
+    "Save to iCloud": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحفظ في iCloud"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save to iCloud"
+          }
+        }
+      }
+    },
+    "Saved to iCloud": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آخر حفظ في iCloud"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to iCloud"
           }
         }
       }
@@ -3569,6 +3688,23 @@
         }
       }
     },
+    "The backup couldn’t be downloaded from iCloud. Check your connection and try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تنزيل النسخة من iCloud. تحقّق من اتصالك وحاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The backup couldn’t be downloaded from iCloud. Check your connection and try again."
+          }
+        }
+      }
+    },
     "The backup couldn’t be saved, so nothing was changed. This iPhone’s storage may be full.": {
       "extractionState": "manual",
       "localizations": {
@@ -3650,6 +3786,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The last backup couldn’t be saved. If this keeps happening, choose the folder again."
+          }
+        }
+      }
+    },
+    "The last iCloud backup couldn’t be saved. Azkar will try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر حفظ آخر نسخة في iCloud. سيحاول أذكار مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last iCloud backup couldn’t be saved. Azkar will try again."
           }
         }
       }
@@ -3803,6 +3956,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "To be reminded of your yearly zakat, set its date in Tracker › Charity and zakat."
+          }
+        }
+      }
+    },
+    "To keep your records in iCloud, sign in to iCloud and turn on iCloud Drive in the Settings app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لحفظ سجلاتك في iCloud، سجّل الدخول إلى iCloud وفعّل iCloud Drive من تطبيق الإعدادات."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To keep your records in iCloud, sign in to iCloud and turn on iCloud Drive in the Settings app."
           }
         }
       }
@@ -4062,19 +4232,19 @@
         }
       }
     },
-    "Your prayer log, progress and settings are kept only on this iPhone, inside the app; removing the app removes them. Export a backup before you do, or before changing phones. A backup also opens in the Azkar website.": {
+    "Your prayer log, progress and settings are kept on this iPhone, inside the app. With “Save to iCloud” on, a copy is also kept in your iCloud, so removing the app or changing phones loses nothing. You can also export a backup, which opens in the Azkar website too.": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "سجل صلواتك وتقدّمك وإعداداتك محفوظة داخل التطبيق على هذا الهاتف فقط، وتُحذف بحذفه. صدِّر نسخة احتياطية قبل ذلك، أو قبل تغيير هاتفك. ويمكن فتح النسخة الاحتياطية في موقع أذكار على الويب أيضًا."
+            "value": "سجل صلواتك وتقدّمك وإعداداتك محفوظة داخل التطبيق على هذا الهاتف. وما دام «الحفظ في iCloud» مفعّلًا تُحفظ نسخة منها في iCloud الخاص بك أيضًا، فلا يضيع شيء بحذف التطبيق أو تغيير الهاتف. ويمكنك كذلك تصدير نسخة احتياطية، وهي تُفتح في موقع أذكار على الويب أيضًا."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your prayer log, progress and settings are kept only on this iPhone, inside the app; removing the app removes them. Export a backup before you do, or before changing phones. A backup also opens in the Azkar website."
+            "value": "Your prayer log, progress and settings are kept on this iPhone, inside the app. With “Save to iCloud” on, a copy is also kept in your iCloud, so removing the app or changing phones loses nothing. You can also export a backup, which opens in the Azkar website too."
           }
         }
       }
@@ -4143,6 +4313,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "e.g. Ahmed"
+          }
+        }
+      }
+    },
+    "iCloud": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud"
           }
         }
       }
