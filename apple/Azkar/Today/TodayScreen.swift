@@ -86,6 +86,8 @@ struct TodayScreen: View {
 
             DuaMomentSection(context: context)
 
+            HadithOfTheDaySection(context: context)
+
             TarawihSection(context: context)
 
             FastingSection(context: context, clock: clock)

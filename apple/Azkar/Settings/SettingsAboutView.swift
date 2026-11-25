@@ -37,6 +37,23 @@ struct SettingsAboutView: View {
 
             Section {
                 CreditRow(
+                    name: SettingsText.string("Imam an-Nawawi", locale: locale),
+                    detail: SettingsText.string("Riyad as-Salihin, compiled by Imam Yahya ibn Sharaf an-Nawawi: the hadith of the day and the hadith library. Only the Arabic text is used, shown as given; the numbering is that of sunnah.com.", locale: locale),
+                    license: SettingsText.string("Classical text", locale: locale),
+                    url: URL(string: "https://sunnah.com/riyadussalihin")
+                )
+                CreditRow(
+                    name: "CheeseWithSauce/HadithsJSONFormat",
+                    detail: SettingsText.string("The digital Arabic text of Riyad as-Salihin, prepared from sunnah.com. Its English translation is not included.", locale: locale),
+                    license: "MIT License",
+                    url: URL(string: "https://github.com/CheeseWithSauce/HadithsJSONFormat")
+                )
+            } header: {
+                Text("Hadith", tableName: SettingsText.table)
+            }
+
+            Section {
+                CreditRow(
                     name: "Adhan",
                     detail: SettingsText.string("Prayer time astronomy, by Batoul Apps.", locale: locale),
                     license: "MIT License",

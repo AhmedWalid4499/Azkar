@@ -10,6 +10,7 @@ import SwiftUI
 ///     -TodayName "Ahmed"            the name the greeting uses
 ///     -TodayLanguage en|ar          the in-app language
 ///     -TodayNow 2026-03-01T03:30:00+02:00   show the screen at another moment (the clock keeps running)
+///     -TodayShow hadith             opens the hadith of the day (which notes it as read)
 ///     -TodayScroll azkar|sunnah     scroll there at launch
 ///     -TodayShow location|calendar          open the location sheet or the calendar at launch
 ///     -TodayFlip morning,evening            azkar cards turned over at launch

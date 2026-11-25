@@ -6,7 +6,7 @@ import Foundation
 /// screen in a simulator without tapping through it.
 ///
 /// - `-AzkarTrackerOpen day:<days back>|missed|trends|qada|giving|give|duas|dua|owed`
-/// - `-AzkarTrackerScroll recent|calendar|trends|fasting|lifetime|export`
+/// - `-AzkarTrackerScroll recent|calendar|trends|fasting|lifetime|export` (on a day: azkar|hadith|season|fast)
 enum TrackerShowcase {
     private static func value(of name: String) -> String? {
         let arguments = ProcessInfo.processInfo.arguments

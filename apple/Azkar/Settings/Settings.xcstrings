@@ -1290,6 +1290,23 @@
         }
       }
     },
+    "Classical text": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نص تراثي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classical text"
+          }
+        }
+      }
+    },
     "Clear location": {
       "extractionState": "manual",
       "localizations": {
@@ -1783,6 +1800,23 @@
         }
       }
     },
+    "Hadith": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحديث"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hadith"
+          }
+        }
+      }
+    },
     "Hanafi": {
       "extractionState": "manual",
       "localizations": {
@@ -1932,6 +1966,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iftar"
+          }
+        }
+      }
+    },
+    "Imam an-Nawawi": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإمام النووي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imam an-Nawawi"
           }
         }
       }
@@ -2888,6 +2939,23 @@
         }
       }
     },
+    "Riyad as-Salihin, compiled by Imam Yahya ibn Sharaf an-Nawawi: the hadith of the day and the hadith library. Only the Arabic text is used, shown as given; the numbering is that of sunnah.com.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رياض الصالحين، جمع الإمام يحيى بن شرف النووي: حديث اليوم ومكتبة الحديث. يُستعمل النص العربي وحده كما ورد، والترقيم ترقيم موقع sunnah.com."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riyad as-Salihin, compiled by Imam Yahya ibn Sharaf an-Nawawi: the hadith of the day and the hadith library. Only the Arabic text is used, shown as given; the numbering is that of sunnah.com."
+          }
+        }
+      }
+    },
     "Same as iPhone": {
       "extractionState": "manual",
       "localizations": {
@@ -3446,6 +3514,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The card is in Wallet"
+          }
+        }
+      }
+    },
+    "The digital Arabic text of Riyad as-Salihin, prepared from sunnah.com. Its English translation is not included.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النص العربي الرقمي لرياض الصالحين، مأخوذ من موقع sunnah.com، دون ترجمته الإنجليزية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The digital Arabic text of Riyad as-Salihin, prepared from sunnah.com. Its English translation is not included."
           }
         }
       }

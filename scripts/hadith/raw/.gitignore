@@ -1,0 +1,5 @@
+# The Riyad as-Salihin files are inputs of build.mjs, pinned by sha256 in sources.mjs and
+# downloaded by `node scripts/hadith/fetch.mjs`, but not redistributed from this repository: beside
+# the Arabic they carry an English translation that is under copyright and not used here.
+# The licence file beside them stays committed.
+cheesewithsauce-hadiths-json/riyadussalihin/

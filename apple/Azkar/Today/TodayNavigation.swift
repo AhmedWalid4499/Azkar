@@ -35,4 +35,11 @@ final class TodayNavigation {
     func open(_ session: AzkarSession, on day: DayKey) {
         sessionRequest = SessionRequest(session: session, day: day)
     }
+
+    /// The hadith the user asked to see in the library, until it is handled.
+    var hadithRequest: Int?
+
+    func openInLibrary(hadith number: Int) {
+        hadithRequest = number
+    }
 }

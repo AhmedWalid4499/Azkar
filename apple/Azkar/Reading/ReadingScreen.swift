@@ -59,6 +59,12 @@ private struct ReadingStack: View {
                         if let chapter = OccasionsBook.bundled.chapter(number) {
                             OccasionChapterView(chapter: chapter)
                         }
+                    case .hadithLibrary:
+                        HadithLibraryView()
+                    case let .hadithBook(number):
+                        HadithBookView(number: number)
+                    case let .hadith(number):
+                        HadithNumberView(number: number)
                     }
                 }
         }

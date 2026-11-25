@@ -13,6 +13,12 @@ enum ReadingDestination: Hashable {
     case occasions
     /// One chapter of the duas for occasions, by its number in Hisn al-Muslim.
     case occasion(Int)
+    /// Riyad as-Salihin: its books, favourites and search.
+    case hadithLibrary
+    /// One of its books, by number (0 for the Introduction).
+    case hadithBook(Int)
+    /// One hadith, by its number.
+    case hadith(Int)
 }
 
 /// The Azkar tab's navigation, for opening a session from elsewhere in the app (the Today
@@ -52,6 +58,11 @@ final class ReadingRouter {
     /// Opens one chapter of the duas for occasions, over the list of them.
     func openOccasion(_ chapter: Int) {
         path = [.occasions, .occasion(chapter)]
+    }
+
+    /// Opens hadith `number` in the Riyad as-Salihin library, with the library behind it.
+    func openHadith(_ number: Int) {
+        path = [.hadithLibrary, .hadith(number)]
     }
 
     /// Back to the session picker.

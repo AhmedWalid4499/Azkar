@@ -10,7 +10,10 @@ import Foundation
 /// - `-ReadingMarksSample YES` (with the demo dataset): adds a first morning item that wraps
 ///   Ayat al-Kursi in the signs ۞ (U+06DE) and ۩ (U+06E9), to check how Amiri draws them.
 /// - `-ReadingSeed YES`: counts some sample progress through `RecordsModel` (once per day).
-/// - `-ReadingOpen morning|evening|sleep|afterPrayer:fajr|tasbih`: opens that screen.
+/// - `-ReadingOpen morning|evening|sleep|afterPrayer:fajr|tasbih|hadith|hadith:<n>`: opens that
+///   screen (`hadith` the Riyad as-Salihin library, `hadith:<n>` that hadith in it).
+/// - `-HadithSearch <text>`: types that into the library's search.
+/// - `-HadithFavourite YES`: presses the star of the hadith opened, once per launch.
 /// - `-ReadingPage <n>`: the reader starts at dhikr n (0-based) instead of resuming.
 /// - `-ReadingArabicScale <1…5>`, `-ReadingAutoAdvance YES|NO`: change those reader settings.
 /// - `-ReadingPeek YES`: the reader's neighbouring pages show at its edges, to check their order.
@@ -92,6 +95,8 @@ enum ReadingDebug {
             case "tasbih": router.openTasbih()
             case "occasions": router.path = [.occasions]
             case let key? where key.hasPrefix("occasion:"): router.openOccasion(Int(key.dropFirst(9)) ?? 10)
+            case "hadith": router.path = [.hadithLibrary]
+            case let key? where key.hasPrefix("hadith:"): if let number = Int(key.dropFirst(7)) { router.openHadith(number) }
             case let key?: if let session = AzkarSession(key) { router.open(session) }
             case nil: break
             }

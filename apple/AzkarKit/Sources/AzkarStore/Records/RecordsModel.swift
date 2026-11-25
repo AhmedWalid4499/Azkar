@@ -194,6 +194,11 @@ public final class RecordsModel {
         _ = try await apply(store.changeSeasonRecord(deed, place: place, rakahs: rakahs, on: day, at: at))
     }
 
+    /// Notes that the hadith of the day, `number`, was opened on `day`. Once a day: the first stays.
+    public func logHadithRead(_ number: Int, on day: DayKey) async throws {
+        _ = try await apply(store.changeHadithRead(number, on: day))
+    }
+
     public func clearSeasonRecord(_ deed: SeasonDeed, on day: DayKey) async throws {
         _ = try await apply(store.removeSeasonRecord(deed, on: day))
     }

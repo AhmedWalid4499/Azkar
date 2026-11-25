@@ -18,10 +18,12 @@ public struct TrackerHistory: Hashable, Sendable {
     public var makeups: [PrayerMakeup]
     public var giving: [GivingEntry]
     public var duaEntries: [DuaEntry]
+    /// The Riyad as-Salihin hadith of the day read, by day: its number.
+    public var hadithRead: [DayKey: Int]
 
     public init(prayers: PrayerHistory = [:], sessions: SessionHistory = [:], tasbih: TasbihHistory = [:], fasts: FastingHistory = [:], quran: [QuranEntry] = [],
                 seasons: [DayKey: [SeasonDeed: SeasonRecord]] = [:], hifz: [HifzEntry] = [],
-                makeups: [PrayerMakeup] = [], giving: [GivingEntry] = [], duaEntries: [DuaEntry] = []) {
+                makeups: [PrayerMakeup] = [], giving: [GivingEntry] = [], duaEntries: [DuaEntry] = [], hadithRead: [DayKey: Int] = [:]) {
         self.prayers = prayers
         self.sessions = sessions
         self.tasbih = tasbih
@@ -32,6 +34,7 @@ public struct TrackerHistory: Hashable, Sendable {
         self.makeups = makeups
         self.giving = giving
         self.duaEntries = duaEntries
+        self.hadithRead = hadithRead
     }
 }
 
@@ -100,6 +103,7 @@ public enum TrackerStats {
             || history.makeups.contains { $0.day <= today }
             || history.giving.contains { $0.day <= today }
             || history.duaEntries.contains { $0.day <= today }
+            || history.hadithRead.keys.contains { $0 <= today }
     }
 
     public static func lifetimePrayers(_ history: PrayerHistory, today: DayKey) -> LifetimePrayers {
@@ -156,6 +160,7 @@ public enum TrackerStats {
         days.formUnion(history.giving.map(\.day))
         days.formUnion(history.duaEntries.map(\.day))
         days.formUnion(history.seasons.filter { !$0.value.isEmpty }.keys)
+        days.formUnion(history.hadithRead.keys)
         return days.sorted()
     }
 }

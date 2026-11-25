@@ -46,6 +46,7 @@ struct SessionPickerView: View {
 
                 Section {
                     OccasionsRow(day: clock.tasbihDay)
+                    HadithLibraryRow()
                 }
             }
             .listSectionSpacing(.compact)
