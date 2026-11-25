@@ -126,6 +126,9 @@ extension ReminderContent {
         case .takbir:
             content.title = title("Days of takbir", "%@, these are days of takbir")
             content.body = SystemText.string("Remember Allah with the takbir, and count it on Today.", language)
+        case .hifzReview:
+            content.title = title("Memorisation review", "%@, time to review your memorisation")
+            content.body = SystemText.string("Some of what you have memorised is due for review today.", language)
         }
         let page = reminder.kind == .kahf ? SeasonReminders.kahfPage : nil
         content.userInfo = ReminderInfo(kind: .season, day: entry.day, quranPage: page).userInfo

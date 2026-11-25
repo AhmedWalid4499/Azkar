@@ -121,7 +121,7 @@ struct QuranScreen: View {
                 }
             }
             if list == .hifz {
-                QuranHifzSections(mushaf: mushaf, entries: records.hifz, today: today) { request = QuranReaderRequest(page: $0) }
+                QuranHifzSections(mushaf: mushaf, entries: records.hifz, plans: records.hifzPlans, today: today) { request = QuranReaderRequest(page: $0) }
             }
         }
         .listStyle(.insetGrouped)

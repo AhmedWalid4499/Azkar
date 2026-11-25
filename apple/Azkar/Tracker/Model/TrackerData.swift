@@ -35,7 +35,8 @@ struct TrackerData {
             makeups: records.makeups,
             giving: records.giving,
             duaEntries: records.duaEntries,
-            hadithRead: records.hadithRead
+            hadithRead: records.hadithRead,
+            hifzPlans: records.hifzPlans
         )
         self.history = history
         let sessionsRead = Set(records.sessions.values.flatMap(\.keys))

@@ -104,7 +104,7 @@ public actor RecordStore {
             result: result, day: try rows.day(day), totals: try rows.totals(),
             owedFastsBefore: try rows.value(TallyKind.counter, TallyKind.Counter.owedFastsBefore),
             owedPrayersBefore: try rows.owedPrayersBefore(), duas: try rows.duas(),
-            quranBookmarks: try rows.quranBookmarks(),
+            quranBookmarks: try rows.quranBookmarks(), hifzPlans: try rows.hifzPlans(),
             prunedCounts: result == .changed ? pruned : [:], revision: try rows.revision()
         )
     }

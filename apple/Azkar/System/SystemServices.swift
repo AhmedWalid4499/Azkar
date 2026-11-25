@@ -117,7 +117,12 @@ final class SystemServices {
         // What menstrual mode excuses is logged first, so the reminders below see it.
         if let store = try? SharedRecords.store() { await MenstrualMode.catchUp(settings: settings, store: store, now: now) }
         let (logged, sunnah) = await loggedPrayers(around: now, timeZone: settings.timeZone)
-        await ReminderScheduler.reschedule(settings: settings, logged: logged, sunnah: sunnah, now: now)
+        // The memorisation log is read only when its reminder is on.
+        var hifzDueFrom: DayKey?
+        if settings.activeReminders.season.hifzReview, let store = try? SharedRecords.store(), let log = try? await store.hifzLog() {
+            hifzDueFrom = HifzProgress(entries: log).nextDue(from: DayKey(now, in: settings.timeZone))
+        }
+        await ReminderScheduler.reschedule(settings: settings, logged: logged, sunnah: sunnah, hifzDueFrom: hifzDueFrom, now: now)
         if #available(iOS 26.1, *) {
             // Alarms keep the title and sound they were set with: set them all again when either changes.
             let setWith = "\(language.code) \(AdhanAlarms.soundVersion)"

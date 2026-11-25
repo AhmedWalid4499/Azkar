@@ -8,9 +8,10 @@ import UserNotifications
 /// changes only what moved. Notifications of other features are left alone.
 enum ReminderScheduler {
     /// Replaces the pending reminders with those the settings and records ask for now.
-    static func reschedule(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:], now: Date = .now) async {
+    static func reschedule(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:],
+                           hifzDueFrom: DayKey? = nil, now: Date = .now) async {
         let center = UNUserNotificationCenter.current()
-        let wanted = plan(settings: settings, logged: logged, sunnah: sunnah, now: now)
+        let wanted = plan(settings: settings, logged: logged, sunnah: sunnah, hifzDueFrom: hifzDueFrom, now: now)
         let allowed = await center.notificationSettings().authorizationStatus
         let canDeliver = allowed == .authorized || allowed == .provisional || allowed == .ephemeral
 
@@ -45,7 +46,9 @@ enum ReminderScheduler {
     }
 
     /// The reminders due after `now` within the plan's window.
-    static func plan(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:], now: Date) -> [ReminderEntry] {
+    /// `hifzDueFrom`: the first day memorised ayat fall due for review (they stay due until reviewed).
+    static func plan(settings: SettingsSnapshot, logged: [DayKey: Set<Prayer>], sunnah: [DayKey: Set<SunnahPrayer>] = [:],
+                     hifzDueFrom: DayKey? = nil, now: Date) -> [ReminderEntry] {
         guard let location = settings.location, let place = PrayerPlace(location) else { return [] }
         // Less what menstrual mode pauses while it is on.
         let reminders = settings.activeReminders
@@ -57,7 +60,9 @@ enum ReminderScheduler {
                 ? UnloggedChoices(leadMinutes: reminders.unloggedLeadMinutes, ishaEnds: reminders.ishaDeadline, logged: logged)
                 : nil,
             season: { day in
-                SeasonReminders.plan(for: day, choices: season, offset: offset) { prayer, day in sunnah[day]?.contains(prayer) ?? false }
+                SeasonReminders.plan(for: day, choices: season, offset: offset,
+                                     isDone: { prayer, day in sunnah[day]?.contains(prayer) ?? false },
+                                     hifzDue: { day in hifzDueFrom.map { day >= $0 } ?? false })
             }
         )
         return ReminderPlan.upcoming(

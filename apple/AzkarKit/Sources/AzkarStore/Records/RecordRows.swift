@@ -75,6 +75,16 @@ struct RecordRows {
         try fetch(#Predicate<HifzEntryRow> { $0.id == id }).first
     }
 
+    func hifzPlan(_ id: UUID) throws -> HifzPlanRow? {
+        try fetch(#Predicate<HifzPlanRow> { $0.id == id }).first
+    }
+
+    /// Every memorisation plan, the first made first.
+    func hifzPlans() throws -> [HifzPlan] {
+        let rows: [HifzPlanRow] = try fetch()
+        return rows.compactMap(\.plan).sorted { ($0.createdAt, $0.id.uuidString) < ($1.createdAt, $1.id.uuidString) }
+    }
+
     func makeup(_ id: UUID) throws -> PrayerMakeupRow? {
         try fetch(#Predicate<PrayerMakeupRow> { $0.id == id }).first
     }
@@ -234,6 +244,7 @@ struct RecordRows {
         snapshot.quran = try quranEntries(days: days)
         snapshot.quranBookmarks = try quranBookmarks()
         snapshot.hifz = try hifzEntries(days: days)
+        snapshot.hifzPlans = try hifzPlans()
         snapshot.makeups = try makeups(days: days)
         snapshot.giving = try giving(days: days)
         snapshot.duaEntries = try duaEntries(days: days)
@@ -299,6 +310,7 @@ struct RecordRows {
         try delete(DuaRow.self)
         try delete(DuaEntryRow.self)
         try delete(CompanionRow.self)
+        try delete(HifzPlanRow.self)
         let revisionKey = TallyKind.Counter.revision
         let counter = TallyKind.counter
         for row in try fetch(#Predicate<TallyRow> { $0.kind != counter || $0.key != revisionKey }) { context.delete(row) }
@@ -309,7 +321,13 @@ struct RecordRows {
     }
 
     func insert(_ entry: HifzEntry) {
-        context.insert(HifzEntryRow(id: entry.id, sura: entry.sura, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue))
+        context.insert(HifzEntryRow(id: entry.id, sura: entry.sura, day: entry.day.number, at: entry.at, kind: entry.kind.rawValue,
+                                    fromAyah: entry.fromAyah, toAyah: entry.toAyah, strength: entry.strength?.rawValue))
+    }
+
+    func insert(_ plan: HifzPlan) {
+        context.insert(HifzPlanRow(id: plan.id, createdAt: plan.createdAt, start: plan.start.number, target: plan.target.storage,
+                                   targetDay: plan.targetDay.number, dailyAyat: plan.dailyAyat, endedAt: plan.endedAt))
     }
 
     func insert(_ makeup: PrayerMakeup) {
@@ -387,6 +405,15 @@ struct RecordRows {
         }
         let hifz = Set(existing.hifz.map(\.id))
         for entry in incoming.hifz where !hifz.contains(entry.id) { insert(entry) }
+        // A plan is the same plan by id; one ended on either side stays ended.
+        let plans = Dictionary(existing.hifzPlans.map { ($0.id, $0) }) { first, _ in first }
+        for plan in incoming.hifzPlans {
+            if plans[plan.id] == nil {
+                insert(plan)
+            } else if plans[plan.id]?.endedAt == nil, let ended = plan.endedAt, let row = try hifzPlan(plan.id) {
+                row.endedAt = ended
+            }
+        }
         let makeups = Set(existing.makeups.map(\.id))
         for makeup in incoming.makeups where !makeups.contains(makeup.id) { insert(makeup) }
         let giving = Set(existing.giving.map(\.id))
@@ -423,9 +450,22 @@ struct RecordRows {
 }
 
 extension HifzEntryRow {
+    /// `nil` for what a later version wrote that this one cannot read (a strength it does not know
+    /// is read as none).
     var entry: HifzEntry? {
-        guard let day = DayKey(number: day), let kind = HifzEntry.Kind(rawValue: kind) else { return nil }
-        return HifzEntry(id: id, sura: sura, day: day, at: at.nearestMillisecond, kind: kind)
+        guard let day = DayKey(number: day), let kind = HifzEntry.Kind(rawValue: kind),
+              HifzEntry.isValid(sura: sura, fromAyah: fromAyah, toAyah: toAyah) else { return nil }
+        return HifzEntry(id: id, sura: sura, day: day, at: at.nearestMillisecond, kind: kind, fromAyah: fromAyah, toAyah: toAyah,
+                         strength: strength.flatMap(HifzStrength.init(rawValue:)))
+    }
+}
+
+extension HifzPlanRow {
+    var plan: HifzPlan? {
+        guard let start = DayKey(number: start), let targetDay = DayKey(number: targetDay), let target = HifzPlan.Target(storage: target),
+              dailyAyat > 0 else { return nil }
+        return HifzPlan(id: id, createdAt: createdAt.nearestMillisecond, start: start, target: target, targetDay: targetDay,
+                        dailyAyat: dailyAyat, endedAt: endedAt?.nearestMillisecond)
     }
 }
 

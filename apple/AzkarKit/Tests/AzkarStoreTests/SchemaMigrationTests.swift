@@ -417,13 +417,14 @@ import Testing
     @Test func theMigrationPlanGoesThroughEveryVersionInOrder() {
         #expect(AzkarSchemaV2.versionIdentifier == Schema.Version(2, 0, 0))
         #expect(AzkarSchemaV3.versionIdentifier == Schema.Version(3, 0, 0))
-        #expect(AzkarMigrationPlan.schemas.map { $0.versionIdentifier } == [Schema.Version(1, 0, 0), Schema.Version(2, 0, 0), Schema.Version(3, 0, 0), Schema.Version(4, 0, 0), Schema.Version(5, 0, 0), Schema.Version(6, 0, 0)])
-        #expect(AzkarMigrationPlan.stages.count == 5)
+        #expect(AzkarMigrationPlan.schemas.map { $0.versionIdentifier } == [Schema.Version(1, 0, 0), Schema.Version(2, 0, 0), Schema.Version(3, 0, 0), Schema.Version(4, 0, 0), Schema.Version(5, 0, 0), Schema.Version(6, 0, 0), Schema.Version(7, 0, 0)])
+        #expect(AzkarMigrationPlan.stages.count == 6)
         #expect(AzkarSchemaV2.models.count == AzkarSchemaV1.models.count + 2)
         #expect(AzkarSchemaV3.models.count == AzkarSchemaV2.models.count + 1)
         #expect(AzkarSchemaV4.models.count == AzkarSchemaV3.models.count + 1)
         #expect(AzkarSchemaV5.models.count == AzkarSchemaV4.models.count + 4)
         #expect(AzkarSchemaV6.models.count == AzkarSchemaV5.models.count + 1)
+        #expect(AzkarSchemaV7.models.count == AzkarSchemaV6.models.count + 1)
     }
 }
 

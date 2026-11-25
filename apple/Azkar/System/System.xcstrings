@@ -522,6 +522,23 @@
         }
       }
     },
+    "%@, time to review your memorisation": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@، حان وقت مراجعة حفظك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, time to review your memorisation"
+          }
+        }
+      }
+    },
     "%@, today is your zakat date": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -1403,6 +1420,23 @@
         }
       }
     },
+    "Memorisation review": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مراجعة الحفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorisation review"
+          }
+        }
+      }
+    },
     "Missed": {
       "extractionState": "manual",
       "generatesSymbol": false,
@@ -2082,6 +2116,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shows the direction of the Kaaba."
+          }
+        }
+      }
+    },
+    "Some of what you have memorised is due for review today.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حان اليوم موعد مراجعة بعض ما حفظته."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some of what you have memorised is due for review today."
           }
         }
       }

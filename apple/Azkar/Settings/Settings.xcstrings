@@ -677,6 +677,23 @@
         }
       }
     },
+    "After Fajr, on days memorised ayat are due.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد الفجر، في الأيام التي يحين فيها موعد مراجعة ما حفظته."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After Fajr, on days memorised ayat are due."
+          }
+        }
+      }
+    },
     "After Isha, unless you’ve ticked it off.": {
       "extractionState": "manual",
       "localizations": {
@@ -2242,6 +2259,23 @@
         }
       }
     },
+    "Memorisation review": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مراجعة الحفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memorisation review"
+          }
+        }
+      }
+    },
     "Middle of the night": {
       "extractionState": "manual",
       "localizations": {
@@ -2782,6 +2816,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Qatar"
+          }
+        }
+      }
+    },
+    "Quran": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القرآن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quran"
           }
         }
       }

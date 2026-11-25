@@ -54,6 +54,13 @@ public struct HijriYearReview: Hashable, Sendable {
     /// Surahs memorised in the year, and reviews logged in it.
     public var surasMemorised = 0
     public var surasReviewed = 0
+    /// Ayat memorised and reviewed: a whole surah counts all its ayat.
+    public var ayatMemorised = 0
+    public var ayatReviewed = 0
+    /// Reviews that went weakly.
+    public var weakReviews = 0
+    /// Memorisation plans begun in the year.
+    public var plansStarted = 0
 
     /// Fasts kept to the end, by kind.
     public var fasts: [FastKind: Int] = [:]
@@ -83,6 +90,7 @@ public struct HijriYearReview: Hashable, Sendable {
         let khatmahs = Dictionary(grouping: quran.khatmahDates) { $0 }
         let hifz = Dictionary(grouping: history.hifz, by: \.day)
         let makeups = Dictionary(grouping: history.makeups, by: \.day)
+        let plans = Dictionary(grouping: history.hifzPlans, by: \.start)
         let given = Dictionary(grouping: history.giving, by: \.day)
         let duas = Dictionary(grouping: history.duaEntries, by: \.day)
         var givenInYear: [GivingEntry] = []
@@ -135,8 +143,13 @@ public struct HijriYearReview: Hashable, Sendable {
             for entry in hifz[day] ?? [] {
                 isActive = true
                 switch entry.kind {
-                case .memorised: surasMemorised += 1
-                case .reviewed: surasReviewed += 1
+                case .memorised:
+                    surasMemorised += 1
+                    ayatMemorised += entry.span.count
+                case .reviewed:
+                    surasReviewed += 1
+                    ayatReviewed += entry.span.count
+                    if entry.strength == .weak { weakReviews += 1 }
                 case .forgotten: break
                 }
             }
@@ -153,6 +166,9 @@ public struct HijriYearReview: Hashable, Sendable {
                 if deeds[.tarawih] != nil { tarawih += 1 }
                 if deeds[.eidPrayer] != nil { eidPrayers += 1 }
             }
+            let begun = plans[day]?.count ?? 0
+            plansStarted += begun
+            isActive = isActive || begun > 0
             if let made = makeups[day] {
                 isActive = true
                 madeUp += made.count
@@ -186,6 +202,7 @@ public extension TrackerHistory {
         days.formUnion(seasons.keys)
         days.formUnion(quran.map(\.day))
         days.formUnion(hifz.map(\.day))
+        days.formUnion(hifzPlans.map(\.start))
         days.formUnion(makeups.map(\.day))
         days.formUnion(giving.map(\.day))
         days.formUnion(duaEntries.map(\.day))

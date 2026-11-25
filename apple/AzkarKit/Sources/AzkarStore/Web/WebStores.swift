@@ -166,9 +166,13 @@ public enum WebStores {
         }).persisted)
         snapshot.records.quran = reading.entries
         snapshot.records.quranBookmarks = reading.bookmarks
-        snapshot.records.hifz = WebHifz.read(load(entry(hifz), version: WebHifz.version, migrate: { state, _ in
-            WebHifz.web(WebHifz.read(state))
+        // Version 1 had whole surahs and no plans; the same reader takes it.
+        let memorised = WebHifz.read(load(entry(hifz), version: WebHifz.version, migrate: { state, _ in
+            let read = WebHifz.read(state)
+            return WebHifz.web(read.entries, plans: read.plans)
         }).persisted)
+        snapshot.records.hifz = memorised.entries
+        snapshot.records.hifzPlans = memorised.plans
 
         let made = WebMakeups.read(load(entry(makeups), version: WebMakeups.version, migrate: { state, _ in
             let read = WebMakeups.read(state)
@@ -223,8 +227,8 @@ public enum WebStores {
         if records.seasons.values.contains(where: { !$0.isEmpty }) {
             stores[prefix + seasons] = stored(WebSeasons.web(records.seasons), WebSeasons.version)
         }
-        if !records.hifz.isEmpty {
-            stores[prefix + hifz] = stored(WebHifz.web(records.hifz), WebHifz.version)
+        if !records.hifz.isEmpty || !records.hifzPlans.isEmpty {
+            stores[prefix + hifz] = stored(WebHifz.web(records.hifz, plans: records.hifzPlans), WebHifz.version)
         }
         if !records.makeups.isEmpty || !records.owedPrayersBefore.isEmpty {
             stores[prefix + makeups] = stored(WebMakeups.web(records.makeups, owedBefore: records.owedPrayersBefore), WebMakeups.version)

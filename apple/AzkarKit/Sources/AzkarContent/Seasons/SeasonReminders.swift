@@ -14,8 +14,10 @@ public enum SeasonReminders {
     ///
     /// Friday brings Surah al-Kahf after sunrise, and every day Duha and Witr unless `isDone` says
     /// they are already ticked for that day. The user's zakat day and the 28th of Ramadan come at Dhuhr.
+    /// After Fajr, on a day `hifzDue` says memorised ayat are due, the review reminder.
     public static func plan(for day: DayKey, choices: SeasonReminderChoices, offset: Int = 0,
-                            isDone: (SunnahPrayer, DayKey) -> Bool = { _, _ in false }) -> [SeasonReminder] {
+                            isDone: (SunnahPrayer, DayKey) -> Bool = { _, _ in false },
+                            hifzDue: (DayKey) -> Bool = { _ in false }) -> [SeasonReminder] {
         var reminders: [SeasonReminder] = []
         let tomorrow = FastingCalendar.info(for: day.adding(days: 1), offset: offset)
         if let reason = tomorrow.reasons.first(where: { choices.wants($0) }) {
@@ -43,6 +45,9 @@ public enum SeasonReminders {
         }
         if choices.zakat, let due = choices.zakatDue, zakatDay(due, hijriYear: HijriCalendar.date(of: day, offset: offset).year, offset: offset) == day {
             reminders.append(SeasonReminder(kind: .zakat, anchor: .dhuhr))
+        }
+        if choices.hifzReview, hifzDue(day) {
+            reminders.append(SeasonReminder(kind: .hifzReview, anchor: .fajr, offsetMinutes: SeasonReminderChoices.hifzReviewDelayMinutes))
         }
         let hijri = HijriCalendar.date(of: day, offset: offset)
         if choices.zakatFitr, hijri.month == HijriDate.ramadan, hijri.day == SeasonReminderChoices.zakatFitrDay {

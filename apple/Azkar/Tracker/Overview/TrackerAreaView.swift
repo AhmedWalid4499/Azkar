@@ -233,8 +233,20 @@ struct TrackerDayQuranSection: View {
             }
         }
         let hifz = data.records.hifz.filter { $0.day == day }
-        if !hifz.isEmpty {
+        let plans = data.records.hifzPlans.filter { $0.start == day }
+        if !hifz.isEmpty || !plans.isEmpty {
             Section {
+                ForEach(plans) { plan in
+                    LabeledContent {
+                        Text(format.time(plan.createdAt)).monospacedDigit()
+                    } label: {
+                        Label {
+                            Text(verbatim: format.string(planLine(plan)))
+                        } icon: {
+                            Image(systemName: "calendar.badge.plus").foregroundStyle(.purple)
+                        }
+                    }
+                }
                 ForEach(hifz) { entry in
                     LabeledContent {
                         Text(format.time(entry.at)).monospacedDigit()
@@ -252,13 +264,36 @@ struct TrackerDayQuranSection: View {
         }
     }
 
+    /// "Memorised Al-Baqara 1–143", "Reviewed Al-Mulk: weak".
     private func hifzLine(_ entry: HifzEntry) -> LocalizedStringResource {
-        let name = format.isArabic ? data.quranIndex.suraName(number: entry.sura) : data.quranIndex.suraTransliteration(number: entry.sura)
-        return switch entry.kind {
-        case .memorised: LocalizedStringResource("Memorised \(name)", table: "Tracker")
-        case .reviewed: LocalizedStringResource("Reviewed \(name)", table: "Tracker")
-        case .forgotten: LocalizedStringResource("Took \(name) off the memorised list", table: "Tracker")
+        let name = suraName(entry.sura)
+        let span = entry.span
+        let ayat = span.isWholeSura ? name : span.from == span.to ? "\(name) \(format.number(span.from))" : "\(name) \(format.number(span.from))–\(format.number(span.to))"
+        switch (entry.kind, entry.strength) {
+        case (.memorised, _): return LocalizedStringResource("Memorised \(ayat)", table: "Tracker")
+        case (.reviewed, .weak?): return LocalizedStringResource("Reviewed \(ayat): weak", table: "Tracker")
+        case (.reviewed, .good?): return LocalizedStringResource("Reviewed \(ayat): good", table: "Tracker")
+        case (.reviewed, .strong?): return LocalizedStringResource("Reviewed \(ayat): strong", table: "Tracker")
+        case (.reviewed, nil): return LocalizedStringResource("Reviewed \(ayat)", table: "Tracker")
+        case (.forgotten, _): return LocalizedStringResource("Took \(ayat) off the memorised list", table: "Tracker")
         }
+    }
+
+    private func suraName(_ sura: Int) -> String {
+        format.isArabic ? data.quranIndex.suraName(number: sura) : data.quranIndex.suraTransliteration(number: sura)
+    }
+
+    /// "Started a memorisation plan: Juz 30 by 1 Feb 2027", with "(ended)" once it has.
+    private func planLine(_ plan: HifzPlan) -> LocalizedStringResource {
+        let target = switch plan.target {
+        case let .sura(sura): suraName(sura)
+        case let .juz(juz): format.string(LocalizedStringResource("Juz \(juz)", table: "Tracker"))
+        case let .range(from, to): "\(suraName(from.sura)) \(format.number(from.ayah)) – \(suraName(to.sura)) \(format.number(to.ayah))"
+        }
+        let by = plan.targetDay.noonUTC.formatted(Date.FormatStyle(date: .abbreviated, time: .omitted, locale: format.locale, timeZone: .gmt))
+        return plan.isActive
+            ? LocalizedStringResource("Started a memorisation plan: \(target) by \(by)", table: "Tracker")
+            : LocalizedStringResource("Started a memorisation plan: \(target) by \(by) (ended)", table: "Tracker")
     }
 }
 
